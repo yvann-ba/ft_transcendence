@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  django:
+    build:
+      context: ./requirements/django
+    container_name: django_server
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./requirements/django:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  # db:
+  #   image: postgres:15
+  #   container_name: postgres_server
+  #   environment:
+  #     POSTGRES_USER: admin
+  #     POSTGRES_PASSWORD: secretpassword
+  #     POSTGRES_DB: ft_transcendence
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+
+  nginx:
+    build:
+      context: ./requirements/nginx
+    container_name: nginx_server
+    ports:
+      - "80:80"
+    depends_on:
+      - django
+
+volumes:
+  postgres_data:
