@@ -1,0 +1,18 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ma Page</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <button type="button" onclick="">Cliquez-moi</button>
+</head>
+<body>
+    <h1>Bienvenue sur ma page</h1>
+    <p>Ceci est un exemple de page avec du CSS intégré.</p>
+    <form action="{% url 'nouvelle_page' %}" method="get">
+        <button type="submit">Accéder à la nouvelle page</button>
+    </form>
+</body>
+</html>
