@@ -1,34 +1,28 @@
-
 services:
   db:
     image: postgres:13
-    container_name: postgres
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}  # Utilise la variable du fichier .env
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}  # Utilise la variable du fichier .env
-      POSTGRES_DB: ${POSTGRES_DB}  # Utilise la variable du fichier .env
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   web:
     build:
       context: ./requirements/app
-    container_name: django
+      dockerfile: Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./requirements/app:/usr/src/app
+      - ./requirements/app:/app  # Assurez-vous que ce volume est correctement monté
     ports:
       - "8000:8000"
     depends_on:
-      db:
-        condition: service_healthy
+      - db
+    env_file:
+      - .env
 
 volumes:
-  pgdata:
+  postgres_data:

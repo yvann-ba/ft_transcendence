@@ -1,7 +1,11 @@
-from . import views
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import UserViewSet, GameViewSet
+
+router = DefaultRouter()
+router.register(r'users', UserViewSet)
+router.register(r'games', GameViewSet)
 
 urlpatterns = [
-    path('', views.ma_vue, name='ma_vue'),
-	path('nouvelle-page/', views.nouvelle_page, name='nouvelle_page'),
+    path('', include(router.urls)),
 ]

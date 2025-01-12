@@ -1,7 +1,11 @@
-from django.shortcuts import render
+from rest_framework import viewsets
+from .models import User, Game
+from .serializers import UserSerializer, GameSerializer
 
-def ma_vue(request):
-    return render(request, 'ma_page.html')
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
-def nouvelle_page(request):
-    return render(request, 'nouvelle_page.html')
+class GameViewSet(viewsets.ModelViewSet):
+    queryset = Game.objects.all()
+    serializer_class = GameSerializer
