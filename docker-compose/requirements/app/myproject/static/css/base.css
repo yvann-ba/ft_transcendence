@@ -16,21 +16,13 @@ body, html {
     padding: 0;
     height: auto;
     min-height: 100%;
-    app-height: 1035px;
     overflow: hidden;
     font-family: 'Aeonik', sans-serif;
     background-color: black;
     color: white;
-    font-size: 0.6944444444vw;
+    font-size: 1vw;
 }
 
-#video-header {
-    position: relative;
-    width: 100%;
-    height: 100rem;
-    top: 200px;
-    overflow: hidden;
-}
 
 div {
     margin: 0;
@@ -55,7 +47,7 @@ div {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    height: 8.8rem;
+    height: 5.5rem;
     box-sizing: border-box;
     text-decoration: none;
     position: relative;
@@ -68,12 +60,16 @@ div {
 }
 
 .navbar .logo {
-    font-size: 3.5em;
+    font-size: 2.5rem;
     font-weight: bold;
+    text-align: left;
+    flex: 1;
 }
 
 .navbar .nav-links ul{
     font-family: 'Aeonik', sans-serif;
+    flex: 2;
+    justify-content: center;
     display: flex;
     font-size: 1.4rem;
     position: absolute;
@@ -100,19 +96,20 @@ div {
 
 .profile-link  {
     display: flex;
+    flex: 1;
     height: 3rem;
     color: white;
     align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    margin-top: 20px;
+    justify-content: right;
+    transition: all 0.3s ease-in-out;
 }
+
 .profile-link a {
     height: 100%;
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
 }
 .profile-button svg {
     width: 1.4rem;
@@ -132,59 +129,56 @@ div {
     color: white;
 }
 
-#background-video {
-    padding: 6px;
-    border: 9px outset #ddd;
-}
-
-.profile-link:hover svg{
-    background-color: #b665a7;
+.profile-button-label:hover svg {
+    background-color: #a14590;
     color: white;
 }
-
-.overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: white;
-}
-
-.overlay h1 {
-    margin: 0;
-    font-size: 3em;
-}
-
-.overlay button {
-    padding: 10px 20px;
-    font-size: 1.2em;
-    background-color: rgba(0, 0, 0, 0.5);
-    border: none;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.overlay button:hover {
-    background-color: rgba(0, 0, 0, 0.7);
-}
-
-#app {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    background-color: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: opacity 1s ease-in-out;
-}
-
-#app.fade-in {
-    opacity: 1;
-} 
 
 .clicked {
     color: #BB70AD !important;
+}
+
+.flip-effect a {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    text-align: center;
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    padding: 0;
+}
+
+.flip-effect a span {
+    display: block;
+    transition: transform 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.flip-effect a:after {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    content: attr(data-hover);
+    display: inline;
+    text-align: center;
+    transition: top 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.flip-effect a:hover span {
+    transform: translateY(-100%);
+}
+
+.flip-effect a:hover:after {
+    top: 0;
+}
+
+.flip-effect a:active {
+    -webkit-animation-name: rubberBand;
+    animation-name: rubberBand;
 }

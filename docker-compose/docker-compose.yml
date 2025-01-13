@@ -16,7 +16,7 @@ services:
       dockerfile: Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./requirements/app:/app  # Assurez-vous que ce volume est correctement monté
+      - ./requirements/app:/app  # Assurez-vous que ce volume est 
     ports:
       - "8000:8000"
     depends_on:

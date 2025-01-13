@@ -1,58 +1,50 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="--app-height: 1035px">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Pong Game{% endblock %}</title>
-	<script src="https://kit.fontawesome.com/3de3c501a5.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/3de3c501a5.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <body>
-	<nav class="nav" id="nav">
-		<div class="navbar">
-			<a href="#" class="logo">Pong Game</a>
-			<div class="nav-links">
-				<div>
-					<a href="/" data-page="home" class="nav-link">
-						<span>Home</span></a>
-					<a href="/about/" data-page="about" class="nav-link">
-						</span>About</span>
-					</a>
-					<a href="/contact/" data-page="contact" class="nav-link">
-						<span>Contact</span>
-					</a>
-				</div>
-			</div>
-			<div class="profile-link">
-				<a href="/profile-page/" data-page="profile">
-					<span class="profile-button" >
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-							<path d="M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464l349.5 0c-8.9-63.3-63.3-112-129-112l-91.4 0c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3z"/>
-					</svg></span>
-					<span class="profile-label">Profile</span>
-				</a>
-				
-			</div>
-		</div>
-	</nav>
-    <header id="video-header">
-        <video autoplay muted loop id="background-video">
-            <source src="{% static 'videos/pong.mp4' %}" type="video/mp4" >
-            Your browser does not support the video tag.
-        </video>
-        <div class="overlay">
-            <h1>Welcome to Pong Game</h1>
-            <button id="play-button">Play Game</button>
+    <nav class="nav" id="nav">
+        <div class="navbar">
+            <a href="#" class="logo">Pong Game</a>
+            <div class="nav-links flip-effect">
+                <div>
+                    <a href="/" data-page="home" class="nav-link" data-hover="Home">
+                        <span>Home</span>
+                    </a>
+                    <a href="/about/" data-page="about" class="nav-link" data-hover="About">
+                        <span>About</span>
+                    </a>
+                    <a href="/contact/" data-page="contact" class="nav-link" data-hover="Contact">
+                        <span>Contact</span>
+                    </a>
+                </div>
+            </div>
+            <div class="profile-link">
+                <div class="profile-button-label">
+                    <a href="/profile-page/" data-page="profile">
+                        <span class="profile-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path d="M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464l349.5 0c-8.9-63.3-63.3-112-129-112l-91.4 0c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3z"/>
+                            </svg>
+                        </span>
+                        <span class="profile-label">Profile</span>
+                    </a>
+                </div>
+            </div>
         </div>
-    </header>
-    <main id="app" style="display: none;">
+    </nav>
+
+    <main id="app">
         {% block content %}
         {% endblock %}
     </main>
-    <script src="{% static 'js/video.js' %}"></script>
     <script src="{% static 'js/app.js' %}"></script>
-	<script src="{% static 'js/nav.js' %}"></script>
+    <script src="{% static 'js/nav.js' %}"></script>
 </body>
 </html>
-	

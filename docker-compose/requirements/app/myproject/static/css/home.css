@@ -1,0 +1,10 @@
+.video-header{
+	padding-top: 100 px;
+}
+
+
+#background-video {
+    padding: 6px;
+    border: 9px solid #ddd;
+    border-radius: 30px;
+}

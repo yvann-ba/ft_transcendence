@@ -1,10 +1,24 @@
-<!-- myproject/templates/ma_page.html -->
-<!-- myproject/templates/home.html -->
+<!-- templates/home.html -->
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
+{% load static %}
+
+{% block title %}Home - Pong Game{% endblock %}
 
 {% block content %}
-<h1>Home</h1>
-<p>Welcome to the Home JE  BAISE TROMBOSCOPE page.</p>
+
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+<header class="video-header">
+    <video autoplay muted loop id="background-video">
+        <source src="{% static 'videos/pong.mp4' %}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="overlay">
+        <h1>Welcome to Pong Game</h1>
+        <button id="play-button">Play Game</button>
+    </div>
+</header>
+<script src="{% static 'js/video.js' %}"></script>
+
 {% endblock %}
