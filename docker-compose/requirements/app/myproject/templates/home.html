@@ -9,16 +9,30 @@
 
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 
-<header class="video-header">
-    <video autoplay muted loop id="background-video">
-        <source src="{% static 'videos/pong.mp4' %}" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-    <div class="overlay">
-        <h1>Welcome to Pong Game</h1>
-        <button id="play-button">Play Game</button>
+<header class="home-header">
+    <div class="home-header-video">
+        <video autoplay muted loop id="background-video">
+            <source src="{% static 'videos/pong.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
     </div>
+    <div class="home-header-content hidden">
+        <h1 class="h0 home-header-heading h-anim anima spanned" data-spanner="w" data-anima-delay="3">
+            <p>
+                <span class="w" data-i="1">Click</span>
+                <span class="split"> </span>
+                <span class="w" data-i="2">To</span>
+            </p>
+            <p>
+                <span class="w" data-i="3">Play</span>
+                <span class="split"> </span>
+                <span class="w" data-i="4">Pong</span>
+            </p>
+        </h1>
+    </div>
+    
+    
 </header>
-<script src="{% static 'js/video.js' %}"></script>
+<script src="{% static 'js/home.js' %}"></script>
 
 {% endblock %}

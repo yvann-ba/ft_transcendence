@@ -25,17 +25,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Fonction pour charger les données initiales
     function loadInitialData() {
         fetch('/api/users/')
             .then(response => response.json())
             .then(data => {
                 const usersList = document.getElementById('users-list');
-                data.forEach(user => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = user.name;
-                    usersList.appendChild(listItem);
-                });
+                if (usersList) {
+                    data.forEach(user => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = user.name;
+                        usersList.appendChild(listItem);
+                    });
+                }
             })
             .catch(error => console.error('There was an error fetching the users!', error));
 
@@ -43,16 +44,45 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 const gamesList = document.getElementById('games-list');
-                data.forEach(game => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = game.name;
-                    gamesList.appendChild(listItem);
-                });
+                if (gamesList) {
+                    data.forEach(game => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = game.name;
+                        gamesList.appendChild(listItem);
+                    });
+                }
             })
             .catch(error => console.error('There was an error fetching the games!', error));
     }
 
-    // Fonction pour charger le contenu de la page
+    // Fonction pour initialiser les animations de la page d'accueil
+    function initializeHomeAnimations() {
+        const animatedTextContainer = document.querySelector(".home-header-content");
+        const animatedText = document.querySelector(".h-anim");
+
+        if (animatedTextContainer && animatedText) {
+            // Reset des classes d'animation
+            animatedTextContainer.classList.add("hidden");
+            animatedText.classList.remove("in");
+            const splits = animatedText.querySelectorAll(".split");
+            splits.forEach((split) => split.classList.remove("in"));
+
+            // Relancer l'animation
+            setTimeout(() => {
+                animatedTextContainer.classList.remove("hidden");
+
+                setTimeout(() => {
+                    animatedText.classList.add("in");
+
+                    setTimeout(() => {
+                        splits.forEach((split) => split.classList.add("in"));
+                    }, 1000);
+                }, 500);
+            }, 100);
+        }
+    }
+
+    // Fonction modifiée pour charger le contenu de la page
     function fetchPage(page) {
         fetch(`/${page}/`)
             .then(response => response.text())
@@ -61,6 +91,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const doc = parser.parseFromString(data, 'text/html');
                 const newContent = doc.getElementById('app').innerHTML;
                 document.getElementById('app').innerHTML = newContent;
+                
+                // Initialiser les animations si c'est la page d'accueil
+                if (page === 'home') {
+                    initializeHomeAnimations();
+                }
             })
             .catch(error => console.error('Error fetching the page:', error));
     }

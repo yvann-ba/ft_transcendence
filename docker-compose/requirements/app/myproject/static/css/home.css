@@ -1,10 +1,106 @@
-.video-header{
-	padding-top: 100 px;
+
+main {
+    display: block;
+}
+
+.home-header {
+    height: 100rem;
+    position: relative;
+    max-height: 100vh;
+    overflow: hidden;
+    margin-bottom: 5rem;
+    box-sizing: border-box;
 }
 
 
 #background-video {
+    display: none;
     padding: 6px;
     border: 9px solid #ddd;
     border-radius: 30px;
 }
+
+.home-header-content {
+    position: absolute;
+    text-align: center;
+    opacity: 1;
+    width: 100%;
+    top: 32%;
+}
+
+.home-header-heading {
+    margin: 0;
+}
+
+.h0 {
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.h0 i {
+    font-family: "Great Vibes", serif;
+    font-weight: 400;
+}
+
+.h0 p {
+    margin: 0;
+}
+
+
+.home-header-heading {
+    font-size: 14rem;
+    line-height: 0.84;
+}
+
+.home-header-content.hidden {
+    opacity: 0; 
+    pointer-events: none;
+    transition: opacity 500ms ease-out; 
+}
+
+.h-anim .w {
+    transition: mask-position 1000ms cubic-bezier(0.6, 0, 0.2, 1);
+    mask-image: linear-gradient(90deg, white 33.3%, rgba(255, 255, 255, 0) 66.6%);
+    mask-position: 100% 100%;
+    mask-size: 300% 100%;
+}
+
+.h-anim.in .w {
+    mask-position: 0% 100%;
+}
+
+.h-anim.in .w[data-i="1"] {
+    transition-delay: 150ms;
+}
+
+.h-anim.in .w[data-i="2"] {
+    transition-delay: 300ms;
+}
+
+.h-anim.in .w[data-i="3"] {
+    transition-delay: 450ms;
+}
+
+.h-anim.in .w[data-i="4"] {
+    transition-delay: 600ms;
+}
+
+.split {
+    display: inline-block;
+    width: 0; /* Départ sans largeur */
+    height: 1px;
+    transition: width 300ms ease-out;
+}
+
+.h-anim.in .split {
+    width: 3rem; /* Largeur finale après la révélation */
+    transition-delay: 1000ms; /* Délai après la fin de l'animation de révélation */
+}
+
+@media (max-width: 768px) {
+    .h-anim.in .split {
+        width: 1.5rem; /* Largeur finale pour mobile */
+    }
+}
+
+
