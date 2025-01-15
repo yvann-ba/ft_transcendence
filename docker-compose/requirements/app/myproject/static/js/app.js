@@ -2,21 +2,22 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fonction pour charger les données initiales
     loadInitialData();
 
-    // Gestion de la navigation SPA
-    const links = document.querySelectorAll('nav a');
-    links.forEach(link => {
-        link.addEventListener('click', function(event) {
-            event.preventDefault();
-            const page = event.target.getAttribute('data-page');
-            fetchPage(page);  // Appel pour récupérer le contenu
+    // Gestion de la navigation SPA (Délégation d'événements sur tout le body)
+    document.body.addEventListener('click', function(event) {
+        const link = event.target.closest('a');  // Trouver le lien cliqué
+        if (link && link.getAttribute('href')) {  // Vérifier le 'href' (et si l'attribut 'data-no-spa' n'est pas présent)
+            event.preventDefault();  // Empêcher le rechargement de la page
+            const href = link.getAttribute('href');
+            const page = href.split('/')[1]; // Extraire le nom de la page à partir du href, sans le '/'
+            fetchPage(page);  // Appel pour récupérer le contenu de la page
             // Mise à jour de l'historique avec l'URL propre
-            window.history.pushState({}, '', `/game/${page}/`);
-        });
+            window.history.pushState({}, '', href);
+        }
     });
 
     // Gestion de l'historique du navigateur (back/forward)
     window.addEventListener('popstate', function(event) {
-        const page = window.location.pathname.split('/')[2];  // Récupère le 2e segment de l'URL
+        const page = window.location.pathname.split('/')[1];  // Récupère le 1er segment de l'URL
         if (page) {
             fetchPage(page);
         } else {
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Fonction pour charger les données initiales
     function loadInitialData() {
         fetch('/api/users/')
             .then(response => response.json())
@@ -83,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fonction modifiée pour charger le contenu de la page
     function fetchPage(page) {
-        fetch(`/game/${page}/`) // Utilise l'URL propre sans paramètres
+        fetch(`/${page}/`) // Utilise l'URL propre sans le préfixe 'game/'
             .then(response => response.text())
             .then(data => {
                 const parser = new DOMParser();
@@ -92,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('app').innerHTML = newContent;
 
                 // Met à jour l'historique du navigateur avec l'URL de la page
-                window.history.pushState({}, '', `/game/${page}/`);
+                window.history.pushState({}, '', `/${page}/`);
 
                 // Initialiser les animations si c'est la page d'accueil
                 if (page === 'home') {
