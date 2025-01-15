@@ -32,6 +32,10 @@ main {
     margin: 0;
 }
 
+.w[data-i="4"] {
+    color: #BB70AD;
+}
+
 .h0 {
     text-transform: uppercase;
     font-weight: 700;
