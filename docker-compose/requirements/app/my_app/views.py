@@ -1,11 +1,12 @@
-from rest_framework import viewsets
-from .models import User, Game
-from .serializers import UserSerializer, GameSerializer
+from django.shortcuts import render
+from .models import Game, User
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+def game_page(request, page=None):
+    if not page:
+        page = 'home'
 
-class GameViewSet(viewsets.ModelViewSet):
-    queryset = Game.objects.all()
-    serializer_class = GameSerializer
+    # Exemple d'utilisation des modèles
+    games = Game.objects.all()
+    users = User.objects.all()
+
+    return render(request, f'{page}.html', {'games': games, 'users': users})

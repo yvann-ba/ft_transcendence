@@ -18,16 +18,12 @@ Including another URLconf
 # myproject/urls.py
 
 from django.contrib import admin
-from django.urls import path, include, re_path
-from django.views.generic import TemplateView
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('my_app.urls')),
-    path('', TemplateView.as_view(template_name='home.html'), name='home'),
-    path('about/', TemplateView.as_view(template_name='about.html'), name='about'),
-    path('contact/', TemplateView.as_view(template_name='contact.html'), name='contact'),
-    re_path(r'^.*$', TemplateView.as_view(template_name='home.html')),
+    path('admin/', admin.site.urls),  # URL de l'administration Django
+    path('api/', include('my_app.urls')),  # Redirige vers les routes de l'app 'myapp'
+    path('', include('my_app.urls')),  # Redirige également la racine vers 'myapp.urls' pour SPA
 ] + static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])

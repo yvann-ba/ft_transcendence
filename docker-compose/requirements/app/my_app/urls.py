@@ -1,11 +1,8 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import UserViewSet, GameViewSet
-
-router = DefaultRouter()
-router.register(r'users', UserViewSet)
-router.register(r'games', GameViewSet)
+from django.urls import path
+from . import views
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('', views.game_page, name='home'),
+    path('pong/', views.game_page, name='home'),
+    path('pong/<str:page>/', views.game_page, name='game_page'),  # Route avec paramètre page
 ]
