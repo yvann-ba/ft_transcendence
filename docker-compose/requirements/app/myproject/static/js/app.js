@@ -1,4 +1,3 @@
-// myproject/static/js/app.js
 document.addEventListener('DOMContentLoaded', function() {
     // Fonction pour charger les données initiales
     loadInitialData();
@@ -9,15 +8,15 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', function(event) {
             event.preventDefault();
             const page = event.target.getAttribute('data-page');
-            fetchPage(page);
-            window.history.pushState({}, '', `?page=${page}`);
+            fetchPage(page);  // Appel pour récupérer le contenu
+            // Mise à jour de l'historique avec l'URL propre
+            window.history.pushState({}, '', `/game/${page}/`);
         });
     });
 
-    // Gestion de l'historique du navigateur
+    // Gestion de l'historique du navigateur (back/forward)
     window.addEventListener('popstate', function(event) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const page = urlParams.get('page');
+        const page = window.location.pathname.split('/')[2];  // Récupère le 2e segment de l'URL
         if (page) {
             fetchPage(page);
         } else {
@@ -84,14 +83,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fonction modifiée pour charger le contenu de la page
     function fetchPage(page) {
-        fetch(`/${page}/`)
+        fetch(`/game/${page}/`) // Utilise l'URL propre sans paramètres
             .then(response => response.text())
             .then(data => {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(data, 'text/html');
                 const newContent = doc.getElementById('app').innerHTML;
                 document.getElementById('app').innerHTML = newContent;
-                
+
+                // Met à jour l'historique du navigateur avec l'URL de la page
+                window.history.pushState({}, '', `/game/${page}/`);
+
                 // Initialiser les animations si c'est la page d'accueil
                 if (page === 'home') {
                     initializeHomeAnimations();

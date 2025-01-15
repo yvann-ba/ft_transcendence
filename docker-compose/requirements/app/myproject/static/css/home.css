@@ -39,6 +39,8 @@ main {
 .h0 {
     text-transform: uppercase;
     font-weight: 700;
+    text-decoration: none;
+    color: white;
 }
 
 .h0 i {
