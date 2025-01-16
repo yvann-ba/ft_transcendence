@@ -3,15 +3,22 @@
 
 {% load static %}
 
-{% block title %}Game{% endblock %}
+<!-- {% block title %}Game{% endblock %} -->
 
 {% block content %}
 
 <link rel="stylesheet" href="{% static 'css/pong-game.css' %}">
 
-<main>
-	<h1>MIAM proput le jeu la</h1>
-</main>
+<div class="pong-game">
+	<div id="scoreboard">
+		<span id="player1-score"> 0</span> - <span id="player2-score">0</span>
+	</div>
+	<div id="play-overlay">
+		<button id="play-button"> Play </button>
+	</div>
+	<canvas id="pongCanvas" width="800" height="400"></canvas>
+
+</div>
 
 <script src="{% static 'js/pong-game.js' %}"></script>
 

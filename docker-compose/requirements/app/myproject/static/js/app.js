@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Gestion de la navigation SPA (Délégation d'événements sur tout le body)
     document.body.addEventListener('click', function(event) {
         const link = event.target.closest('a');  // Trouver le lien cliqué
-        if (link && link.getAttribute('href')) {  // Vérifier le 'href' (et si l'attribut 'data-no-spa' n'est pas présent)
+        if (link && link.getAttribute('href')) { 
             event.preventDefault();  // Empêcher le rechargement de la page
             const href = link.getAttribute('href');
             const page = href.split('/')[1]; // Extraire le nom de la page à partir du href, sans le '/'
@@ -60,28 +60,27 @@ document.addEventListener('DOMContentLoaded', function() {
     function initializeHomeAnimations() {
         const animatedTextContainer = document.querySelector(".home-header-content");
         const animatedText = document.querySelector(".h-anim");
-
+    
         if (animatedTextContainer && animatedText) {
-            // Reset des classes d'animation
+            // Réinitialisation des classes d'animation
             animatedTextContainer.classList.add("hidden");
             animatedText.classList.remove("in");
             const splits = animatedText.querySelectorAll(".split");
             splits.forEach((split) => split.classList.remove("in"));
-
-            // Relancer l'animation
+    
+            // Relancer l'animation après un délai
             setTimeout(() => {
                 animatedTextContainer.classList.remove("hidden");
-
                 setTimeout(() => {
                     animatedText.classList.add("in");
-
                     setTimeout(() => {
                         splits.forEach((split) => split.classList.add("in"));
-                    }, 1000);
-                }, 500);
-            }, 100);
+                    }, 1000); // Délai pour synchroniser l'animation des "splits"
+                }, 500); // Délai avant de montrer le texte principal
+            }, 100); // Petit délai pour s'assurer que les classes sont bien réinitialisées
         }
     }
+    
 
     // Fonction modifiée pour charger le contenu de la page
     function fetchPage(page) {

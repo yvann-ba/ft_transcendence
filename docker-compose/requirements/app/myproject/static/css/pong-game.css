@@ -1,0 +1,61 @@
+
+.pong-game {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+	width: 100%;
+	font-family: Aeonik, sans-serif;
+}
+
+#pongCanvas {
+	position: absolute;
+	border: white solid;
+	top: 25vh;
+}
+
+#play-overlay {
+    position: absolute;
+	top: 15vh;
+    width: 100%;
+    height: 80%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	z-index: 10;
+}
+
+#play-button {
+    background: #ffffff;
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 15px 30px;
+    font-size: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.3s ease;
+}
+
+#play-button:hover {
+    background: #BB70AD;
+    transform: scale(1.1);
+}
+
+#play-overlay.hidden {
+    display: none;
+}
+
+.pong-game #scoreboard {
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	color: rgb(250, 250, 250);
+	top: 17vh;
+	font-size: 2rem;
+	font-weight: 700;
+	height: 100vh;
+	width: 100%;
+	gap: 1.5rem;
+}
