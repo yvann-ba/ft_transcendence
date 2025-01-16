@@ -21,6 +21,9 @@ body, html {
     background-color: black;
     color: white;
     font-size: 1vw;
+    scrollbar-color: white black;
+    scrollbar-width: thin;
+
 }
 
 div {
