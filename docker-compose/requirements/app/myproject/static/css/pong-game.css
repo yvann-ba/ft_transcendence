@@ -1,9 +1,20 @@
 
-.pong-game {
+.main-menu {
 	position: absolute;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	height: 100vh;
+	width: 100%;
+	font-family: Aeonik, sans-serif;
+}
+
+.pong-custom-menu {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	padding: 7.2vh;
 	height: 100vh;
 	width: 100%;
 	font-family: Aeonik, sans-serif;
@@ -15,7 +26,7 @@
 	top: 25vh;
 }
 
-#play-overlay {
+#pong-menu {
     position: absolute;
 	top: 15vh;
     width: 100%;
@@ -25,9 +36,11 @@
     justify-content: center;
     align-items: center;
 	z-index: 10;
+	flex-direction: column;
+	gap: 1.5vh;
 }
 
-#play-button {
+.pong-button {
     background: #ffffff;
     color: rgb(0, 0, 0);
     border: none;
@@ -36,18 +49,20 @@
     border-radius: 8px;
     cursor: pointer;
     transition: transform 0.2s ease, background 0.3s ease;
+	width: 20vh;
 }
 
-#play-button:hover {
+.pong-button:hover {
     background: #BB70AD;
     transform: scale(1.1);
 }
 
-#play-overlay.hidden {
-    display: none;
+.hidden {
+    display: none !important;
 }
 
-.pong-game #scoreboard {
+
+#pong-game #scoreboard {
 	position: absolute;
 	display: flex;
 	justify-content: center;
@@ -56,6 +71,6 @@
 	font-size: 2rem;
 	font-weight: 700;
 	height: 100vh;
-	width: 100%;
+	width: 800px;
 	gap: 1.5rem;
 }

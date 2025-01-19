@@ -2,6 +2,10 @@
 const canvas = document.getElementById("pongCanvas");
 const ctx = canvas.getContext("2d");
 
+// Colors
+groundColor = "#fff";
+ballColor = "#fff";
+
 // Dimensions et positions
 const paddleWidth = 7;
 const paddleHeight = 100;
@@ -52,7 +56,7 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Dessiner le terrain
-    ctx.fillStyle = "#fff";
+    ctx.fillStyle = groundColor;
     ctx.fillRect(canvas.width / 2 - 1, 0, 2, canvas.height);
 
     // Dessiner les raquettes
@@ -62,7 +66,7 @@ function draw() {
     // Dessiner la balle (ronde)
     ctx.beginPath();
     ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "#fff";
+    ctx.fillStyle = ballColor;
     ctx.fill();
     ctx.closePath();
 }
@@ -136,7 +140,7 @@ function resetGame() {
     player1Score = 0;
     player2Score = 0;
     resetBall();
-    document.getElementById("play-overlay").classList.remove("hidden"); 
+    document.getElementById("pong-menu").classList.remove("hidden"); 
 }
 
 // Boucle principale
@@ -148,9 +152,20 @@ function gameLoop() {
 
 // Lancer ou arrêter le jeu
 document.getElementById("play-button").addEventListener("click", () => {
+    document.getElementById("pong-menu").classList.add("hidden");
     gameRunning = true;
-    document.getElementById("play-overlay").classList.add("hidden");
 });
+
+// Customisation des couleurs
+document.getElementById("custom-button").addEventListener("click", () => {
+    document.getElementById("pong-menu").classList.add("hidden");
+    document.getElementById("pong-custom-menu").classList.remove("hidden");
+
+    document.getElementById("pong-game").classList.remove("main-menu".add);
+    document.getElementById("pong-game").classList.add("pong-custom-menu");
+
+});
+
 
 // Démarrage
 gameLoop();
