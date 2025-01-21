@@ -1,3 +1,4 @@
+
 // Configuration du canvas
 const canvas = document.getElementById("pongCanvas");
 const ctx = canvas.getContext("2d");
@@ -24,7 +25,7 @@ let ballSpeedY = 4;
 // Scores
 let player1Score = 0;
 let player2Score = 0;
-const winningScore = 3;
+let winningScore = 3;
 
 // Contrôles des joueurs
 let player1Up = false;
@@ -34,6 +35,9 @@ let player2Down = false;
 
 // État du jeu
 let gameRunning = false;
+
+// Démarrage
+gameLoop();
 
 // Écoute des touches
 document.addEventListener("keydown", (event) => {
@@ -60,8 +64,8 @@ function draw() {
     ctx.fillRect(canvas.width / 2 - 1, 0, 2, canvas.height);
 
     // Dessiner les raquettes
-    ctx.fillRect(0, player1Y, paddleWidth, paddleHeight);
-    ctx.fillRect(canvas.width - paddleWidth, player2Y, paddleWidth, paddleHeight);
+    ctx.fillRect(3, player1Y, paddleWidth, paddleHeight);
+    ctx.fillRect(canvas.width - paddleWidth - 3, player2Y, paddleWidth, paddleHeight);
 
     // Dessiner la balle (ronde)
     ctx.beginPath();
@@ -82,10 +86,10 @@ function update() {
     if (!gameRunning) return;
 
     // Mouvement des raquettes
-    if (player1Up && player1Y > 0) player1Y -= 5;
-    if (player1Down && player1Y < canvas.height - paddleHeight) player1Y += 5;
-    if (player2Up && player2Y > 0) player2Y -= 5;
-    if (player2Down && player2Y < canvas.height - paddleHeight) player2Y += 5;
+    if (player1Up && player1Y > 5) player1Y -= 5;
+    if (player1Down && player1Y < canvas.height - paddleHeight - 5) player1Y += 5;
+    if (player2Up && player2Y > 5) player2Y -= 5;
+    if (player2Down && player2Y < canvas.height - paddleHeight - 5) player2Y += 5;
 
     // Mouvement de la balle
     ballX += ballSpeedX;
@@ -156,7 +160,7 @@ document.getElementById("play-button").addEventListener("click", () => {
     gameRunning = true;
 });
 
-// Customisation des couleurs
+// Menu de personnalisation
 document.getElementById("custom-button").addEventListener("click", () => {
     document.getElementById("pong-menu").classList.add("hidden");
     document.getElementById("pong-custom-menu").classList.remove("hidden");
@@ -166,5 +170,34 @@ document.getElementById("custom-button").addEventListener("click", () => {
 });
 
 
-// Démarrage
-gameLoop();
+// Retour au menu de jeu
+
+document.getElementById("custom-back-button").addEventListener("click", () => {
+    document.getElementById("pong-menu").classList.remove("hidden");
+    document.getElementById("pong-custom-menu").classList.add("hidden");
+    document.getElementById("pong-game").classList.remove("pong-custom-menu-canvas");
+    document.getElementById("pong-game").classList.add("main-menu");
+});
+
+
+// Modif du score max
+document.getElementById("winning-score-slider").addEventListener("input", (event) => {
+    const slider = event.target; 
+
+    winningScore = Math.floor(slider.value);
+    document.getElementById("pong-winning-score").textContent = "Winning score : " + winningScore;
+});
+
+//barre de progression des sliders
+document.querySelectorAll(".pong-custom-slider").forEach(slider => {
+    slider.addEventListener("input", (event) => {
+        const slider = event.target;
+        let value = 5 + (slider.value - slider.min) / (slider.max - slider.min) * 90; // Calcul de progression
+        // value += ;
+        console.log(`Valeur calculée : ${value}%`);
+
+        // Met à jour le style de fond
+    slider.style.setProperty('--slider-track-bg', `linear-gradient(to right, #BB70AD 0%, #BB70AD ${value}%, #ffffff ${value}%)`);
+
+    });
+});
