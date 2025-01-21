@@ -162,8 +162,7 @@ document.getElementById("custom-button").addEventListener("click", () => {
     document.getElementById("pong-custom-menu").classList.remove("hidden");
 
     document.getElementById("pong-game").classList.remove("main-menu".add);
-    document.getElementById("pong-game").classList.add("pong-custom-menu");
-
+    document.getElementById("pong-game").classList.add("pong-custom-menu-canvas");
 });
 
 

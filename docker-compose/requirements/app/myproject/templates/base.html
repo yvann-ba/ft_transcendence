@@ -12,7 +12,7 @@
 <body>
     <nav class="nav" id="nav">
         <div class="navbar">
-            <a href="#" class="logo">Pong Game</a>
+            <a href="{% url 'game_page' page='home' %}" class="logo">Pong Game</a>
             <div class="nav-links flip-effect">
                 <div>
                     <a href="{% url 'game_page' page='home' %}" data-page="home" class="nav-link" data-hover="Home">
