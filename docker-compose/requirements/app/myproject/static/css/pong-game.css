@@ -21,6 +21,9 @@
 }
 
 #pong-custom-menu {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5vh;
 	width: 100%;
 }
 
@@ -77,4 +80,79 @@
 	height: 100vh;
 	width: 800px;
 	gap: 1.5rem;
+}
+
+
+ /* Slider custom */
+ .pong-custom-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20vh;
+    height: 25px;
+    background: linear-gradient(to right, #BB70AD 0%, #BB70AD 25%, #ffffff 25%);
+    border-radius: 2vh;
+    transition: background 0.2s ease-in-out;	
+    outline: none;
+}
+
+/* Style du curseur */
+.pong-custom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #BB70AD;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.pong-custom-slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #BB70AD;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Mouse-over effects */
+.pong-custom-slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider track */
+.pong-custom-slider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 25px;
+    border-radius: 2vh;
+}
+
+.pong-custom-slider::-moz-range-progress {
+    background-color: #BB70AD; /* Progress bar color */
+    height: 25px;
+    border-radius: 2vh;
+}
+
+.pong-custom-slider::-webkit-slider-runnable-track {
+    background: var(--slider-track-bg, linear-gradient(to right, #BB70AD 0%, #BB70AD 25%, #ffffff 25%)); /* Valeur par défaut */
+}
+
+/* bump effect on paddle */
+@keyframes bump {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2); /* Agrandissement temporaire */
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.paddle {
+    transition: transform 0.1s ease;
+}
+
+.paddle.bump {
+    animation: bump 0.2s ease;
 }

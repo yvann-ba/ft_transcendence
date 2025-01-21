@@ -8,7 +8,7 @@ def game_page(request, page='home'):  # 'home' est la valeur par défaut
     users = User.objects.all()
 
     # Assurez-vous que le template existe avant de le rendre
-    valid_pages = ['home', 'profile', 'settings', 'pong-game', 'about']  # Liste des pages valides
+    valid_pages = ['home', 'profile', 'settings', 'pong-game', 'about', 'test']  # Liste des pages valides
     if page not in valid_pages:
         page = '404' 
 
