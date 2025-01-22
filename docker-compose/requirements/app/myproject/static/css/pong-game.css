@@ -10,26 +10,44 @@
 }
 
 .pong-custom-menu-canvas {
-	position: absolute;
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
-	padding: 7.2vh;
+	padding: 0 7.2vh 0 0;
 	height: 100vh;
 	width: 100%;
 	font-family: Aeonik, sans-serif;
+	font-size: 2vh;
 }
 
 #pong-custom-menu {
 	display: flex;
 	flex-direction: column;
+	align-items: center;
 	gap: 1.5vh;
 	width: 100%;
 }
 
+#custom-menu-content {
+	display: flex;
+	flex-direction: column;
+	gap: 4vh;
+	width: 50%;
+	align-items: center;
+}
+
+#custom-settings {
+	display: flex;
+	flex-direction: column;
+	gap: 2vh;
+}
+
+:root {
+	--ground-color: #ffffff;
+}
+
 #pongCanvas {
-	position: absolute;
-	border: white solid;
+	border: var(--ground-color) 0.7vh solid;
 	top: 25vh;
 }
 
@@ -75,12 +93,12 @@
 	justify-content: center;
 	color: rgb(250, 250, 250);
 	top: 17vh;
-	font-size: 2rem;
+	font-size: 5vh;
 	font-weight: 700;
-	height: 100vh;
 	width: 800px;
 	gap: 1.5rem;
 }
+
 
 
  /* Slider custom */
@@ -136,6 +154,35 @@
     background: var(--slider-track-bg, linear-gradient(to right, #BB70AD 0%, #BB70AD 25%, #ffffff 25%)); /* Valeur par défaut */
 }
 
+/* custom input color */
+
+
+
+.color-input {
+    -webkit-appearance: none; /* Supprime le style par défaut sur Webkit (Chrome, Safari) */
+    -moz-appearance: none;    /* Supprime le style par défaut sur Firefox */
+    appearance: none;         /* Supprime le style par défaut (support généralisé) */
+    border: 2px solid transparent; /* Bordure par défaut (transparent) */
+    border-radius: 8px;       /* Coins arrondis */
+    width: 20vh;              /* Taille du carré (largeur) */
+    height: 25px;             /* Taille du carré (hauteur) */
+    cursor: pointer;
+}
+
+.color-input::-webkit-color-swatch {
+    border: none; /* Supprime la bordure du swatch (aperçu de couleur) */
+}
+
+.color-input:hover {
+    border-color: #acacac;       /* Bordure plus visible au survol */
+}
+
+.color-input:focus {
+    border-color: #BB70AD;    /* Bordure visible au focus */
+    outline: none;            /* Supprime le contour par défaut bleu vif */
+}
+
+
 /* bump effect on paddle */
 @keyframes bump {
     0% {
@@ -155,4 +202,31 @@
 
 .paddle.bump {
     animation: bump 0.2s ease;
+}
+
+
+@media (max-width : 1160px) {
+	#pong-game {
+		width: 100%;
+	}
+	.pong-custom-menu-canvas {
+		flex-direction: column-reverse;
+		padding: 7.2vh;
+		top: 10vh;
+	}
+
+	#custom-menu-content {
+		justify-content: space-between;
+		width: 100%;
+		flex-wrap: wrap;
+	}
+
+	#custom-settings {
+		display: flex;
+		flex-direction: row;
+	}
+
+	#pong-game #scoreboard {
+		top: -1vh;
+	}
 }

@@ -23,17 +23,30 @@
 	</div>
 	
 	<div id="pong-custom-menu" class="hidden">
-		<div>
-			<p id="pong-winning-score">Winning score : 3</p>
-			<input id="winning-score-slider" class="pong-custom-slider" type="range" min="1" max="10" value="3" step="any">
-		</div>
-		<div>
-			<button class="pong-button" id="custom-back-button"> Return </button>
+		<div id="custom-menu-content">
+			<div id="custom-settings">
+				<div>
+					<p id="pong-winning-score">Winning score : 3</p>
+					<input id="winning-score-slider" class="pong-custom-slider" type="range" min="1" max="10" value="3" step="any">
+				</div>
+				<div>
+					<p>Ground color</p>
+					<input id="pong-ground-color" class="color-input" type="color" value="#ffffff">
+				</div>
+				<div>
+					<p>Ball color</p>
+					<input id="pong-ball-color" class="color-input" type="color" value="#ffffff">
+				</div>
+				<div>
+					<p>Paddle color</p>
+					<input id="pong-paddle-color" class="color-input" type="color" value="#ffffff">
+				</div>
+			</div>
+			<div>
+				<button class="pong-button" id="custom-back-button"> Return </button>
+			</div>
 		</div>
 	</div>
-	<div id="paddle1" class="paddle"></div>
-	<div id="paddle2" class="paddle"></div>
-
 	<canvas id="pongCanvas" width="800" height="400"></canvas>
 </div>
 
