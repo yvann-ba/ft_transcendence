@@ -41,6 +41,10 @@ const maxDeltaTime = 0.02;
 
 // Effet "bump" 
 let bumpIntensity = 1.1;
+let countDown = 3;
+let countdownRunning = false; // Indicateur pour le compte à rebours
+let countdownOpacity = 0.7; // Opacité initiale du compte à rebours
+let fadingOut = false; 
 
 // Effet de taille des raquettes
 let paddle1Height = paddleHeight;
@@ -49,8 +53,21 @@ const maxPaddleHeight = 150;
 const minPaddleHeight = 90;
 const paddleResizeSpeed = 5; // Vitesse de l'animation de redimensionnement
 
+// Variables pour animation de bump
+let paddle1Animation = false;
+let paddle2Animation = false;
+let animationStartTime = 0;
+const animationDuration = 300; // Durée de l'animation en millisecondes
+
 // Démarrage
-gameLoop();
+document.addEventListener("DOMContentLoaded", () => {
+
+    setTimeout(() => {
+        
+        gameLoop();
+    }, 1000);
+
+});
 
 // Écoute des touches
 document.addEventListener("keydown", (event) => {
@@ -94,11 +111,72 @@ function updateScores() {
     document.getElementById('player2-score').textContent = player2Score;
 }
 
+async function animatePaddleSize(paddle, targetHeight, duration, easing) {
+    let startHeight = paddle === "player1" ? paddle1Height : paddle2Height;
+    let startY = paddle === "player1" ? player1Y : player2Y;
+    let startTime = null;
+
+    function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        let progress = (timestamp - startTime) / duration;
+
+        // Appliquer la fonction d'easing pour le retour lent
+        let easedProgress = easing(progress);
+
+        // Calcul de la hauteur actuelle
+        let currentHeight =
+            progress < 0.5
+                ? startHeight + (targetHeight - startHeight) * (progress * 2)
+                : targetHeight + (paddleHeight - targetHeight) * (easedProgress - 0.5) * 2;
+
+        // Calcul du décalage vertical pour centrer la raquette
+        let currentY = startY - (currentHeight - startHeight) / 2;
+
+        // Mise à jour des valeurs
+        if (paddle === "player1") {
+            paddle1Height = Math.max(minPaddleHeight, Math.min(maxPaddleHeight, currentHeight));
+            player1Y = currentY;
+        } else if (paddle === "player2") {
+            paddle2Height = Math.max(minPaddleHeight, Math.min(maxPaddleHeight, currentHeight));
+            player2Y = currentY;
+        }
+
+        // Si l'animation n'est pas terminée, continuer
+        if (progress < 1) {
+            requestAnimationFrame(step);
+        }
+    }
+
+    requestAnimationFrame(step);
+}
+
+
 // Mettre à jour les positions
 function update(deltaTime) {
     if (!gameRunning) return;
 
     deltaTime = Math.min(deltaTime, maxDeltaTime);
+
+    // Animation des raquettes (bump effect)
+    if (paddle1Animation) {
+        let elapsedTime = Date.now() - animationStartTime;
+        if (elapsedTime < animationDuration) {
+            paddle1Height = paddleHeight + (maxPaddleHeight - paddleHeight) * (elapsedTime / animationDuration);
+        } else {
+            paddle1Height = maxPaddleHeight;
+            paddle1Animation = false; // Fin de l'animation
+        }
+    }
+
+    if (paddle2Animation) {
+        let elapsedTime = Date.now() - animationStartTime;
+        if (elapsedTime < animationDuration) {
+            paddle2Height = paddleHeight + (maxPaddleHeight - paddleHeight) * (elapsedTime / animationDuration);
+        } else {
+            paddle2Height = maxPaddleHeight;
+            paddle2Animation = false; // Fin de l'animation
+        }
+    }
 
     // Mouvement des raquettes
     const paddleSpeed = 300;
@@ -123,23 +201,15 @@ function update(deltaTime) {
     ) {
         ballSpeedX = -ballSpeedX * bumpIntensity;
         ballSpeedY = ballSpeedY * bumpIntensity;
-
-        // Agrandir la raquette gauche (player1)
+    
+        // Déclencher l'animation pour player1
         if (ballX - ballRadius < paddleWidth) {
-            if (paddle1Height < maxPaddleHeight) {
-                paddle1Height += paddleResizeSpeed; // Agrandir la raquette progressivement
-            }
-        } else if (paddle1Height > paddleHeight) {
-            paddle1Height -= paddleResizeSpeed; // Rétrécir la raquette progressivement
+            animatePaddleSize("player1", maxPaddleHeight, 300, (t) => t * t); // Easing quadratique
         }
-
-        // Agrandir la raquette droite (player2)
+    
+        // Déclencher l'animation pour player2
         if (ballX + ballRadius > canvas.width - paddleWidth) {
-            if (paddle2Height < maxPaddleHeight) {
-                paddle2Height += paddleResizeSpeed; // Agrandir la raquette progressivement
-            }
-        } else if (paddle2Height > paddleHeight) {
-            paddle2Height -= paddleResizeSpeed; // Rétrécir la raquette progressivement
+            animatePaddleSize("player2", maxPaddleHeight, 300, (t) => t * t); // Easing quadratique
         }
     }
 
@@ -174,27 +244,104 @@ function resetGame() {
     player2Score = 0;
     paddle1Height = paddleHeight; // Réinitialiser la taille de la raquette
     paddle2Height = paddleHeight; // Réinitialiser la taille de la raquette
+    player1Y = (canvas.height - paddleHeight) / 2;
+    player2Y = (canvas.height - paddleHeight) / 2;
     resetBall();
     document.getElementById("pong-menu").classList.remove("hidden");
 }
 
 // Boucle principale
+
 function gameLoop(timestamp) {
     let deltaTime = (timestamp - lastTime) / 1000;
     lastTime = timestamp;
 
+    draw(); // Dessiner le terrain et les autres éléments
+
+    if (countdownRunning) {
+        drawCountdown(countDown); // Dessiner le compte à rebours si actif
+    } else if (gameRunning) {
+        update(deltaTime); // Mettre à jour le jeu si actif
+    }
+
+    requestAnimationFrame(gameLoop); // Prochaine frame
+}
+
+function startCountdown(seconds) {
     draw();
-    update(deltaTime);
-    requestAnimationFrame(gameLoop);
+    countDown = seconds;
+    countdownOpacity = 1.0;
+    fadingOut = false;
+    countdownRunning = true; 
+    gameRunning = false;
+    const countdownInterval = setInterval(() => {
+        countDown--;
+
+        if (countDown <= 0) {
+            clearInterval(countdownInterval); // Arrêter le décompte
+            fadingOut = true; // Démarrer immédiatement le fade-out
+        }
+    }, 1000);
 }
 
 
+function drawCountdown() {
+    if (countDown > 0) {
+        // Dessiner le cercle avec opacité
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2, canvas.height / 2, 50, 0, Math.PI * 2); 
+        ctx.fillStyle = "rgba(224, 122, 236, 0.7)"; 
+        ctx.fill();
+        ctx.closePath();
 
-// Lancer ou arrêter le jeu
+        // Dessiner le chiffre
+        ctx.fillStyle = "white"; 
+        ctx.font = "50px Aeonik";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle"; 
+        ctx.fillText(countDown, canvas.width / 2, canvas.height / 2 + 5);
+
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 4;
+        ctx.stroke();
+        
+    }
+    if (fadingOut) {
+        countdownOpacity -= 0.01;
+
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2, canvas.height / 2, 50, 0, Math.PI * 2); 
+        ctx.fillStyle = `rgba(224, 122, 236, ${countdownOpacity})`; 
+        ctx.fill();
+        ctx.closePath();
+
+        ctx.fillStyle = `rgba(255, 255, 255, ${countdownOpacity})`;
+        ctx.font = "50px Aeonik";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("GO", canvas.width / 2, canvas.height / 2 + 5);
+
+        ctx.strokeStyle = `rgba(255, 255, 255, ${countdownOpacity})`;
+        ctx.lineWidth = 4; 
+        ctx.stroke();
+
+        if (countdownOpacity <= 0) {
+            countdownRunning = false;
+            gameRunning = true; 
+        }
+    }
+}
+
+// Événement "Play"
 document.getElementById("play-button").addEventListener("click", () => {
+    player1Score = 0;
+    player2Score = 0;
+    updateScores();
+    draw();
     document.getElementById("pong-menu").classList.add("hidden");
-    gameRunning = true;
+    startCountdown(3);
 });
+
 
 // Menu de personnalisation
 document.getElementById("custom-button").addEventListener("click", () => {

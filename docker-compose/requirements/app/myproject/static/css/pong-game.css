@@ -49,6 +49,7 @@
 #pongCanvas {
 	border: var(--ground-color) 0.7vh solid;
 	top: 25vh;
+    border-radius: 14px;
 }
 
 #pong-menu {
