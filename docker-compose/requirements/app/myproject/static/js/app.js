@@ -28,18 +28,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fonction pour charger les données initiales
     function loadInitialData() {
         fetch('/api/users/')
-            .then(response => response.json())
-            .then(data => {
-                const usersList = document.getElementById('users-list');
-                if (usersList) {
-                    data.forEach(user => {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = user.name;
-                        usersList.appendChild(listItem);
-                    });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
+                return response.json();
             })
-            .catch(error => console.error('There was an error fetching the users!', error));
+            .then(data => {
+                console.log('Users:', data);
+            })
+            .catch(error => console.error('Error fetching users:', error));
 
         fetch('/api/games/')
             .then(response => response.json())
@@ -99,6 +97,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (page === 'home') {
                     initializeHomeAnimations();
                 }
+                // if (page === 'pong-game') {
+                //     initializePongGame();
+                // }
             })
             .catch(error => console.error('Error fetching the page:', error));
     }

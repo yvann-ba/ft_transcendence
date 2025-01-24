@@ -1,5 +1,9 @@
+// document.addEventListener("DOMContentLoaded", function() {
+
 const canvas = document.getElementById("pongCanvas");
+console.log("canvas: ", canvas);
 const ctx = canvas.getContext("2d");
+console.log("ctx: ", ctx);
 
 // Colors
 let groundColor = "#fff";
@@ -18,7 +22,8 @@ let ballX = canvas.width / 2;
 let ballY = canvas.height / 2;
 
 // Vitesse de la balle
-const initialBallSpeed = 200;
+const initialBallSpeed = 250;
+const maxBallSpeed =  1000;
 let ballSpeedX = initialBallSpeed;
 let ballSpeedY = initialBallSpeed;
 
@@ -37,19 +42,21 @@ let player2Down = false;
 let gameRunning = false;
 
 let lastTime = 0;
-const maxDeltaTime = 0.02;
+const maxDeltaTime = 0.05;
 
 // Effet "bump" 
 let bumpIntensity = 1.1;
+
+// Compte à rebours
 let countDown = 3;
-let countdownRunning = false; // Indicateur pour le compte à rebours
-let countdownOpacity = 0.7; // Opacité initiale du compte à rebours
+let countdownRunning = false; 
+let countdownOpacity = 0.7;
 let fadingOut = false; 
 
 // Effet de taille des raquettes
 let paddle1Height = paddleHeight;
 let paddle2Height = paddleHeight;
-const maxPaddleHeight = 150;
+const maxPaddleHeight = 120;
 const minPaddleHeight = 90;
 const paddleResizeSpeed = 5; // Vitesse de l'animation de redimensionnement
 
@@ -60,14 +67,11 @@ let animationStartTime = 0;
 const animationDuration = 300; // Durée de l'animation en millisecondes
 
 // Démarrage
-document.addEventListener("DOMContentLoaded", () => {
-
-    setTimeout(() => {
         
-        gameLoop();
-    }, 1000);
-
-});
+function initializePongGame ()
+{
+    gameLoop();
+}
 
 // Écoute des touches
 document.addEventListener("keydown", (event) => {
@@ -111,43 +115,51 @@ function updateScores() {
     document.getElementById('player2-score').textContent = player2Score;
 }
 
-async function animatePaddleSize(paddle, targetHeight, duration, easing) {
-    let startHeight = paddle === "player1" ? paddle1Height : paddle2Height;
+function animatePaddleSize(paddle, duration) {
+    let startTime = Date.now();
+    let startHeight = paddleHeight;
     let startY = paddle === "player1" ? player1Y : player2Y;
-    let startTime = null;
+    let maxHeight = paddleHeight * 1.05;  // 50% larger
+    let minHeight = paddleHeight * 0.9;  // 30% smaller
 
-    function step(timestamp) {
-        if (!startTime) startTime = timestamp;
-        let progress = (timestamp - startTime) / duration;
+    function animate() {
+        let elapsedTime = Date.now() - startTime;
+        let progress = elapsedTime / duration;
 
-        // Appliquer la fonction d'easing pour le retour lent
-        let easedProgress = easing(progress);
+        let currentHeight;
+        let currentY;
 
-        // Calcul de la hauteur actuelle
-        let currentHeight =
-            progress < 0.5
-                ? startHeight + (targetHeight - startHeight) * (progress * 2)
-                : targetHeight + (paddleHeight - targetHeight) * (easedProgress - 0.5) * 2;
-
-        // Calcul du décalage vertical pour centrer la raquette
-        let currentY = startY - (currentHeight - startHeight) / 2;
-
-        // Mise à jour des valeurs
-        if (paddle === "player1") {
-            paddle1Height = Math.max(minPaddleHeight, Math.min(maxPaddleHeight, currentHeight));
-            player1Y = currentY;
-        } else if (paddle === "player2") {
-            paddle2Height = Math.max(minPaddleHeight, Math.min(maxPaddleHeight, currentHeight));
-            player2Y = currentY;
+        if (progress < 0.3) {
+            // Quickly grow larger from center
+            currentHeight = startHeight + (maxHeight - startHeight) * (progress / 0.3);
+            currentY = startY - (currentHeight - startHeight) / 2;
+        } else if (progress < 0.6) {
+            // Quickly shrink below normal from center
+            currentHeight = maxHeight - (maxHeight - minHeight) * ((progress - 0.3) / 0.3);
+            currentY = startY + (startHeight - currentHeight) / 2;
+        } else {
+            // Smoothly return to normal
+            let returnProgress = (progress - 0.6) / 0.4;
+            currentHeight = minHeight + (startHeight - minHeight) * Math.pow(returnProgress, 3);
+            currentY = startY + (startHeight - currentHeight) / 2;
         }
 
-        // Si l'animation n'est pas terminée, continuer
+        if (paddle === "player1") {
+            paddle1Height = currentHeight;
+            player1Y = currentY;
+            paddle1Animation = progress < 1;
+        } else if (paddle === "player2") {
+            paddle2Height = currentHeight;
+            player2Y = currentY;
+            paddle2Animation = progress < 1;
+        }
+
         if (progress < 1) {
-            requestAnimationFrame(step);
+            requestAnimationFrame(animate);
         }
     }
 
-    requestAnimationFrame(step);
+    requestAnimationFrame(animate);
 }
 
 
@@ -157,6 +169,13 @@ function update(deltaTime) {
 
     deltaTime = Math.min(deltaTime, maxDeltaTime);
 
+    // Mouvement des raquettes
+    const paddleSpeed = 300;
+    if (player1Up && player1Y > 5) player1Y -= paddleSpeed * deltaTime;
+    if (player1Down && player1Y < canvas.height - paddle1Height - 5) player1Y += paddleSpeed * deltaTime;
+    if (player2Up && player2Y > 5) player2Y -= paddleSpeed * deltaTime;
+    if (player2Down && player2Y < canvas.height - paddle2Height - 5) player2Y += paddleSpeed * deltaTime;
+
     // Animation des raquettes (bump effect)
     if (paddle1Animation) {
         let elapsedTime = Date.now() - animationStartTime;
@@ -164,7 +183,7 @@ function update(deltaTime) {
             paddle1Height = paddleHeight + (maxPaddleHeight - paddleHeight) * (elapsedTime / animationDuration);
         } else {
             paddle1Height = maxPaddleHeight;
-            paddle1Animation = false; // Fin de l'animation
+            paddle1Animation = false;
         }
     }
 
@@ -174,42 +193,64 @@ function update(deltaTime) {
             paddle2Height = paddleHeight + (maxPaddleHeight - paddleHeight) * (elapsedTime / animationDuration);
         } else {
             paddle2Height = maxPaddleHeight;
-            paddle2Animation = false; // Fin de l'animation
+            paddle2Animation = false;
         }
     }
 
-    // Mouvement des raquettes
-    const paddleSpeed = 300;
-    if (player1Up && player1Y > 5) player1Y -= paddleSpeed * deltaTime;
-    if (player1Down && player1Y < canvas.height - paddle1Height - 5) player1Y += paddleSpeed * deltaTime;
-    if (player2Up && player2Y > 5) player2Y -= paddleSpeed * deltaTime;
-    if (player2Down && player2Y < canvas.height - paddle2Height - 5) player2Y += paddleSpeed * deltaTime;
 
     // Mouvement de la balle
-    ballX += ballSpeedX * deltaTime;
-    ballY += ballSpeedY * deltaTime;
+    let nextBallX = ballX + ballSpeedX * deltaTime;
+    let nextBallY = ballY + ballSpeedY * deltaTime;
 
-    // Collision avec le haut et le bas
-    if (ballY - ballRadius < 0 || ballY + ballRadius > canvas.height) {
+    // Vertical wall collision
+    if (nextBallY - ballRadius <= 0 || nextBallY + ballRadius >= canvas.height) {
         ballSpeedY = -ballSpeedY;
+        nextBallY = nextBallY > canvas.height/2 
+            ? canvas.height - ballRadius 
+            : ballRadius;
     }
+
+    // Update ball position
+    ballX = nextBallX;
+    ballY = nextBallY;
 
     // Collision avec les raquettes
     if (
         (ballX - ballRadius < paddleWidth && ballY > player1Y && ballY < player1Y + paddle1Height) ||
         (ballX + ballRadius > canvas.width - paddleWidth && ballY > player2Y && ballY < player2Y + paddle2Height)
     ) {
-        ballSpeedX = -ballSpeedX * bumpIntensity;
-        ballSpeedY = ballSpeedY * bumpIntensity;
-    
+
+        let relativePosition;
+        if (ballX - ballRadius < paddleWidth) {
+            relativePosition = (ballY - player1Y) / paddle1Height - 0.5;
+        } else {
+            relativePosition = (ballY - player2Y) / paddle2Height - 0.5;
+        }
+
+        const maxDeflectionAngle = Math.PI / 1.4;
+        const deflectionAngle = relativePosition * maxDeflectionAngle;
+
+        const currentSpeed = Math.sqrt(ballSpeedX**2 + ballSpeedY**2);
+        const newSpeed = currentSpeed * bumpIntensity;
+
+        // Maintain the original speed while changing direction
+        ballSpeedX = -Math.sign(ballSpeedX) * newSpeed * Math.cos(Math.abs(deflectionAngle));
+        ballSpeedY = newSpeed * Math.sin(deflectionAngle);
+
+        // Limiter la vitesse maximale
+        if (Math.abs(ballSpeedX) > maxBallSpeed)
+            ballSpeedX = maxBallSpeed * (ballSpeedX > 0 ? 1 : -1);
+        if (Math.abs(ballSpeedY) > maxBallSpeed)
+            ballSpeedY = maxBallSpeed * (ballSpeedY > 0 ? 1 : -1);
+
         // Déclencher l'animation pour player1
         if (ballX - ballRadius < paddleWidth) {
-            animatePaddleSize("player1", maxPaddleHeight, 300, (t) => t * t); // Easing quadratique
+            animatePaddleSize("player1", 150); // Easing quadratique
         }
     
         // Déclencher l'animation pour player2
         if (ballX + ballRadius > canvas.width - paddleWidth) {
-            animatePaddleSize("player2", maxPaddleHeight, 300, (t) => t * t); // Easing quadratique
+            animatePaddleSize("player2", 150);
         }
     }
 
@@ -223,7 +264,6 @@ function update(deltaTime) {
     }
     updateScores();
 
-    // Vérifier si un joueur a gagné
     if (player1Score === winningScore || player2Score === winningScore) {
         gameRunning = false;
         resetGame();
@@ -256,15 +296,15 @@ function gameLoop(timestamp) {
     let deltaTime = (timestamp - lastTime) / 1000;
     lastTime = timestamp;
 
-    draw(); // Dessiner le terrain et les autres éléments
+    draw();
 
     if (countdownRunning) {
-        drawCountdown(countDown); // Dessiner le compte à rebours si actif
+        drawCountdown(countDown);
     } else if (gameRunning) {
-        update(deltaTime); // Mettre à jour le jeu si actif
+        update(deltaTime);
     }
 
-    requestAnimationFrame(gameLoop); // Prochaine frame
+    requestAnimationFrame(gameLoop);
 }
 
 function startCountdown(seconds) {
@@ -278,8 +318,8 @@ function startCountdown(seconds) {
         countDown--;
 
         if (countDown <= 0) {
-            clearInterval(countdownInterval); // Arrêter le décompte
-            fadingOut = true; // Démarrer immédiatement le fade-out
+            clearInterval(countdownInterval);
+            fadingOut = true;
         }
     }, 1000);
 }
@@ -287,14 +327,12 @@ function startCountdown(seconds) {
 
 function drawCountdown() {
     if (countDown > 0) {
-        // Dessiner le cercle avec opacité
         ctx.beginPath();
         ctx.arc(canvas.width / 2, canvas.height / 2, 50, 0, Math.PI * 2); 
         ctx.fillStyle = "rgba(224, 122, 236, 0.7)"; 
         ctx.fill();
         ctx.closePath();
 
-        // Dessiner le chiffre
         ctx.fillStyle = "white"; 
         ctx.font = "50px Aeonik";
         ctx.textAlign = "center";
@@ -334,6 +372,7 @@ function drawCountdown() {
 
 // Événement "Play"
 document.getElementById("play-button").addEventListener("click", () => {
+    console.log("play-button clicked");
     player1Score = 0;
     player2Score = 0;
     updateScores();
@@ -400,3 +439,5 @@ document.querySelectorAll(".color-input").forEach(input => {
         }
     });
 });
+
+// }); // Fin de l'écouteur d'événement "DOMContentLoaded"
