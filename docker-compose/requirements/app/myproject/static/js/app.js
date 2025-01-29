@@ -1,3 +1,5 @@
+
+
 document.addEventListener('DOMContentLoaded', function() {
     // Fonction pour charger les données initiales
     loadInitialData();
@@ -82,24 +84,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fonction modifiée pour charger le contenu de la page
     function fetchPage(page) {
-        fetch(`/${page}/`) // Utilise l'URL propre sans le préfixe 'game/'
+        fetch(`/${page}/`)
             .then(response => response.text())
             .then(data => {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(data, 'text/html');
                 const newContent = doc.getElementById('app').innerHTML;
-                document.getElementById('app').innerHTML = newContent;
-
-                // Met à jour l'historique du navigateur avec l'URL de la page
+                const appContainer = document.getElementById('app');
+                
+                // Remplacer le contenu
+                appContainer.innerHTML = newContent;
+    
+                // Exécuter les scripts dynamiquement
+                const scripts = appContainer.getElementsByTagName('script');
+                Array.from(scripts).forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    if (oldScript.src) {
+                        newScript.src = oldScript.src;
+                    } else {
+                        newScript.textContent = oldScript.textContent;
+                    }
+                    document.body.appendChild(newScript).parentNode.removeChild(newScript);
+                });
+    
+                // Mise à jour de l'historique
                 window.history.pushState({}, '', `/${page}/`);
-
-                // Initialiser les animations si c'est la page d'accueil
+    
                 if (page === 'home') {
                     initializeHomeAnimations();
                 }
-                // if (page === 'pong-game') {
-                //     initializePongGame();
-                // }
+                if (page === 'pong-game') {
+                    if (typeof initializePongGame === 'function') {
+                        initializePongGame();
+                    }
+                }
             })
             .catch(error => console.error('Error fetching the page:', error));
     }
