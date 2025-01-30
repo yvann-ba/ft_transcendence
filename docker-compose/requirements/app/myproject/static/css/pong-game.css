@@ -231,3 +231,15 @@
 		top: -1vh;
 	}
 }
+
+#pong-menu, #pong-custom-menu {
+    opacity: 0;
+    /* display: flex !important; */ 
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+
+#pong-menu.show, #pong-custom-menu.show {
+    opacity: 1;
+    visibility: visible;
+}
