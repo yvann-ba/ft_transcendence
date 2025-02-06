@@ -1,20 +1,28 @@
 # views.py
 from django.shortcuts import render
 from django.http import JsonResponse
-from .models import Game, User
+from .models import CustomUser, GameResult
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import CustomUser, GameResult
+from .serializers import UserSerializer, GameResultSerializer
 
+@api_view(['GET'])
 def users_list(request):
-    users = list(User.objects.values())
-    return JsonResponse(users, safe=False)
+    users = CustomUser.objects.all()
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)
 
-def games_list(request):
-    games = list(Game.objects.values())
-    return JsonResponse(games, safe=False)
+@api_view(['GET'])
+def game_results(request):
+    results = GameResult.objects.order_by('-score')[:10]
+    serializer = GameResultSerializer(results, many=True)
+    return Response(serializer.data)
 
 def game_page(request, page='home'):  # 'home' est la valeur par défaut
     # Récupération des données
-    games = Game.objects.all()
-    users = User.objects.all()
+    games = GameResult.objects.all()
+    users = CustomUser.objects.all()
 
     # Assurez-vous que le template existe avant de le rendre
     valid_pages = ['home', 'profile', 'settings', 'pong-game', 'about', 'test']  # Liste des pages valides

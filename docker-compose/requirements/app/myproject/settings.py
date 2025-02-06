@@ -96,3 +96,17 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'  # Ajout de STATIC_ROOT
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+AUTH_USER_MODEL = 'my_app.CustomUser'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
+
+INSTALLED_APPS += ['corsheaders']
+MIDDLEWARE.insert(2, 'corsheaders.middleware.CorsMiddleware')
+CORS_ORIGIN_ALLOW_ALL = True  # Pour le développement seulement

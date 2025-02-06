@@ -1,12 +1,14 @@
 from rest_framework import serializers
-from .models import User, Game
+from .models import CustomUser, GameResult
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = '__all__'
+        model = CustomUser
+        fields = ['id', 'username', 'avatar', 'total_score']
 
-class GameSerializer(serializers.ModelSerializer):
+class GameResultSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    
     class Meta:
-        model = Game
-        fields = '__all__'
+        model = GameResult
+        fields = ['user', 'score', 'duration', 'created_at']
