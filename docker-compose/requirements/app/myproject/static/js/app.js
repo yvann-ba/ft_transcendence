@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fonction modifiée pour charger le contenu de la page
     function fetchPage(page) {
-        fetch(`/${page}/`)
+        fetch(`/${page}/`) // Utilise l'URL propre sans le préfixe 'game/'
             .then(response => response.text())
             .then(data => {
                 const parser = new DOMParser();
