@@ -1,0 +1,27 @@
+services:
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - database
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./frontend:/app
+    command: npm run dev
+
+  database:
+    image: nouchka/sqlite3
+    container_name: sqlite_db
+    volumes:
+      - ./backend/database:/data

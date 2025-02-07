@@ -1,8 +1,5 @@
 .env
-*__pycache__/
-data
 staticfiles
 .gitignore
-docker-compose.yml
-
+node_modules
 test.*

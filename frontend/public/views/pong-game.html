@@ -1,0 +1,40 @@
+<section id="pong-game" class="main-menu">
+	<div id="scoreboard">
+		<span id="player1-score"> 0</span> - <span id="player2-score">0</span>
+	</div>
+	<div id="pong-menu">
+		<div id="play-overlay">
+			<button class="pong-button " id="play-button"> Play </button>
+		</div>
+		<div id="custom-overlay">
+			<button class="pong-button" id="custom-button"> Custom </button>
+		</div>
+	</div>
+	
+	<div id="pong-custom-menu" class="hidden">
+		<div id="custom-menu-content">
+			<div id="custom-settings">
+				<div>
+					<p id="pong-winning-score">Winning score : 3</p>
+					<input id="winning-score-slider" class="pong-custom-slider" type="range" min="1" max="10" value="3" step="any">
+				</div>
+				<div>
+					<p>Ground color</p>
+					<input id="pong-ground-color" class="color-input" type="color" value="#ffffff">
+				</div>
+				<div>
+					<p>Ball color</p>
+					<input id="pong-ball-color" class="color-input" type="color" value="#ffffff">
+				</div>
+				<div>
+					<p>Paddle color</p>
+					<input id="pong-paddle-color" class="color-input" type="color" value="#ffffff">
+				</div>
+			</div>
+			<div>
+				<button class="pong-button" id="custom-back-button"> Return </button>
+			</div>
+		</div>
+	</div>
+	<canvas id="pongCanvas" width="800" height="400"></canvas>
+</section>
