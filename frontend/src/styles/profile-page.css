@@ -1,0 +1,151 @@
+.profile-container {
+	margin: 20px auto;
+	padding: 20px;
+	background-color: #2b2d42 ;
+	border-radius: 10px;  
+	max-width: 900px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+	margin-top: 300px;
+  }
+  
+  .page-title {
+	text-align: center;
+	font-size: 28px;
+	color: #BB70AD;
+  }
+  
+  /* Tab Navigation */
+  .tabs {
+	display: flex;
+	list-style: none;
+	padding: 0;
+	margin: 0 0 20px;
+	border-bottom: 2px solid #BB70AD;
+	margin-top: 50px;
+  }
+  
+  .tab-link {
+	flex: 1;
+	text-align: center;
+	padding: 10px 15px;
+	cursor: pointer;
+	background-color: #2b2d42;
+	color: #f0f0f0;
+	border: none;
+	outline: none;
+	font-size: 16px;
+  }
+  
+  .tab-link.active {
+	background-color: #BB70AD;
+	color: #2b2d42;
+	font-weight: bold;
+  }
+  
+  /* Tab Content */
+  .tab-content {
+	display: none;
+  }
+  
+  .tab-content.active {
+	display: block;
+  }
+  
+  /* Profile Info */
+  .profile-info {
+	text-align: center;
+  } 
+  
+  .avatar {
+	width: 120px;
+	height: 120px;
+	border-radius: 50%;
+	margin-bottom: 10px;
+	object-fit: cover;
+	object-position: bottom;
+  }
+  
+  .username {
+	font-size: 24px;
+	color: #BB70AD;
+  }
+  
+  .Profilename {
+	font-size: 18px;
+  }
+  
+  .btn-add-friend {
+	padding: 10px 15px;
+	background-color: #BB70AD;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+  }
+  
+  .btn-add-friend:hover {
+	background-color: #e63946;
+  }
+  
+  /* Stats List */
+  .stats-list {
+	list-style: none;
+	padding: 0;
+  }
+  
+  .stats-list li {
+	margin: 5px 0;
+  }
+  
+  /* Score Table */
+  .score-table {
+	width: 100%;
+	border-collapse: collapse;
+  }
+  
+  .score-table th, .score-table td {
+	padding: 8px;
+	text-align: center;
+	border: 1px solid #f0f0f0;
+  }
+  
+  .score-table th {
+	background-color: #BB70AD;
+  }
+  
+  .score-table td {
+	background-color: #2b2d42;
+  }
+  
+  * Win/Loss Gauge Styles */
+  .win-loss-gauge-container {
+	  margin-top: 20px;
+  }
+  
+  .win-loss-gauge {
+	  width: 100%;
+	  height: 30px;
+	  display: flex;
+	  border-radius: 15px;
+	  overflow: hidden;
+  }
+  
+  .win-segment {
+	  background-color: #4CAF50;  /* Green for wins */
+	  height: 100%;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  color: white;
+	  font-weight: bold;
+  }
+  
+  .loss-segment {
+	  background-color: #F44336;  /* Red for losses */
+	  height: 100%;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  color: white;
+	  font-weight: bold;
+  }

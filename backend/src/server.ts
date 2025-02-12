@@ -18,7 +18,7 @@ fastify.register(fastifyStatic, {
 });
 
 fastify.setNotFoundHandler((request, reply) => {
-	reply.sendFile("index.html"); // Renvoie toujours index.html pour les routes inconnues
+	reply.sendFile("index.html"); 
   });
   
 

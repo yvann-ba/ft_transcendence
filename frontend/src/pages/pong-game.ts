@@ -67,21 +67,22 @@ interface GameState {
 	countdownOpacity: number;
 	fadingOut: boolean;
 	lastTime: number;
+	animationFrameId: number | null;
 }
 
-export default function initializePongGame(): void {
+export default function initializePongGame(): (() => void) | null {
 	// ======================
 	// Configuration initiale
 	// ======================
 	const canvas = document.getElementById("pongCanvas") as HTMLCanvasElement | null;
 	if (!canvas) {
 		console.error("Canvas non trouvé");
-		return;
+		return null;
 	}
 	const ctx = canvas.getContext("2d");
 	if (!ctx) {
 		console.error("Contexte 2D non trouvé");
-		return;
+		return null;
 	}
 
 	// Éléments UI
@@ -150,7 +151,8 @@ export default function initializePongGame(): void {
 		countdownActive: false,
 		countdownOpacity: 1.0,
 		fadingOut: false,
-		lastTime: performance.now()
+		lastTime: performance.now(),
+		animationFrameId: 0
 	};
 
 	// ======================
@@ -271,9 +273,11 @@ export default function initializePongGame(): void {
 		if (state.ball.x - state.ball.radius < 0) {
 			state.scores.player2++;
 			resetBall();
+			updateScores();
 		} else if (state.ball.x + state.ball.radius > canvas.width) {
 			state.scores.player1++;
 			resetBall();
+			updateScores();
 		}
 	}
 
@@ -374,6 +378,7 @@ export default function initializePongGame(): void {
 	function endGame(): void {
 		state.running = false;
 		elements.menu?.classList.remove("hidden");
+		elements.menu?.classList.add("show");
 		resetBall();
 	}
 
@@ -433,7 +438,7 @@ export default function initializePongGame(): void {
 
 		ctx.beginPath();
 		ctx.arc(canvas.width / 2, canvas.height / 2, 50, 0, Math.PI * 2);
-		ctx.fillStyle = `rgba(224, 122, 236, ${opacity * 0.7})`;
+		ctx.fillStyle = `rgba(187, 112, 173, ${opacity * 1})`;
 		ctx.fill();
 
 		// Texte
@@ -494,7 +499,7 @@ export default function initializePongGame(): void {
 			drawCountdown();
 		}
 
-		requestAnimationFrame(gameLoop);
+		state.animationFrameId = requestAnimationFrame(gameLoop);
 	}
 
 	// ======================
@@ -598,10 +603,31 @@ export default function initializePongGame(): void {
 		});
 		elements.winningScoreSlider?.addEventListener("input", changeWinningScore);
 
-		requestAnimationFrame(gameLoop);
+		state.animationFrameId = requestAnimationFrame(gameLoop);
 	}
 
 	init();
+
+	function cleanup() : void {
+		document.removeEventListener("keydown", handleKeyDown);
+		document.removeEventListener("keyup", handleKeyUp);
+		elements.playButton?.removeEventListener("click", startGame);
+		elements.customButton?.removeEventListener("click", openCustomMenu);
+		elements.customBackButton?.removeEventListener("click", closeCustomMenu);
+		elements.customColorsInputs.forEach((input) => {
+		  input.removeEventListener("input", changeColors);
+		});
+		elements.customSliders.forEach((slider) => {
+		  slider.removeEventListener("input", sliderAnimation);
+		});
+		elements.winningScoreSlider?.removeEventListener("input", changeWinningScore);
+		if (state.animationFrameId) {
+		  cancelAnimationFrame(state.animationFrameId);
+		}
+	  }
+	
+	  return cleanup;
+
 }
 
 // Export pour SPA
