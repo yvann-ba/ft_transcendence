@@ -246,7 +246,7 @@
         flex-direction: row;
     }
     #pong-game #scoreboard {
-        top: -1vh;
+        top: 9vh;
     }
 }
 

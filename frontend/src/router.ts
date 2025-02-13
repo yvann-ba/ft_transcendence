@@ -62,19 +62,16 @@ const loadPage = async (page: string) => {
 	  return "<section>Page introuvable</section>";
 	}
   };
-  
-// Gestion des clics sur les liens
-document.addEventListener("DOMContentLoaded", () => {
-  navigate();
 
-  document.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", (event) => {
+document.body.addEventListener("click", (event) => {
+  const target = event.target as HTMLElement;
+  const link = target.closest("a");
+  if (link) {
+    const href = link.getAttribute("href");
+    if (href && href.startsWith("/")) {
       event.preventDefault();
-      const href = link.getAttribute("href")!;
       window.history.pushState({}, "", href);
-      navigate(); // Navigation sans rechargement de la page
-    });
-  });
-
-  window.addEventListener("popstate", navigate); // Gérer les retours dans l'historique
+      navigate();
+    }
+  }
 });
