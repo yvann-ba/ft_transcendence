@@ -216,20 +216,16 @@ export default function initializePongGame(): (() => void) | null {
 			return;
 
 		// Collision pour le joueur 1
-		if (
-			state.ball.x - state.ball.radius < pw + 3 &&
+		if ( state.ball.x - state.ball.radius < pw + 3 &&
 			state.ball.y > state.paddles.player1Y &&
-			state.ball.y < state.paddles.player1Y + ph
-		) {
+			state.ball.y < state.paddles.player1Y + ph ) {
 			handlePaddleBounce("player1");
 		}
 
 		// Collision pour le joueur 2
-		if (
-			state.ball.x + state.ball.radius > canvas.width - (pw + 3) &&
+		if ( state.ball.x + state.ball.radius > canvas.width - (pw + 3) &&
 			state.ball.y > state.paddles.player2Y &&
-			state.ball.y < state.paddles.player2Y + ph
-		) {
+			state.ball.y < state.paddles.player2Y + ph ) {
 			handlePaddleBounce("player2");
 		}
 	}
@@ -262,10 +258,7 @@ export default function initializePongGame(): (() => void) | null {
 		if (!canvas)
 			return;
 
-		if (
-			state.ball.y - state.ball.radius <= 0 ||
-			state.ball.y + state.ball.radius >= canvas.height
-		) {
+		if ( state.ball.y - state.ball.radius <= 0 || state.ball.y + state.ball.radius >= canvas.height ) {
 			state.ball.speedY *= -1;
 		}
 
@@ -351,15 +344,11 @@ export default function initializePongGame(): (() => void) | null {
 		state.ball.x += state.ball.speedX * deltaTime;
 		state.ball.y += state.ball.speedY * deltaTime;
 
-		// Collisions
 		checkWallCollision();
 		checkPaddleCollision();
 
 		// Vérification victoire
-		if (
-			state.scores.player1 >= state.scores.winning ||
-			state.scores.player2 >= state.scores.winning
-		) {
+		if ( state.scores.player1 >= state.scores.winning || state.scores.player2 >= state.scores.winning) {
 			endGame();
 		}
 	}

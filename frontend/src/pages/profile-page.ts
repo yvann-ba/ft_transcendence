@@ -4,7 +4,7 @@ function initializeProfilePage(): () => void {
 	const tabLinks = document.querySelectorAll<HTMLElement>('.tab-link');
 	const tabContents = document.querySelectorAll<HTMLElement>('.tab-content');
   
-	function handleTabClick(this: HTMLElement) {
+	function handleTabClick(this: HTMLElement) : void {
 		tabLinks.forEach(tab => tab.classList.remove('active'));
 		tabContents.forEach(content => content.classList.remove('active'));
   

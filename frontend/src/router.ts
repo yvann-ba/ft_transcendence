@@ -5,10 +5,11 @@ const routes: { [key: string]: string } = {
   "/home": "home",
   "/pong-game": "pong-game",
   "/profile-page": "profile-page",
+  "/test": "test",
   "404": "404",
 };
 
-export const navigate = async () => {
+export const navigate = async (): Promise<void> => {
   const path = window.location.pathname;
   const page = routes[path] || routes["404"];
   const pageContent = await loadPage(page);
@@ -24,7 +25,7 @@ export const navigate = async () => {
 
 let currentCleanup: (() => void) | null = null;
 
-const loadPageScript = async () => {
+const loadPageScript = async (): Promise<void> => {
   const path = window.location.pathname;
 
   if (currentCleanup) {
@@ -43,12 +44,16 @@ const loadPageScript = async () => {
       const module = await import("./pages/profile-page");
       currentCleanup = module.default() || null;
     }
+      else if (path === "/test") {
+      const module = await import("./pages/test");
+      module.default();
+    }
   } catch (error) {
     console.error(`Erreur lors du chargement du script pour ${path}:`, error);
   }
 };
   
-const loadPage = async (page: string) => {
+const loadPage = async (page: string): Promise<string> => {
 	try {
 	  const response = await fetch(`/views/${page}.html`);
 	  if (!response.ok) throw new Error("Page introuvable");
@@ -63,7 +68,7 @@ const loadPage = async (page: string) => {
 	}
   };
 
-document.body.addEventListener("click", (event) => {
+document.body.addEventListener("click", (event: MouseEvent) : void => {
   const target = event.target as HTMLElement;
   const link = target.closest("a");
   if (link) {

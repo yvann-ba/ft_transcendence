@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 });
 
-const initializeNavbarAnimation = () => {
+const initializeNavbarAnimation = () : void => {
   const nav = document.querySelector(".nav");
 
   if (nav) {

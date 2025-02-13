@@ -1,16 +1,32 @@
-import { FastifyInstance } from "fastify";
-import * as sqlite3 from 'sqlite3';
+import * as sqlite3 from "sqlite3";
 import { open } from "sqlite";
+import fs from "fs";
+import path from "path";
 
-export async function Database(fastify: FastifyInstance) {
+
+const dbPath = path.join(__dirname, "../../database/db.sqlite");
+
+export async function setupDatabase() {
   const db = await open({
-    filename: "./database/db.sqlite",
+    filename: dbPath,
     driver: sqlite3.Database,
   });
 
-  fastify.decorate("db", db);
+  await runMigrations(db);
+  return db;
+}
 
-  fastify.addHook("onClose", async () => {
-    await db.close();
-  });
+async function runMigrations(db: any) {
+  const migrationsDir = path.join(__dirname, "../../database/migrations");
+  const files = fs.readdirSync(migrationsDir).sort(); // Exécute dans l'ordre
+
+  for (const file of files) {
+    if (file.endsWith(".ts")) {
+      const migration = require(path.join(migrationsDir, file));
+      console.log(`🔄 Running migration: ${file}`);
+      await migration.up(db);
+    }
+  }
+
+  console.log("✅ All migrations applied!");
 }
