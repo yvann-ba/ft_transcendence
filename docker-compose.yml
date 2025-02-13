@@ -22,7 +22,7 @@ services:
     build: nginx
     container_name: nginx
     ports:
-      - "8000:8000"
+      - "8443:443"
     restart: always
     
 
