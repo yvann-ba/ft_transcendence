@@ -162,6 +162,7 @@
 /* Effet au survol */
 .pong-custom-slider:hover {
     opacity: 1;
+    cursor: pointer;
 }
 
 /* ------------------------------ */

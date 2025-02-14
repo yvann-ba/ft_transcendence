@@ -16,7 +16,7 @@ fastify.register(cors, {
 // Servir les fichiers statiques du frontend
 fastify.register(fastifyStatic, {
   root: path.join(__dirname, "../../frontend/public"),
-  prefix: "/", // Permet d'accéder aux fichiers comme `localhost:3000/`
+  prefix: "/",
 });
 
 fastify.register(migrateRoutes);

@@ -103,10 +103,49 @@ main {
     transition-delay: 1000ms; /* Délai après la fin de l'animation de révélation */
 }
 
+.home-header-heading, .home-header {
+    transition: font-size 0.3s ease-out, height 0.3s ease-out;
+}
+
 @media (max-width: 768px) {
     .h-anim.in .split {
-        width: 1.5rem; /* Largeur finale pour mobile */
+        width: 1.5rem;
     }
 }
 
 
+@media (max-width: 1440px) { 
+  .home-header-heading {
+      font-size: 11rem;
+    }
+}
+
+@media (max-width: 1200px) { 
+    .home-header-heading {
+        font-size: 10rem;
+      }
+  }
+
+@media (max-width: 1024px) { 
+    .home-header-heading {
+        font-size: 7rem;
+      }
+}
+
+@media (max-width: 768px) { 
+    .home-header-heading {
+        font-size: 5rem;
+      }
+}
+
+@media (max-width: 513px) { 
+    .home-header-heading {
+        font-size: 4rem;
+      }
+}
+
+@media (max-width: 410px) { 
+    .home-header-heading {
+        font-size: 3rem;
+      }
+}
