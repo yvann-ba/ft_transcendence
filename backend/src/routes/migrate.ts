@@ -1,15 +1,13 @@
-import { FastifyInstance } from "fastify";
-import { setupDatabase } from "../config/database";
+import { FastifyInstance } from 'fastify';
+import createUsersTable from '../../database/migrations/001_create_users_table';
 
-export async function migrateRoutes(fastify: FastifyInstance): Promise<void> {
-  fastify.post("/api/migrate", async (request, reply) => {
+export default async function (fastify: FastifyInstance) {
+  fastify.get('/migrate', async (request, reply) => {
     try {
-      const db = await setupDatabase();
-      fastify.decorate("db", db);
-      reply.send({ success: true, message: "Migrations applied!" });
-    } catch (error) {
-      const errorMessage = error instanceof Error;
-      reply.status(500).send({ error: errorMessage });
+      createUsersTable();
+      return reply.send({ message: 'Migration réussie' });
+    } catch (err) {
+      reply.status(500).send({ message: 'Erreur de migration', error: err });
     }
   });
 }

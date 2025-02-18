@@ -31,4 +31,4 @@ services:
     container_name: sqlite_db
     volumes:
       - ./backend/database:/data
-    restart: always
+    restart: on-failure

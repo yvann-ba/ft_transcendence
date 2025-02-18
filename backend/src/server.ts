@@ -2,44 +2,53 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import fastifyStatic from "@fastify/static";
 import path from "path";
-import { setupDatabase } from "./config/database";
-import { migrateRoutes } from "./routes/migrate";
+import migrateRoutes from './routes/migrate';
+import createUsersTable from '../database/migrations/001_create_users_table'; // Assure-toi que tu importes ta migration
+import createUser from '../database/seeders/createUser';
+import fastifyFormbody from "@fastify/formbody";
 
 const fastify = Fastify({ logger: true });
 
-// Configuration CORS pour autoriser le frontend à accéder au backend
 fastify.register(cors, {
   origin: "*",
   methods: ["GET", "POST"],
 });
 
-// Servir les fichiers statiques du frontend
 fastify.register(fastifyStatic, {
   root: path.join(__dirname, "../../frontend/public"),
   prefix: "/",
 });
 
+fastify.setNotFoundHandler((request, reply) => {
+  reply.sendFile("index.html"); 
+});
+
 fastify.register(migrateRoutes);
 
-fastify.setNotFoundHandler((request, reply) => {
-	reply.sendFile("index.html"); 
-  });
+fastify.register(fastifyFormbody);
 
-// Route API de test
+fastify.post('/users', async (request, reply) => {
+  const { username, password, email } = request.body as { username: string; password: string; email: string };
+
+
+  const userinfos = await createUser(username, password, email);
+
+  reply.send(userinfos);
+});
+  
+//test
 fastify.get("/hello", async (request, reply) => {
   return { message: "Hello from Fastify API!" };
 });
 
-// Route pour servir index.html par défaut
 fastify.get("/", async (request, reply) => {
   return reply.sendFile("index.html");
 });
 
-// Lancer le serveur
 const start = async () => {
   try {
 
-    const db = await setupDatabase();
+    createUsersTable();
 
     await fastify.listen({ port: 3000, host: "0.0.0.0" });
     fastify.log.info("Server running on http://localhost:3000");
