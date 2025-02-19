@@ -3,7 +3,35 @@ import "./styles/404.css";
 import { navigate } from "./router";
 import initializeHomeAnimations from "./pages/home";
 
+const profileButton = document.querySelector(".profile-label");
+
+async function checkAuthStatus() {
+  try {
+    const response = await fetch('/api/check-auth', {
+      method: 'GET',
+      credentials: 'same-origin'
+    });
+    
+    const data = await response.json();
+
+    if (data.authenticated == true) {
+      if (profileButton) {
+        profileButton.textContent = "Profile";
+        profileButton.setAttribute("data-hover", "Profile");
+      }
+    } else {
+      if (profileButton) {
+        profileButton.textContent = "Login";
+        profileButton.setAttribute("data-hover", "Login");
+      }
+    }
+  } catch (error) {
+    console.error('Error checking auth status:', error);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
+  checkAuthStatus();
   initializeNavbarAnimation();
   await navigate();
 
@@ -14,10 +42,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   window.addEventListener("popstate", async () => {
     await navigate();
   });
+  
 });
 
 const initializeNavbarAnimation = (): void => {
   const nav = document.querySelector(".nav");
+  
 
   if (nav) {
     setTimeout(() => {
@@ -41,5 +71,7 @@ const initializeBurgerMenu = (): void => {
         burgerMenu?.classList.add('hidden');
       }
     });
+
+
   }
 };

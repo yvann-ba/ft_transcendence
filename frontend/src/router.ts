@@ -6,17 +6,21 @@ const routes: { [key: string]: string } = {
   "/pong-game": "pong-game",
   "/profile-page": "profile-page",
   "/test": "test",
+  "/login": "login",
   "404": "404",
 };
 
 export const navigate = async (): Promise<void> => {
-  const path = window.location.pathname;
-  const page = routes[path] || routes["404"];
+  let path = window.location.pathname;
+  if (path === "/profile-page" && !isAuthenticated()) {
+    path = "/login";
+  }
+  let page = routes[path] || routes["404"];
   const pageContent = await loadPage(page);
-  document.getElementById("app")!.innerHTML = pageContent; // Seul le contenu change
+  document.getElementById("app")!.innerHTML = pageContent;
 
-  // Charger le script de la page après avoir modifié le contenu
   await loadPageScript();
+
 
   if (page === "home") {
     initializeHomeAnimations();
@@ -48,11 +52,20 @@ const loadPageScript = async (): Promise<void> => {
       const module = await import("./pages/test");
       module.default();
     }
+     else if (path === "/login") {
+      const module = await import("./pages/login");
+      module.default();
+    }
   } catch (error) {
     console.error(`Erreur lors du chargement du script pour ${path}:`, error);
   }
 };
   
+const isAuthenticated = (): boolean => {
+  const token = localStorage.getItem('token');
+  return token !== null && token !== "";
+};
+
 const loadPage = async (page: string): Promise<string> => {
 	try {
 	  const response = await fetch(`/views/${page}.html`);
