@@ -2,10 +2,16 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import fastifyStatic from "@fastify/static";
 import path from "path";
-import migrateRoutes from './routes/migrate';
-import createUsersTable from '../database/migrations/001_create_users_table'; // Assure-toi que tu importes ta migration
-import createUser from '../database/seeders/createUser';
 import fastifyFormbody from "@fastify/formbody";
+import jwt from '@fastify/jwt';
+import fastifyCookie from '@fastify/cookie';
+import { FastifyRequest, FastifyReply } from 'fastify';
+
+import config from './config/fastifyconfig';
+import migrateRoutes from './routes/migrate';
+import createUsersTable from '../database/migrations/001_create_users_table'
+import userRoutes from "./routes/users";
+import authRoutes from "./routes/auth";
 
 const fastify = Fastify({ logger: true });
 
@@ -23,19 +29,28 @@ fastify.setNotFoundHandler((request, reply) => {
   reply.sendFile("index.html"); 
 });
 
+fastify.register(fastifyFormbody);
+fastify.register(fastifyCookie);
+
+fastify.register(jwt, {
+  secret: config.jwtSecret,
+  cookie: {
+    cookieName: "sessionid",
+    signed: false
+  }
+  
+});
+
+fastify.decorate('authenticate', async function (request: any, reply: any) {
+  try {
+    await request.jwtVerify();
+  } catch (err) {
+    reply.status(401).send({ error: 'Unauthorized' });
+  }
+});
+
 fastify.register(migrateRoutes);
 
-fastify.register(fastifyFormbody);
-
-fastify.post('/users', async (request, reply) => {
-  const { username, password, email } = request.body as { username: string; password: string; email: string };
-
-
-  const userinfos = await createUser(username, password, email);
-
-  reply.send(userinfos);
-});
-  
 //test
 fastify.get("/hello", async (request, reply) => {
   return { message: "Hello from Fastify API!" };
@@ -44,6 +59,11 @@ fastify.get("/hello", async (request, reply) => {
 fastify.get("/", async (request, reply) => {
   return reply.sendFile("index.html");
 });
+
+//vos routes
+fastify.register(userRoutes);
+fastify.register(authRoutes);
+
 
 const start = async () => {
   try {

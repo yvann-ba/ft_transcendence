@@ -9,5 +9,5 @@
 	  "resolveJsonModule": true,
 	  "types": ["node", "fastify"]
 	},
-	"include": ["src/**/*"]
+	"include": ["src/**/*", "types/*.d.ts"],
   }
