@@ -1,153 +1,254 @@
+@import url('home.css'); 
+
 .profile-container {
-	margin: 20px auto;
-	padding: 20px;
-	background-color: #2b2d42 ;
-	border-radius: 10px;  
-	max-width: 900px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-	margin-top: 300px;
-  }
-  
-  .page-title {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    margin-top: 100px;
+    width: 100%;
+    height: 100%;
+}
+
+.page-title {
+    font-size: 5rem; /* Même taille que dans home.css */
+    text-transform: uppercase;
+    font-weight: 700;
+    color: white; /* Harmonisation avec home.css */
 	text-align: center;
-	font-size: 28px;
-	color: #BB70AD;
-  }
-  
-  /* Tab Navigation */
-  .tabs {
-	display: flex;
-	list-style: none;
-	padding: 0;
-	margin: 0 0 20px;
-	border-bottom: 2px solid #BB70AD;
-	margin-top: 50px;
-  }
-  
-  .tab-link {
-	flex: 1;
-	text-align: center;
-	padding: 10px 15px;
-	cursor: pointer;
-	background-color: #2b2d42;
-	color: #f0f0f0;
-	border: none;
-	outline: none;
-	font-size: 16px;
-  }
-  
-  .tab-link.active {
-	background-color: #BB70AD;
-	color: #2b2d42;
-	font-weight: bold;
-  }
-  
-  /* Tab Content */
-  .tab-content {
-	display: none;
-  }
-  
-  .tab-content.active {
-	display: block;
-  }
-  
-  /* Profile Info */
-  .profile-info {
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-  } 
-  
-  .avatar {
-	width: 120px;
-	height: 120px;
-	border-radius: 50%;
-	margin-bottom: 10px;
-	object-fit: cover;
-	object-position: bottom;
-  }
-  
-  .username {
-	font-size: 24px;
-	color: #BB70AD;
-  }
-  
-  .Profilename {
-	font-size: 18px;
-  }
-  
-  .btn-add-friend {
-	padding: 10px 15px;
-	background-color: #BB70AD;
-	color: #fff;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-  }
-  
-  .btn-add-friend:hover {
-	background-color: #e63946;
-  }
-  
-  /* Stats List */
-  .stats-list {
-	list-style: none;
-	padding: 0;
-  }
-  
-  .stats-list li {
-	margin: 5px 0;
-  }
-  
-  /* Score Table */
-  .score-table {
-	width: 100%;
-	border-collapse: collapse;
-  }
-  
-  .score-table th, .score-table td {
-	padding: 8px;
-	text-align: center;
-	border: 1px solid #f0f0f0;
-  }
-  
-  .score-table th {
-	background-color: #BB70AD;
-  }
-  
-  .score-table td {
-	background-color: #2b2d42;
-  }
-  
-  * Win/Loss Gauge Styles */
-  .win-loss-gauge-container {
-	  margin-top: 20px;
-  }
-  
-  .win-loss-gauge {
-	  width: 100%;
-	  height: 30px;
-	  display: flex;
-	  border-radius: 15px;
-	  overflow: hidden;
-  }
-  
-  .win-segment {
-	  background-color: #4CAF50;  /* Green for wins */
-	  height: 100%;
-	  display: flex;
-	  align-items: center;
-	  justify-content: center;
-	  color: white;
-	  font-weight: bold;
-  }
-  
-  .loss-segment {
-	  background-color: #F44336;  /* Red for losses */
-	  height: 100%;
-	  display: flex;
-	  align-items: center;
-	  justify-content: center;
-	  color: white;
-	  font-weight: bold;
-  }
+}
+
+
+/* Tab Navigation */
+.tabs {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px;
+    border-bottom: 2px solid #BB70AD;
+    margin-top: 50px;
+}
+
+.tab-link {
+    flex: 1;
+    text-align: center;
+    padding: 10px 15px;
+    cursor: pointer;
+    color: #f0f0f0;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+.tab-link.active {
+    background-color: #BB70AD;
+    color: #2b2d42;
+    font-weight: bold;
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Profile Info */
+.profile-info {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    object-fit: cover;
+    object-position: bottom;
+}
+
+.username {
+    font-size: 24px;
+    color: #BB70AD;
+}
+
+.Profilename {
+    font-size: 18px;
+}
+
+.btn-add-friend {
+    padding: 10px 15px;
+    background-color: #BB70AD;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-add-friend:hover {
+    background-color: #e63946;
+}
+
+/* Stats List */
+.stats-list {
+    list-style: none;
+    padding: 0;
+}
+
+.stats-list li {
+    margin: 5px 0;
+}
+
+/* Score Table */
+.score-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.score-table th, .score-table td {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #f0f0f0;
+}
+
+.score-table th {
+    background-color: #BB70AD;
+}
+
+/* Win/Loss Gauge Styles */
+.win-loss-gauge-container {
+    margin-top: 20px;
+}
+
+.win-loss-gauge {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.win-segment {
+    background-color: #4CAF50;  /* Green for wins */
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+.loss-segment {
+    background-color: #F44336;  /* Red for losses */
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+/* Reusing styles from home.css */
+.profile-header {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.profile-header h1 {
+    font-size: 5rem;
+    color: #BB70AD;
+    text-transform: uppercase;
+    font-weight: 700;
+    line-height: 0.84;
+}
+
+.profile-header h1 i {
+    font-family: "Great Vibes", serif;
+    font-weight: 400;
+}
+
+.profile-header h1 p {
+    margin: 0;
+}
+
+/* Applying h-anim animation */
+.profile-header.h-anim .w {
+    transition: mask-position 1000ms cubic-bezier(0.6, 0, 0.2, 1);
+    mask-image: linear-gradient(90deg, white 33.3%, rgba(0, 0, 0, 0) 66.6%);
+    mask-position: 100% 100%;
+    mask-size: 300% 100%;
+}
+
+.profile-header.h-anim.in .w {
+    mask-position: 0% 100%;
+}
+
+.profile-header.h-anim.in .w[data-i="1"] {
+    transition-delay: 150ms;
+}
+
+.profile-header.h-anim.in .w[data-i="2"] {
+    transition-delay: 300ms;
+}
+
+.profile-header.h-anim.in .w[data-i="3"] {
+    transition-delay: 450ms;
+}
+
+.profile-header.h-anim.in .w[data-i="4"] {
+    transition-delay: 600ms;
+}
+
+.profile-header .split {
+    display: inline-block;
+    width: 0;
+    height: 1px;
+    transition: width 300ms ease-out;
+}
+
+.profile-header.h-anim.in .split {
+    width: 3rem;
+    transition-delay: 1000ms;
+}
+
+/* Media Queries from home.css */
+@media (max-width: 1440px) {
+    .profile-header h1 {
+        font-size: 11rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .profile-header h1 {
+        font-size: 10rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .profile-header h1 {
+        font-size: 7rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-header h1 {
+        font-size: 5rem;
+    }
+
+    .profile-header.h-anim.in .split {
+        width: 1.5rem;
+    }
+}
+
+@media (max-width: 513px) {
+    .profile-header h1 {
+        font-size: 4rem;
+    }
+}
+
+@media (max-width: 410px) {
+    .profile-header h1 {
+        font-size: 3rem;
+    }
+}
