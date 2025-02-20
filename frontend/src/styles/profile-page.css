@@ -116,38 +116,6 @@
     background-color: #BB70AD;
 }
 
-/* Win/Loss Gauge Styles */
-.win-loss-gauge-container {
-    margin-top: 20px;
-}
-
-.win-loss-gauge {
-    width: 100%;
-    height: 30px;
-    display: flex;
-    border-radius: 15px;
-    overflow: hidden;
-}
-
-.win-segment {
-    background-color: #4CAF50;  /* Green for wins */
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-}
-
-.loss-segment {
-    background-color: #F44336;  /* Red for losses */
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-}
 
 /* Reusing styles from home.css */
 .profile-header {
@@ -250,5 +218,280 @@
 @media (max-width: 410px) {
     .profile-header h1 {
         font-size: 3rem;
+    }
+}
+/* Smooth transitions for interactive elements */
+.tab-link, .btn-add-friend, .avatar {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Smooth hover effects */
+.tab-link:hover {
+    transform: translateY(-2px);
+    color: #f0f0f0;
+}
+
+.btn-add-friend:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(187, 112, 173, 0.3);
+}
+
+.avatar:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(187, 112, 173, 0.5);
+}
+
+/* Smooth tab content transitions */
+.tab-content {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.tab-content.active {
+    opacity: 1;
+}
+
+
+/* Chart styles */
+.chart-container {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin: 20px auto;
+    margin-top: 100px;
+  }
+  
+  .donut-chart {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .chart-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  
+  .ratio-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #BB70AD;
+    margin-bottom: 5px;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.5s forwards 1.2s;
+  }
+  
+  .percentage-text {
+    font-size: 16px;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.5s forwards 1.5s;
+  }
+  
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  
+  .legend-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .legend-color {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+  }
+  
+  .win-color {
+    background-color: #BB70AD;
+  }
+  
+  .loss-color {
+    background-color: white;
+  }
+  
+  /* Tooltip styles */
+  .chart-tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 10;
+  }
+  
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* History Tab Styles */
+.header-row-animated {
+    transform: translateY(-20px);
+    opacity: 0;
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+.header-row-animated.header-active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.animated-row {
+    transition: opacity 0.5s ease, transform 0.5s ease, background-color 0.3s ease;
+}
+
+.row-hover {
+    background-color: rgba(187, 112, 173, 0.1) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px) !important;
+}
+
+/* Result badges */
+.result-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-weight: bold;
+    color: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.result-badge.win {
+    background-color: #4CAF50;
+}
+
+.result-badge.loss {
+    background-color: #F44336;
+}
+
+.result-badge.pulse {
+    animation: pulse-badge 1s infinite;
+}
+
+@keyframes pulse-badge {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(187, 112, 173, 0.7);
+    }
+    70% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 10px rgba(187, 112, 173, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(187, 112, 173, 0);
+    }
+}
+
+/* Win/Loss row styling */
+.win-row td {
+    border-left: 3px solid transparent;
+    transition: border-color 0.3s ease;
+}
+
+.loss-row td {
+    border-left: 3px solid transparent;
+    transition: border-color 0.3s ease;
+}
+
+.win-row:hover td {
+    border-left-color: #4CAF50;
+}
+
+.loss-row:hover td {
+    border-left-color: #F44336;
+}
+
+/* Opponent highlighting */
+.highlight-opponent {
+    color: #BB70AD;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(187, 112, 173, 0.3);
+}
+
+/* Table sorting styles */
+th.sorted-asc::after {
+    content: " ▲";
+    color: #BB70AD;
+    font-size: 0.8em;
+}
+
+th.sorted-desc::after {
+    content: " ▼";
+    color: #BB70AD;
+    font-size: 0.8em;
+}
+
+.sorting {
+    position: relative;
+}
+
+.sorting::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(187, 112, 173, 0.05);
+    pointer-events: none;
+    animation: sort-highlight 0.5s ease-out;
+}
+
+@keyframes sort-highlight {
+    0% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Empty state animation for table */
+.score-table:empty::after {
+    content: "No match history available";
+    display: block;
+    text-align: center;
+    padding: 20px;
+    color: #888;
+    font-style: italic;
+    animation: fade-in 0.5s ease-out;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

@@ -19,23 +19,50 @@
 			</div>
 			<div id="tab-container"></div>
 			<div id="tab-stats" class="tab-content">
-				<h2>Statistics</h2>
 				<ul class="stats-list">
-					<li>Games Played: 150</li>
+					<!-- <li>Games Played: 150</li>
 					<li>Wins: 85</li>
 					<li>Losses: 65</li>
-					<li>Win/Loss Ratio: 1.31</li>
-					<li class="win-loss-gauge-container">
-						<div class="win-loss-gauge">
-							<div class="win-segment" style="width: 56.7%">85 Wins</div>
-							<div class="loss-segment" style="width: 43.3%">65 Losses</div>
+					<li>Win/Loss Ratio: 1.31</li> -->
+					<li class="win-loss-chart-container">
+						<div class="chart-container">
+						  <svg class="donut-chart" viewBox="0 0 100 100">
+							<circle cx="50" cy="50" r="45" fill="transparent" stroke="#444" stroke-width="10" />
+							<circle id="win-segment" cx="50" cy="50" r="45" fill="transparent" 
+							  stroke="#BB70AD" stroke-width="10" 
+							  stroke-dasharray="0 283" 
+							  stroke-dashoffset="0"
+							  transform="rotate(-90 50 50)" />
+							<circle id="loss-segment" cx="50" cy="50" r="45" fill="transparent" 
+							  stroke="white" stroke-width="10" 
+							  stroke-dasharray="0 283" 
+							  stroke-dashoffset="0"
+							  transform="rotate(-90 50 50)" />
+						  </svg>
+						  
+						  <div class="chart-center">
+							<div class="ratio-text">1.31</div>
+							<div class="percentage-text" id="win-percentage">56.7% Wins</div>
+						  </div>
+						  
+						  <div class="chart-tooltip" id="chart-tooltip"></div>
 						</div>
-					</li>
+						
+						<div class="legend">
+						  <div class="legend-item" id="win-legend">
+							<span class="legend-color win-color"></span>
+							<span>85 Wins</span>
+						  </div>
+						  <div class="legend-item" id="loss-legend">
+							<span class="legend-color loss-color"></span>
+							<span>65 Losses</span>
+						  </div>
+						</div>
+					  </li>
 				</ul>
 			</div>
 			
 			<div id="tab-history" class="tab-content">
-				<h2>History & Scores</h2>
 				<table class="score-table">
 					<thead>
 						<tr>
@@ -47,12 +74,37 @@
 					<tbody>
 						<tr>
 							<td>2025-01-01</td>
-							<td>player123</td>
+							<td>tsoloher</td>
 							<td>Win</td>
 						</tr>
 						<tr>
 							<td>2025-01-02</td>
-							<td>player456</td>
+							<td>roguigna</td>
+							<td>Loss</td>
+						</tr>
+						<tr>
+							<td>2025-01-02</td>
+							<td>ybarbot</td>
+							<td>Loss</td>
+						</tr>
+						<tr>
+							<td>2025-01-02</td>
+							<td>lauger</td>
+							<td>Loss</td>
+						</tr>
+						<tr>
+							<td>2025-01-02</td>
+							<td>lslater</td>
+							<td>Loss</td>
+						</tr>
+						<tr>
+							<td>2025-01-02</td>
+							<td>tsadouk</td>
+							<td>Win</td>
+						</tr>
+						<tr>
+							<td>2025-01-02</td>
+							<td>edbernar</td>
 							<td>Loss</td>
 						</tr>
 					</tbody>
