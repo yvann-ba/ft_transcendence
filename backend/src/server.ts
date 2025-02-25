@@ -41,11 +41,12 @@ fastify.register(jwt, {
   
 });
 
-fastify.decorate('authenticate', async function (request: any, reply: any) {
+fastify.decorate("authenticate", async (request: any, reply: any) => {
   try {
     await request.jwtVerify();
   } catch (err) {
-    reply.status(401).send({ error: 'Unauthorized' });
+    fastify.log.error("JWT Verify Error:", err);
+    reply.status(401).send({ error: "Unauthorized" });
   }
 });
 
@@ -53,6 +54,7 @@ fastify.register(migrateRoutes);
 
 //test
 fastify.get("/hello", async (request, reply) => {
+  fastify.log.info("Request received for /hello");
   return { message: "Hello from Fastify API!" };
 });
 
@@ -67,9 +69,9 @@ fastify.register(authRoutes);
 
 const start = async () => {
   try {
-
+    
     createUsersTable();
-
+    
     await fastify.listen({ port: 3000, host: "0.0.0.0" });
     fastify.log.info("Server running on http://localhost:3000");
   } catch (err) {

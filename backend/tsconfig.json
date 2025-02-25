@@ -7,7 +7,9 @@
 	  "strict": true,
 	  "moduleResolution": "node",
 	  "resolveJsonModule": true,
+	  "typeRoots": ["./types", "./node_modules/@types"],
 	  "types": ["node", "fastify"]
 	},
-	"include": ["src/**/*", "types/*.d.ts"],
+	"include": ["src/**/*", "types/**/*.d.ts"]
   }
+  

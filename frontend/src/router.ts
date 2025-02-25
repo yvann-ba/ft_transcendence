@@ -12,7 +12,7 @@ const routes: { [key: string]: string } = {
 
 export const navigate = async (): Promise<void> => {
   let path = window.location.pathname;
-  if (path === "/profile-page" && !isAuthenticated()) {
+  if (path === "/profile-page" && !(await isAuthenticated())) {
     path = "/login";
   }
   let page = routes[path] || routes["404"];
@@ -49,8 +49,8 @@ const loadPageScript = async (): Promise<void> => {
       currentCleanup = module.default() || null;
     }
       else if (path === "/test") {
-      const module = await import("./pages/test");
-      module.default();
+      // const module = await import("./pages/test");
+      // module.default();
     }
      else if (path === "/login") {
       const module = await import("./pages/login");

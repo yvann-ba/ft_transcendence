@@ -8,6 +8,8 @@ services:
       - ./backend:/app
     depends_on:
       - database
+    ports:
+      - "3000:3000"
     restart: always
 
   frontend:

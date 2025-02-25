@@ -5,30 +5,20 @@ import initializeHomeAnimations from "./pages/home";
 
 const profileButton = document.querySelector(".profile-label");
 
-async function checkAuthStatus() {
+export const checkAuthStatus = async (): Promise<boolean> => {
   try {
-    const response = await fetch('/api/check-auth', {
-      method: 'GET',
-      credentials: 'same-origin'
+    const response = await fetch("/api/check-auth", {
+      method: "GET",
+      credentials: "include",
     });
-    
+    if (!response.ok) return false;
     const data = await response.json();
-
-    if (data.authenticated == true) {
-      if (profileButton) {
-        profileButton.textContent = "Profile";
-        profileButton.setAttribute("data-hover", "Profile");
-      }
-    } else {
-      if (profileButton) {
-        profileButton.textContent = "Login";
-        profileButton.setAttribute("data-hover", "Login");
-      }
-    }
-  } catch (error) {
-    console.error('Error checking auth status:', error);
+    return data.authenticated;
+  } catch (err) {
+    console.error("Error checking auth status:", err);
+    return false;
   }
-}
+};
 
 document.addEventListener("DOMContentLoaded", async () => {
   checkAuthStatus();
