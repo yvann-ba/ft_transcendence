@@ -91,7 +91,9 @@ function initializeHistoryTable(): void {
         const resultCell = row.querySelector('td:last-child');
         if (!resultCell) return;
         
-        const isWin = resultCell.textContent?.trim().toLowerCase() === 'win';
+        const cellText = resultCell.textContent?.trim().toLowerCase() || '';
+        // Check for various win indicators in the text
+        const isWin = cellText.includes('win') || cellText === 'w' || cellText === 'victory' || cellText === '1';
         const resultBadge = document.createElement('span');
         resultBadge.className = `result-badge ${isWin ? 'win' : 'loss'}`;
         resultBadge.textContent = isWin ? 'W' : 'L';
