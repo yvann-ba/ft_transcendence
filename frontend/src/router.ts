@@ -1,4 +1,5 @@
 import initializeHomeAnimations from "./pages/home";
+import { changeProfileLabel } from "./app";
 
 const routes: { [key: string]: string } = {
   "/": "home",
@@ -10,16 +11,26 @@ const routes: { [key: string]: string } = {
   "404": "404",
 };
 
+const isPublicRoute = (path: string): boolean => {
+  if (path === "/" || path === "/home")
+    return true;
+  return (false)
+}
+
 export const navigate = async (): Promise<void> => {
   let path = window.location.pathname;
-  if (path === "/profile-page" && !(await isAuthenticated())) {
+  if (!isPublicRoute(path) && !isAuthenticated()) {
     path = "/login";
   }
+  if (path === '/login' && isAuthenticated())
+    path = "/home"
+
   let page = routes[path] || routes["404"];
   const pageContent = await loadPage(page);
   document.getElementById("app")!.innerHTML = pageContent;
+  changeProfileLabel();
 
-  await loadPageScript();
+  await loadPageScript(path);
 
 
   if (page === "home") {
@@ -29,8 +40,7 @@ export const navigate = async (): Promise<void> => {
 
 let currentCleanup: (() => void) | null = null;
 
-const loadPageScript = async (): Promise<void> => {
-  const path = window.location.pathname;
+const loadPageScript = async (path: string): Promise<void> => {
 
   if (currentCleanup) {
     currentCleanup();
@@ -61,7 +71,7 @@ const loadPageScript = async (): Promise<void> => {
   }
 };
   
-const isAuthenticated = (): boolean => {
+export const isAuthenticated = (): boolean => {
   const token = localStorage.getItem('token');
   return token !== null && token !== "";
 };
@@ -86,6 +96,8 @@ document.body.addEventListener("click", (event: MouseEvent) : void => {
   const link = target.closest("a");
   if (link) {
     const href = link.getAttribute("href");
+    const profileLabel = document.querySelector(".profile-label") as HTMLElement;
+
     if (href && href.startsWith("/")) {
       event.preventDefault();
       window.history.pushState({}, "", href);

@@ -1,6 +1,6 @@
 import "./styles/globals.css";
 import "./styles/404.css";
-import { navigate } from "./router";
+import { navigate, isAuthenticated } from "./router";
 import initializeHomeAnimations from "./pages/home";
 
 const profileButton = document.querySelector(".profile-label");
@@ -35,9 +35,26 @@ document.addEventListener("DOMContentLoaded", async () => {
   
 });
 
+export const changeProfileLabel = (): void => {
+  const profileLabel = document.querySelector(".profile-label") as HTMLElement;
+
+  
+  if (isAuthenticated())
+  {
+    profileLabel.textContent = "Profile";
+    profileLabel.setAttribute("data-hover", "Profile");
+  }
+  else
+  {
+    profileLabel.textContent = "Login";
+    profileLabel.setAttribute("data-hover", "Login");
+  }
+}
+
 const initializeNavbarAnimation = (): void => {
   const nav = document.querySelector(".nav");
   
+  changeProfileLabel;
 
   if (nav) {
     setTimeout(() => {

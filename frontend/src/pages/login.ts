@@ -1,4 +1,5 @@
 import '../styles/login.css';
+import { navigate } from '../router';
 
 interface LoginResponse {
     message: string;
@@ -32,6 +33,17 @@ export default function login() {
 			}
 
 			const data: LoginResponse = await response.json();
+
+			event.preventDefault();
+			let path = window.location.href;
+			if (path === '/login')
+				path = '/home'
+
+			event.preventDefault();
+			window.history.pushState({}, "", path);
+			setTimeout(() => {
+				navigate();
+			  }, 100);
 
 			messageDiv.textContent = 'Connexion réussie !';
 			messageDiv.classList.remove('error');
