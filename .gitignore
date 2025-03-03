@@ -3,3 +3,4 @@ staticfiles
 .gitignore
 node_modules
 test.*
+core.1.9

@@ -1,4 +1,5 @@
 import initializeHomeAnimations from "./pages/home";
+import { changeProfileLabel } from "./app";
 
 const routes: { [key: string]: string } = {
   "/": "home",
@@ -6,17 +7,31 @@ const routes: { [key: string]: string } = {
   "/pong-game": "pong-game",
   "/profile-page": "profile-page",
   "/test": "test",
+  "/login": "login",
   "404": "404",
 };
 
-export const navigate = async (): Promise<void> => {
-  const path = window.location.pathname;
-  const page = routes[path] || routes["404"];
-  const pageContent = await loadPage(page);
-  document.getElementById("app")!.innerHTML = pageContent; // Seul le contenu change
+const isPublicRoute = (path: string): boolean => {
+  if (path === "/" || path === "/home")
+    return true;
+  return (false)
+}
 
-  // Charger le script de la page après avoir modifié le contenu
-  await loadPageScript();
+export const navigate = async (): Promise<void> => {
+  let path = window.location.pathname;
+  if (!isPublicRoute(path) && !isAuthenticated()) {
+    path = "/login";
+  }
+  if (path === '/login' && isAuthenticated())
+    path = "/home"
+
+  let page = routes[path] || routes["404"];
+  const pageContent = await loadPage(page);
+  document.getElementById("app")!.innerHTML = pageContent;
+  changeProfileLabel();
+
+  await loadPageScript(path);
+
 
   if (page === "home") {
     initializeHomeAnimations();
@@ -25,8 +40,7 @@ export const navigate = async (): Promise<void> => {
 
 let currentCleanup: (() => void) | null = null;
 
-const loadPageScript = async (): Promise<void> => {
-  const path = window.location.pathname;
+const loadPageScript = async (path: string): Promise<void> => {
 
   if (currentCleanup) {
     currentCleanup();
@@ -45,7 +59,11 @@ const loadPageScript = async (): Promise<void> => {
       currentCleanup = module.default() || null;
     }
       else if (path === "/test") {
-      const module = await import("./pages/test");
+      // const module = await import("./pages/test");
+      // module.default();
+    }
+     else if (path === "/login") {
+      const module = await import("./pages/login");
       module.default();
     }
   } catch (error) {
@@ -53,6 +71,11 @@ const loadPageScript = async (): Promise<void> => {
   }
 };
   
+export const isAuthenticated = (): boolean => {
+  const token = localStorage.getItem('token');
+  return token !== null && token !== "";
+};
+
 const loadPage = async (page: string): Promise<string> => {
 	try {
 	  const response = await fetch(`/views/${page}.html`);
@@ -73,6 +96,8 @@ document.body.addEventListener("click", (event: MouseEvent) : void => {
   const link = target.closest("a");
   if (link) {
     const href = link.getAttribute("href");
+    const profileLabel = document.querySelector(".profile-label") as HTMLElement;
+
     if (href && href.startsWith("/")) {
       event.preventDefault();
       window.history.pushState({}, "", href);

@@ -1,32 +1,13 @@
-import * as sqlite3 from "sqlite3";
-import { open } from "sqlite";
-import fs from "fs";
-import path from "path";
+import sqlite3 from 'sqlite3';
+import path from 'path';
 
-
-const dbPath = path.join(__dirname, "../../database/db.sqlite");
-
-export async function setupDatabase() {
-  const db = await open({
-    filename: dbPath,
-    driver: sqlite3.Database,
-  });
-
-  await runMigrations(db);
-  return db;
-}
-
-async function runMigrations(db: any) {
-  const migrationsDir = path.join(__dirname, "../../database/migrations");
-  const files = fs.readdirSync(migrationsDir).sort(); // Exécute dans l'ordre
-
-  for (const file of files) {
-    if (file.endsWith(".ts")) {
-      const migration = require(path.join(migrationsDir, file));
-      console.log(`🔄 Running migration: ${file}`);
-      await migration.up(db);
-    }
+const dbPath = path.resolve(__dirname, '../../database/db.sqlite');
+const db = new sqlite3.Database(dbPath, (err) => {
+  if (err) {
+    console.error('Erreur lors de la connexion à la base de données:', err.message);
+  } else {
+    console.log('Connexion réussie à la base de données SQLite');
   }
+});
 
-  console.log("✅ All migrations applied!");
-}
+export default db;

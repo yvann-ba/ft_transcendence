@@ -3,7 +3,7 @@ import "../styles/home.css";
 export default function initializeHomeAnimations(): () => void {
 	const animatedTextContainer = document.querySelector<HTMLDivElement>(".home-header-content");
 	const animatedText = document.querySelector<HTMLDivElement>(".h-anim");
-  
+
 	if (animatedTextContainer && animatedText) {
 	  animatedTextContainer.classList.add("hidden");
 	  animatedText.classList.remove("in");

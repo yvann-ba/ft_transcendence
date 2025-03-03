@@ -1,9 +1,27 @@
 import "./styles/globals.css";
 import "./styles/404.css";
-import { navigate } from "./router";
+import { navigate, isAuthenticated } from "./router";
 import initializeHomeAnimations from "./pages/home";
 
+const profileButton = document.querySelector(".profile-label");
+
+export const checkAuthStatus = async (): Promise<boolean> => {
+  try {
+    const response = await fetch("/api/check-auth", {
+      method: "GET",
+      credentials: "include",
+    });
+    if (!response.ok) return false;
+    const data = await response.json();
+    return data.authenticated;
+  } catch (err) {
+    console.error("Error checking auth status:", err);
+    return false;
+  }
+};
+
 document.addEventListener("DOMContentLoaded", async () => {
+  checkAuthStatus();
   initializeNavbarAnimation();
   await navigate();
 
@@ -14,10 +32,29 @@ document.addEventListener("DOMContentLoaded", async () => {
   window.addEventListener("popstate", async () => {
     await navigate();
   });
+  
 });
+
+export const changeProfileLabel = (): void => {
+  const profileLabel = document.querySelector(".profile-label") as HTMLElement;
+
+  
+  if (isAuthenticated())
+  {
+    profileLabel.textContent = "Profile";
+    profileLabel.setAttribute("data-hover", "Profile");
+  }
+  else
+  {
+    profileLabel.textContent = "Login";
+    profileLabel.setAttribute("data-hover", "Login");
+  }
+}
 
 const initializeNavbarAnimation = (): void => {
   const nav = document.querySelector(".nav");
+  
+  changeProfileLabel;
 
   if (nav) {
     setTimeout(() => {
@@ -41,5 +78,7 @@ const initializeBurgerMenu = (): void => {
         burgerMenu?.classList.add('hidden');
       }
     });
+
+
   }
 };

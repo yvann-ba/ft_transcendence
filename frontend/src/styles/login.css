@@ -1,0 +1,41 @@
+
+.login-container {
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	width: 300px;
+	position: absolute;
+	top: 25%;
+}
+h2 {
+	text-align: center;
+}
+input[type="text"],
+input[type="password"] {
+	width: 100%;
+	padding: 10px;
+	margin: 10px 0;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	color: black;
+}
+button {
+	width: 100%;
+	padding: 10px;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	border-radius: 4px;
+}
+button:hover {
+	background-color: #45a049;
+}
+.error {
+	color: red;
+	text-align: center;
+}
+.success {
+	color: green;
+	text-align: center;
+}
