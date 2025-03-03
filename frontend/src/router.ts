@@ -12,7 +12,7 @@ const routes: { [key: string]: string } = {
 };
 
 const isPublicRoute = (path: string): boolean => {
-  if (path === "/" || path === "/home")
+  if (path === "/" || path === "/home" || path === "/pong-game" )
     return true;
   return (false)
 }
