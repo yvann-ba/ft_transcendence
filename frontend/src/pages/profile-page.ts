@@ -31,7 +31,7 @@ async function loadUserProfile(): Promise<User42Profile | null> {
 }
 
 
-function initializeProfilePage(): () => void {
+async function initializeProfilePage(): Promise<() => void> {
 
     const profileData = await loadUserProfile();
     if (profileData) {
@@ -117,13 +117,13 @@ function initializeProfilePage(): () => void {
 }
 
 // Chart event handler references (for cleanup)
-let handleSegmentMouseEnter: (event: MouseEvent) => void;
+let handleSegmentMouseEnter: (this: HTMLElement, event: MouseEvent) => void;
 let handleSegmentMouseLeave: (event: MouseEvent) => void;
 let handleSegmentMouseMove: (event: MouseEvent) => void;
 
 // History row event handlers
-let handleHistoryRowHover: (event: MouseEvent) => void;
-let handleHistoryRowLeave: (event: MouseEvent) => void;
+let handleHistoryRowHover: (this: HTMLElement, event: Event) => void;
+let handleHistoryRowLeave: (this: HTMLElement, event: Event) => void;
 
 // Chart animation function reference
 let animateChart: () => void;
@@ -158,12 +158,12 @@ function initializeHistoryTable(): void {
         
         // Add animation classes but keep them invisible at first
         row.classList.add('animated-row');
-        row.style.opacity = '0';
-        row.style.transform = 'translateY(20px)';
+        (row as HTMLElement).style.opacity = '0';
+        (row as HTMLElement).style.transform = 'translateY(20px)';
     });
     
     // Define hover handlers
-    handleHistoryRowHover = function(this: HTMLElement) {
+    handleHistoryRowHover = function(this: HTMLElement, _event: Event) {
         this.classList.add('row-hover');
         
         // Add pulse animation to the badge
@@ -179,7 +179,7 @@ function initializeHistoryTable(): void {
         }
     };
     
-    handleHistoryRowLeave = function(this: HTMLElement) {
+    handleHistoryRowLeave = function(this: HTMLElement, _event: Event) {
         this.classList.remove('row-hover');
         
         // Remove pulse
@@ -204,7 +204,7 @@ function initializeHistoryTable(): void {
     // Add table sorting functionality
     const headerCells = historyTab.querySelectorAll('thead th');
     headerCells.forEach((header, index) => {
-        header.style.cursor = 'pointer';
+        (header as HTMLElement).style.cursor = 'pointer';
         header.setAttribute('data-sort-direction', 'none');
         header.addEventListener('click', () => sortTable(index, header));
     });
@@ -219,9 +219,9 @@ function initializeHistoryTable(): void {
     animateHistoryTable = () => {
         // Reset all rows first
         rows.forEach(row => {
-            row.style.opacity = '0';
-            row.style.transform = 'translateY(20px)';
-            row.style.transition = 'none';
+            (row as HTMLElement).style.opacity = '0';
+            (row as HTMLElement).style.transform = 'translateY(20px)';
+            (row as HTMLElement).style.transition = 'none';
         });
         
         // Force reflow
@@ -235,9 +235,9 @@ function initializeHistoryTable(): void {
         // Stagger the row animations
         rows.forEach((row, index) => {
             setTimeout(() => {
-                row.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                row.style.opacity = '1';
-                row.style.transform = 'translateY(0)';
+                (row as HTMLElement).style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                (row as HTMLElement).style.opacity = '1';
+                (row as HTMLElement).style.transform = 'translateY(0)';
             }, 150 + (index * 100));
         });
     };
@@ -308,15 +308,15 @@ function sortTable(columnIndex: number, headerElement: Element): void {
     // Re-append rows in sorted order with staggered animation
     setTimeout(() => {
         rows.forEach((row, index) => {
-            row.style.opacity = '0';
-            row.style.transform = 'translateY(10px)';
+            (row as HTMLElement).style.opacity = '0';
+            (row as HTMLElement).style.transform = 'translateY(10px)';
             tbody.appendChild(row);
             
             // Staggered fade-in animation
             setTimeout(() => {
-                row.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                row.style.opacity = '1';
-                row.style.transform = 'translateY(0)';
+                (row as HTMLElement).style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                (row as HTMLElement).style.opacity = '1';
+                (row as HTMLElement).style.transform = 'translateY(0)';
             }, 50 * index);
         });
         
@@ -398,7 +398,7 @@ function initializeChart(): void {
     if (!chartContainer) return;
     
     // Define event handlers (store references for cleanup)
-    handleSegmentMouseEnter = function(this: HTMLElement, e: MouseEvent) {
+    handleSegmentMouseEnter = function(this: HTMLElement, _e: MouseEvent) {
         tooltip.style.opacity = '1';
         
         if (this === winSegment) {
@@ -410,7 +410,7 @@ function initializeChart(): void {
         }
     };
     
-    handleSegmentMouseLeave = function(e: MouseEvent) {
+    handleSegmentMouseLeave = function(_e: MouseEvent) {
         tooltip.style.opacity = '0';
         winSegment.style.stroke = '#4CAF50';
         lossSegment.style.stroke = '#F44336';
@@ -439,9 +439,11 @@ function initializeChart(): void {
 }
 
 if (document.readyState !== 'loading') {
-    initializeProfilePage();
+    initializeProfilePage().catch(console.error);
 } else {
-    document.addEventListener('DOMContentLoaded', initializeProfilePage);
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeProfilePage().catch(console.error);
+    });
 }
 
 export default initializeProfilePage;
