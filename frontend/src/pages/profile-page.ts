@@ -1,6 +1,54 @@
 import "../styles/profile-page.css";
 
+// Ajouter au début du fichier
+interface User42Profile {
+    id: number;
+    login: string;
+    displayname: string;
+    image: {
+        link: string;
+    };
+    // Autres champs que vous souhaitez utiliser
+}
+
+async function loadUserProfile(): Promise<User42Profile | null> {
+    try {
+        const response = await fetch('/api/user/profile', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error('Échec du chargement du profil');
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Erreur lors du chargement du profil:', error);
+        return null;
+    }
+}
+
+
 function initializeProfilePage(): () => void {
+
+    const profileData = await loadUserProfile();
+    if (profileData) {
+        // Mettre à jour l'interface avec les données de l'utilisateur
+        const profileImage = document.getElementById('profile-image') as HTMLImageElement;
+        const profileName = document.getElementById('profile-name') as HTMLElement;
+        
+        if (profileImage && profileData.image && profileData.image.link) {
+            profileImage.src = profileData.image.link;
+            profileImage.alt = profileData.displayname || profileData.login;
+        }
+        
+        if (profileName) {
+            profileName.textContent = profileData.displayname || profileData.login;
+        }
+    }
+    
 	const tabLinks = document.querySelectorAll<HTMLElement>('.tab-link');
 	const tabContents = document.querySelectorAll<HTMLElement>('.tab-content');
 	
