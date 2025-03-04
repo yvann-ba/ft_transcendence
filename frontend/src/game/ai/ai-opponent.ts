@@ -1,6 +1,3 @@
-// src/game/ai/ai-opponent.ts
-
-// Define the interfaces needed for the AI
 interface Ball {
     x: number;
     y: number;
@@ -23,14 +20,14 @@ interface GameState {
     ball: Ball;
     paddles: Paddles;
     running: boolean;
-    [key: string]: any; // To allow for other properties
+    [key: string]: any; 
 }
 
 export type AIDifficulty = 'easy' | 'medium' | 'hard';
 
 export class AIOpponent {
     private lastUpdateTime: number = 0;
-    private updateInterval: number = 1000; // 1 second refresh rate as required
+    private updateInterval: number = 1000; 
     private gameState: GameState | null = null;
     private predictedBallPath: { x: number, y: number }[] = [];
     private difficulty: AIDifficulty = 'medium';
@@ -80,8 +77,8 @@ export class AIOpponent {
         const player2Y = this.gameState.paddles.player2Y;
         
         let simulationTime = 0;
-        const timeStep = 0.016; // 60 FPS simulation
-        const maxPredictionTime = 3; // Predict 3 seconds ahead
+        const timeStep = 0.016; 
+        const maxPredictionTime = 3; 
         
         while (simulationTime < maxPredictionTime) {
             ball.x += ball.speedX * timeStep;
@@ -99,7 +96,9 @@ export class AIOpponent {
             }
             
             if (ball.x + ball.radius > this.canvasWidth - (paddleWidth + 3) &&
-                ball.y > player2Y && ball.y < player2Y + paddleHeight) {
+                ball.x - ball.radius < this.canvasWidth - 3 &&
+                ball.y > player2Y && 
+                ball.y < player2Y + paddleHeight) {
                 ball.speedX = -Math.abs(ball.speedX);
                 const relativeIntersect = (ball.y - player2Y) / paddleHeight - 0.5;
                 ball.speedY = relativeIntersect * (Math.abs(ball.speedX) * 0.8);
@@ -126,7 +125,23 @@ export class AIOpponent {
         
         let targetY = paddleCenter;
         
-        const aiSidePredictions = this.predictedBallPath.filter(pos => pos.x > this.canvasWidth / 2);
+        
+        let predictionLimit = 0;
+        switch (this.difficulty) {
+            case 'easy':
+                predictionLimit = 5; 
+                break;
+            case 'medium':
+                predictionLimit = 15; 
+                break;
+            case 'hard':
+                predictionLimit = 100; 
+                break;
+        }
+        
+        const aiSidePredictions = this.predictedBallPath
+            .filter(pos => pos.x > this.canvasWidth / 2)
+            .slice(0, predictionLimit);
         
         if (aiSidePredictions.length > 0) {
             const crossingPoints = aiSidePredictions.filter(pos => 
@@ -141,24 +156,69 @@ export class AIOpponent {
             }
         }
         
+        
+        let reactionDelay = 0;
+        switch (this.difficulty) {
+            case 'easy':
+                reactionDelay = 0.5; 
+                break;
+            case 'medium':
+                reactionDelay = 0.2; 
+                break;
+            case 'hard':
+                reactionDelay = 0.05; 
+                break;
+        }
+        
+        
+        if (this.gameState.ball.speedX < 0) {
+            
+            targetY = this.canvasHeight / 2;
+        }
+        
+        
         let imperfectionRange = 0;
         switch (this.difficulty) {
             case 'easy':
-                imperfectionRange = 50;
+                imperfectionRange = 70; 
                 break;
             case 'medium':
-                imperfectionRange = 20;
+                imperfectionRange = 25; 
                 break;
             case 'hard':
-                imperfectionRange = 5;
+                imperfectionRange = 5; 
                 break;
         }
         
         const imperfection = Math.random() * imperfectionRange * 2 - imperfectionRange;
         targetY += imperfection;
         
+        
+        let speedFactor = 1.0;
+        switch (this.difficulty) {
+            case 'easy':
+                speedFactor = 0.7; 
+                break;
+            case 'medium':
+                speedFactor = 1.0; 
+                break;
+            case 'hard':
+                speedFactor = 1.2; 
+                break;
+        }
+        
+        
         const moveUp = targetY < paddleCenter - 5;
         const moveDown = targetY > paddleCenter + 5;
+        
+        
+        if (this.difficulty === 'easy' && Math.random() < 0.2) {
+            return { moveUp: !moveUp, moveDown: !moveDown };
+        }
+        
+        if (this.difficulty === 'medium' && Math.random() < 0.1) {
+            return { moveUp: false, moveDown: false }; 
+        }
         
         return { moveUp, moveDown };
     }

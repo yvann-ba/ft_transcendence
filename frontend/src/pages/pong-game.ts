@@ -349,8 +349,6 @@ export default function initializePongGame(): (() => void) | null {
 			state.paddles.player2Y += state.paddles.speed * deltaTime;
 		}
 		
-		// Add this right after the player movement code in your update function
-		// Inside the if(state.running) block and before ball movement
 		if (state.aiEnabled && state.aiOpponent) {
 			// Get AI decisions
 			const aiControls = state.aiOpponent.update(state, performance.now());
@@ -592,9 +590,6 @@ export default function initializePongGame(): (() => void) | null {
 		}
 	}
 
-	// ======================
-	// AI Opponent Functions
-	// ======================
 	function toggleAI(): void {
 		state.aiEnabled = !state.aiEnabled;
 		
@@ -690,11 +685,9 @@ export default function initializePongGame(): (() => void) | null {
 
 		state.animationFrameId = requestAnimationFrame(gameLoop);
 
-		// Add these lines to your init function
 		elements.aiButton?.addEventListener("click", toggleAI);
 		elements.difficultySelector?.addEventListener("change", changeAIDifficulty);
 
-		// Debug mode toggle (optional)
 		document.addEventListener("keydown", (e) => {
 			if (e.key === "d" && e.ctrlKey) {
 				state.debugMode = !state.debugMode;
@@ -721,7 +714,6 @@ export default function initializePongGame(): (() => void) | null {
 		if (state.animationFrameId) {
 		  cancelAnimationFrame(state.animationFrameId);
 		}
-		// Add these lines to your cleanup function
 		elements.aiButton?.removeEventListener("click", toggleAI);
 		elements.difficultySelector?.removeEventListener("change", changeAIDifficulty);
 		document.removeEventListener("keydown", (e) => {
