@@ -1,5 +1,7 @@
 // Déclaration pour étendre l'interface Window
 import "../styles/pong-game.css";
+import { AIOpponent, AIDifficulty } from '../game/ai/ai-opponent';
+
 
 declare global {
 	interface Window {
@@ -95,13 +97,15 @@ export default function initializePongGame(): (() => void) | null {
 		customBackButton: document.getElementById("custom-back-button") as HTMLElement | null,
 		customColorsInputs: document.querySelectorAll(".color-input") as NodeListOf<HTMLInputElement>,
 		customSliders: document.querySelectorAll(".pong-custom-slider") as NodeListOf<HTMLInputElement>,
-		winningScoreSlider: document.getElementById("winning-score-slider") as HTMLInputElement | null
+		winningScoreSlider: document.getElementById("winning-score-slider") as HTMLInputElement | null,
+		aiButton: document.getElementById("ai-button") as HTMLElement | null,
+        difficultySelector: document.getElementById("ai-difficulty") as HTMLSelectElement | null
 	};
 
 	// ======================
 	// État du jeu
 	// ======================
-	const state: GameState = {
+	const state: any = {
 		// Physique
 		ball: {
 			x: canvas.width / 2,
@@ -152,8 +156,13 @@ export default function initializePongGame(): (() => void) | null {
 		countdownOpacity: 1.0,
 		fadingOut: false,
 		lastTime: performance.now(),
-		animationFrameId: 0
+		animationFrameId: 0,
+
+		aiEnabled: false,
+		aiOpponent: null,
+		debugMode: false,
 	};
+
 
 	// ======================
 	// Fonctions de base
@@ -339,7 +348,17 @@ export default function initializePongGame(): (() => void) | null {
 		if (state.controls.player2Down && state.paddles.player2Y < canvas.height - state.paddles.height - 5) {
 			state.paddles.player2Y += state.paddles.speed * deltaTime;
 		}
-
+		
+		// Add this right after the player movement code in your update function
+		// Inside the if(state.running) block and before ball movement
+		if (state.aiEnabled && state.aiOpponent) {
+			// Get AI decisions
+			const aiControls = state.aiOpponent.update(state, performance.now());
+			
+			// Override player 2 controls with AI decisions
+			state.controls.player2Up = aiControls.moveUp;
+			state.controls.player2Down = aiControls.moveDown;
+		}
 		// Mouvement de la balle
 		state.ball.x += state.ball.speedX * deltaTime;
 		state.ball.y += state.ball.speedY * deltaTime;
@@ -487,7 +506,9 @@ export default function initializePongGame(): (() => void) | null {
 		if (state.countdownActive || state.fadingOut) {
 			drawCountdown();
 		}
-
+		if (state.debugMode) {
+			drawDebug();
+		}
 		state.animationFrameId = requestAnimationFrame(gameLoop);
 	}
 
@@ -572,6 +593,81 @@ export default function initializePongGame(): (() => void) | null {
 	}
 
 	// ======================
+	// AI Opponent Functions
+	// ======================
+	function toggleAI(): void {
+		state.aiEnabled = !state.aiEnabled;
+		
+		if (state.aiEnabled) {
+			if (!state.aiOpponent && canvas) {
+				state.aiOpponent = new AIOpponent(canvas.width, canvas.height);
+				
+				if (elements.difficultySelector) {
+					const difficulty = elements.difficultySelector.value as AIDifficulty;
+					state.aiOpponent.setDifficulty(difficulty);
+				}
+			}
+			
+			state.scores.player1 = 0;
+			state.scores.player2 = 0;
+			updateScores();
+			
+			if (state.running) {
+				resetBall();
+			}
+			
+			if (elements.aiButton) {
+				elements.aiButton.textContent = "Play vs Human";
+			}
+		} else {
+			if (elements.aiButton) {
+				elements.aiButton.textContent = "Play vs AI";
+			}
+			
+			state.scores.player1 = 0;
+			state.scores.player2 = 0;
+			updateScores();
+			
+			if (state.running) {
+				resetBall();
+			}
+		}
+	}
+
+	function changeAIDifficulty(): void {
+		if (state.aiOpponent && elements.difficultySelector) {
+			const difficulty = elements.difficultySelector.value as AIDifficulty;
+			state.aiOpponent.setDifficulty(difficulty);
+		}
+	}
+
+	function drawDebug(): void {
+		if (!state.debugMode || !state.aiOpponent || !ctx) return;
+		
+		const predictedPath = state.aiOpponent.getPredictedPath();
+		
+		if (predictedPath.length === 0) return;
+		
+		ctx.beginPath();
+		ctx.moveTo(predictedPath[0].x, predictedPath[0].y);
+		
+		for (let i = 1; i < predictedPath.length; i++) {
+			ctx.lineTo(predictedPath[i].x, predictedPath[i].y);
+		}
+		
+		ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
+		ctx.lineWidth = 2;
+		ctx.stroke();
+		
+		if (predictedPath.length > 0) {
+			const lastPoint = predictedPath[predictedPath.length - 1];
+			ctx.beginPath();
+			ctx.arc(lastPoint.x, lastPoint.y, 5, 0, Math.PI * 2);
+			ctx.fillStyle = 'yellow';
+			ctx.fill();
+		}
+	}
+	// ======================
 	// Initialisation
 	// ======================
 	function init(): void {
@@ -593,6 +689,18 @@ export default function initializePongGame(): (() => void) | null {
 		elements.winningScoreSlider?.addEventListener("input", changeWinningScore);
 
 		state.animationFrameId = requestAnimationFrame(gameLoop);
+
+		// Add these lines to your init function
+		elements.aiButton?.addEventListener("click", toggleAI);
+		elements.difficultySelector?.addEventListener("change", changeAIDifficulty);
+
+		// Debug mode toggle (optional)
+		document.addEventListener("keydown", (e) => {
+			if (e.key === "d" && e.ctrlKey) {
+				state.debugMode = !state.debugMode;
+				console.log("Debug mode:", state.debugMode);
+			}
+		});
 	}
 
 	init();
@@ -613,11 +721,21 @@ export default function initializePongGame(): (() => void) | null {
 		if (state.animationFrameId) {
 		  cancelAnimationFrame(state.animationFrameId);
 		}
+		// Add these lines to your cleanup function
+		elements.aiButton?.removeEventListener("click", toggleAI);
+		elements.difficultySelector?.removeEventListener("change", changeAIDifficulty);
+		document.removeEventListener("keydown", (e) => {
+			if (e.key === "d" && e.ctrlKey) {
+				state.debugMode = !state.debugMode;
+			}
+		});
 	  }
 	
 	  return cleanup;
 
 }
+
+
 
 // Export pour SPA
 if (typeof window !== "undefined") {
@@ -625,3 +743,4 @@ if (typeof window !== "undefined") {
 }
 
 export {}; // Pour s'assurer que le fichier est un module
+
