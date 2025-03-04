@@ -3,6 +3,16 @@
 		<span id="player1-score"> 0</span> - <span id="player2-score">0</span>
 	</div>
 	<div id="pong-menu">
+		<button id="ai-button" class="pong-button">Play vs AI</button>
+		<!-- Add difficulty selector -->
+		<div style="margin-top: 10px;">
+			<label for="ai-difficulty" style="color: white;">AI Difficulty:</label>
+			<select id="ai-difficulty" style="padding: 5px; margin-left: 10px; background-color: #ffffff; color: #000000;">
+				<option value="easy">Easy</option>
+				<option value="medium" selected>Medium</option>
+				<option value="hard">Hard</option>
+			</select>
+		</div>
 		<div id="play-overlay">
 			<button class="pong-button " id="play-button"> Play </button>
 		</div>
