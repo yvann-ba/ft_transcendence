@@ -220,68 +220,21 @@ export default function initializePongGame(): (() => void) | null {
 	function checkPaddleCollision(): void {
 		const pw = state.paddles.width;
 		const ph = state.paddles.height;
-	
-		if (!canvas) return;
-	
-		// Calculate the current frame's time delta
-		const currentDeltaTime = 1/60; // Assume a fixed time step of 1/60 second for collision detection
-		
-		// Store the ball's previous and current positions
-		const prevBallX = state.ball.x - state.ball.speedX * currentDeltaTime;
-		const prevBallY = state.ball.y - state.ball.speedY * currentDeltaTime;
-		const currentBallX = state.ball.x;
-		const currentBallY = state.ball.y;
-		
-		// Player 1 paddle (left)
-		const paddle1Right = pw + 3;
-		
-		// Check if ball crossed the paddle1 plane during this frame
-		if ((prevBallX - state.ball.radius > paddle1Right && currentBallX - state.ball.radius <= paddle1Right) ||
-			(prevBallX - state.ball.radius <= paddle1Right && currentBallX - state.ball.radius <= paddle1Right && 
-			 state.ball.speedX < 0)) {
-			
-			// Calculate the Y position when the ball crossed the paddle plane
-			const t = Math.abs((paddle1Right - (prevBallX - state.ball.radius)) / 
-					 (currentBallX - prevBallX || 0.001)); // Avoid division by zero
-			const crossingY = prevBallY + t * (currentBallY - prevBallY);
-			
-			// Check if this Y position is within the paddle's height
-			if (crossingY >= state.paddles.player1Y && 
-				crossingY <= state.paddles.player1Y + ph) {
-				handlePaddleBounce("player1");
-			}
-		}
-		
-		// Player 2 paddle (right)
-		const paddle2Left = canvas.width - (pw + 3);
-		
-		// Check if ball crossed the paddle2 plane during this frame
-		if ((prevBallX + state.ball.radius < paddle2Left && currentBallX + state.ball.radius >= paddle2Left) ||
-			(prevBallX + state.ball.radius >= paddle2Left && currentBallX + state.ball.radius >= paddle2Left && 
-			 state.ball.speedX > 0)) {
-			
-			// Calculate the Y position when the ball crossed the paddle plane
-			const t = Math.abs((paddle2Left - (prevBallX + state.ball.radius)) / 
-					 (currentBallX - prevBallX || 0.001)); // Avoid division by zero
-			const crossingY = prevBallY + t * (currentBallY - prevBallY);
-			
-			// Check if this Y position is within the paddle's height
-			if (crossingY >= state.paddles.player2Y && 
-				crossingY <= state.paddles.player2Y + ph) {
-				handlePaddleBounce("player2");
-			}
-		}
-		
-		// Also keep the original collision detection as backup
-		if (state.ball.x - state.ball.radius < pw + 3 &&
+
+		if (!canvas)
+			return;
+
+		// Collision pour le joueur 1
+		if ( state.ball.x - state.ball.radius < pw + 3 &&
 			state.ball.y > state.paddles.player1Y &&
-			state.ball.y < state.paddles.player1Y + ph) {
+			state.ball.y < state.paddles.player1Y + ph ) {
 			handlePaddleBounce("player1");
 		}
-		
-		if (state.ball.x + state.ball.radius > canvas.width - (pw + 3) &&
+
+		// Collision pour le joueur 2
+		if ( state.ball.x + state.ball.radius > canvas.width - (pw + 3) &&
 			state.ball.y > state.paddles.player2Y &&
-			state.ball.y < state.paddles.player2Y + ph) {
+			state.ball.y < state.paddles.player2Y + ph ) {
 			handlePaddleBounce("player2");
 		}
 	}
