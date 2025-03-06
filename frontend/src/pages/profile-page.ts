@@ -1,54 +1,6 @@
 import "../styles/profile-page.css";
 
-// Ajouter au début du fichier
-interface User42Profile {
-    id: number;
-    login: string;
-    displayname: string;
-    image: {
-        link: string;
-    };
-    // Autres champs que vous souhaitez utiliser
-}
-
-async function loadUserProfile(): Promise<User42Profile | null> {
-    try {
-        const response = await fetch('/api/user/profile', {
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-        });
-        
-        if (!response.ok) {
-            throw new Error('Échec du chargement du profil');
-        }
-        
-        return await response.json();
-    } catch (error) {
-        console.error('Erreur lors du chargement du profil:', error);
-        return null;
-    }
-}
-
-
-async function initializeProfilePage(): Promise<() => void> {
-
-    const profileData = await loadUserProfile();
-    if (profileData) {
-        // Mettre à jour l'interface avec les données de l'utilisateur
-        const profileImage = document.getElementById('profile-image') as HTMLImageElement;
-        const profileName = document.getElementById('profile-name') as HTMLElement;
-        
-        if (profileImage && profileData.image && profileData.image.link) {
-            profileImage.src = profileData.image.link;
-            profileImage.alt = profileData.displayname || profileData.login;
-        }
-        
-        if (profileName) {
-            profileName.textContent = profileData.displayname || profileData.login;
-        }
-    }
-    
+function initializeProfilePage(): () => void {
 	const tabLinks = document.querySelectorAll<HTMLElement>('.tab-link');
 	const tabContents = document.querySelectorAll<HTMLElement>('.tab-content');
 	
@@ -117,13 +69,13 @@ async function initializeProfilePage(): Promise<() => void> {
 }
 
 // Chart event handler references (for cleanup)
-let handleSegmentMouseEnter: (this: HTMLElement, event: MouseEvent) => void;
+let handleSegmentMouseEnter: (event: MouseEvent) => void;
 let handleSegmentMouseLeave: (event: MouseEvent) => void;
 let handleSegmentMouseMove: (event: MouseEvent) => void;
 
 // History row event handlers
-let handleHistoryRowHover: (this: HTMLElement, event: Event) => void;
-let handleHistoryRowLeave: (this: HTMLElement, event: Event) => void;
+let handleHistoryRowHover: (event: MouseEvent) => void;
+let handleHistoryRowLeave: (event: MouseEvent) => void;
 
 // Chart animation function reference
 let animateChart: () => void;
@@ -158,12 +110,12 @@ function initializeHistoryTable(): void {
         
         // Add animation classes but keep them invisible at first
         row.classList.add('animated-row');
-        (row as HTMLElement).style.opacity = '0';
-        (row as HTMLElement).style.transform = 'translateY(20px)';
+        row.style.opacity = '0';
+        row.style.transform = 'translateY(20px)';
     });
     
     // Define hover handlers
-    handleHistoryRowHover = function(this: HTMLElement, _event: Event) {
+    handleHistoryRowHover = function(this: HTMLElement) {
         this.classList.add('row-hover');
         
         // Add pulse animation to the badge
@@ -179,7 +131,7 @@ function initializeHistoryTable(): void {
         }
     };
     
-    handleHistoryRowLeave = function(this: HTMLElement, _event: Event) {
+    handleHistoryRowLeave = function(this: HTMLElement) {
         this.classList.remove('row-hover');
         
         // Remove pulse
@@ -204,7 +156,7 @@ function initializeHistoryTable(): void {
     // Add table sorting functionality
     const headerCells = historyTab.querySelectorAll('thead th');
     headerCells.forEach((header, index) => {
-        (header as HTMLElement).style.cursor = 'pointer';
+        header.style.cursor = 'pointer';
         header.setAttribute('data-sort-direction', 'none');
         header.addEventListener('click', () => sortTable(index, header));
     });
@@ -219,9 +171,9 @@ function initializeHistoryTable(): void {
     animateHistoryTable = () => {
         // Reset all rows first
         rows.forEach(row => {
-            (row as HTMLElement).style.opacity = '0';
-            (row as HTMLElement).style.transform = 'translateY(20px)';
-            (row as HTMLElement).style.transition = 'none';
+            row.style.opacity = '0';
+            row.style.transform = 'translateY(20px)';
+            row.style.transition = 'none';
         });
         
         // Force reflow
@@ -235,9 +187,9 @@ function initializeHistoryTable(): void {
         // Stagger the row animations
         rows.forEach((row, index) => {
             setTimeout(() => {
-                (row as HTMLElement).style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                (row as HTMLElement).style.opacity = '1';
-                (row as HTMLElement).style.transform = 'translateY(0)';
+                row.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                row.style.opacity = '1';
+                row.style.transform = 'translateY(0)';
             }, 150 + (index * 100));
         });
     };
@@ -308,15 +260,15 @@ function sortTable(columnIndex: number, headerElement: Element): void {
     // Re-append rows in sorted order with staggered animation
     setTimeout(() => {
         rows.forEach((row, index) => {
-            (row as HTMLElement).style.opacity = '0';
-            (row as HTMLElement).style.transform = 'translateY(10px)';
+            row.style.opacity = '0';
+            row.style.transform = 'translateY(10px)';
             tbody.appendChild(row);
             
             // Staggered fade-in animation
             setTimeout(() => {
-                (row as HTMLElement).style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                (row as HTMLElement).style.opacity = '1';
-                (row as HTMLElement).style.transform = 'translateY(0)';
+                row.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                row.style.opacity = '1';
+                row.style.transform = 'translateY(0)';
             }, 50 * index);
         });
         
@@ -398,7 +350,7 @@ function initializeChart(): void {
     if (!chartContainer) return;
     
     // Define event handlers (store references for cleanup)
-    handleSegmentMouseEnter = function(this: HTMLElement, _e: MouseEvent) {
+    handleSegmentMouseEnter = function(this: HTMLElement, e: MouseEvent) {
         tooltip.style.opacity = '1';
         
         if (this === winSegment) {
@@ -410,7 +362,7 @@ function initializeChart(): void {
         }
     };
     
-    handleSegmentMouseLeave = function(_e: MouseEvent) {
+    handleSegmentMouseLeave = function(e: MouseEvent) {
         tooltip.style.opacity = '0';
         winSegment.style.stroke = '#4CAF50';
         lossSegment.style.stroke = '#F44336';
@@ -439,11 +391,9 @@ function initializeChart(): void {
 }
 
 if (document.readyState !== 'loading') {
-    initializeProfilePage().catch(console.error);
+    initializeProfilePage();
 } else {
-    document.addEventListener('DOMContentLoaded', () => {
-        initializeProfilePage().catch(console.error);
-    });
+    document.addEventListener('DOMContentLoaded', initializeProfilePage);
 }
 
 export default initializeProfilePage;
