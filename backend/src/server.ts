@@ -12,8 +12,10 @@ import migrateRoutes from './routes/migrate';
 import createUsersTable from '../database/migrations/001_create_users_table'
 import userRoutes from "./routes/users";
 import authRoutes from "./routes/auth";
+import oauthGoogleRoutes from './routes/oauthGoogle';
 
 const fastify = Fastify({ logger: true });
+fastify.register(oauthGoogleRoutes);
 
 fastify.register(cors, {
   origin: "*",
@@ -69,7 +71,7 @@ fastify.register(authRoutes);
 
 const start = async () => {
   try {
-    
+
     createUsersTable();
     
     await fastify.listen({ port: 3000, host: "0.0.0.0" });
