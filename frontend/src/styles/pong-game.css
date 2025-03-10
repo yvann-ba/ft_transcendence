@@ -264,3 +264,91 @@
     opacity: 1;
     visibility: visible;
 }
+
+/* Add these styles to your pong-game.css file */
+
+.pong-option-container {
+    margin-bottom: 1.5vh;
+  }
+  
+  .pong-checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  .pong-checkbox {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 2px solid #ffffff;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .pong-checkbox:checked {
+    background-color: #BB70AD;
+    border-color: #BB70AD;
+  }
+  
+  .pong-checkbox:checked::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 7px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  
+  .pong-checkbox:hover {
+    border-color: #BB70AD;
+  }
+  
+  .pong-checkbox-text {
+    font-size: 20px;
+  }
+  
+  .pong-select {
+    padding: 8px 15px;
+    font-size: 16px;
+    background-color: #222;
+    color: white;
+    border: 2px solid #ffffff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    width: 20vh;
+    margin-bottom: 1.5vh;
+  }
+  
+  .pong-select:hover {
+    border-color: #BB70AD;
+  }
+  
+  .pong-select:focus {
+    outline: none;
+    border-color: #BB70AD;
+  }
+  
+  .pong-select option {
+    background-color: #222;
+    color: white;
+  }
+  
+  #difficulty-selector-container {
+    transition: opacity 0.3s ease;
+  }
+  
+  #difficulty-selector-container.hidden {
+    display: none;
+  }

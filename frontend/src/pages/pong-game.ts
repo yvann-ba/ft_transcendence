@@ -98,8 +98,9 @@ export default function initializePongGame(): (() => void) | null {
 		customColorsInputs: document.querySelectorAll(".color-input") as NodeListOf<HTMLInputElement>,
 		customSliders: document.querySelectorAll(".pong-custom-slider") as NodeListOf<HTMLInputElement>,
 		winningScoreSlider: document.getElementById("winning-score-slider") as HTMLInputElement | null,
-		aiButton: document.getElementById("ai-button") as HTMLElement | null,
-        difficultySelector: document.getElementById("ai-difficulty") as HTMLSelectElement | null
+		aiCheckbox: document.getElementById("ai-checkbox") as HTMLInputElement | null,
+		difficultySelector: document.getElementById("ai-difficulty") as HTMLSelectElement | null,
+		difficultySelectorContainer: document.getElementById("difficulty-selector-container") as HTMLElement | null
 	};
 
 	// ======================
@@ -591,7 +592,18 @@ export default function initializePongGame(): (() => void) | null {
 	}
 
 	function toggleAI(): void {
-		state.aiEnabled = !state.aiEnabled;
+		if (!elements.aiCheckbox) return;
+		
+		state.aiEnabled = elements.aiCheckbox.checked;
+		
+		// Show/hide difficulty selector based on checkbox state
+		if (elements.difficultySelectorContainer) {
+			if (state.aiEnabled) {
+				elements.difficultySelectorContainer.classList.remove("hidden");
+			} else {
+				elements.difficultySelectorContainer.classList.add("hidden");
+			}
+		}
 		
 		if (state.aiEnabled) {
 			if (!state.aiOpponent && canvas) {
@@ -610,15 +622,7 @@ export default function initializePongGame(): (() => void) | null {
 			if (state.running) {
 				resetBall();
 			}
-			
-			if (elements.aiButton) {
-				elements.aiButton.textContent = "Play vs Human";
-			}
 		} else {
-			if (elements.aiButton) {
-				elements.aiButton.textContent = "Play vs AI";
-			}
-			
 			state.scores.player1 = 0;
 			state.scores.player2 = 0;
 			updateScores();
@@ -666,10 +670,12 @@ export default function initializePongGame(): (() => void) | null {
 	// Initialisation
 	// ======================
 	function init(): void {
-		setTimeout(() => {
-			elements.menu?.classList.add("show");
-		}, 50);
-
+		// Make sure the menu is visible when the game loads
+		if (elements.menu) {
+			elements.menu.classList.add("show");
+			// No need for setTimeout since we're showing it immediately
+		}
+	
 		document.addEventListener("keydown", handleKeyDown);
 		document.addEventListener("keyup", handleKeyUp);
 		elements.playButton?.addEventListener("click", startGame);
@@ -682,12 +688,24 @@ export default function initializePongGame(): (() => void) | null {
 			slider.addEventListener("input", sliderAnimation);
 		});
 		elements.winningScoreSlider?.addEventListener("input", changeWinningScore);
-
+	
 		state.animationFrameId = requestAnimationFrame(gameLoop);
-
-		elements.aiButton?.addEventListener("click", toggleAI);
+	
+		// Use change event for checkbox instead of click for button
+		elements.aiCheckbox?.addEventListener("change", toggleAI);
 		elements.difficultySelector?.addEventListener("change", changeAIDifficulty);
-
+		
+		// Initialize difficulty selector visibility
+		if (elements.difficultySelectorContainer && elements.aiCheckbox) {
+			if (elements.aiCheckbox.checked) {
+				elements.difficultySelectorContainer.classList.remove("hidden");
+				state.aiEnabled = true;
+			} else {
+				elements.difficultySelectorContainer.classList.add("hidden");
+				state.aiEnabled = false;
+			}
+		}
+	
 		document.addEventListener("keydown", (e) => {
 			if (e.key === "d" && e.ctrlKey) {
 				state.debugMode = !state.debugMode;
@@ -714,14 +732,14 @@ export default function initializePongGame(): (() => void) | null {
 		if (state.animationFrameId) {
 		  cancelAnimationFrame(state.animationFrameId);
 		}
-		elements.aiButton?.removeEventListener("click", toggleAI);
+		elements.aiCheckbox?.removeEventListener("change", toggleAI);
 		elements.difficultySelector?.removeEventListener("change", changeAIDifficulty);
 		document.removeEventListener("keydown", (e) => {
 			if (e.key === "d" && e.ctrlKey) {
 				state.debugMode = !state.debugMode;
 			}
 		});
-	  }
+	}
 	
 	  return cleanup;
 

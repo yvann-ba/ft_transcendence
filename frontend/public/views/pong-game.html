@@ -1,50 +1,74 @@
-<section id="pong-game" class="main-menu">
-	<div id="scoreboard">
-		<span id="player1-score"> 0</span> - <span id="player2-score">0</span>
-	</div>
-	<div id="pong-menu">
-		<button id="ai-button" class="pong-button">Play vs AI</button>
-		<!-- Add difficulty selector -->
-		<div style="margin-top: 10px;">
-			<label for="ai-difficulty" style="color: white;">AI Difficulty:</label>
-			<select id="ai-difficulty" style="padding: 5px; margin-left: 10px; background-color: #ffffff; color: #000000;">
-				<option value="easy">Easy</option>
-				<option value="medium" selected>Medium</option>
-				<option value="hard">Hard</option>
-			</select>
-		</div>
-		<div id="play-overlay">
-			<button class="pong-button " id="play-button"> Play </button>
-		</div>
-		<div id="custom-overlay">
-			<button class="pong-button" id="custom-button"> Custom </button>
-		</div>
-	</div>
-	
-	<div id="pong-custom-menu" class="hidden">
-		<div id="custom-menu-content">
-			<div id="custom-settings">
-				<div>
-					<p id="pong-winning-score">Winning score : 3</p>
-					<input id="winning-score-slider" class="pong-custom-slider" type="range" min="1" max="10" value="3" step="any">
-				</div>
-				<div>
-					<p>Ground color</p>
-					<input id="pong-ground-color" class="color-input" type="color" value="#ffffff">
-				</div>
-				<div>
-					<p>Ball color</p>
-					<input id="pong-ball-color" class="color-input" type="color" value="#ffffff">
-				</div>
-				<div>
-					<p>Paddle color</p>
-					<input id="pong-paddle-color" class="color-input" type="color" value="#ffffff">
-				</div>
-			</div>
-			<div>
-				<button class="pong-button" id="custom-back-button"> Return </button>
-			</div>
-		</div>
-	</div>
-	<canvas id="pongCanvas" width="800" height="400"></canvas>
-</section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong Game</title>
+    <link rel="stylesheet" href="frontend/src/styles/pong-game.css">
+</head>
+<body>
+    <div id="pong-game" class="main-menu">
+        <canvas id="pongCanvas" width="800" height="450"></canvas>
+        
+        <div id="scoreboard">
+            <div id="player1-score">0</div>
+            <div>-</div>
+            <div id="player2-score">0</div>
+        </div>
+        
+        <!-- Remove the "hidden" class from the menu -->
+        <div id="pong-menu">
+            <h1>PONG</h1>
+            <button id="play-button" class="pong-button">Play</button>
+            
+            <div class="pong-option-container">
+                <label class="pong-checkbox-label">
+                    <input type="checkbox" id="ai-checkbox" class="pong-checkbox">
+                    <span class="pong-checkbox-text">Play with AI</span>
+                </label>
+            </div>
+            
+            <div id="difficulty-selector-container" class="hidden">
+				<h1>AI Difficulty</h1>
+                <select id="ai-difficulty" class="pong-select">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+            
+            <button id="custom-button" class="pong-button">Customize</button>
+        </div>
+        
+        <div id="pong-custom-menu" class="hidden">
+            <div id="custom-menu-content">
+                <h1>Customize</h1>
+                <div id="custom-settings">
+                    <div>
+                        <label for="pong-ground-color">Ground Color</label>
+                        <input type="color" value="#ffffff" id="pong-ground-color" class="color-input">
+                    </div>
+                    <div>
+                        <label for="pong-ball-color">Ball Color</label>
+                        <input type="color" value="#ffffff" id="pong-ball-color" class="color-input">
+                    </div>
+                    <div>
+                        <label for="pong-paddle-color">Paddle Color</label>
+                        <input type="color" value="#ffffff" id="pong-paddle-color" class="color-input">
+                    </div>
+                </div>
+                <div>
+                    <p id="pong-winning-score">Winning score: 3</p>
+                    <input type="range" min="1" max="10" value="3" class="pong-custom-slider" id="winning-score-slider">
+                </div>
+                <button id="custom-back-button" class="pong-button">Back</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="chart-tooltip" class="chart-tooltip"></div>
+
+    <!-- Update the script path to match your actual file structure -->
+    <script type="module" src="frontend/src/pages/pong-game.ts"></script>
+</body>
+</html>
