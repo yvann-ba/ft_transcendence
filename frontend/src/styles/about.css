@@ -1,5 +1,5 @@
-/* About page styles */
-.about-container {
+/* Scrolling styles specific to about page only */
+body.about-page .about-container {
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;

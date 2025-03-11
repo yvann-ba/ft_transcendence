@@ -8,15 +8,29 @@ export default function initializeAboutPage(): () => void {
     // Add class to body for specific styling
     document.body.classList.add('about-page');
     
-    // Fix the scroll issue
-    document.body.style.overflowY = 'auto';
-    document.body.style.height = 'auto';
-    
+    // Fix the scroll issue ONLY for about page
+    // These styles will be removed when navigating away
     const appContainer = document.getElementById('app');
+    
+    // Store original styles to restore later
+    const originalBodyOverflow = document.body.style.overflowY;
+    const originalBodyHeight = document.body.style.height;
+    let originalAppOverflow = '';
+    let originalAppHeight = '';
+    
     if (appContainer) {
+        originalAppOverflow = appContainer.style.overflowY;
+        originalAppHeight = appContainer.style.height;
+        
+        // Apply scroll fixes
         appContainer.style.overflowY = 'auto';
         appContainer.style.height = 'auto';
     }
+    
+    // Apply scroll styles to body
+    document.body.style.overflowY = 'auto';
+    document.body.style.height = 'auto';
+    
     // Handle section animations with Intersection Observer
     const sections = document.querySelectorAll<HTMLElement>('.about-section');
     const header = document.querySelector<HTMLElement>('.about-header');
@@ -87,7 +101,7 @@ export default function initializeAboutPage(): () => void {
     const featureCards = document.querySelectorAll<HTMLElement>('.feature-card');
     
     const handleFeatureCardMouseEnter = function(this: HTMLElement) {
-        const icon = this.querySelector('.feature-icon');
+        const icon = this.querySelector<HTMLElement>('.feature-icon');
         if (icon) {
             icon.classList.add('pulse');
             icon.style.backgroundColor = 'rgba(187, 112, 173, 0.6)';
@@ -95,7 +109,7 @@ export default function initializeAboutPage(): () => void {
     };
     
     const handleFeatureCardMouseLeave = function(this: HTMLElement) {
-        const icon = this.querySelector('.feature-icon');
+        const icon = this.querySelector<HTMLElement>('.feature-icon');
         if (icon) {
             icon.classList.remove('pulse');
             icon.style.backgroundColor = 'rgba(187, 112, 173, 0.2)';
@@ -143,6 +157,15 @@ export default function initializeAboutPage(): () => void {
         
         // Remove the body class when unmounting
         document.body.classList.remove('about-page');
+        
+        // Restore original styles
+        document.body.style.overflowY = originalBodyOverflow;
+        document.body.style.height = originalBodyHeight;
+        
+        if (appContainer) {
+            appContainer.style.overflowY = originalAppOverflow;
+            appContainer.style.height = originalAppHeight;
+        }
     };
 }
 

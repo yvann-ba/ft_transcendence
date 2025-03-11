@@ -8,15 +8,29 @@ export default function initializeContactPage(): () => void {
     // Add class to body for specific styling
     document.body.classList.add('contact-page');
     
-    // Fix the scroll issue
-    document.body.style.overflowY = 'auto';
-    document.body.style.height = 'auto';
-    
+    // Fix the scroll issue ONLY for contact page
+    // These styles will be removed when navigating away
     const appContainer = document.getElementById('app');
+    
+    // Store original styles to restore later
+    const originalBodyOverflow = document.body.style.overflowY;
+    const originalBodyHeight = document.body.style.height;
+    let originalAppOverflow = '';
+    let originalAppHeight = '';
+    
     if (appContainer) {
+        originalAppOverflow = appContainer.style.overflowY;
+        originalAppHeight = appContainer.style.height;
+        
+        // Apply scroll fixes
         appContainer.style.overflowY = 'auto';
         appContainer.style.height = 'auto';
     }
+    
+    // Apply scroll styles to body
+    document.body.style.overflowY = 'auto';
+    document.body.style.height = 'auto';
+    
     // Animation for header elements
     const header = document.querySelector<HTMLElement>('.contact-header');
     
@@ -32,7 +46,7 @@ export default function initializeContactPage(): () => void {
     // Handle animations for team members using Intersection Observer
     const teamMembers = document.querySelectorAll<HTMLElement>('.team-member');
     const timelineItems = document.querySelectorAll<HTMLElement>('.timeline-item');
-    const sections = document.querySelectorAll<HTMLElement>('.collaboration-section, .contact-form-section');
+    const sections = document.querySelectorAll<HTMLElement>('.collaboration-section');
     
     // Create intersection observer for animation on scroll
     const observer = new IntersectionObserver((entries) => {
@@ -133,8 +147,6 @@ export default function initializeContactPage(): () => void {
         icon.addEventListener('mouseleave', handleTimelineIconMouseLeave);
     });
     
-    // Contact form handling removed as requested
-    
     // Create parallax effect on scroll
     const handleScroll = () => {
         const scrollY = window.scrollY;
@@ -144,9 +156,9 @@ export default function initializeContactPage(): () => void {
             const speed = 0.03;
             const yPos = -(scrollY * speed * (index + 1) % 10);
             
-            const photo = container.querySelector('.member-photo');
+            const photo = container.querySelector<HTMLElement>('.member-photo');
             if (photo) {
-                (photo as HTMLElement).style.transform = `translateY(${yPos}px)`;
+                photo.style.transform = `translateY(${yPos}px)`;
             }
         });
     };
@@ -174,12 +186,19 @@ export default function initializeContactPage(): () => void {
             icon.removeEventListener('mouseleave', handleTimelineIconMouseLeave);
         });
         
-        // Contact form cleanup removed
-        
         window.removeEventListener('scroll', handleScroll);
         
         // Remove the body class when unmounting
         document.body.classList.remove('contact-page');
+        
+        // Restore original styles
+        document.body.style.overflowY = originalBodyOverflow;
+        document.body.style.height = originalBodyHeight;
+        
+        if (appContainer) {
+            appContainer.style.overflowY = originalAppOverflow;
+            appContainer.style.height = originalAppHeight;
+        }
     };
 }
 
