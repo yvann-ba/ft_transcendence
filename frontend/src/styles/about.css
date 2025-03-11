@@ -1,0 +1,273 @@
+/* About page styles */
+.about-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    color: white;
+}
+
+.about-header {
+    text-align: center;
+    margin-top: 120px;
+    margin-bottom: 4rem;
+}
+
+.about-header h1 {
+    font-size: 5rem;
+    line-height: 0.9;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+/* Section styles */
+.about-section {
+    margin-bottom: 6rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.about-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.section-title {
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.section-title h2 {
+    color: #f0f0f0;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.title-line {
+    width: 0;
+    height: 3px;
+    background-color: #BB70AD;
+    transition: width 1.5s ease-out;
+}
+
+.about-section.visible .title-line {
+    width: 100%;
+}
+
+.section-text {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    max-width: 800px;
+    margin-bottom: 1.5rem;
+}
+
+/* Tech stack grid */
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.tech-card {
+    background-color: rgba(30, 30, 30, 0.5);
+    border-radius: 10px;
+    padding: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.tech-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background-color: #BB70AD;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s ease;
+}
+
+.tech-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.tech-card:hover::before {
+    transform: scaleX(1);
+}
+
+.tech-card h3 {
+    color: #BB70AD;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.tech-card ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.tech-card li {
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.tech-card li::before {
+    content: "•";
+    color: #BB70AD;
+    position: absolute;
+    left: 0;
+    font-size: 1.2rem;
+}
+
+.tech-icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 1rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Features grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.feature-card {
+    background-color: rgba(30, 30, 30, 0.5);
+    border-radius: 10px;
+    padding: 2rem;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    background-color: rgba(50, 50, 50, 0.5);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1.5rem;
+    border-radius: 50%;
+    background-color: rgba(187, 112, 173, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.feature-icon::before {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.feature-card h3 {
+    color: #BB70AD;
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+}
+
+.feature-card p {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Placeholder for tech icons - Replace with SVG or actual icons */
+.tech-frontend, .tech-backend, .tech-database, .tech-devops {
+    display: block;
+    width: 40px;
+    height: 40px;
+    background-color: #BB70AD;
+    border-radius: 50%;
+    position: relative;
+}
+
+.tech-frontend::before, 
+.tech-backend::before, 
+.tech-database::before, 
+.tech-devops::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    color: white;
+}
+
+.tech-frontend::before { content: "F"; }
+.tech-backend::before { content: "B"; }
+.tech-database::before { content: "D"; }
+.tech-devops::before { content: "O"; }
+
+/* Feature icons placeholders */
+.game-icon::before { content: "🎮"; font-size: 24px; }
+.ai-icon::before { content: "🤖"; font-size: 24px; }
+.user-icon::before { content: "👤"; font-size: 24px; }
+.custom-icon::before { content: "🎨"; font-size: 24px; }
+.security-icon::before { content: "🔒"; font-size: 24px; }
+.responsive-icon::before { content: "📱"; font-size: 24px; }
+
+/* Animation delays for staggered effect */
+.about-section:nth-child(2) { transition-delay: 0.2s; }
+.about-section:nth-child(3) { transition-delay: 0.4s; }
+.about-section:nth-child(4) { transition-delay: 0.6s; }
+.about-section:nth-child(5) { transition-delay: 0.8s; }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .about-header h1 {
+        font-size: 3rem;
+    }
+    
+    .section-title h2 {
+        font-size: 2rem;
+    }
+    
+    .section-text {
+        font-size: 1rem;
+    }
+    
+    .tech-grid, .features-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animation for tech cards on hover */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.tech-card:hover .tech-icon i {
+    animation: pulse 1s infinite;
+}
+
+/* Team section styling */
+.team-members {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}

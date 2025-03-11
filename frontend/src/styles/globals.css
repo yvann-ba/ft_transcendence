@@ -354,3 +354,21 @@ div {
         display: flex;
     }
 }
+
+html, body {
+    overflow-y: auto !important;
+    height: auto !important;
+    min-height: 100vh !important;
+}
+
+#app {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow-y: auto !important;
+}
+
+/* For about and contact pages specifically */
+body.about-page, 
+body.contact-page {
+    overflow-y: auto !important;
+}
