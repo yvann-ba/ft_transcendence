@@ -5,6 +5,18 @@ import "../styles/contact.css";
  * @returns Cleanup function to be called when the component unmounts
  */
 export default function initializeContactPage(): () => void {
+    // Add class to body for specific styling
+    document.body.classList.add('contact-page');
+    
+    // Fix the scroll issue
+    document.body.style.overflowY = 'auto';
+    document.body.style.height = 'auto';
+    
+    const appContainer = document.getElementById('app');
+    if (appContainer) {
+        appContainer.style.overflowY = 'auto';
+        appContainer.style.height = 'auto';
+    }
     // Animation for header elements
     const header = document.querySelector<HTMLElement>('.contact-header');
     
@@ -217,6 +229,9 @@ export default function initializeContactPage(): () => void {
         }
         
         window.removeEventListener('scroll', handleScroll);
+        
+        // Remove the body class when unmounting
+        document.body.classList.remove('contact-page');
     };
 }
 

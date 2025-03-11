@@ -5,6 +5,18 @@ import "../styles/about.css";
  * @returns Cleanup function to be called when the component unmounts
  */
 export default function initializeAboutPage(): () => void {
+    // Add class to body for specific styling
+    document.body.classList.add('about-page');
+    
+    // Fix the scroll issue
+    document.body.style.overflowY = 'auto';
+    document.body.style.height = 'auto';
+    
+    const appContainer = document.getElementById('app');
+    if (appContainer) {
+        appContainer.style.overflowY = 'auto';
+        appContainer.style.height = 'auto';
+    }
     // Handle section animations with Intersection Observer
     const sections = document.querySelectorAll<HTMLElement>('.about-section');
     const header = document.querySelector<HTMLElement>('.about-header');
@@ -128,6 +140,9 @@ export default function initializeAboutPage(): () => void {
         });
         
         window.removeEventListener('scroll', handleScroll);
+        
+        // Remove the body class when unmounting
+        document.body.classList.remove('about-page');
     };
 }
 

@@ -5,6 +5,8 @@
     margin: 0 auto;
     color: white;
     font-family: 'Aeonik', sans-serif;
+    height: auto;
+    overflow-y: auto;
 }
 
 .contact-header {
@@ -32,6 +34,7 @@
 /* Team container styles */
 .team-container {
     margin-bottom: 6rem;
+    overflow: visible;
 }
 
 .team-intro {

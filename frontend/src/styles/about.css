@@ -4,6 +4,8 @@
     max-width: 1200px;
     margin: 0 auto;
     color: white;
+    height: auto;
+    overflow-y: auto;
 }
 
 .about-header {
@@ -25,6 +27,7 @@
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    overflow: visible;
 }
 
 .about-section.visible {
