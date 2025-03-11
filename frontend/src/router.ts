@@ -56,12 +56,11 @@ const loadPageScript = async (path: string): Promise<void> => {
     } else if (path === "/pong-game") {
       const module = await import("./pages/pong-game");
       currentCleanup = module.default() || null;
-    }/*
+    }
      else if (path === "/profile-page") {
       const module = await import("./pages/profile-page");
       currentCleanup = module.default() || null;
     }
-    */
     else if (path === "/about") {
       const module = await import("./pages/about");
       currentCleanup = module.default() || null;
