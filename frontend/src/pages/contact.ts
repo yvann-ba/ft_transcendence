@@ -133,57 +133,7 @@ export default function initializeContactPage(): () => void {
         icon.addEventListener('mouseleave', handleTimelineIconMouseLeave);
     });
     
-    // Handle form submission
-    const contactForm = document.getElementById('contact-form') as HTMLFormElement;
-    
-    const handleFormSubmit = function(event: Event) {
-        event.preventDefault();
-        
-        const submitButton = contactForm.querySelector('.submit-button') as HTMLButtonElement;
-        
-        // Add submitting animation
-        submitButton.classList.add('submitting');
-        submitButton.textContent = 'Sending...';
-        
-        // Get form data
-        const formData = new FormData(contactForm);
-        const formDataObj: Record<string, string> = {};
-        
-        formData.forEach((value, key) => {
-            formDataObj[key] = value.toString();
-        });
-        
-        // Simulate form submission
-        setTimeout(() => {
-            // Remove animation
-            submitButton.classList.remove('submitting');
-            submitButton.textContent = 'Send Message';
-            
-            // Show success message
-            let messageElement = document.querySelector('.form-success-message') as HTMLElement;
-            
-            if (!messageElement) {
-                messageElement = document.createElement('div');
-                messageElement.className = 'form-success-message';
-                contactForm.appendChild(messageElement);
-            }
-            
-            messageElement.style.display = 'block';
-            messageElement.textContent = 'Your message has been sent successfully!';
-            
-            // Reset form
-            contactForm.reset();
-            
-            // Hide success message after a few seconds
-            setTimeout(() => {
-                messageElement.style.display = 'none';
-            }, 5000);
-        }, 1500);
-    };
-    
-    if (contactForm) {
-        contactForm.addEventListener('submit', handleFormSubmit);
-    }
+    // Contact form handling removed as requested
     
     // Create parallax effect on scroll
     const handleScroll = () => {
@@ -224,9 +174,7 @@ export default function initializeContactPage(): () => void {
             icon.removeEventListener('mouseleave', handleTimelineIconMouseLeave);
         });
         
-        if (contactForm) {
-            contactForm.removeEventListener('submit', handleFormSubmit);
-        }
+        // Contact form cleanup removed
         
         window.removeEventListener('scroll', handleScroll);
         
