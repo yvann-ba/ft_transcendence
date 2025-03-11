@@ -1,4 +1,4 @@
-// Déclaration pour étendre l'interface Window
+
 import "../styles/pong-game.css";
 import { AIOpponent, AIDifficulty } from '../game/ai/ai-opponent';
 
@@ -73,9 +73,9 @@ interface GameState {
 }
 
 export default function initializePongGame(): (() => void) | null {
-	// ======================
-	// Configuration initiale
-	// ======================
+	
+	
+	
 	const canvas = document.getElementById("pongCanvas") as HTMLCanvasElement | null;
 	if (!canvas) {
 		console.error("Canvas non trouvé");
@@ -87,7 +87,7 @@ export default function initializePongGame(): (() => void) | null {
 		return null;
 	}
 
-	// Éléments UI
+	
 	const elements = {
 		playButton: document.getElementById("play-button") as HTMLElement | null,
 		menu: document.getElementById("pong-menu") as HTMLElement | null,
@@ -98,22 +98,23 @@ export default function initializePongGame(): (() => void) | null {
 		customColorsInputs: document.querySelectorAll(".color-input") as NodeListOf<HTMLInputElement>,
 		customSliders: document.querySelectorAll(".pong-custom-slider") as NodeListOf<HTMLInputElement>,
 		winningScoreSlider: document.getElementById("winning-score-slider") as HTMLInputElement | null,
-		aiButton: document.getElementById("ai-button") as HTMLElement | null,
-        difficultySelector: document.getElementById("ai-difficulty") as HTMLSelectElement | null
+		aiCheckbox: document.getElementById("ai-checkbox") as HTMLInputElement | null,
+		difficultySelector: document.getElementById("ai-difficulty") as HTMLSelectElement | null,
+		difficultySelectorContainer: document.getElementById("difficulty-selector-container") as HTMLElement | null
 	};
 
-	// ======================
-	// État du jeu
-	// ======================
+	
+	
+	
 	const state: any = {
-		// Physique
+		
 		ball: {
 			x: canvas.width / 2,
 			y: canvas.height / 2,
 			speedX: 250,
 			speedY: 250,
 			radius: 6,
-			maxSpeed: 1000
+			maxSpeed: 850
 		},
 
 		paddles: {
@@ -128,14 +129,14 @@ export default function initializePongGame(): (() => void) | null {
 			}
 		},
 
-		// Scores
+		
 		scores: {
 			player1: 0,
 			player2: 0,
 			winning: 3
 		},
 
-		// Contrôles
+		
 		controls: {
 			player1Up: false,
 			player1Down: false,
@@ -149,7 +150,6 @@ export default function initializePongGame(): (() => void) | null {
 			paddleColor: "#fff"
 		},
 
-		// État
 		running: false,
 		countdown: 3,
 		countdownActive: false,
@@ -164,15 +164,11 @@ export default function initializePongGame(): (() => void) | null {
 	};
 
 
-	// ======================
-	// Fonctions de base
-	// ======================
 	function drawPaddles(): void {
 		if (!ctx || !canvas)
 			return;
 		ctx.fillStyle = state.color.paddleColor;
 
-		// Dessiner player1 avec animation
 		const anim1 = state.paddles.animations.player1;
 		const width1 = state.paddles.width * anim1.scale;
 		const height1 = state.paddles.height * anim1.scale;
@@ -183,7 +179,6 @@ export default function initializePongGame(): (() => void) | null {
 			height1
 		);
 
-		// Dessiner player2 avec animation
 		const anim2 = state.paddles.animations.player2;
 		const width2 = state.paddles.width * anim2.scale;
 		const height2 = state.paddles.height * anim2.scale;
@@ -214,28 +209,139 @@ export default function initializePongGame(): (() => void) | null {
 		}
 	}
 
-	// ======================
-	// Logique de collision
-	// ======================
 	function checkPaddleCollision(): void {
+		if (!canvas) return;
+	
 		const pw = state.paddles.width;
 		const ph = state.paddles.height;
+		const ballRadius = state.ball.radius;
+	
+		const deltaTime = (performance.now() - state.lastTime) / 1000;
+		
+		const ballVelocityX = state.ball.speedX * deltaTime;
+		const ballVelocityY = state.ball.speedY * deltaTime;
+		
+		const prevBallX = state.ball.x - ballVelocityX;
+		const prevBallY = state.ball.y - ballVelocityY;
+		
+		const leftPaddleRight = pw + 3;
+		const leftPaddleLeft = 3;
+		
+		if (state.ball.speedX < 0) {
+			
+			if ((prevBallX - ballRadius > leftPaddleRight && state.ball.x - ballRadius <= leftPaddleRight) ||
+				
+				(state.ball.x - ballRadius <= leftPaddleRight && state.ball.x + ballRadius >= leftPaddleLeft)) {
+				
 
-		if (!canvas)
-			return;
-
-		// Collision pour le joueur 1
-		if ( state.ball.x - state.ball.radius < pw + 3 &&
-			state.ball.y > state.paddles.player1Y &&
-			state.ball.y < state.paddles.player1Y + ph ) {
-			handlePaddleBounce("player1");
+				let t = 0;
+				if (Math.abs(ballVelocityX) > 0.0001) {
+					t = (leftPaddleRight - (state.ball.x - ballRadius)) / ballVelocityX;
+					t = Math.max(0, Math.min(1, t));
+				}
+				const intersectionY1 = state.ball.y - (1 - t) * ballVelocityY;
+				
+				
+				const ratio = (leftPaddleRight - (state.ball.x - ballRadius)) / 
+							 ((prevBallX - ballRadius) - (state.ball.x - ballRadius) || 0.0001);
+				const intersectionY2 = state.ball.y + (prevBallY - state.ball.y) * ratio;
+				
+				
+				const intersectionY3 = state.ball.y;
+				
+				
+				const paddleTop = state.paddles.player1Y - ballRadius; 
+				const paddleBottom = state.paddles.player1Y + ph + ballRadius; 
+				
+				if ((intersectionY1 >= paddleTop && intersectionY1 <= paddleBottom) ||
+					(intersectionY2 >= paddleTop && intersectionY2 <= paddleBottom) ||
+					(intersectionY3 >= paddleTop && intersectionY3 <= paddleBottom)) {
+					
+					
+					const ballLeft = state.ball.x - ballRadius;
+					const ballRight = state.ball.x + ballRadius;
+					const ballTop = state.ball.y - ballRadius;
+					const ballBottom = state.ball.y + ballRadius;
+					
+					const paddleBoxLeft = leftPaddleLeft;
+					const paddleBoxRight = leftPaddleRight;
+					const paddleBoxTop = state.paddles.player1Y;
+					const paddleBoxBottom = state.paddles.player1Y + ph;
+					
+					const overlaps = !(
+						ballRight < paddleBoxLeft ||
+						ballLeft > paddleBoxRight ||
+						ballBottom < paddleBoxTop ||
+						ballTop > paddleBoxBottom
+					);
+					
+					if (overlaps || 
+						state.ball.x - ballRadius <= leftPaddleRight || 
+						Math.abs(prevBallX - ballRadius - leftPaddleRight) < Math.abs(ballVelocityX * 1.2)) {
+						
+						
+						state.ball.x = leftPaddleRight + ballRadius + 1; 
+						
+						
+						handlePaddleBounce("player1");
+						return; 
+					}
+				}
+			}
+			
+			
+			if (state.ball.x - ballRadius < leftPaddleRight + 2 && 
+				state.ball.x + ballRadius > leftPaddleLeft - 2 &&  
+				state.ball.y + ballRadius > state.paddles.player1Y - 2 && 
+				state.ball.y - ballRadius < state.paddles.player1Y + ph + 2) { 
+				
+				
+				console.log("Fallback collision detected for left paddle");
+				
+				
+				state.ball.x = leftPaddleRight + ballRadius + 1;
+				handlePaddleBounce("player1");
+				return;
+			}
 		}
-
-		// Collision pour le joueur 2
-		if ( state.ball.x + state.ball.radius > canvas.width - (pw + 3) &&
-			state.ball.y > state.paddles.player2Y &&
-			state.ball.y < state.paddles.player2Y + ph ) {
-			handlePaddleBounce("player2");
+		
+		const rightPaddleLeft = canvas.width - (pw + 3);
+		const rightPaddleRight = canvas.width - 3;
+		
+		
+		if (state.ball.speedX > 0 && 
+			((prevBallX + ballRadius < rightPaddleLeft && state.ball.x + ballRadius >= rightPaddleLeft) ||
+			 
+			 (state.ball.x + ballRadius > rightPaddleLeft && state.ball.x - ballRadius < rightPaddleRight))) {
+			
+			
+			let t = 0;
+			if (Math.abs(ballVelocityX) > 0.0001) {
+				t = (rightPaddleLeft - (state.ball.x + ballRadius)) / -ballVelocityX;
+				t = Math.max(0, Math.min(1, t));
+			}
+			
+			const intersectionY = state.ball.y - (1 - t) * ballVelocityY;
+			
+			
+			if (intersectionY + ballRadius >= state.paddles.player2Y && 
+				intersectionY - ballRadius <= state.paddles.player2Y + ph) {
+				
+				
+				state.ball.x = rightPaddleLeft - ballRadius - 0.1;
+				handlePaddleBounce("player2");
+				return;
+			}
+			
+			
+			if (state.ball.x + ballRadius > rightPaddleLeft &&
+				state.ball.x - ballRadius < rightPaddleRight &&
+				state.ball.y + ballRadius > state.paddles.player2Y &&
+				state.ball.y - ballRadius < state.paddles.player2Y + ph) {
+				
+				state.ball.x = rightPaddleLeft - ballRadius - 0.1;
+				handlePaddleBounce("player2");
+			}
 		}
 	}
 
@@ -245,52 +351,145 @@ export default function initializePongGame(): (() => void) | null {
 			phase: "grow",
 			time: 0
 		};
-
+	
 		const paddleY = player === "player1" ? state.paddles.player1Y : state.paddles.player2Y;
-		const relativeIntersect =
-			(state.ball.y - paddleY) / state.paddles.height - 0.5;
-		const bounceAngle = relativeIntersect * (Math.PI / 3); // ±60 degrés max
-
-		// Ajustement de la vitesse
-		const speedMultiplier = 1.1;
+		const paddleHeight = state.paddles.height;
+		
+		
+		let relativeIntersect = (state.ball.y - (paddleY + paddleHeight/2)) / (paddleHeight/2);
+		
+		
+		const isTopEdge = relativeIntersect < -0.8;
+		const isBottomEdge = relativeIntersect > 0.8;
+		
+		
+		relativeIntersect = Math.max(-0.8, Math.min(0.8, relativeIntersect));
+		
+		
+		const bounceAngle = relativeIntersect * (Math.PI / 3.5);
+	
+		
+		const randomVariation = (Math.random() * 0.1) - 0.05; 
+		
+		
+		const speedMultiplier = 1.05; 
 		const currentSpeed = Math.hypot(state.ball.speedX, state.ball.speedY);
 		const newSpeed = Math.min(currentSpeed * speedMultiplier, state.ball.maxSpeed);
-
-		// Nouvelle direction
-		state.ball.speedX = (player === "player1" ? 1 : -1) * newSpeed * Math.cos(bounceAngle);
-		state.ball.speedY = newSpeed * Math.sin(bounceAngle);
+	
+		
+		if (isTopEdge || isBottomEdge) {
+			
+			const strongerVerticalComponent = 0.6; 
+			const weakerHorizontalComponent = 0.8; 
+			
+			
+			if (player === "player1") {
+				state.ball.speedX = newSpeed * weakerHorizontalComponent;
+			} else {
+				state.ball.speedX = -newSpeed * weakerHorizontalComponent;
+			}
+			
+			
+			state.ball.speedY = (isTopEdge ? -1 : 1) * newSpeed * strongerVerticalComponent;
+			
+			
+			console.log(`Edge hit detected: ${isTopEdge ? "top" : "bottom"} edge`);
+			
+			return; 
+		}
+	
+		
+		if (player === "player1") {
+			
+			const minXComponent = 0.7; 
+			const xComponent = Math.max(minXComponent, Math.cos(bounceAngle + randomVariation));
+			state.ball.speedX = newSpeed * xComponent;
+		} else {
+			
+			const minXComponent = 0.7; 
+			const xComponent = Math.max(minXComponent, Math.cos(bounceAngle + randomVariation));
+			state.ball.speedX = -newSpeed * xComponent;
+		}
+		
+		
+		let ySpeed = newSpeed * Math.sin(bounceAngle + randomVariation);
+		if (Math.abs(ySpeed) < 50) { 
+			ySpeed = 50 * Math.sign(ySpeed || 1);
+		}
+		state.ball.speedY = ySpeed;
 	}
 
 	function checkWallCollision(): void {
-		// Mur haut/bas
-
-		if (!canvas)
-			return;
-
-		if ( state.ball.y - state.ball.radius <= 0 || state.ball.y + state.ball.radius >= canvas.height ) {
-			state.ball.speedY *= -1;
+		if (!canvas) return;
+	
+		const ballRadius = state.ball.radius;
+		
+		
+		if (state.ball.y - ballRadius <= 0) {
+			
+			state.ball.y = ballRadius + 1;
+			
+			state.ball.speedY = Math.abs(state.ball.speedY) * (1 + (Math.random() * 0.1 - 0.05));
+			
+			
+			if (Math.abs(state.ball.speedY) < 50) {
+				state.ball.speedY = 50 * Math.sign(state.ball.speedY);
+			}
 		}
-
-		// Sortie latérale
-		if (state.ball.x - state.ball.radius < 0) {
+		
+		
+		if (state.ball.y + ballRadius >= canvas.height) {
+			
+			state.ball.y = canvas.height - ballRadius - 1;
+			
+			state.ball.speedY = -Math.abs(state.ball.speedY) * (1 + (Math.random() * 0.1 - 0.05));
+			
+			
+			if (Math.abs(state.ball.speedY) < 50) {
+				state.ball.speedY = -50;
+			}
+			
+			
+			const leftCornerProximity = state.ball.x - ballRadius < 20;
+			const rightCornerProximity = state.ball.x + ballRadius > canvas.width - 20;
+			
+			if (leftCornerProximity || rightCornerProximity) {
+				
+				if (Math.abs(state.ball.speedX) < 100) {
+					
+					state.ball.speedX = (leftCornerProximity ? 1 : -1) * 
+									   (100 + Math.random() * 50);
+				}
+				
+				
+				state.ball.speedY = -Math.abs(state.ball.speedY) * 1.2;
+				
+				
+				console.log("Corner escape triggered!");
+			}
+		}
+	
+		
+		if (state.ball.x - ballRadius < 0) {
 			state.scores.player2++;
 			resetBall();
 			updateScores();
-		} else if (state.ball.x + state.ball.radius > canvas.width) {
+		} 
+		
+		else if (state.ball.x + ballRadius > canvas.width) {
 			state.scores.player1++;
 			resetBall();
 			updateScores();
 		}
 	}
 
-	// ======================
-	// Logique de jeu
-	// ======================
 	function update(deltaTime: number): void {
-
 		if (!canvas)
 			return;
-
+	
+		
+		const currentTime = performance.now();
+		
 		if (state.countdownActive) {
 			state.countdown -= deltaTime;
 			if (state.countdown <= 0) {
@@ -298,7 +497,7 @@ export default function initializePongGame(): (() => void) | null {
 				state.fadingOut = true;
 			}
 		}
-
+	
 		if (state.fadingOut) {
 			state.countdownOpacity -= deltaTime;
 			if (state.countdownOpacity <= 0) {
@@ -306,14 +505,14 @@ export default function initializePongGame(): (() => void) | null {
 				state.running = true;
 			}
 		}
-
+	
 		if (!state.running) return;
-
+	
 		(["player1", "player2"] as const).forEach((player) => {
 			const anim = state.paddles.animations[player];
 			if (anim.phase !== "none") {
 				anim.time += deltaTime;
-
+	
 				if (anim.phase === "grow") {
 					if (anim.time >= 0.2) {
 						anim.phase = "shrink";
@@ -333,15 +532,15 @@ export default function initializePongGame(): (() => void) | null {
 				}
 			}
 		});
-
-		// Mouvement des joueurs
+	
+		
 		if (state.controls.player1Up && state.paddles.player1Y > 5) {
 			state.paddles.player1Y -= state.paddles.speed * deltaTime;
 		}
 		if (state.controls.player1Down && state.paddles.player1Y < canvas.height - state.paddles.height - 5) {
 			state.paddles.player1Y += state.paddles.speed * deltaTime;
 		}
-
+	
 		if (state.controls.player2Up && state.paddles.player2Y > 5) {
 			state.paddles.player2Y -= state.paddles.speed * deltaTime;
 		}
@@ -350,35 +549,58 @@ export default function initializePongGame(): (() => void) | null {
 		}
 		
 		if (state.aiEnabled && state.aiOpponent) {
-			// Get AI decisions
-			const aiControls = state.aiOpponent.update(state, performance.now());
 			
-			// Override player 2 controls with AI decisions
+			const aiControls = state.aiOpponent.update(state, currentTime);
+			
+			
 			state.controls.player2Up = aiControls.moveUp;
 			state.controls.player2Down = aiControls.moveDown;
 		}
-		// Mouvement de la balle
+		
+		
+		const prevBallX = state.ball.x;
+		const prevBallY = state.ball.y;
+		
+		
 		state.ball.x += state.ball.speedX * deltaTime;
 		state.ball.y += state.ball.speedY * deltaTime;
-
+	
+		
+		state.lastTime = currentTime;
+	
 		checkWallCollision();
 		checkPaddleCollision();
-
-		// Vérification victoire
-		if ( state.scores.player1 >= state.scores.winning || state.scores.player2 >= state.scores.winning) {
+	
+		
+		if (state.scores.player1 >= state.scores.winning || state.scores.player2 >= state.scores.winning) {
 			endGame();
 		}
 	}
 
 	function resetBall(): void {
-
-		if (!canvas)
-			return;
-
+		if (!canvas) return;
+		
 		state.ball.x = canvas.width / 2;
 		state.ball.y = canvas.height / 2;
-		state.ball.speedX = 250 * (Math.random() > 0.5 ? 1 : -1);
-		state.ball.speedY = 250 * (Math.random() > 0.5 ? 1 : -1);
+		
+		
+		const initialSpeed = 250;
+		const directionX = Math.random() > 0.5 ? 1 : -1;
+		const directionY = Math.random() > 0.5 ? 1 : -1;
+		
+		
+		const randomAngle = (Math.random() * 0.5 + 0.25) * (Math.PI / 3); 
+		
+		state.ball.speedX = directionX * initialSpeed * Math.cos(randomAngle);
+		state.ball.speedY = directionY * initialSpeed * Math.sin(randomAngle);
+		
+		
+		if (Math.abs(state.ball.speedX) < 100) {
+			state.ball.speedX = directionX * 100;
+		}
+		if (Math.abs(state.ball.speedY) < 100) {
+			state.ball.speedY = directionY * 100;
+		}
 	}
 
 	function endGame(): void {
@@ -388,9 +610,9 @@ export default function initializePongGame(): (() => void) | null {
 		resetBall();
 	}
 
-	// ======================
-	// Gestion des événements
-	// ======================
+	
+	
+	
 	function handleKeyDown(e: KeyboardEvent): void {
 		switch (e.key) {
 			case "w":
@@ -437,7 +659,7 @@ export default function initializePongGame(): (() => void) | null {
 	}
 
 	function drawCountElement(text: string, opacity: number = 1.0): void {
-		// Cercle de fond
+		
 
 		if (!ctx || !canvas)
 			return;
@@ -447,14 +669,14 @@ export default function initializePongGame(): (() => void) | null {
 		ctx.fillStyle = `rgba(187, 112, 173, ${opacity * 1})`;
 		ctx.fill();
 
-		// Texte
+		
 		ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
 		ctx.font = "50px Aeonik";
 		ctx.textAlign = "center";
 		ctx.textBaseline = "middle";
 		ctx.fillText(text, canvas.width / 2, canvas.height / 2 + 5);
 
-		// Contour
+		
 		ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
 		ctx.lineWidth = 4;
 		ctx.stroke();
@@ -473,16 +695,13 @@ export default function initializePongGame(): (() => void) | null {
 		updateScores();
 		resetBall();
 
-		// Initialiser le compte à rebours
+		
 		state.countdown = 3;
 		state.countdownActive = true;
 		state.fadingOut = false;
 		state.countdownOpacity = 1.0;
 	}
 
-	// ======================
-	// Cycle principal
-	// ======================
 	function gameLoop(currentTime: number): void {
 
 		if (!ctx || !canvas)
@@ -493,7 +712,7 @@ export default function initializePongGame(): (() => void) | null {
 
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		// Terrain
+		
 		ctx.fillStyle = state.color.groundColor;
 		ctx.fillRect(canvas.width / 2 - 1, 0, 2, canvas.height);
 
@@ -510,9 +729,6 @@ export default function initializePongGame(): (() => void) | null {
 		state.animationFrameId = requestAnimationFrame(gameLoop);
 	}
 
-	// ======================
-	// Custom menu
-	// ======================
 	function openCustomMenu(): void {
 		elements.menu?.classList.remove("show");
 		const customMenu = document.getElementById("pong-custom-menu");
@@ -574,7 +790,7 @@ export default function initializePongGame(): (() => void) | null {
 
 	function sliderAnimation(event: Event): void {
 		const slider = event.target as HTMLInputElement;
-		// On considère que les attributs min et max existent et sont convertibles en nombre
+		
 		const min = parseFloat(slider.min);
 		const max = parseFloat(slider.max);
 		const value = 5 + ((parseFloat(slider.value) - min) / (max - min)) * 90;
@@ -591,7 +807,18 @@ export default function initializePongGame(): (() => void) | null {
 	}
 
 	function toggleAI(): void {
-		state.aiEnabled = !state.aiEnabled;
+		if (!elements.aiCheckbox) return;
+		
+		state.aiEnabled = elements.aiCheckbox.checked;
+		
+		
+		if (elements.difficultySelectorContainer) {
+			if (state.aiEnabled) {
+				elements.difficultySelectorContainer.classList.remove("hidden");
+			} else {
+				elements.difficultySelectorContainer.classList.add("hidden");
+			}
+		}
 		
 		if (state.aiEnabled) {
 			if (!state.aiOpponent && canvas) {
@@ -610,15 +837,7 @@ export default function initializePongGame(): (() => void) | null {
 			if (state.running) {
 				resetBall();
 			}
-			
-			if (elements.aiButton) {
-				elements.aiButton.textContent = "Play vs Human";
-			}
 		} else {
-			if (elements.aiButton) {
-				elements.aiButton.textContent = "Play vs AI";
-			}
-			
 			state.scores.player1 = 0;
 			state.scores.player2 = 0;
 			updateScores();
@@ -662,14 +881,14 @@ export default function initializePongGame(): (() => void) | null {
 			ctx.fill();
 		}
 	}
-	// ======================
-	// Initialisation
-	// ======================
-	function init(): void {
-		setTimeout(() => {
-			elements.menu?.classList.add("show");
-		}, 50);
 
+	function init(): void {
+		
+		if (elements.menu) {
+			elements.menu.classList.add("show");
+			
+		}
+	
 		document.addEventListener("keydown", handleKeyDown);
 		document.addEventListener("keyup", handleKeyUp);
 		elements.playButton?.addEventListener("click", startGame);
@@ -682,12 +901,24 @@ export default function initializePongGame(): (() => void) | null {
 			slider.addEventListener("input", sliderAnimation);
 		});
 		elements.winningScoreSlider?.addEventListener("input", changeWinningScore);
-
+	
 		state.animationFrameId = requestAnimationFrame(gameLoop);
-
-		elements.aiButton?.addEventListener("click", toggleAI);
+	
+		
+		elements.aiCheckbox?.addEventListener("change", toggleAI);
 		elements.difficultySelector?.addEventListener("change", changeAIDifficulty);
-
+		
+		
+		if (elements.difficultySelectorContainer && elements.aiCheckbox) {
+			if (elements.aiCheckbox.checked) {
+				elements.difficultySelectorContainer.classList.remove("hidden");
+				state.aiEnabled = true;
+			} else {
+				elements.difficultySelectorContainer.classList.add("hidden");
+				state.aiEnabled = false;
+			}
+		}
+	
 		document.addEventListener("keydown", (e) => {
 			if (e.key === "d" && e.ctrlKey) {
 				state.debugMode = !state.debugMode;
@@ -714,25 +945,22 @@ export default function initializePongGame(): (() => void) | null {
 		if (state.animationFrameId) {
 		  cancelAnimationFrame(state.animationFrameId);
 		}
-		elements.aiButton?.removeEventListener("click", toggleAI);
+		elements.aiCheckbox?.removeEventListener("change", toggleAI);
 		elements.difficultySelector?.removeEventListener("change", changeAIDifficulty);
 		document.removeEventListener("keydown", (e) => {
 			if (e.key === "d" && e.ctrlKey) {
 				state.debugMode = !state.debugMode;
 			}
 		});
-	  }
+	}
 	
 	  return cleanup;
 
 }
 
-
-
-// Export pour SPA
 if (typeof window !== "undefined") {
 	window.initializePongGame = initializePongGame;
 }
 
-export {}; // Pour s'assurer que le fichier est un module
+export {}; 
 
