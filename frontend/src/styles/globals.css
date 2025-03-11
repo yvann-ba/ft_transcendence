@@ -355,7 +355,7 @@ div {
     }
 }
 
-/* html, body {
+html, body {
     overflow-y: auto !important;
     height: auto !important;
     min-height: 100vh !important;
@@ -370,4 +370,4 @@ div {
 body.about-page, 
 body.contact-page {
     overflow-y: auto !important;
-} */
+}
