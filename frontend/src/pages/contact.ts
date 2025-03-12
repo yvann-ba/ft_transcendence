@@ -1,9 +1,5 @@
 import "../styles/contact.css";
 
-/**
- * Initialize the contact page animations and interactions
- * @returns Cleanup function to be called when the component unmounts
- */
 export default function initializeContactPage(): () => void {
     // Add class to body for specific styling
     document.body.classList.add('contact-page');
