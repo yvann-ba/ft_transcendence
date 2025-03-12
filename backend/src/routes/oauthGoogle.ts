@@ -33,11 +33,16 @@ export default async function oauthGoogleRoutes(fastify: FastifyInstance) {
       if (!tokenRes.ok) throw new Error(tokenData.error_description || 'Erreur OAuth Google');
 
       const accessToken = tokenData.access_token;
+      if (!accessToken) throw new Error('Access token not received from Google');
 
       // Récupérer les informations de l'utilisateur
       const userRes = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
+      
+      if (!userRes.ok) {
+        throw new Error(`Failed to fetch user info: ${userRes.status} ${userRes.statusText}`);
+      }
 
       const googleUser = await userRes.json();
 
@@ -47,6 +52,8 @@ export default async function oauthGoogleRoutes(fastify: FastifyInstance) {
         avatar: googleUser.picture,
       };
 
+      fastify.log.info(`Google user data: ${JSON.stringify(userData)}`);
+
       // Vérifier si utilisateur existe, sinon le créer
       let user = await checkUserLogin(userData.email);
       if (!user) {
@@ -55,21 +62,29 @@ export default async function oauthGoogleRoutes(fastify: FastifyInstance) {
 
       // Générer JWT et cookie
       const jwtToken = fastify.jwt.sign({ userId: user.id });
-
+      
+      // Store token in localStorage via a cookie that the frontend can read
       reply
         .setCookie('sessionid', jwtToken, {
           httpOnly: true,
-          secure: true,
           path: '/',
-          maxAge: 60 * 60 * 24,
-          sameSite: 'none',
+          maxAge: 60 * 60 * 24 * 7, // 7 days
+          sameSite: 'lax', // Use 'lax' instead of 'none'
+          secure: process.env.NODE_ENV === 'production'
         })
-        .redirect('/profile-page');
+        // Set a non-httpOnly cookie that frontend JS can access to know auth state
+        .setCookie('auth_token', 'true', {
+          httpOnly: false,
+          path: '/',
+          maxAge: 60 * 60 * 24 * 7,
+          sameSite: 'lax',
+          secure: process.env.NODE_ENV === 'production'
+        })
+        .redirect('/home');
 
     } catch (err) {
       fastify.log.error(err);
       return reply.redirect('/login?error=auth_failed');
     }
   });
-
 }

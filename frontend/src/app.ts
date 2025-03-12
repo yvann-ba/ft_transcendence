@@ -3,23 +3,48 @@ import "./styles/404.css";
 import { navigate, isAuthenticated } from "./router";
 import initializeHomeAnimations from "./pages/home";
 
-const profileButton = document.querySelector(".profile-label");
-
 export const checkAuthStatus = async (): Promise<boolean> => {
   try {
-    const response = await fetch("/api/check-auth", {
+    // First check if we have a token in localStorage
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      return true;
+    }
+    
+    // Check auth_token non-httpOnly cookie
+    const hasAuthCookie = document.cookie.split(';').some(item => item.trim().startsWith('auth_token='));
+    if (hasAuthCookie) {
+      localStorage.setItem('token', 'authenticated');
+      return true;
+    }
+    
+    // If no local token, check with the server
+    const response = await fetch("/api/auth/status", {
       method: "GET",
       credentials: "include",
+      headers: {
+        "Accept": "application/json"
+      }
     });
+    
     if (!response.ok) return false;
-    const data = await response.json();
-    return data.authenticated;
+    
+    try {
+      const data = await response.json();
+      if (data.authenticated) {
+        localStorage.setItem('token', 'authenticated');
+        return true;
+      }
+      return false;
+    } catch (jsonError) {
+      console.error("Received non-JSON response from auth status endpoint");
+      return false;
+    }
   } catch (err) {
     console.error("Error checking auth status:", err);
     return false;
   }
 };
-
 document.addEventListener("DOMContentLoaded", async () => {
   checkAuthStatus();
   initializeNavbarAnimation();
@@ -54,7 +79,7 @@ export const changeProfileLabel = (): void => {
 const initializeNavbarAnimation = (): void => {
   const nav = document.querySelector(".nav");
   
-  changeProfileLabel;
+  changeProfileLabel(); // Execute the function instead of referencing it
 
   if (nav) {
     setTimeout(() => {

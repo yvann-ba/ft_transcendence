@@ -68,6 +68,39 @@ fastify.get("/", async (request, reply) => {
 fastify.register(userRoutes);
 fastify.register(authRoutes);
 
+fastify.get("/auth/status", async (request: FastifyRequest, reply: FastifyReply) => {
+  try {
+    await request.jwtVerify();
+    return { authenticated: true };
+  } catch (err) {
+    return { authenticated: false };
+  }
+});
+
+fastify.get("/debug/auth", async (request: FastifyRequest, reply: FastifyReply) => {
+  try {
+    const cookie = request.cookies.sessionid;
+    if (cookie) {
+      try {
+        const decoded = fastify.jwt.verify(cookie);
+        return { 
+          hasCookie: true, 
+          isValid: true,
+          decoded 
+        };
+      } catch (err) {
+        return { 
+          hasCookie: true, 
+          isValid: false,
+          error: (err as Error).message 
+        };
+      }
+    }
+    return { hasCookie: false };
+  } catch (err) {
+    return { error: (err as Error).message };
+  }
+});
 
 const start = async () => {
   try {

@@ -21,12 +21,18 @@ const isPublicRoute = (path: string): boolean => {
 }
 
 export const navigate = async (): Promise<void> => {
+  const hasAuthCookie = document.cookie.split(';').some(item => item.trim().startsWith('auth_token='));
+  if (hasAuthCookie && !isAuthenticated()) {
+    localStorage.setItem('token', 'authenticated');
+  }
+
   let path = window.location.pathname;
   if (!isPublicRoute(path) && !isAuthenticated()) {
     path = "/login";
   }
-  if (path === '/login' && isAuthenticated())
-    path = "/home"
+  if (path === '/login' && isAuthenticated()) {
+    path = "/home";
+  }
 
   let page = routes[path] || routes["404"];
   const pageContent = await loadPage(page);
