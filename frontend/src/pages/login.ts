@@ -19,7 +19,7 @@ export default function login() {
         googleButton.type = 'button';
         googleButton.id = 'google-button';
         googleButton.className = 'oauth-button google-button';
-        googleButton.innerHTML = 'Se connecter avec <img src="assets/images/Google_Logo.png" alt="Google Logo">';
+        googleButton.innerHTML = 'Se connecter avec <img src="/assets/images/Google_Logo.png" alt="Google Logo">';
         
         googleButton.addEventListener('click', () => {
             window.location.href = '/api/auth/google';
