@@ -1,5 +1,6 @@
 
 import "../styles/pong-game.css";
+import "../styles/pong-selection.css";
 import { AIOpponent, AIDifficulty } from '../game/ai/ai-opponent';
 
 
@@ -72,9 +73,9 @@ interface GameState {
 	animationFrameId: number | null;
 }
 
+
+
 export default function initializePongGame(): (() => void) | null {
-	
-	
 	
 	const canvas = document.getElementById("pongCanvas") as HTMLCanvasElement | null;
 	if (!canvas) {
@@ -162,6 +163,35 @@ export default function initializePongGame(): (() => void) | null {
 		aiOpponent: null,
 		debugMode: false,
 	};
+
+	const aiModeEnabled = localStorage.getItem('pongAiMode') === 'true';
+  
+	if (aiModeEnabled && elements.aiCheckbox) {
+	  // Enable AI mode automatically
+	  elements.aiCheckbox.checked = true;
+	  
+	  // If you have a difficulty selector, set it to medium by default
+	  if (elements.difficultySelector) {
+		elements.difficultySelector.value = 'medium';
+	  }
+	  
+	  // Show difficulty selector if it's hidden
+	  if (elements.difficultySelectorContainer) {
+		elements.difficultySelectorContainer.classList.remove("hidden");
+	  }
+	  
+	  // Update state to enable AI
+	  state.aiEnabled = true;
+	  
+	  // Initialize AI opponent if needed
+	  if (!state.aiOpponent && canvas) {
+		state.aiOpponent = new AIOpponent(canvas.width, canvas.height);
+		if (elements.difficultySelector) {
+		  const difficulty = elements.difficultySelector.value as AIDifficulty;
+		  state.aiOpponent.setDifficulty(difficulty);
+		}
+	  }
+	}
 
 
 	function drawPaddles(): void {

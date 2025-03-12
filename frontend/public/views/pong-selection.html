@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Pong Game Mode</title>
+    <link rel="stylesheet" href="/styles/pong-selection.css">
+</head>
+<body>
+    <div class="game-selection-container">
+        <div class="header">
+            <h1 class="title">SELECT YOUR <span class="highlight">GAME MODE</span></h1>
+            <p class="subtitle">Choose how you want to play Pong</p>
+        </div>
+        
+        <div class="game-cards">
+            <!-- Classic 1v1 Mode -->
+            <div class="game-card" id="classic-mode">
+                <div class="card-content">
+                    <div class="card-icon">
+                        <img src="/assets/images/pong-classic.svg" alt="Classic Pong" class="mode-icon">
+                    </div>
+                    <h2>Classic Pong</h2>
+                    <p>The original 1v1 experience</p>
+                    <ul class="features">
+                        <li>Two players</li>
+                        <li>Same keyboard</li>
+                        <li>First to 5 points wins</li>
+                    </ul>
+                    <div class="controls">
+                        <p><strong>Player 1:</strong> W / S</p>
+                        <p><strong>Player 2:</strong> ↑ / ↓</p>
+                    </div>
+                </div>
+                <a href="/pong-game" class="play-button">PLAY NOW</a>
+            </div>
+            
+            <!-- AI Mode -->
+            <div class="game-card" id="ai-mode">
+                <div class="card-content">
+                    <div class="card-icon">
+                        <img src="/assets/images/pong-ai.svg" alt="Pong vs AI" class="mode-icon">
+                    </div>
+                    <h2>AI Challenge</h2>
+                    <p>Test your skills against the computer</p>
+                    <ul class="features">
+                        <li>Single player</li>
+                        <li>Three difficulty levels</li>
+                        <li>Adaptive AI opponent</li>
+                    </ul>
+                    <div class="controls">
+                        <p><strong>Controls:</strong> W / S</p>
+                    </div>
+                </div>
+                <a href="/pong-game?ai=true" class="play-button">PLAY NOW</a>
+            </div>
+            
+            <!-- 4-Player Mode -->
+            <div class="game-card" id="multiplayer-mode">
+                <div class="card-content">
+                    <div class="card-tag">NEW!</div>
+                    <div class="card-icon">
+                        <img src="/assets/images/pong-multiplayer.svg" alt="Multiplayer Pong" class="mode-icon">
+                    </div>
+                    <h2>4-Player Mayhem</h2>
+                    <p>Chaotic multiplayer fun</p>
+                    <ul class="features">
+                        <li>Square arena</li>
+                        <li>Four players</li>
+                        <li>Fast-paced action</li>
+                    </ul>
+                    <div class="controls">
+                        <p><strong>Top:</strong> A / D</p>
+                        <p><strong>Right:</strong> ↑ / ↓</p>
+                        <p><strong>Bottom:</strong> J / L</p>
+                        <p><strong>Left:</strong> W / S</p>
+                    </div>
+                </div>
+                <a href="/four-player-pong" class="play-button">PLAY NOW</a>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="/home" class="back-button">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
