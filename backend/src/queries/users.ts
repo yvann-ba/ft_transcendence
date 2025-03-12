@@ -65,5 +65,14 @@ export const checkUserLogin = async (username: string): Promise<any> => {
   });
 };
 
+export const createUserOAuth = (username: string, email: string, avatar: string) => {
+  return new Promise((resolve, reject) => {
+    const query = `INSERT INTO users (username, password, email) VALUES (?, ?, ?)`;
+    db.run(query, [username, 'google_oauth', email], function (err) {
+      if (err) return reject(err);
+      resolve({ id: this.lastID, username, email });
+    });
+  });
+};
 
 export default { createUser, getUserById, checkUserLogin };

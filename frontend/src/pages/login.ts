@@ -13,26 +13,27 @@ export default function login() {
     const messageDiv = document.getElementById('message') as HTMLElement;
     const loginContainer = document.querySelector('.login-container') as HTMLElement;
     
-    // In login.ts, modify the button creation logic:
-if (loginContainer && !document.getElementById('oauth42-button')) {
-    const oauth42Button = document.createElement('button');
-    oauth42Button.type = 'button';
-    oauth42Button.id = 'oauth42-button'; // This ID will help us check for duplicates
-    oauth42Button.className = 'oauth-button';
-    oauth42Button.innerHTML = 'Log with <img src="assets/images/42-logo.png" alt="42 Logo">';
-    
-    oauth42Button.addEventListener('click', () => {
-        window.location.href = '/api/auth/42';
-    });
-    
-    const orSeparator = document.createElement('div');
-    orSeparator.className = 'separator';
-    orSeparator.innerHTML = '<span>ou</span>';
-    
-    // Insérer avant le formulaire
-    form.parentNode?.insertBefore(orSeparator, form);
-    form.parentNode?.insertBefore(oauth42Button, orSeparator);
-}
+    // Ajouter le bouton de connexion Google
+    if (loginContainer && !document.getElementById('google-button')) {
+        const googleButton = document.createElement('button');
+        googleButton.type = 'button';
+        googleButton.id = 'google-button';
+        googleButton.className = 'oauth-button google-button';
+        googleButton.innerHTML = 'Se connecter avec <img src="assets/images/Google_Logo.png" alt="Google Logo">';
+        
+        googleButton.addEventListener('click', () => {
+            window.location.href = '/api/auth/google';
+        });
+        
+        const orSeparator = document.createElement('div');
+        orSeparator.className = 'separator';
+        orSeparator.innerHTML = '<span>ou</span>';
+        
+        // Insérer avant le formulaire
+        form.parentNode?.insertBefore(orSeparator, form);
+        form.parentNode?.insertBefore(googleButton, orSeparator);
+    }
+
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
         
@@ -81,7 +82,7 @@ if (loginContainer && !document.getElementById('oauth42-button')) {
     const urlParams = new URLSearchParams(window.location.search);
     const errorParam = urlParams.get('error');
     if (errorParam === 'auth_failed') {
-        messageDiv.textContent = "L'authentification avec 42 a échoué. Veuillez réessayer.";
+        messageDiv.textContent = "L'authentification avec Google a échoué. Veuillez réessayer.";
         messageDiv.classList.remove('success');
         messageDiv.classList.add('error');
     }
