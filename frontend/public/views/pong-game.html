@@ -16,20 +16,13 @@
             <div id="player2-score">0</div>
         </div>
         
-        <!-- Remove the "hidden" class from the menu -->
         <div id="pong-menu">
             <h1>PONG</h1>
             <button id="play-button" class="pong-button">Play</button>
             
-            <div class="pong-option-container">
-                <label class="pong-checkbox-label">
-                    <input type="checkbox" id="ai-checkbox" class="pong-checkbox">
-                    <span class="pong-checkbox-text">Play with AI</span>
-                </label>
-            </div>
-            
+            <!-- Only show AI difficulty in AI mode -->
             <div id="difficulty-selector-container" class="hidden">
-				<h1>AI Difficulty</h1>
+                <h1>AI Difficulty</h1>
                 <select id="ai-difficulty" class="pong-select">
                     <option value="easy">Easy</option>
                     <option value="medium" selected>Medium</option>

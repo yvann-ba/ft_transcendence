@@ -1,0 +1,360 @@
+/* ------------------------------ */
+/*       General Styles          */
+/* ------------------------------ */
+.main-menu {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+    font-family: Aeonik, sans-serif;
+}
+
+.four-player-custom-menu-canvas {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 7.2vh 0 0;
+    height: 100vh;
+    width: 100%;
+    font-family: Aeonik, sans-serif;
+    font-size: 2vh;
+}
+
+#four-player-custom-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5vh;
+    width: 100%;
+}
+
+#four-player-custom-menu-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4vh;
+    width: 50%;
+    align-items: center;
+}
+
+#four-player-custom-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+}
+
+:root {
+    --ground-color: #ffffff;
+    --slider-track-bg: linear-gradient(to right, #BB70AD 0%, #BB70AD 25%, #ffffff 25%);
+}
+
+#fourPlayerCanvas {
+    border: var(--ground-color) 0.7vh solid;
+    border-radius: 14px;
+    /* Center the canvas */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 30px rgba(187, 112, 173, 0.3);
+    max-width: 90vmin;
+    max-height: 90vmin;
+}
+
+#four-player-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    flex-direction: column;
+    gap: 2vh;
+}
+
+.four-player-button {
+    background: #ffffff;
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 15px 30px;
+    font-size: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.3s ease;
+    width: 20vh;
+    margin: 5px 0;
+}
+
+.four-player-button:hover {
+    background: #BB70AD;
+    transform: scale(1.1);
+}
+
+.hidden {
+    display: none !important;
+}
+
+#four-player-game #four-player-scoreboard {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 15px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    z-index: 5;
+}
+
+.player-score {
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 5px 15px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.player1-score {
+    background-color: rgba(187, 112, 173, 0.8);
+}
+
+.player2-score {
+    background-color: rgba(112, 187, 136, 0.8);
+}
+
+.player3-score {
+    background-color: rgba(112, 136, 187, 0.8);
+}
+
+.player4-score {
+    background-color: rgba(187, 187, 112, 0.8);
+}
+
+/* ------------------------------ */
+/*        Slider Styles           */
+/* ------------------------------ */
+.four-player-custom-slider {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 20vh;
+    height: 25px;
+    background: var(--slider-track-bg);
+    border-radius: 2vh;
+    transition: background 0.2s ease-in-out;
+    outline: none;
+}
+
+/* Thumb styles for Chrome/Safari */
+.four-player-custom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #BB70AD;
+    border-radius: 50%;
+    border: none;    
+    outline: none;
+    box-shadow: none; 
+    cursor: pointer;
+}
+
+/* Track styles for Chrome/Safari */
+.four-player-custom-slider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 25px;
+    border-radius: 2vh;
+    background: var(--slider-track-bg);
+}
+
+/* Thumb styles for Firefox */
+.four-player-custom-slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #BB70AD;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+/* Track styles for Firefox */
+.four-player-custom-slider::-moz-range-track {
+    width: 100%;
+    height: 25px;
+    border-radius: 2vh;
+    background: var(--slider-track-bg);
+}
+
+.four-player-custom-slider::-moz-range-progress {
+    height: 25px;
+    border-radius: 2vh;
+}
+
+/* Hover effect */
+.four-player-custom-slider:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+/* ------------------------------ */
+/*         Color Input            */
+/* ------------------------------ */
+.four-player-color-input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    width: 20vh;
+    height: 25px;
+    cursor: pointer;
+    padding: 0;
+    box-shadow: none;
+}
+
+.four-player-color-input::-webkit-color-swatch {
+    border: none;
+    padding: 0;
+    box-shadow: none;
+}
+
+.four-player-color-input::-moz-color-swatch {
+    border: none;
+    padding: 0;
+    box-shadow: none;
+}
+
+.four-player-color-input:hover {
+    border-color: #acacac;
+}
+
+.four-player-color-input:focus {
+    border-color: #BB70AD;
+    outline: none;
+}
+
+/* ------------------------------ */
+/*      Paddle Animation         */
+/* ------------------------------ */
+@keyframes bump {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.paddle.bump {
+    animation: bump 0.2s ease;
+}
+
+/* ------------------------------ */
+/*         Winner Message         */
+/* ------------------------------ */
+.winner-message {
+    background-color: rgba(30, 30, 30, 0.9);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    border: 2px solid #BB70AD;
+    max-width: 80%;
+}
+
+.winner-message h2 {
+    color: #BB70AD;
+    margin-bottom: 15px;
+    font-size: 2rem;
+}
+
+.winner-message ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.winner-message li {
+    padding: 5px 0;
+    font-size: 1.2rem;
+}
+
+/* ------------------------------ */
+/*        Controls Info           */
+/* ------------------------------ */
+.controls-info {
+    background-color: rgba(30, 30, 30, 0.9);
+    border-radius: 10px;
+    padding: 15px 25px;
+    margin-top: 20px;
+    text-align: center;
+    border: 1px solid #BB70AD;
+}
+
+.controls-info h3 {
+    color: #BB70AD;
+    margin-bottom: 10px;
+}
+
+.controls-info p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+/* ------------------------------ */
+/*            Media Queries       */
+/* ------------------------------ */
+@media (max-width: 1160px) {
+    #four-player-game {
+        width: 100%;
+    }
+    
+    .four-player-custom-menu-canvas {
+        flex-direction: column-reverse;
+        padding: 7.2vh;
+        top: 10vh;
+    }
+    
+    #four-player-custom-menu-content {
+        justify-content: space-between;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    
+    #four-player-custom-settings {
+        display: flex;
+        flex-direction: row;
+    }
+    
+    #four-player-scoreboard {
+        top: 5px;
+        font-size: 0.9rem;
+    }
+}
+
+/* ------------------------------ */
+/*         Menu Transitions       */
+/* ------------------------------ */
+#four-player-menu, #four-player-custom-menu {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+
+#four-player-menu.show, #four-player-custom-menu.show {
+    opacity: 1;
+    visibility: visible;
+}
