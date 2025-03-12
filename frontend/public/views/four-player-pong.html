@@ -4,20 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Four Player Pong</title>
-    <link rel="stylesheet" href="/styles/four-player-pong.css">
 </head>
 <body>
     <div id="four-player-game" class="main-menu">
         <canvas id="fourPlayerCanvas" width="800" height="800"></canvas>
         
+        <!-- Main Menu -->
         <div id="four-player-menu">
             <h2>FOUR PLAYER PONG</h2>
             <button id="four-player-play-button" class="four-player-button">PLAY</button>
             <button id="four-player-custom-button" class="four-player-button">CUSTOMIZE</button>
-            <a href="/pong-game" class="four-player-button">REGULAR PONG</a>
+            <a href="/pong-selection" class="four-player-button">GAME MODES</a>
             <a href="/home" class="four-player-button">RETURN HOME</a>
+            
+            <!-- Controls Information -->
+            <div class="controls-info">
+                <h3>Controls</h3>
+                <p>Player 1 (Top): A / D</p>
+                <p>Player 2 (Right): ↑ / ↓</p>
+                <p>Player 3 (Bottom): J / L</p>
+                <p>Player 4 (Left): W / S</p>
+            </div>
         </div>
         
+        <!-- Scoreboard - Hidden Initially -->
         <div id="four-player-scoreboard" class="hidden">
             <div id="player1-score" class="player-score player1-score">0</div>
             <div id="player2-score" class="player-score player2-score">0</div>
@@ -25,6 +35,7 @@
             <div id="player4-score" class="player-score player4-score">0</div>
         </div>
         
+        <!-- Customization Menu - Hidden Initially -->
         <div id="four-player-custom-menu" class="hidden">
             <div id="four-player-custom-menu-content">
                 <h2>Game Settings</h2>
@@ -70,15 +81,5 @@
             </div>
         </div>
     </div>
-    
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            if (typeof window.initializeFourPlayerPong === 'function') {
-                window.initializeFourPlayerPong();
-            } else {
-                console.error("Four player pong initialization function not found");
-            }
-        });
-    </script>
 </body>
 </html>

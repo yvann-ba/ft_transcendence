@@ -22,31 +22,9 @@
     font-size: 2vh;
 }
 
-#four-player-custom-menu {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5vh;
-    width: 100%;
-}
-
-#four-player-custom-menu-content {
-    display: flex;
-    flex-direction: column;
-    gap: 4vh;
-    width: 50%;
-    align-items: center;
-}
-
-#four-player-custom-settings {
-    display: flex;
-    flex-direction: column;
-    gap: 2vh;
-}
-
 :root {
     --ground-color: #ffffff;
-    --slider-track-bg: linear-gradient(to right, #BB70AD 0%, #BB70AD 25%, #ffffff 25%);
+    --slider-track-bg: linear-gradient(to right, #BB70AD 0%, #BB70AD 50%, #ffffff 50%);
 }
 
 #fourPlayerCanvas {
@@ -88,18 +66,22 @@
     transition: transform 0.2s ease, background 0.3s ease;
     width: 20vh;
     margin: 5px 0;
+    display: block;
+    text-align: center;
+    text-decoration: none;
 }
 
 .four-player-button:hover {
     background: #BB70AD;
     transform: scale(1.1);
+    color: white;
 }
 
 .hidden {
     display: none !important;
 }
 
-#four-player-game #four-player-scoreboard {
+#four-player-scoreboard {
     position: absolute;
     top: 10px;
     left: 50%;
@@ -139,75 +121,81 @@
 }
 
 /* ------------------------------ */
-/*        Slider Styles           */
+/*       Menu Transitions         */
 /* ------------------------------ */
-.four-player-custom-slider {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    width: 20vh;
-    height: 25px;
-    background: var(--slider-track-bg);
-    border-radius: 2vh;
-    transition: background 0.2s ease-in-out;
-    outline: none;
-}
-
-/* Thumb styles for Chrome/Safari */
-.four-player-custom-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 25px;
-    background: #BB70AD;
-    border-radius: 50%;
-    border: none;    
-    outline: none;
-    box-shadow: none; 
-    cursor: pointer;
-}
-
-/* Track styles for Chrome/Safari */
-.four-player-custom-slider::-webkit-slider-runnable-track {
-    width: 100%;
-    height: 25px;
-    border-radius: 2vh;
-    background: var(--slider-track-bg);
-}
-
-/* Thumb styles for Firefox */
-.four-player-custom-slider::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
-    background: #BB70AD;
-    border-radius: 50%;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    cursor: pointer;
-}
-
-/* Track styles for Firefox */
-.four-player-custom-slider::-moz-range-track {
-    width: 100%;
-    height: 25px;
-    border-radius: 2vh;
-    background: var(--slider-track-bg);
-}
-
-.four-player-custom-slider::-moz-range-progress {
-    height: 25px;
-    border-radius: 2vh;
-}
-
-/* Hover effect */
-.four-player-custom-slider:hover {
+#four-player-menu, #four-player-custom-menu {
     opacity: 1;
-    cursor: pointer;
+    visibility: visible;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+
+#four-player-menu.hidden, #four-player-custom-menu.hidden {
+    opacity: 0;
+    visibility: hidden;
 }
 
 /* ------------------------------ */
-/*         Color Input            */
+/*         Controls Info          */
+/* ------------------------------ */
+.controls-info {
+    background-color: rgba(30, 30, 30, 0.9);
+    border-radius: 10px;
+    padding: 15px 25px;
+    margin-top: 20px;
+    text-align: center;
+    border: 1px solid #BB70AD;
+}
+
+.controls-info h3 {
+    color: #BB70AD;
+    margin-bottom: 10px;
+}
+
+.controls-info p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+/* ------------------------------ */
+/*       Custom Menu Styles       */
+/* ------------------------------ */
+#four-player-custom-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    flex-direction: column;
+}
+
+#four-player-custom-menu-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4vh;
+    width: 50%;
+    align-items: center;
+}
+
+#four-player-custom-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+}
+
+.setting-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ------------------------------ */
+/*         Custom Controls        */
 /* ------------------------------ */
 .four-player-color-input {
     -webkit-appearance: none;
@@ -243,27 +231,68 @@
     outline: none;
 }
 
-/* ------------------------------ */
-/*      Paddle Animation         */
-/* ------------------------------ */
-@keyframes bump {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.2);
-    }
-    100% {
-        transform: scale(1);
-    }
+.four-player-custom-slider {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 20vh;
+    height: 25px;
+    background: linear-gradient(to right, #BB70AD 0%, #BB70AD 50%, #ffffff 50%);
+    border-radius: 2vh;
+    transition: background 0.2s ease-in-out;
+    outline: none;
 }
 
-.paddle.bump {
-    animation: bump 0.2s ease;
+.four-player-custom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #BB70AD;
+    border-radius: 50%;
+    border: none;    
+    outline: none;
+    box-shadow: none; 
+    cursor: pointer;
+}
+
+.four-player-custom-slider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 25px;
+    border-radius: 2vh;
+    background: var(--slider-track-bg);
+}
+
+.four-player-custom-slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #BB70AD;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+.four-player-custom-slider::-moz-range-track {
+    width: 100%;
+    height: 25px;
+    border-radius: 2vh;
+    background: var(--slider-track-bg);
+}
+
+.four-player-custom-slider::-moz-range-progress {
+    height: 25px;
+    border-radius: 2vh;
+}
+
+.four-player-custom-slider:hover {
+    opacity: 1;
+    cursor: pointer;
 }
 
 /* ------------------------------ */
-/*         Winner Message         */
+/*       Winner Message           */
 /* ------------------------------ */
 .winner-message {
     background-color: rgba(30, 30, 30, 0.9);
@@ -293,28 +322,6 @@
 }
 
 /* ------------------------------ */
-/*        Controls Info           */
-/* ------------------------------ */
-.controls-info {
-    background-color: rgba(30, 30, 30, 0.9);
-    border-radius: 10px;
-    padding: 15px 25px;
-    margin-top: 20px;
-    text-align: center;
-    border: 1px solid #BB70AD;
-}
-
-.controls-info h3 {
-    color: #BB70AD;
-    margin-bottom: 10px;
-}
-
-.controls-info p {
-    margin: 5px 0;
-    font-size: 0.9rem;
-}
-
-/* ------------------------------ */
 /*            Media Queries       */
 /* ------------------------------ */
 @media (max-width: 1160px) {
@@ -337,24 +344,12 @@
     #four-player-custom-settings {
         display: flex;
         flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
     }
     
     #four-player-scoreboard {
         top: 5px;
         font-size: 0.9rem;
     }
-}
-
-/* ------------------------------ */
-/*         Menu Transitions       */
-/* ------------------------------ */
-#four-player-menu, #four-player-custom-menu {
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
-}
-
-#four-player-menu.show, #four-player-custom-menu.show {
-    opacity: 1;
-    visibility: visible;
 }
