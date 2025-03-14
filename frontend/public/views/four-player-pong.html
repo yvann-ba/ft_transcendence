@@ -1,84 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Four Player Pong</title>
-    <link rel="stylesheet" href="/styles/four-player-pong.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4-Player Pong Breakout</title>
 </head>
 <body>
-    <div id="four-player-game" class="main-menu">
-        <canvas id="fourPlayerCanvas" width="800" height="800"></canvas>
-        
-        <div id="four-player-menu">
-            <h2>FOUR PLAYER PONG</h2>
-            <button id="four-player-play-button" class="four-player-button">PLAY</button>
-            <button id="four-player-custom-button" class="four-player-button">CUSTOMIZE</button>
-            <a href="/pong-game" class="four-player-button">REGULAR PONG</a>
-            <a href="/home" class="four-player-button">RETURN HOME</a>
-        </div>
-        
-        <div id="four-player-scoreboard" class="hidden">
-            <div id="player1-score" class="player-score player1-score">0</div>
-            <div id="player2-score" class="player-score player2-score">0</div>
-            <div id="player3-score" class="player-score player3-score">0</div>
-            <div id="player4-score" class="player-score player4-score">0</div>
-        </div>
-        
-        <div id="four-player-custom-menu" class="hidden">
-            <div id="four-player-custom-menu-content">
-                <h2>Game Settings</h2>
-                
-                <div id="four-player-custom-settings">
-                    <div class="setting-group">
-                        <p>Ball Color</p>
-                        <input type="color" id="four-player-ball-color" class="four-player-color-input" value="#ffffff">
-                    </div>
-                    
-                    <div class="setting-group">
-                        <p>Line Color</p>
-                        <input type="color" id="four-player-ground-color" class="four-player-color-input" value="#ffffff">
-                    </div>
-                    
-                    <div class="setting-group">
-                        <p>Player 1 Color (Top)</p>
-                        <input type="color" id="four-player-p1-color" class="four-player-color-input" value="#BB70AD">
-                    </div>
-                    
-                    <div class="setting-group">
-                        <p>Player 2 Color (Right)</p>
-                        <input type="color" id="four-player-p2-color" class="four-player-color-input" value="#70BB88">
-                    </div>
-                    
-                    <div class="setting-group">
-                        <p>Player 3 Color (Bottom)</p>
-                        <input type="color" id="four-player-p3-color" class="four-player-color-input" value="#7088BB">
-                    </div>
-                    
-                    <div class="setting-group">
-                        <p>Player 4 Color (Left)</p>
-                        <input type="color" id="four-player-p4-color" class="four-player-color-input" value="#BBBB70">
-                    </div>
-                    
-                    <div class="setting-group">
-                        <p id="four-player-winning-score">Winning score: 5</p>
-                        <input type="range" id="four-player-winning-score-slider" class="four-player-custom-slider" min="3" max="10" value="5">
-                    </div>
-                </div>
-                
-                <button id="four-player-custom-back-button" class="four-player-button">BACK</button>
-            </div>
-        </div>
+  <div class="game-container">
+    <canvas id="multiplayerCanvas" width="800" height="600"></canvas>
+    
+    <div class="score-display">
+      <div class="player-score" id="player1-score">Player 1: 0</div>
+      <div class="player-score" id="player2-score">Player 2: 0</div>
+      <div class="player-score" id="player3-score">Player 3: 0</div>
+      <div class="player-score" id="player4-score">Player 4: 0</div>
     </div>
     
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            if (typeof window.initializeFourPlayerPong === 'function') {
-                window.initializeFourPlayerPong();
-            } else {
-                console.error("Four player pong initialization function not found");
-            }
-        });
-    </script>
+    <div id="game-menu">
+      <h1 class="menu-title">4-Player Pong Breakout</h1>
+      
+      <div class="menu-content">
+        <button id="play-button" class="game-button">Start Game</button>
+        <a href="/pong-selection" id="back-button" class="game-button">Back to Game Modes</a>
+        
+        <div class="controls-info">
+          <h3>Controls</h3>
+          <table class="controls-table">
+            <tr>
+              <th>Player</th>
+              <th>Controls</th>
+            </tr>
+            <tr>
+              <td>Player 1 (Bottom)</td>
+              <td>← / → Arrow Keys</td>
+            </tr>
+            <tr>
+              <td>Player 2 (Top)</td>
+              <td>A / D Keys</td>
+            </tr>
+            <tr>
+              <td>Player 3 (Left)</td>
+              <td>J / L Keys (Up/Down)</td>
+            </tr>
+            <tr>
+              <td>Player 4 (Right)</td>
+              <td>W / S Keys (Up/Down)</td>
+            </tr>
+          </table>
+          
+          <p style="text-align: center; margin-top: 1rem;">
+            First player to reach 25 points wins!
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
