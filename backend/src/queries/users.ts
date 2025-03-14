@@ -75,4 +75,18 @@ export const createUserOAuth = (username: string, email: string, avatar: string)
   });
 };
 
+export const checkUserByEmail = async (email: string): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    const query = `SELECT id, username, email, password FROM users WHERE email = ?`;
+
+    db.get(query, [email], (err, row) => {
+      if (err) {
+        console.error("Erreur lors de la récupération de l'utilisateur par email:", err.message);
+        return reject(err);
+      }
+      resolve(row || null);
+    });
+  });
+};
+
 export default { createUser, getUserById, checkUserLogin };

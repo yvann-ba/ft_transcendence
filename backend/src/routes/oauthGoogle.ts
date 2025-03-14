@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import config from '../config/fastifyconfig';
-import { checkUserLogin, createUserOAuth } from '../queries/users';
+import { checkUserLogin, createUserOAuth, checkUserByEmail } from '../queries/users';
 
 export default async function oauthGoogleRoutes(fastify: FastifyInstance) {
 
@@ -55,8 +55,9 @@ export default async function oauthGoogleRoutes(fastify: FastifyInstance) {
       fastify.log.info(`Google user data: ${JSON.stringify(userData)}`);
 
       // Vérifier si utilisateur existe, sinon le créer
-      let user = await checkUserLogin(userData.email);
-      if (!user) {
+      let user = await checkUserByEmail(userData.email);
+      fastify.log.info(`User found: ${JSON.stringify(user)}`);
+      if (user === null) {
         user = await createUserOAuth(userData.username, userData.email, userData.avatar);
       }
 
