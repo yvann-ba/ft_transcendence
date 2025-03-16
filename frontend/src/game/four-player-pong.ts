@@ -186,7 +186,7 @@ export default function initializeMultiplayerGame(): (() => void) | null {
           y: brickY,
           width: BRICK_HEIGHT, // Swap width/height for vertical
           height: BRICK_WIDTH,
-          color: playerColors[2],
+          color: playerColors[3],
           active: true,
           playerIndex: 2
         });
@@ -205,7 +205,7 @@ export default function initializeMultiplayerGame(): (() => void) | null {
           y: brickY,
           width: BRICK_HEIGHT, // Swap width/height for vertical
           height: BRICK_WIDTH,
-          color: playerColors[3],
+          color: playerColors[2],
           active: true,
           playerIndex: 3
         });
@@ -431,30 +431,6 @@ export default function initializeMultiplayerGame(): (() => void) | null {
   }
   
   function drawControlsHint(): void {
-    if (!ctx) return;
-    
-    ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-    ctx.font = "12px Arial";
-    
-    // Bottom controls (Player 1)
-    ctx.fillText("← / →", GAME_WIDTH / 2 - 10, GAME_HEIGHT - 25);
-    
-    // Top controls (Player 2)
-    ctx.fillText("A / D", GAME_WIDTH / 2 - 10, 25);
-    
-    // Left controls (Player 3)
-    ctx.save();
-    ctx.translate(25, GAME_HEIGHT / 2);
-    ctx.rotate(-Math.PI / 2);
-    ctx.fillText("J / L", -15, 0);
-    ctx.restore();
-    
-    // Right controls (Player 4)
-    ctx.save();
-    ctx.translate(GAME_WIDTH - 25, GAME_HEIGHT / 2);
-    ctx.rotate(Math.PI / 2);
-    ctx.fillText("Q / E", -15, 0);
-    ctx.restore();
   }
   
   function drawWinner(): void {
@@ -723,6 +699,7 @@ export default function initializeMultiplayerGame(): (() => void) | null {
     gameRunning = false;
     if (elements.menu) {
       elements.menu.classList.remove("hidden");
+      elements.menu.classList.add("show");
     }
     if (animationFrameId !== null) {
       cancelAnimationFrame(animationFrameId);
