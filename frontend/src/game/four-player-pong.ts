@@ -87,7 +87,7 @@ export default function initializeMultiplayerGame(): (() => void) | null {
       y: GAME_HEIGHT - paddleHeight - 10,
       width: paddleWidth,
       height: paddleHeight,
-      color: playerColors[0],
+      color: playerColors[1],
       score: 0,
       lastHitTime: 0
     },
@@ -97,7 +97,7 @@ export default function initializeMultiplayerGame(): (() => void) | null {
       y: 10,
       width: paddleWidth,
       height: paddleHeight,
-      color: playerColors[1],
+      color: playerColors[0],
       score: 0,
       lastHitTime: 0
     },
@@ -107,7 +107,7 @@ export default function initializeMultiplayerGame(): (() => void) | null {
       y: GAME_HEIGHT / 2 - paddleWidth / 2,
       width: paddleHeight,
       height: paddleWidth,
-      color: playerColors[2],
+      color: playerColors[3],
       score: 0,
       lastHitTime: 0
     },
@@ -117,7 +117,7 @@ export default function initializeMultiplayerGame(): (() => void) | null {
       y: GAME_HEIGHT / 2 - paddleWidth / 2,
       width: paddleHeight,
       height: paddleWidth,
-      color: playerColors[3],
+      color: playerColors[2],
       score: 0,
       lastHitTime: 0
     }
@@ -148,7 +148,7 @@ export default function initializeMultiplayerGame(): (() => void) | null {
           y: brickY,
           width: BRICK_WIDTH,
           height: BRICK_HEIGHT,
-          color: playerColors[0],
+          color: playerColors[1],
           active: true,
           playerIndex: 0
         });
@@ -167,7 +167,7 @@ export default function initializeMultiplayerGame(): (() => void) | null {
           y: brickY,
           width: BRICK_WIDTH,
           height: BRICK_HEIGHT,
-          color: playerColors[1],
+          color: playerColors[0],
           active: true,
           playerIndex: 1
         });
