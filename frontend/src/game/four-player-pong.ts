@@ -252,12 +252,12 @@ export default function initializeMultiplayerGame(): (() => void) | null {
         break;
         
       // Player 4 (right)
-      case "w":
-      case "W":
+      case "q":
+      case "Q":
         playerControls[3].up = true;
         break;
-      case "s":
-      case "S":
+      case "e":
+      case "E":
         playerControls[3].down = true;
         break;
         
@@ -301,12 +301,12 @@ export default function initializeMultiplayerGame(): (() => void) | null {
         break;
         
       // Player 4 (right)
-      case "w":
-      case "W":
+      case "q":
+      case "Q":
         playerControls[3].up = false;
         break;
-      case "s":
-      case "S":
+      case "e":
+      case "E":
         playerControls[3].down = false;
         break;
     }

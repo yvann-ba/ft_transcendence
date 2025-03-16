@@ -5,3 +5,4 @@ node_modules
 test.*
 core.1.9
 credentials.json
+backend/database/db.sqlite
