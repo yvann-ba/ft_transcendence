@@ -23,6 +23,7 @@ body, html {
 .header {
     text-align: center;
     margin-bottom: 4rem;
+    margin-top: 3rem;
     animation: fadeInDown 0.8s ease-out;
 }
 
@@ -54,9 +55,8 @@ body, html {
 .subtitle {
     font-size: 1.2rem;
     opacity: 0.8;
-    margin-top: 1rem;
+    margin-top: 1.2rem; /* Slightly increase space below title */
 }
-
 /* Game Card Styles */
 .game-cards {
     display: flex;

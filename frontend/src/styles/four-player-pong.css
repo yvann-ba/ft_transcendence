@@ -95,12 +95,12 @@
     display: flex;
     justify-content: center;
     color: rgb(250, 250, 250);
-    top: 17vh;
+    top: 10vh; /* Changed from 17vh to 10vh to move it higher */
     font-size: 5vh;
     font-weight: 700;
     width: 800px;
     gap: 1.5rem;
-  }
+  } 
   
   /* ------------------------------ */
   /*        Slider personnalisé     */

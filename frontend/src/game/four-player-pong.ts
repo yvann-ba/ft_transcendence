@@ -79,49 +79,49 @@ export default function initializeMultiplayerGame(): (() => void) | null {
   // Player colors
   const playerColors = ["#BB70AD", "#70BB88", "#7088BB", "#BBBB70"];
   
-  // Create paddles for 4 players
-  const paddles: Paddle[] = [
-    // Bottom paddle (Player 1)
-    {
-      x: GAME_WIDTH / 2 - paddleWidth / 2,
-      y: GAME_HEIGHT - paddleHeight - 10,
-      width: paddleWidth,
-      height: paddleHeight,
-      color: playerColors[1],
-      score: 0,
-      lastHitTime: 0
-    },
-    // Top paddle (Player 2)
-    {
-      x: GAME_WIDTH / 2 - paddleWidth / 2,
-      y: 10,
-      width: paddleWidth,
-      height: paddleHeight,
-      color: playerColors[0],
-      score: 0,
-      lastHitTime: 0
-    },
-    // Left paddle (Player 3)
-    {
-      x: 10,
-      y: GAME_HEIGHT / 2 - paddleWidth / 2,
-      width: paddleHeight,
-      height: paddleWidth,
-      color: playerColors[3],
-      score: 0,
-      lastHitTime: 0
-    },
-    // Right paddle (Player 4)
-    {
-      x: GAME_WIDTH - paddleHeight - 10,
-      y: GAME_HEIGHT / 2 - paddleWidth / 2,
-      width: paddleHeight,
-      height: paddleWidth,
-      color: playerColors[2],
-      score: 0,
-      lastHitTime: 0
-    }
-  ];
+// Create paddles for 4 players
+const paddles: Paddle[] = [
+  // Bottom paddle (Player 1)
+  {
+    x: GAME_WIDTH / 2 - paddleWidth / 2,
+    y: GAME_HEIGHT - paddleHeight - 10,
+    width: paddleWidth,
+    height: paddleHeight,
+    color: playerColors[0],  // Purple (#BB70AD)
+    score: 0,
+    lastHitTime: 0
+  },
+  // Top paddle (Player 2)
+  {
+    x: GAME_WIDTH / 2 - paddleWidth / 2,
+    y: 10,
+    width: paddleWidth,
+    height: paddleHeight,
+    color: playerColors[1],  // Green (#70BB88)
+    score: 0,
+    lastHitTime: 0
+  },
+  // Left paddle (Player 3)
+  {
+    x: 10,
+    y: GAME_HEIGHT / 2 - paddleWidth / 2,
+    width: paddleHeight,
+    height: paddleWidth,
+    color: playerColors[2],  // Blue (#7088BB)
+    score: 0,
+    lastHitTime: 0
+  },
+  // Right paddle (Player 4)
+  {
+    x: GAME_WIDTH - paddleHeight - 10,
+    y: GAME_HEIGHT / 2 - paddleWidth / 2,
+    width: paddleHeight,
+    height: paddleWidth,
+    color: playerColors[3],  // Yellow (#BBBB70)
+    score: 0,
+    lastHitTime: 0
+  }
+];
   
   // Create bricks for all players
   const bricks: Brick[] = [];
@@ -136,26 +136,7 @@ export default function initializeMultiplayerGame(): (() => void) | null {
     
     // Create brick sets for each player - 4 regions of the screen
     
-    // Top area (Player 1's bricks)
-    const offsetTopY = 60;
-    for (let c = 0; c < BRICK_COLS; c++) {
-      for (let r = 0; r < BRICK_ROWS; r++) {
-        const brickX = GAME_WIDTH / 2 - ((BRICK_COLS * (BRICK_WIDTH + BRICK_PADDING)) / 2) + c * (BRICK_WIDTH + BRICK_PADDING);
-        const brickY = offsetTopY + r * (BRICK_HEIGHT + BRICK_PADDING);
-        
-        bricks.push({
-          x: brickX,
-          y: brickY,
-          width: BRICK_WIDTH,
-          height: BRICK_HEIGHT,
-          color: playerColors[1],
-          active: true,
-          playerIndex: 0
-        });
-      }
-    }
-    
-    // Bottom area (Player 2's bricks)
+    // Bottom area (Player 1's bricks - purple)
     const offsetBottomY = GAME_HEIGHT - BRICK_ROWS * (BRICK_HEIGHT + BRICK_PADDING) - 60;
     for (let c = 0; c < BRICK_COLS; c++) {
       for (let r = 0; r < BRICK_ROWS; r++) {
@@ -167,14 +148,33 @@ export default function initializeMultiplayerGame(): (() => void) | null {
           y: brickY,
           width: BRICK_WIDTH,
           height: BRICK_HEIGHT,
-          color: playerColors[0],
+          color: playerColors[0],  // Purple (#BB70AD)
+          active: true,
+          playerIndex: 0
+        });
+      }
+    }
+    
+    // Top area (Player 2's bricks - green)
+    const offsetTopY = 60;
+    for (let c = 0; c < BRICK_COLS; c++) {
+      for (let r = 0; r < BRICK_ROWS; r++) {
+        const brickX = GAME_WIDTH / 2 - ((BRICK_COLS * (BRICK_WIDTH + BRICK_PADDING)) / 2) + c * (BRICK_WIDTH + BRICK_PADDING);
+        const brickY = offsetTopY + r * (BRICK_HEIGHT + BRICK_PADDING);
+        
+        bricks.push({
+          x: brickX,
+          y: brickY,
+          width: BRICK_WIDTH,
+          height: BRICK_HEIGHT,
+          color: playerColors[1],  // Green (#70BB88)
           active: true,
           playerIndex: 1
         });
       }
     }
     
-    // Left area (Player 3's bricks) - rotated to be vertical
+    // Left area (Player 3's bricks - blue) - rotated to be vertical
     const offsetLeftX = 60;
     for (let c = 0; c < BRICK_ROWS; c++) { // Swap rows/cols for vertical arrangement
       for (let r = 0; r < BRICK_COLS; r++) {
@@ -186,14 +186,14 @@ export default function initializeMultiplayerGame(): (() => void) | null {
           y: brickY,
           width: BRICK_HEIGHT, // Swap width/height for vertical
           height: BRICK_WIDTH,
-          color: playerColors[3],
+          color: playerColors[2],  // Blue (#7088BB)
           active: true,
           playerIndex: 2
         });
       }
     }
     
-    // Right area (Player 4's bricks) - rotated to be vertical
+    // Right area (Player 4's bricks - yellow) - rotated to be vertical
     const offsetRightX = GAME_WIDTH - BRICK_ROWS * (BRICK_HEIGHT + BRICK_PADDING) - 60;
     for (let c = 0; c < BRICK_ROWS; c++) { // Swap rows/cols for vertical arrangement
       for (let r = 0; r < BRICK_COLS; r++) {
@@ -205,7 +205,7 @@ export default function initializeMultiplayerGame(): (() => void) | null {
           y: brickY,
           width: BRICK_HEIGHT, // Swap width/height for vertical
           height: BRICK_WIDTH,
-          color: playerColors[2],
+          color: playerColors[3],  // Yellow (#BBBB70)
           active: true,
           playerIndex: 3
         });
