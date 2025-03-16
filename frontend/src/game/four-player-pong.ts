@@ -1,4 +1,4 @@
-import "../styles/simple-multiplayer.css";
+import "../styles/four-player-pong.css";
 
 interface Ball {
   x: number;
@@ -6,6 +6,7 @@ interface Ball {
   speedX: number;
   speedY: number;
   radius: number;
+  originalSpeed: number;
 }
 
 interface Paddle {
@@ -15,6 +16,7 @@ interface Paddle {
   height: number;
   color: string;
   score: number;
+  lastHitTime: number;
 }
 
 interface Brick {
@@ -25,6 +27,11 @@ interface Brick {
   color: string;
   active: boolean;
   playerIndex: number;
+}
+
+interface Colors {
+  ballColor: string;
+  backgroundColor: string;
 }
 
 export default function initializeMultiplayerGame(): (() => void) | null {
@@ -45,8 +52,9 @@ export default function initializeMultiplayerGame(): (() => void) | null {
   // Game settings
   const GAME_WIDTH = canvas.width;
   const GAME_HEIGHT = canvas.height;
-  const MAX_SCORE = 10; // Increased winning score to 25
-  const PLAYER_COUNT = 4; // Fixed at 4 players
+  let MAX_SCORE = 10; // Default winning score
+  const PLAYER_COUNT = 4;
+  const PADDLE_COOLDOWN = 300; // ms delay between paddle hits to prevent lag
   
   // Game elements
   const ball: Ball = {
@@ -54,7 +62,14 @@ export default function initializeMultiplayerGame(): (() => void) | null {
     y: GAME_HEIGHT / 2,
     speedX: 4,
     speedY: -4,
-    radius: 10
+    radius: 10,
+    originalSpeed: 4
+  };
+  
+  // Custom colors
+  const colors: Colors = {
+    ballColor: "#FFFFFF",
+    backgroundColor: "#000000"
   };
   
   // Paddle settings
@@ -73,7 +88,8 @@ export default function initializeMultiplayerGame(): (() => void) | null {
       width: paddleWidth,
       height: paddleHeight,
       color: playerColors[0],
-      score: 0
+      score: 0,
+      lastHitTime: 0
     },
     // Top paddle (Player 2)
     {
@@ -82,25 +98,28 @@ export default function initializeMultiplayerGame(): (() => void) | null {
       width: paddleWidth,
       height: paddleHeight,
       color: playerColors[1],
-      score: 0
+      score: 0,
+      lastHitTime: 0
     },
     // Left paddle (Player 3)
     {
       x: 10,
       y: GAME_HEIGHT / 2 - paddleWidth / 2,
-      width: paddleHeight, // Swap width and height for vertical paddles
+      width: paddleHeight,
       height: paddleWidth,
       color: playerColors[2],
-      score: 0
+      score: 0,
+      lastHitTime: 0
     },
     // Right paddle (Player 4)
     {
       x: GAME_WIDTH - paddleHeight - 10,
       y: GAME_HEIGHT / 2 - paddleWidth / 2,
-      width: paddleHeight, // Swap width and height for vertical paddles
+      width: paddleHeight,
       height: paddleWidth,
       color: playerColors[3],
-      score: 0
+      score: 0,
+      lastHitTime: 0
     }
   ];
   
@@ -205,20 +224,28 @@ export default function initializeMultiplayerGame(): (() => void) | null {
   // UI elements
   const elements = {
     playButton: document.getElementById("play-button") as HTMLElement | null,
+    customizeButton: document.getElementById("custom-button") as HTMLElement | null,
     menu: document.getElementById("game-menu") as HTMLElement | null,
+    customMenu: document.getElementById("pong-custom-menu") as HTMLElement | null,
+    winningScoreSlider: document.getElementById("winning-score-slider") as HTMLInputElement | null,
+    winningScoreDisplay: document.getElementById("pong-winning-score") as HTMLElement | null,
+    ballColorPicker: document.getElementById("pong-ball-color") as HTMLInputElement | null,
+    backgroundColorPicker: document.getElementById("pong-ground-color") as HTMLInputElement | null,
+    customBackButton: document.getElementById("custom-back-button") as HTMLElement | null,
+    scoreDisplay: document.getElementById("scoreboard") as HTMLElement | null,
     playerScores: [
       document.getElementById("player1-score") as HTMLElement | null,
       document.getElementById("player2-score") as HTMLElement | null,
       document.getElementById("player3-score") as HTMLElement | null,
       document.getElementById("player4-score") as HTMLElement | null
-    ],
-    backButton: document.getElementById("back-button") as HTMLElement | null
+    ]
   };
   
   // Game state
   let gameRunning = false;
   let animationFrameId: number | null = null;
   let winner: number | null = null;
+  let lastTime = performance.now();
   
   // Event handlers
   function handleKeyDown(e: KeyboardEvent): void {
@@ -312,12 +339,47 @@ export default function initializeMultiplayerGame(): (() => void) | null {
     }
   }
   
+  // Color and customization event handlers
+  function changeColors(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const id = input.id;
+    const color = input.value;
+
+    input.style.backgroundColor = color;
+
+    switch (id) {
+      case "pong-ground-color":
+        colors.backgroundColor = color;
+        break;
+      case "pong-ball-color":
+        colors.ballColor = color;
+        break;
+    }
+  }
+
+  function changeWinningScore(event: Event): void {
+    const slider = event.target as HTMLInputElement;
+    MAX_SCORE = Math.floor(parseFloat(slider.value));
+    if (elements.winningScoreDisplay) {
+      elements.winningScoreDisplay.textContent = "Winning score: " + MAX_SCORE;
+    }
+  }
+
+  function sliderAnimation(event: Event): void {
+    const slider = event.target as HTMLInputElement;
+    
+    const min = parseFloat(slider.min);
+    const max = parseFloat(slider.max);
+    const value = 5 + ((parseFloat(slider.value) - min) / (max - min)) * 90;
+    slider.style.setProperty('--slider-track-bg', `linear-gradient(to right, #BB70AD 0%, #BB70AD ${value}%, #ffffff ${value}%)`);
+  }
+  
   // Draw functions
   function drawBall(): void {
     if (!ctx) return;
     ctx.beginPath();
     ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-    ctx.fillStyle = "#FFFFFF";
+    ctx.fillStyle = colors.ballColor;
     ctx.fill();
     ctx.closePath();
   }
@@ -356,20 +418,43 @@ export default function initializeMultiplayerGame(): (() => void) | null {
     });
   }
   
-  function drawScores(): void {
+  function drawScoreboard(): void {
+    if (!ctx || !elements.scoreDisplay) return;
+    
+    // Only update the scoreboard at the bottom of the canvas
+    paddles.forEach((paddle, index) => {
+      if (elements.playerScores[index]) {
+        elements.playerScores[index].textContent = `${paddle.score}`;
+        elements.playerScores[index].style.color = paddle.color;
+      }
+    });
+  }
+  
+  function drawControlsHint(): void {
     if (!ctx) return;
     
-    ctx.font = "16px Arial";
+    ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+    ctx.font = "12px Arial";
     
-    for (let i = 0; i < PLAYER_COUNT; i++) {
-      ctx.fillStyle = playerColors[i];
-      ctx.fillText(`Player ${i + 1}: ${paddles[i].score}`, 10, 20 + i * 20);
-      
-      // Update score display in HTML if elements exist
-      if (elements.playerScores[i]) {
-        elements.playerScores[i].textContent = `Player ${i + 1}: ${paddles[i].score}`;
-      }
-    }
+    // Bottom controls (Player 1)
+    ctx.fillText("← / →", GAME_WIDTH / 2 - 10, GAME_HEIGHT - 25);
+    
+    // Top controls (Player 2)
+    ctx.fillText("A / D", GAME_WIDTH / 2 - 10, 25);
+    
+    // Left controls (Player 3)
+    ctx.save();
+    ctx.translate(25, GAME_HEIGHT / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText("J / L", -15, 0);
+    ctx.restore();
+    
+    // Right controls (Player 4)
+    ctx.save();
+    ctx.translate(GAME_WIDTH - 25, GAME_HEIGHT / 2);
+    ctx.rotate(Math.PI / 2);
+    ctx.fillText("Q / E", -15, 0);
+    ctx.restore();
   }
   
   function drawWinner(): void {
@@ -389,17 +474,30 @@ export default function initializeMultiplayerGame(): (() => void) | null {
   
   // Game logic
   function checkCollisions(): void {
+    const currentTime = performance.now();
+    
     // Wall collisions - bounce off all walls for simplicity
     if (ball.x + ball.radius > GAME_WIDTH || ball.x - ball.radius < 0) {
       ball.speedX = -ball.speedX;
+      
+      // Add small random angle change to prevent repetitive patterns
+      ball.speedY += (Math.random() - 0.5) * 0.5;
     }
     
     if (ball.y + ball.radius > GAME_HEIGHT || ball.y - ball.radius < 0) {
       ball.speedY = -ball.speedY;
+      
+      // Add small random angle change to prevent repetitive patterns
+      ball.speedX += (Math.random() - 0.5) * 0.5;
     }
     
-    // Paddle collisions
+    // Paddle collisions with cooldown to prevent multiple hits
     paddles.forEach((paddle, index) => {
+      // Only check collision if enough time has passed since last hit
+      if (currentTime - paddle.lastHitTime < PADDLE_COOLDOWN) {
+        return;
+      }
+      
       // For horizontal paddles (top and bottom)
       if (index < 2) {
         if (
@@ -408,12 +506,22 @@ export default function initializeMultiplayerGame(): (() => void) | null {
           ((index === 0 && ball.y + ball.radius > paddle.y && ball.y < paddle.y + paddle.height) || // Bottom paddle
            (index === 1 && ball.y - ball.radius < paddle.y + paddle.height && ball.y > paddle.y)) // Top paddle
         ) {
+          // Update last hit time
+          paddle.lastHitTime = currentTime;
+          
           // Reverse ball direction
           ball.speedY = -ball.speedY;
           
           // Add some angle based on where the ball hit the paddle
           const hitPosition = (ball.x - paddle.x) / paddle.width;
           ball.speedX = 6 * (hitPosition - 0.5);
+          
+          // Slightly increase ball speed for more dynamic gameplay
+          const speedMultiplier = 1.05;
+          const newSpeed = Math.min(Math.hypot(ball.speedX, ball.speedY) * speedMultiplier, 8);
+          const angle = Math.atan2(ball.speedY, ball.speedX);
+          ball.speedX = Math.cos(angle) * newSpeed;
+          ball.speedY = Math.sin(angle) * newSpeed;
         }
       } 
       // For vertical paddles (left and right)
@@ -424,17 +532,27 @@ export default function initializeMultiplayerGame(): (() => void) | null {
           ((index === 2 && ball.x - ball.radius < paddle.x + paddle.width && ball.x > paddle.x) || // Left paddle
            (index === 3 && ball.x + ball.radius > paddle.x && ball.x < paddle.x + paddle.width)) // Right paddle
         ) {
+          // Update last hit time
+          paddle.lastHitTime = currentTime;
+          
           // Reverse ball direction
           ball.speedX = -ball.speedX;
           
           // Add some angle based on where the ball hit the paddle
           const hitPosition = (ball.y - paddle.y) / paddle.height;
           ball.speedY = 6 * (hitPosition - 0.5);
+          
+          // Slightly increase ball speed for more dynamic gameplay
+          const speedMultiplier = 1.05;
+          const newSpeed = Math.min(Math.hypot(ball.speedX, ball.speedY) * speedMultiplier, 8);
+          const angle = Math.atan2(ball.speedY, ball.speedX);
+          ball.speedX = Math.cos(angle) * newSpeed;
+          ball.speedY = Math.sin(angle) * newSpeed;
         }
       }
     });
     
-    // Brick collisions
+    // Brick collisions with improved collision detection
     for (let i = 0; i < bricks.length; i++) {
       const brick = bricks[i];
       if (brick.active) {
@@ -451,14 +569,20 @@ export default function initializeMultiplayerGame(): (() => void) | null {
           const overlapTop = ball.y + ball.radius - brick.y;
           const overlapBottom = brick.y + brick.height - (ball.y - ball.radius);
           
-          // Find the smallest overlap
+          // Find the smallest overlap to determine hit direction
           const minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
           
           // Bounce based on which side was hit
           if (minOverlap === overlapTop || minOverlap === overlapBottom) {
             ball.speedY = -ball.speedY;
+            
+            // Add small variation to prevent repetitive patterns
+            ball.speedX += (Math.random() - 0.5) * 0.3;
           } else {
             ball.speedX = -ball.speedX;
+            
+            // Add small variation to prevent repetitive patterns
+            ball.speedY += (Math.random() - 0.5) * 0.3;
           }
           
           // Deactivate brick
@@ -489,8 +613,8 @@ export default function initializeMultiplayerGame(): (() => void) | null {
     }
   }
   
-  function updatePaddles(): void {
-    const paddleSpeed = 6;
+  function updatePaddles(deltaTime: number): void {
+    const paddleSpeed = 350 * deltaTime; // Speed adjusted for deltaTime
     
     // Player 1 (bottom - horizontal)
     if (playerControls[0].left && paddles[0].x > 0) {
@@ -525,17 +649,25 @@ export default function initializeMultiplayerGame(): (() => void) | null {
     }
   }
   
-  function updateBall(): void {
-    ball.x += ball.speedX;
-    ball.y += ball.speedY;
+  function updateBall(deltaTime: number): void {
+    ball.x += ball.speedX * deltaTime * 60; // Adjust for deltaTime (assuming 60 FPS as baseline)
+    ball.y += ball.speedY * deltaTime * 60;
     
     // Cap ball speed to prevent it from going too fast
-    const maxSpeed = 10;
-    if (Math.abs(ball.speedX) > maxSpeed) {
-      ball.speedX = maxSpeed * Math.sign(ball.speedX);
+    const maxSpeed = 12;
+    const currentSpeed = Math.hypot(ball.speedX, ball.speedY);
+    if (currentSpeed > maxSpeed) {
+      const angle = Math.atan2(ball.speedY, ball.speedX);
+      ball.speedX = Math.cos(angle) * maxSpeed;
+      ball.speedY = Math.sin(angle) * maxSpeed;
     }
-    if (Math.abs(ball.speedY) > maxSpeed) {
-      ball.speedY = maxSpeed * Math.sign(ball.speedY);
+    
+    // Prevent ball from stopping completely
+    const minSpeed = 3;
+    if (currentSpeed < minSpeed) {
+      const angle = Math.atan2(ball.speedY, ball.speedX);
+      ball.speedX = Math.cos(angle) * minSpeed;
+      ball.speedY = Math.sin(angle) * minSpeed;
     }
   }
   
@@ -544,9 +676,18 @@ export default function initializeMultiplayerGame(): (() => void) | null {
     ball.x = GAME_WIDTH / 2;
     ball.y = GAME_HEIGHT / 2;
     
-    // Consistent, predictable initial velocity
-    ball.speedX = 4 * (Math.random() > 0.5 ? 1 : -1);
-    ball.speedY = 4 * (Math.random() > 0.5 ? 1 : -1);
+    // Randomize initial direction
+    const angle = Math.random() * Math.PI * 2;
+    ball.speedX = Math.cos(angle) * ball.originalSpeed;
+    ball.speedY = Math.sin(angle) * ball.originalSpeed;
+    
+    // Ensure the ball isn't moving too slow in either axis
+    if (Math.abs(ball.speedX) < 2) {
+      ball.speedX = 2 * Math.sign(ball.speedX) || 2;
+    }
+    if (Math.abs(ball.speedY) < 2) {
+      ball.speedY = 2 * Math.sign(ball.speedY) || 2;
+    }
   }
   
   function startGame(): void {
@@ -567,6 +708,7 @@ export default function initializeMultiplayerGame(): (() => void) | null {
     
     // Start game loop
     gameRunning = true;
+    lastTime = performance.now();
     if (animationFrameId !== null) {
       cancelAnimationFrame(animationFrameId);
     }
@@ -588,27 +730,56 @@ export default function initializeMultiplayerGame(): (() => void) | null {
     }
   }
   
-  function gameLoop(): void {
+  function openCustomMenu(): void {
+    elements.menu?.classList.add("hidden");
+    elements.customMenu?.classList.remove("hidden");
+    elements.customMenu?.classList.add("show");
+
+    const pongGame = document.getElementById("game-container");
+    if (pongGame) {
+      pongGame.classList.remove("main-menu");
+      pongGame.classList.add("pong-custom-menu-canvas");
+    }
+  }
+
+  function closeCustomMenu(): void {
+    elements.customMenu?.classList.remove("show");
+    elements.customMenu?.classList.add("hidden");
+    elements.menu?.classList.remove("hidden");
+
+    const pongGame = document.getElementById("game-container");
+    if (pongGame) {
+      pongGame.classList.remove("pong-custom-menu-canvas");
+      pongGame.classList.add("main-menu");
+    }
+  }
+  
+  function gameLoop(timestamp: number): void {
     if (!ctx) return;
+    
+    // Calculate delta time
+    const deltaTime = (timestamp - lastTime) / 1000; // Convert to seconds
+    lastTime = timestamp;
     
     // Clear canvas
     ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
     
     // Draw background
-    ctx.fillStyle = "#000000";
+    ctx.fillStyle = colors.backgroundColor;
     ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
     
     if (gameRunning) {
       // Update game state
-      updatePaddles();
-      updateBall();
+      updatePaddles(deltaTime);
+      updateBall(deltaTime);
       checkCollisions();
       
       // Draw game elements
       drawBricks();
       drawPaddles();
       drawBall();
-      drawScores();
+      drawScoreboard();
+      drawControlsHint();
       
       // Continue game loop
       animationFrameId = requestAnimationFrame(gameLoop);
@@ -617,7 +788,7 @@ export default function initializeMultiplayerGame(): (() => void) | null {
       drawBricks();
       drawPaddles();
       drawBall();
-      drawScores();
+      drawScoreboard();
       drawWinner();
       
       animationFrameId = requestAnimationFrame(gameLoop);
@@ -631,9 +802,14 @@ export default function initializeMultiplayerGame(): (() => void) | null {
     
     // Button event listeners
     elements.playButton?.addEventListener("click", startGame);
-    elements.backButton?.addEventListener("click", () => {
-      window.location.href = "/pong-selection";
-    });
+    elements.customizeButton?.addEventListener("click", openCustomMenu);
+    elements.customBackButton?.addEventListener("click", closeCustomMenu);
+    
+    // Color picker and slider listeners
+    elements.ballColorPicker?.addEventListener("input", changeColors);
+    elements.backgroundColorPicker?.addEventListener("input", changeColors);
+    elements.winningScoreSlider?.addEventListener("input", changeWinningScore);
+    elements.winningScoreSlider?.addEventListener("input", sliderAnimation);
     
     // Show menu initially
     showMenu();
@@ -651,9 +827,13 @@ export default function initializeMultiplayerGame(): (() => void) | null {
     document.removeEventListener("keyup", handleKeyUp);
     
     elements.playButton?.removeEventListener("click", startGame);
-    elements.backButton?.removeEventListener("click", () => {
-      window.location.href = "/pong-selection";
-    });
+    elements.customizeButton?.removeEventListener("click", openCustomMenu);
+    elements.customBackButton?.removeEventListener("click", closeCustomMenu);
+    
+    elements.ballColorPicker?.removeEventListener("input", changeColors);
+    elements.backgroundColorPicker?.removeEventListener("input", changeColors);
+    elements.winningScoreSlider?.removeEventListener("input", changeWinningScore);
+    elements.winningScoreSlider?.removeEventListener("input", sliderAnimation);
     
     if (animationFrameId !== null) {
       cancelAnimationFrame(animationFrameId);

@@ -1,0 +1,310 @@
+/* ------------------------------ */
+/*       Styles généraux          */
+/* ------------------------------ */
+.main-menu {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+    font-family: Aeonik, sans-serif;
+  }
+  
+  .pong-custom-menu-canvas {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 7.2vh 0 0;
+    height: 100vh;
+    width: 100%;
+    font-family: Aeonik, sans-serif;
+    font-size: 2vh;
+  }
+  
+  #pong-custom-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5vh;
+    width: 100%;
+  }
+  
+  #custom-menu-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4vh;
+    width: 50%;
+    align-items: center;
+  }
+  
+  #custom-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+  }
+  
+  :root {
+    --ground-color: #000000;
+    --slider-track-bg: linear-gradient(to right, #BB70AD 0%, #BB70AD 25%, #ffffff 25%);
+  }
+  
+  #multiplayerCanvas {
+    border: #ffffff 0.7vh solid;
+    top: 25vh;
+    border-radius: 14px;
+  }
+  
+  #game-menu {
+    position: absolute;
+    top: 15vh;
+    width: 100%;
+    height: 80%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    flex-direction: column;
+    gap: 1.5vh;
+  }
+  
+  .pong-button {
+    background: #ffffff;
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 15px 30px;
+    font-size: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.3s ease;
+    width: 20vh;
+  }
+  
+  .pong-button:hover {
+    background: #BB70AD;
+    transform: scale(1.1);
+  }
+  
+  .hidden {
+    display: none !important;
+  }
+  
+  #game-container #scoreboard {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    color: rgb(250, 250, 250);
+    top: 17vh;
+    font-size: 5vh;
+    font-weight: 700;
+    width: 800px;
+    gap: 1.5rem;
+  }
+  
+  /* ------------------------------ */
+  /*        Slider personnalisé     */
+  /* ------------------------------ */
+  .pong-custom-slider {
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+    width: 20vh;
+    height: 25px;
+    background: var(--slider-track-bg);
+    border-radius: 2vh;
+    transition: background 0.2s ease-in-out;
+    outline: none;
+  }
+  
+  /* Pseudo-éléments pour Chrome/Safari */
+  .pong-custom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+            appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #BB70AD;
+    border-radius: 50%;
+    border: none;    
+    outline: none;
+    box-shadow: none; 
+  }
+  
+  .pong-custom-slider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 25px;
+    border-radius: 2vh;
+    background: var(--slider-track-bg);
+  }
+  
+  .pong-custom-slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #BB70AD;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    box-shadow: none;
+  }
+  
+  .pong-custom-slider::-moz-range-track {
+    width: 100%;
+    height: 25px;
+    border-radius: 2vh;
+    background: var(--slider-track-bg);
+  }
+  
+  .pong-custom-slider::-moz-range-progress {
+    height: 25px;
+    border-radius: 2vh;
+  }
+  
+  /* Effet au survol */
+  .pong-custom-slider:hover {
+    opacity: 1;
+    cursor: pointer;
+  }
+  
+  /* ------------------------------ */
+  /*         Input color            */
+  /* ------------------------------ */
+  .color-input {
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    width: 20vh;
+    height: 25px;
+    cursor: pointer;
+    padding: 0;
+    box-shadow: none;
+  }
+  
+  .color-input::-webkit-color-swatch {
+    border: none;
+    padding: 0;
+    box-shadow: none;
+  }
+  
+  .color-input::-moz-color-swatch {
+    border: none;
+    padding: 0;
+    box-shadow: none;
+  }
+  
+  .color-input:hover {
+    border-color: #acacac;
+  }
+  
+  .color-input:focus {
+    border-color: #BB70AD;
+    outline: none;
+  }
+  
+  /* ------------------------------ */
+  /*      Animation pour paddle     */
+  /* ------------------------------ */
+  @keyframes bump {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  /* ------------------------------ */
+  /*         Controls info          */
+  /* ------------------------------ */
+  .controls-info-floating {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid #BB70AD;
+    border-radius: 8px;
+    padding: 10px 15px;
+    color: white;
+    font-size: 14px;
+    z-index: 5;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  
+  .controls-info-floating h3 {
+    margin: 0 0 8px 0;
+    text-align: center;
+    color: #BB70AD;
+    font-size: 16px;
+  }
+  
+  .controls-guide {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .control-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+  }
+  
+  .player-label {
+    font-weight: bold;
+  }
+  
+  .control-keys {
+    color: #ccc;
+  }
+  
+  /* ------------------------------ */
+  /*         Transitions menus      */
+  /* ------------------------------ */
+  #game-menu, #pong-custom-menu {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+  }
+  
+  #game-menu.show, #pong-custom-menu.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  /* ------------------------------ */
+  /*            Media Queries       */
+  /* ------------------------------ */
+  @media (max-width: 1160px) {
+    #game-container {
+      width: 100%;
+    }
+    .pong-custom-menu-canvas {
+      flex-direction: column-reverse;
+      padding: 7.2vh;
+      top: 10vh;
+    }
+    #custom-menu-content {
+      justify-content: space-between;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+    #custom-settings {
+      display: flex;
+      flex-direction: row;
+    }
+    #game-container #scoreboard {
+      top: 9vh;
+    }
+    .controls-info-floating {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      font-size: 12px;
+    }
+  }

@@ -3,54 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>4-Player Pong Breakout</title>
+  <title>Brick Breaker - 4-Player Mode</title>
 </head>
 <body>
-  <div class="game-container">
+  <div id="game-container" class="main-menu">
     <canvas id="multiplayerCanvas" width="800" height="600"></canvas>
     
-    <div class="score-display">
-      <div class="player-score" id="player1-score">Player 1: 0</div>
-      <div class="player-score" id="player2-score">Player 2: 0</div>
-      <div class="player-score" id="player3-score">Player 3: 0</div>
-      <div class="player-score" id="player4-score">Player 4: 0</div>
+    <div id="scoreboard">
+      <div id="player1-score">0</div>
+      <div>-</div>
+      <div id="player2-score">0</div>
+      <div>-</div>
+      <div id="player3-score">0</div>
+      <div>-</div>
+      <div id="player4-score">0</div>
     </div>
     
     <div id="game-menu">
-      <h1 class="menu-title">4-Player Pong Breakout</h1>
-      
-      <div class="menu-content">
-        <button id="play-button" class="game-button">Start Game</button>
-        <a href="/pong-selection" id="back-button" class="game-button">Back to Game Modes</a>
-        
-        <div class="controls-info">
-          <h3>Controls</h3>
-          <table class="controls-table">
-            <tr>
-              <th>Player</th>
-              <th>Controls</th>
-            </tr>
-            <tr>
-              <td>Player 1 (Bottom)</td>
-              <td>← / → Arrow Keys</td>
-            </tr>
-            <tr>
-              <td>Player 2 (Top)</td>
-              <td>A / D Keys</td>
-            </tr>
-            <tr>
-              <td>Player 3 (Left)</td>
-              <td>J / L Keys (Up/Down)</td>
-            </tr>
-            <tr>
-              <td>Player 4 (Right)</td>
-              <td>Q / E Keys (Up/Down)</td>
-            </tr>
-          </table>
-          
-          <p style="text-align: center; margin-top: 1rem;">
-            First player to reach 25 points wins!
-          </p>
+      <h1>BRICK BREAKER</h1>
+      <button id="play-button" class="pong-button">Play</button>
+      <button id="custom-button" class="pong-button">Customize</button>
+    </div>
+    
+    <div id="pong-custom-menu" class="hidden">
+      <div id="custom-menu-content">
+        <h1>Customize</h1>
+        <div id="custom-settings">
+          <div>
+            <label for="pong-ground-color">Background Color</label>
+            <input type="color" value="#000000" id="pong-ground-color" class="color-input">
+          </div>
+          <div>
+            <label for="pong-ball-color">Ball Color</label>
+            <input type="color" value="#ffffff" id="pong-ball-color" class="color-input">
+          </div>
+        </div>
+        <div>
+          <p id="pong-winning-score">Winning score: 10</p>
+          <input type="range" min="5" max="25" value="10" class="pong-custom-slider" id="winning-score-slider">
+        </div>
+        <button id="custom-back-button" class="pong-button">Back</button>
+      </div>
+    </div>
+    
+    <div class="controls-info-floating">
+      <h3>Controls (Requires 2 Keyboards)</h3>
+      <div class="controls-guide">
+        <div class="control-item">
+          <span class="player-label" style="color: #BB70AD;">Player 1 (Bottom):</span>
+          <span class="control-keys">← / → Arrow Keys</span>
+        </div>
+        <div class="control-item">
+          <span class="player-label" style="color: #70BB88;">Player 2 (Top):</span>
+          <span class="control-keys">A / D Keys</span>
+        </div>
+        <div class="control-item">
+          <span class="player-label" style="color: #7088BB;">Player 3 (Left):</span>
+          <span class="control-keys">J / L Keys</span>
+        </div>
+        <div class="control-item">
+          <span class="player-label" style="color: #BBBB70;">Player 4 (Right):</span>
+          <span class="control-keys">Q / E Keys</span>
         </div>
       </div>
     </div>
