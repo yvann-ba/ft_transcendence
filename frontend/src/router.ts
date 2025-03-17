@@ -7,6 +7,7 @@ const routes: { [key: string]: string } = {
   "/pong-selection": "pong-selection",
   "/pong-game": "pong-game",
   "/four-player-pong" : "four-player-pong",
+  "/pong-tournament": "pong-tournament", 
   "/profile-page": "profile-page",
   "/test": "test",
   "/login": "login",
@@ -80,6 +81,9 @@ const loadPageScript = async (path: string): Promise<void> => {
     currentCleanup = module.default() || null;
     } else if (path === "/four-player-pong") {
       const module = await import("./game/four-player-pong");
+      currentCleanup = module.default() || null;
+    } else if (path === "/pong-tournament") {
+      const module = await import("./pages/pong-tournament");
       currentCleanup = module.default() || null;
     } else if (path === "/profile-page") {
       const module = await import("./pages/profile-page");

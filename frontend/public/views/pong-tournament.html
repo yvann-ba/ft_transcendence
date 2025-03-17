@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong Tournament</title>
+    <link rel="stylesheet" href="frontend/src/styles/pong-game.css">
+    <link rel="stylesheet" href="frontend/src/styles/pong-tournament.css">
+</head>
+<body>
+    <div id="tournament-game" class="main-menu">
+        <canvas id="tournamentCanvas" width="800" height="450"></canvas>
+        
+        <div id="scoreboard" class="tournament-scoreboard">
+            <div id="match-info">Match: <span id="current-match">-</span></div>
+            <div id="player1-score">0</div>
+            <div>-</div>
+            <div id="player2-score">0</div>
+        </div>
+        
+        <div id="tournament-menu">
+            <h1>PONG TOURNAMENT</h1>
+            <div id="registration-form">
+                <h2>Enter Player Names</h2>
+                <div class="player-inputs">
+                    <div class="player-input">
+                        <label for="player1-name">Player 1:</label>
+                        <input type="text" id="player1-name" maxlength="15" placeholder="Enter name">
+                    </div>
+                    <div class="player-input">
+                        <label for="player2-name">Player 2:</label>
+                        <input type="text" id="player2-name" maxlength="15" placeholder="Enter name">
+                    </div>
+                    <div class="player-input">
+                        <label for="player3-name">Player 3:</label>
+                        <input type="text" id="player3-name" maxlength="15" placeholder="Enter name">
+                    </div>
+                    <div class="player-input">
+                        <label for="player4-name">Player 4:</label>
+                        <input type="text" id="player4-name" maxlength="15" placeholder="Enter name">
+                    </div>
+                </div>
+                <button id="start-tournament-button" class="pong-button">Start Tournament</button>
+            </div>
+            
+            <div id="tournament-bracket" class="hidden">
+                <h2>Tournament Bracket</h2>
+                <div class="bracket-container">
+                    <div class="round">
+                        <div class="round-title">Semi-Finals</div>
+                        <div class="match" id="match1">
+                            <div class="match-player" id="match1-player1">Player 1</div>
+                            <div class="vs">VS</div>
+                            <div class="match-player" id="match1-player2">Player 2</div>
+                        </div>
+                        <div class="match" id="match2">
+                            <div class="match-player" id="match2-player1">Player 3</div>
+                            <div class="vs">VS</div>
+                            <div class="match-player" id="match2-player2">Player 4</div>
+                        </div>
+                    </div>
+                    <div class="connector-container">
+                        <div class="connector"></div>
+                        <div class="connector"></div>
+                    </div>
+                    <div class="round">
+                        <div class="round-title">Final</div>
+                        <div class="match" id="match3">
+                            <div class="match-player" id="match3-player1">TBD</div>
+                            <div class="vs">VS</div>
+                            <div class="match-player" id="match3-player2">TBD</div>
+                        </div>
+                    </div>
+                </div>
+                <button id="play-next-match-button" class="pong-button">Play Next Match</button>
+            </div>
+            
+            <div id="winner-announcement" class="hidden">
+                <h2>Tournament Champion</h2>
+                <div class="winner-name" id="champion-name">Player Name</div>
+                <div class="trophy-icon">🏆</div>
+                <button id="new-tournament-button" class="pong-button">New Tournament</button>
+            </div>
+        </div>
+        
+        <div id="countdown-container" class="hidden">
+            <div id="countdown">3</div>
+        </div>
+    </div>
+</body>
+</html>

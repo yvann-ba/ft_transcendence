@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Trophy -->
+  <path d="M32 10C41.5 10 45 5 45 5H19C19 5 22.5 10 32 10z" fill="#FFD700"/>
+  <path d="M32 10V42M19 5V15C19 25 25 30 32 30M45 5V15C45 25 39 30 32 30" stroke="#FFD700" stroke-width="3" fill="none"/>
+  <rect x="24" y="42" width="16" height="4" fill="#FFD700"/>
+  <rect x="27" y="46" width="10" height="8" fill="#FFD700"/>
+  <rect x="22" y="54" width="20" height="3" fill="#FFD700"/>
+  
+  <!-- Paddles -->
+  <rect x="5" y="25" width="3" height="15" fill="white"/>
+  <rect x="56" y="25" width="3" height="15" fill="white"/>
+  
+  <!-- Ball -->
+  <circle cx="32" cy="20" r="3" fill="white"/>
+  
+  <!-- Tournament Bracket (simplified) -->
+  <path d="M15 8H8V20M15 32H8V20M49 8h7V20M49 32h7V20" stroke="white" stroke-width="1.5" fill="none"/>
+</svg>
