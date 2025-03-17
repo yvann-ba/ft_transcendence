@@ -79,28 +79,35 @@
                 <a href="/four-player-pong" class="play-button">PLAY NOW</a>
             </div>
 
-            <!-- Tournament Mode -->
-            <div class="game-card" id="tournament-mode">
-                <div class="card-content">
-                    <div class="card-tag">NEW!</div>
-                    <div class="card-icon">
-                        <img src="/assets/images/pong-tournament.svg" alt="Tournament Pong" class="mode-icon">
-                    </div>
-                    <h2>Tournament Mode</h2>
-                    <p>Compete for the championship!</p>
-                    <ul class="features">
-                        <li>4 players tournament</li>
-                        <li>Bracket system</li>
-                        <li>Temporary alias per player</li>
-                    </ul>
-                    <div class="controls">
-                        <p><strong>Player 1:</strong> A / D</p>
-                        <p><strong>Player 2:</strong> ← / →</p>
-                    </div>
+        <!-- Tournament Mode Card -->
+        <div class="game-card" id="tournament-mode">
+            <div class="card-content">
+                <div class="card-tag">NEW!</div>
+                <div class="card-icon">
+                    <img src="/assets/images/pong-tournament.svg" alt="Tournament Pong" class="mode-icon">
                 </div>
-                <a href="/pong-tournament" class="play-button">PLAY NOW</a>
+                <h2>Tournament Mode</h2>
+                <p>Compete for the championship!</p>
+                <ul class="features">
+                    <li>4 players tournament</li>
+                    <li>Bracket system</li>
+                    <li>Temporary alias per player</li>
+                </ul>
+                <div class="controls">
+                    <p><strong>Player 1:</strong> W / S</p>
+                    <p><strong>Player 2:</strong> ← / →</p>
+                </div>
             </div>
+            <a href="/pong-tournament" class="play-button">PLAY NOW</a>
         </div>
+
+        <style>
+        /* Ajout des animations identiques aux autres cartes */
+        #tournament-mode {
+            animation: fadeInUp 0.8s ease-out forwards;
+            animation-delay: 0.8s; /* Un délai légèrement plus long que les autres cartes */
+        }
+        </style>
         
         <div class="navigation">
             <a href="/home" class="back-button">Back to Home</a>

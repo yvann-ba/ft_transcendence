@@ -40,7 +40,33 @@
                         <input type="text" id="player4-name" maxlength="15" placeholder="Enter name">
                     </div>
                 </div>
-                <button id="start-tournament-button" class="pong-button">Start Tournament</button>
+                <div class="tournament-buttons">
+                    <button id="start-tournament-button" class="pong-button">Start Tournament</button>
+                    <button id="customize-button" class="pong-button">Customize</button>
+                </div>
+            </div>
+            <div id="customize-menu" class="hidden">
+                <h2>Customize Game</h2>
+                <div id="custom-settings">
+                    <div class="custom-option">
+                        <label for="ball-color">Ball Color</label>
+                        <input type="color" value="#ffffff" id="ball-color" class="color-input">
+                    </div>
+                    <div class="custom-option">
+                        <label for="paddle-color">Paddle Color</label>
+                        <input type="color" value="#ffffff" id="paddle-color" class="color-input">
+                    </div>
+                    <div class="custom-option">
+                        <label for="line-color">Line Color</label>
+                        <input type="color" value="#ffffff" id="line-color" class="color-input">
+                    </div>
+                    <div class="custom-option">
+                        <label for="points-to-win">Points to Win</label>
+                        <input type="range" min="3" max="10" value="5" class="pong-custom-slider" id="points-to-win">
+                        <span id="points-display">5 points</span>
+                    </div>
+                </div>
+                <button id="back-button" class="pong-button">Back</button>
             </div>
             
             <div id="tournament-bracket" class="hidden">
@@ -60,20 +86,87 @@
                         </div>
                     </div>
                     <div class="connector-container">
-                        <div class="connector"></div>
-                        <div class="connector"></div>
+                        <div class="connector top"></div>
+                        <div class="connector bottom"></div>
                     </div>
                     <div class="round">
                         <div class="round-title">Final</div>
                         <div class="match" id="match3">
-                            <div class="match-player" id="match3-player1">TBD</div>
+                            <div class="match-player" id="match3-player1">Waiting...</div>
                             <div class="vs">VS</div>
-                            <div class="match-player" id="match3-player2">TBD</div>
+                            <div class="match-player" id="match3-player2">Waiting...</div>
                         </div>
                     </div>
                 </div>
                 <button id="play-next-match-button" class="pong-button">Play Next Match</button>
             </div>
+            <style>
+                .connector-container {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    height: 180px;
+                    margin: 0 20px;
+                    width: 80px;
+                    position: relative;
+                }
+                
+                .connector {
+                    position: relative;
+                    width: 100%;
+                    height: 2px;
+                    background-color: #BB70AD;
+                }
+                
+                .connector.top {
+                    position: absolute;
+                    top: 25%;
+                    transform: translateY(-50%);
+                }
+                
+                .connector.bottom {
+                    position: absolute;
+                    bottom: 25%;
+                    transform: translateY(50%);
+                }
+                
+                .connector:before, .connector:after {
+                    content: '';
+                    position: absolute;
+                    width: 2px;
+                    background-color: #BB70AD;
+                }
+                
+                .connector.top:before {
+                    height: 50px;
+                    left: 0;
+                    top: 0;
+                }
+                
+                .connector.top:after {
+                    height: 80px;
+                    right: 0;
+                    top: 0;
+                }
+                
+                .connector.bottom:before {
+                    height: 50px;
+                    left: 0;
+                    bottom: 0;
+                }
+                
+                .connector.bottom:after {
+                    height: 80px;
+                    right: 0;
+                    bottom: 0;
+                }
+                
+                /* Horizontal connector to final match */
+                .connector.top:after, .connector.bottom:after {
+                    width: 2px;
+                    right: 0;
+                }
+                </style>
             
             <div id="winner-announcement" class="hidden">
                 <h2>Tournament Champion</h2>

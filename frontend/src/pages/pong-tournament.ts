@@ -116,6 +116,24 @@ export default function initializeTournamentMode() {
       currentMatch: document.getElementById("current-match")
   };
 
+    const customizeElements = {
+        customizeButton: document.getElementById("customize-button"),
+        customizeMenu: document.getElementById("customize-menu"),
+        backButton: document.getElementById("back-button"),
+        ballColorInput: document.getElementById("ball-color") as HTMLInputElement,
+        paddleColorInput: document.getElementById("paddle-color") as HTMLInputElement,
+        lineColorInput: document.getElementById("line-color") as HTMLInputElement,
+        pointsToWinSlider: document.getElementById("points-to-win") as HTMLInputElement,
+        pointsDisplay: document.getElementById("points-display")
+    };
+    
+    const customSettings = {
+        ballColor: "#ffffff",
+        paddleColor: "#ffffff",
+        lineColor: "#ffffff",
+        pointsToWin: 5
+    };
+
   // Tournament state
   const tournamentState = {
       players: [] as TournamentPlayer[],
@@ -334,6 +352,39 @@ export default function initializeTournamentMode() {
       startCountdown();
   }
 
+    function openCustomizeMenu(): void {
+        elements.registrationForm?.classList.add("hidden");
+        customizeElements.customizeMenu?.classList.remove("hidden");
+    }
+
+    function closeCustomizeMenu(): void {
+        customizeElements.customizeMenu?.classList.add("hidden");
+        elements.registrationForm?.classList.remove("hidden");
+    }
+
+    function updateCustomSettings(): void {
+        if (customizeElements.ballColorInput) {
+            customSettings.ballColor = customizeElements.ballColorInput.value;
+        }
+        if (customizeElements.paddleColorInput) {
+            customSettings.paddleColor = customizeElements.paddleColorInput.value;
+        }
+        if (customizeElements.lineColorInput) {
+            customSettings.lineColor = customizeElements.lineColorInput.value;
+        }
+        if (customizeElements.pointsToWinSlider) {
+            customSettings.pointsToWin = parseInt(customizeElements.pointsToWinSlider.value);
+            gameState.scores.winning = customSettings.pointsToWin;
+        }
+        if (customizeElements.pointsDisplay) {
+            customizeElements.pointsDisplay.textContent = `${customSettings.pointsToWin} points`;
+        }
+    }
+    
+    function applyCustomSettings(): void {
+    // Les couleurs seront appliquées dans les fonctions de dessin
+    }
+
   // Start countdown before match
   function startCountdown(): void {
       gameState.countdown = 3;
@@ -465,8 +516,7 @@ export default function initializeTournamentMode() {
       // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Draw center line
-      ctx.fillStyle = "#ffffff";
+      ctx.fillStyle = customSettings.lineColor;
       ctx.fillRect(canvas.width / 2 - 1, 0, 2, canvas.height);
       
       // Update game
@@ -522,91 +572,157 @@ export default function initializeTournamentMode() {
   
   // Check for collisions
   function checkCollisions(): void {
-      // Wall collisions (top/bottom)
-      if (gameState.ball.y - gameState.ball.radius <= 0 || 
-          gameState.ball.y + gameState.ball.radius >= canvas.height) {
-          gameState.ball.speedY = -gameState.ball.speedY;
-      }
-      
-      // Paddle collisions
-      // Left paddle (Player 1)
-      if (gameState.ball.x - gameState.ball.radius <= gameState.paddles.width &&
-          gameState.ball.y >= gameState.paddles.player1Y &&
-          gameState.ball.y <= gameState.paddles.player1Y + gameState.paddles.height) {
-          
-          gameState.ball.speedX = Math.abs(gameState.ball.speedX);
-          
-          // Add angle based on where ball hits paddle
-          const hitPosition = (gameState.ball.y - gameState.paddles.player1Y) / gameState.paddles.height;
-          gameState.ball.speedY = (hitPosition - 0.5) * gameState.ball.speedX;
-      }
-      
-      // Right paddle (Player 2)
-      if (gameState.ball.x + gameState.ball.radius >= canvas.width - gameState.paddles.width &&
-          gameState.ball.y >= gameState.paddles.player2Y &&
-          gameState.ball.y <= gameState.paddles.player2Y + gameState.paddles.height) {
-          
-          gameState.ball.speedX = -Math.abs(gameState.ball.speedX);
-          
-          // Add angle based on where ball hits paddle
-          const hitPosition = (gameState.ball.y - gameState.paddles.player2Y) / gameState.paddles.height;
-          gameState.ball.speedY = (hitPosition - 0.5) * -gameState.ball.speedX;
-      }
-      
-      // Score (ball goes out of bounds on left/right)
-      if (gameState.ball.x - gameState.ball.radius <= 0) {
-          // Player 2 scores
-          gameState.scores.player2++;
-          updateScoreboard();
-          resetBall();
-      } else if (gameState.ball.x + gameState.ball.radius >= canvas.width) {
-          // Player 1 scores
-          gameState.scores.player1++;
-          updateScoreboard();
-          resetBall();
-      }
-  }
+    // Ball radius
+    const radius = gameState.ball.radius;
+    
+    // Wall collisions (top/bottom)
+    if (gameState.ball.y - radius <= 0) {
+        gameState.ball.y = radius; // Ensure the ball doesn't get stuck
+        gameState.ball.speedY = Math.abs(gameState.ball.speedY);
+    } else if (gameState.ball.y + radius >= canvas.height) {
+        gameState.ball.y = canvas.height - radius; // Ensure the ball doesn't get stuck
+        gameState.ball.speedY = -Math.abs(gameState.ball.speedY);
+    }
+    
+    // Paddle collisions with improved detection
+    const paddleWidth = gameState.paddles.width;
+    const paddleHeight = gameState.paddles.height;
+    
+    // Left paddle (Player 1)
+    if (gameState.ball.speedX < 0 && // Ball is moving left
+        gameState.ball.x - radius <= paddleWidth && 
+        gameState.ball.x + radius >= 0 && // Added to prevent sticking
+        gameState.ball.y >= gameState.paddles.player1Y && 
+        gameState.ball.y <= gameState.paddles.player1Y + paddleHeight) {
+        
+        // Push ball outside paddle to prevent sticking
+        gameState.ball.x = paddleWidth + radius;
+        
+        // Reflect speed
+        gameState.ball.speedX = Math.abs(gameState.ball.speedX);
+        
+        // Add angle based on where ball hits paddle
+        const hitPosition = (gameState.ball.y - gameState.paddles.player1Y) / paddleHeight;
+        gameState.ball.speedY += (hitPosition - 0.5) * gameState.ball.speedX * 1.5;
+        
+        // Limit max vertical speed
+        const maxVerticalSpeed = gameState.ball.maxSpeed * 0.8;
+        if (Math.abs(gameState.ball.speedY) > maxVerticalSpeed) {
+            gameState.ball.speedY = Math.sign(gameState.ball.speedY) * maxVerticalSpeed;
+        }
+        
+        // Slightly increase speed to make game more challenging
+        const speedMultiplier = 1.05;
+        const currentSpeed = Math.sqrt(gameState.ball.speedX * gameState.ball.speedX + gameState.ball.speedY * gameState.ball.speedY);
+        const newSpeed = Math.min(currentSpeed * speedMultiplier, gameState.ball.maxSpeed);
+        const angle = Math.atan2(gameState.ball.speedY, gameState.ball.speedX);
+        gameState.ball.speedX = Math.cos(angle) * newSpeed;
+        gameState.ball.speedY = Math.sin(angle) * newSpeed;
+    }
+    
+    // Right paddle (Player 2)
+    if (gameState.ball.speedX > 0 && // Ball is moving right
+        gameState.ball.x + radius >= canvas.width - paddleWidth && 
+        gameState.ball.x - radius <= canvas.width && // Added to prevent sticking
+        gameState.ball.y >= gameState.paddles.player2Y && 
+        gameState.ball.y <= gameState.paddles.player2Y + paddleHeight) {
+        
+        // Push ball outside paddle to prevent sticking
+        gameState.ball.x = canvas.width - paddleWidth - radius;
+        
+        // Reflect speed
+        gameState.ball.speedX = -Math.abs(gameState.ball.speedX);
+        
+        // Add angle based on where ball hits paddle
+        const hitPosition = (gameState.ball.y - gameState.paddles.player2Y) / paddleHeight;
+        gameState.ball.speedY += (hitPosition - 0.5) * -gameState.ball.speedX * 1.5;
+        
+        // Limit max vertical speed
+        const maxVerticalSpeed = gameState.ball.maxSpeed * 0.8;
+        if (Math.abs(gameState.ball.speedY) > maxVerticalSpeed) {
+            gameState.ball.speedY = Math.sign(gameState.ball.speedY) * maxVerticalSpeed;
+        }
+        
+        // Slightly increase speed to make game more challenging
+        const speedMultiplier = 1.05;
+        const currentSpeed = Math.sqrt(gameState.ball.speedX * gameState.ball.speedX + gameState.ball.speedY * gameState.ball.speedY);
+        const newSpeed = Math.min(currentSpeed * speedMultiplier, gameState.ball.maxSpeed);
+        const angle = Math.atan2(gameState.ball.speedY, gameState.ball.speedX);
+        gameState.ball.speedX = Math.cos(angle) * newSpeed;
+        gameState.ball.speedY = Math.sin(angle) * newSpeed;
+    }
+    
+    // Score (ball goes out of bounds on left/right)
+    if (gameState.ball.x - radius <= 0) {
+        // Player 2 scores
+        gameState.scores.player2++;
+        updateScoreboard();
+        resetBall();
+    } else if (gameState.ball.x + radius >= canvas.width) {
+        // Player 1 scores
+        gameState.scores.player1++;
+        updateScoreboard();
+        resetBall();
+    }
+}
   
-  // Reset ball to center with random direction
-  function resetBall(): void {
-      gameState.ball.x = canvas.width / 2;
-      gameState.ball.y = canvas.height / 2;
-      
-      // Random direction
-      const angle = Math.random() * Math.PI / 4 - Math.PI / 8;
-      const direction = Math.random() > 0.5 ? 1 : -1;
-      
-      const speed = 300;
-      gameState.ball.speedX = direction * speed * Math.cos(angle);
-      gameState.ball.speedY = speed * Math.sin(angle);
-  }
+    // Remplacer la fonction resetBall dans pong-tournament.ts
+
+    function resetBall(): void {
+        // Position au centre
+        gameState.ball.x = canvas.width / 2;
+        gameState.ball.y = canvas.height / 2;
+        
+        // Direction aléatoire mais plus contrôlée
+        // Angle entre -45° et 45° (±π/4)
+        const maxAngle = Math.PI / 4;
+        const angle = (Math.random() * maxAngle * 2 - maxAngle);
+        
+        // Direction horizontale aléatoire (gauche ou droite)
+        const direction = Math.random() > 0.5 ? 1 : -1;
+        
+        // Vitesse initiale constante
+        const initialSpeed = 300;
+        
+        // Calcul des composantes de vitesse
+        gameState.ball.speedX = direction * initialSpeed * Math.cos(angle);
+        gameState.ball.speedY = initialSpeed * Math.sin(angle);
+        
+        // Ajout d'une petite pause avant de repartir (optionnel)
+        if (gameState.running) {
+            gameState.running = false;
+            setTimeout(() => {
+                if (!gameState.countdownActive) {
+                    gameState.running = true;
+                }
+            }, 500);
+        }
+    }
   
-  // Draw paddles
-  function drawPaddles(): void {
-      if (!ctx) return;
-      
-      // Left paddle (Player 1)
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, gameState.paddles.player1Y, gameState.paddles.width, gameState.paddles.height);
-      
-      // Right paddle (Player 2)
-      ctx.fillRect(
-          canvas.width - gameState.paddles.width,
-          gameState.paddles.player2Y,
-          gameState.paddles.width,
-          gameState.paddles.height
-      );
-  }
+    function drawPaddles(): void {
+        if (!ctx) return;
+        
+        // Left paddle (Player 1)
+        ctx.fillStyle = customSettings.paddleColor;
+        ctx.fillRect(0, gameState.paddles.player1Y, gameState.paddles.width, gameState.paddles.height);
+        
+        // Right paddle (Player 2)
+        ctx.fillRect(
+            canvas.width - gameState.paddles.width,
+            gameState.paddles.player2Y,
+            gameState.paddles.width,
+            gameState.paddles.height
+        );
+    }
   
-  // Draw ball
   function drawBall(): void {
-      if (!ctx) return;
-      
-      ctx.beginPath();
-      ctx.arc(gameState.ball.x, gameState.ball.y, gameState.ball.radius, 0, Math.PI * 2);
-      ctx.fillStyle = "#ffffff";
-      ctx.fill();
-  }
+    if (!ctx) return;
+    
+    ctx.beginPath();
+    ctx.arc(gameState.ball.x, gameState.ball.y, gameState.ball.radius, 0, Math.PI * 2);
+    ctx.fillStyle = customSettings.ballColor;
+    ctx.fill();
+}
   
   // Update scoreboard
   function updateScoreboard(): void {
@@ -656,6 +772,29 @@ export default function initializeTournamentMode() {
               break;
       }
   }
+
+    function initCustomization(): void {
+        customizeElements.customizeButton?.addEventListener("click", openCustomizeMenu);
+        customizeElements.backButton?.addEventListener("click", closeCustomizeMenu);
+        
+        // Écouteurs pour les changements de couleur
+        customizeElements.ballColorInput?.addEventListener("input", () => {
+            updateCustomSettings();
+        });
+        
+        customizeElements.paddleColorInput?.addEventListener("input", () => {
+            updateCustomSettings();
+        });
+        
+        customizeElements.lineColorInput?.addEventListener("input", () => {
+            updateCustomSettings();
+        });
+        
+        // Écouteur pour le changement de points
+        customizeElements.pointsToWinSlider?.addEventListener("input", () => {
+            updateCustomSettings();
+        });
+    }
   
   // Initialize game and tournament
   function init(): void {
@@ -673,6 +812,23 @@ export default function initializeTournamentMode() {
       elements.playerInputs[1].value = "Player 2";
       elements.playerInputs[2].value = "Player 3";
       elements.playerInputs[3].value = "Player 4";
+
+      initCustomization();
+    
+    // Initialiser les valeurs par défaut
+    if (customizeElements.ballColorInput) {
+        customizeElements.ballColorInput.value = customSettings.ballColor;
+    }
+    if (customizeElements.paddleColorInput) {
+        customizeElements.paddleColorInput.value = customSettings.paddleColor;
+    }
+    if (customizeElements.lineColorInput) {
+        customizeElements.lineColorInput.value = customSettings.lineColor;
+    }
+    if (customizeElements.pointsToWinSlider) {
+        customizeElements.pointsToWinSlider.value = customSettings.pointsToWin.toString();
+    }
+    updateCustomSettings();
   }
   
   // Call init to set up the tournament
@@ -690,5 +846,11 @@ export default function initializeTournamentMode() {
       if (gameState.animationFrameId !== null) {
           cancelAnimationFrame(gameState.animationFrameId);
       }
+      customizeElements.customizeButton?.removeEventListener("click", openCustomizeMenu);
+    customizeElements.backButton?.removeEventListener("click", closeCustomizeMenu);
+    customizeElements.ballColorInput?.removeEventListener("input", updateCustomSettings);
+    customizeElements.paddleColorInput?.removeEventListener("input", updateCustomSettings);
+    customizeElements.lineColorInput?.removeEventListener("input", updateCustomSettings);
+    customizeElements.pointsToWinSlider?.removeEventListener("input", updateCustomSettings);
   };
 }
