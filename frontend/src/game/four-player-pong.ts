@@ -228,20 +228,18 @@ const paddles: Paddle[] = [
       case "D":
         playerControls[1].right = true;
         break;
-      case "j":
-      case "J":
+      case "w":
+      case "W":
         playerControls[2].up = true;
         break;
-      case "l":
-      case "L":
+      case "s":
+      case "S":
         playerControls[2].down = true;
         break;
-      case "q":
-      case "Q":
+      case "ArrowUp":
         playerControls[3].up = true;
         break;
-      case "e":
-      case "E":
+      case "ArrowDown":
         playerControls[3].down = true;
         break;
       case " ":
@@ -268,20 +266,18 @@ const paddles: Paddle[] = [
       case "D":
         playerControls[1].right = false;
         break;
-      case "j":
-      case "J":
+      case "w":
+      case "W":
         playerControls[2].up = false;
         break;
-      case "l":
-      case "L":
+      case "s":
+      case "S":
         playerControls[2].down = false;
         break;
-      case "q":
-      case "Q":
+      case "ArrowUp":
         playerControls[3].up = false;
         break;
-      case "e":
-      case "E":
+      case "ArrowDown":
         playerControls[3].down = false;
         break;
     }

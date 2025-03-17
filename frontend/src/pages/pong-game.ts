@@ -549,45 +549,49 @@ export default function initializePongGame(): (() => void) | null {
 
 	function handleKeyDown(e: KeyboardEvent): void {
 		switch (e.key) {
-			case "w":
-				state.controls.player1Up = true;
-				break;
-			case "s":
-				state.controls.player1Down = true;
-				break;
-			case "ArrowUp":
-				if (!state.aiEnabled) {
-					state.controls.player2Up = true;
-				}
-				break;
-			case "ArrowDown":
-				if (!state.aiEnabled) {
-					state.controls.player2Down = true;
-				}
-				break;
+		  case "w":
+		  case "W":
+			state.controls.player1Up = true;
+			break;
+		  case "s":
+		  case "S":
+			state.controls.player1Down = true;
+			break;
+		  case "ArrowUp":
+			if (!state.aiEnabled) {
+			  state.controls.player2Up = true;
+			}
+			break;
+		  case "ArrowDown":
+			if (!state.aiEnabled) {
+			  state.controls.player2Down = true;
+			}
+			break;
 		}
-	}
+	  }
 
-	function handleKeyUp(e: KeyboardEvent): void {
+	  function handleKeyUp(e: KeyboardEvent): void {
 		switch (e.key) {
-			case "w":
-				state.controls.player1Up = false;
-				break;
-			case "s":
-				state.controls.player1Down = false;
-				break;
-			case "ArrowUp":
-				if (!state.aiEnabled) {
-					state.controls.player2Up = false;
-				}
-				break;
-			case "ArrowDown":
-				if (!state.aiEnabled) {
-					state.controls.player2Down = false;
-				}
-				break;
+		  case "w":
+		  case "W":
+			state.controls.player1Up = false;
+			break;
+		  case "s":
+		  case "S":
+			state.controls.player1Down = false;
+			break;
+		  case "ArrowUp":
+			if (!state.aiEnabled) {
+			  state.controls.player2Up = false;
+			}
+			break;
+		  case "ArrowDown":
+			if (!state.aiEnabled) {
+			  state.controls.player2Down = false;
+			}
+			break;
 		}
-	}
+	  }
 
 	function drawCountdown(): void {
 		if (state.countdownActive) {
