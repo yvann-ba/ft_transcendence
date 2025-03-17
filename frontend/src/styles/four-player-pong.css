@@ -1,6 +1,3 @@
-/* ------------------------------ */
-/*       Styles généraux          */
-/* ------------------------------ */
 .main-menu {
     position: absolute;
     display: flex;
@@ -95,17 +92,13 @@
     display: flex;
     justify-content: center;
     color: rgb(250, 250, 250);
-    top: 10vh; /* Changed from 17vh to 10vh to move it higher */
-    font-size: 5vh;
+    top: 10vh;     font-size: 5vh;
     font-weight: 700;
     width: 800px;
     gap: 1.5rem;
   } 
   
-  /* ------------------------------ */
-  /*        Slider personnalisé     */
-  /* ------------------------------ */
-  .pong-custom-slider {
+        .pong-custom-slider {
     -webkit-appearance: none;
        -moz-appearance: none;
             appearance: none;
@@ -117,8 +110,7 @@
     outline: none;
   }
   
-  /* Pseudo-éléments pour Chrome/Safari */
-  .pong-custom-slider::-webkit-slider-thumb {
+    .pong-custom-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
             appearance: none;
     width: 25px;
@@ -159,16 +151,12 @@
     border-radius: 2vh;
   }
   
-  /* Effet au survol */
-  .pong-custom-slider:hover {
+    .pong-custom-slider:hover {
     opacity: 1;
     cursor: pointer;
   }
   
-  /* ------------------------------ */
-  /*         Input color            */
-  /* ------------------------------ */
-  .color-input {
+        .color-input {
     -webkit-appearance: none;
        -moz-appearance: none;
             appearance: none;
@@ -202,10 +190,7 @@
     outline: none;
   }
   
-  /* ------------------------------ */
-  /*      Animation pour paddle     */
-  /* ------------------------------ */
-  @keyframes bump {
+        @keyframes bump {
     0% {
       transform: scale(1);
     }
@@ -217,10 +202,7 @@
     }
   }
   
-  /* ------------------------------ */
-  /*         Controls info          */
-  /* ------------------------------ */
-  .controls-info-floating {
+        .controls-info-floating {
     position: absolute;
     bottom: 20px;
     left: 20px;
@@ -262,10 +244,7 @@
     color: #ccc;
   }
   
-  /* ------------------------------ */
-  /*         Transitions menus      */
-  /* ------------------------------ */
-  #game-menu, #pong-custom-menu {
+        #game-menu, #pong-custom-menu {
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
@@ -276,10 +255,7 @@
     visibility: visible;
   }
   
-  /* ------------------------------ */
-  /*            Media Queries       */
-  /* ------------------------------ */
-  @media (max-width: 1160px) {
+        @media (max-width: 1160px) {
     #game-container {
       width: 100%;
     }

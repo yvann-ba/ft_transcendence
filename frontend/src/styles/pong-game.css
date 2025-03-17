@@ -1,6 +1,3 @@
-/* ------------------------------ */
-/*       Styles généraux          */
-/* ------------------------------ */
 .main-menu {
     position: absolute;
     display: flex;
@@ -102,9 +99,6 @@
     gap: 1.5rem;
 }
 
-/* ------------------------------ */
-/*        Slider personnalisé     */
-/* ------------------------------ */
 .pong-custom-slider {
     -webkit-appearance: none;
        -moz-appearance: none;
@@ -117,7 +111,6 @@
     outline: none;
 }
 
-/* Pseudo-éléments pour Chrome/Safari */
 .pong-custom-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
             appearance: none;
@@ -159,15 +152,11 @@
     border-radius: 2vh;
 }
 
-/* Effet au survol */
 .pong-custom-slider:hover {
     opacity: 1;
     cursor: pointer;
 }
 
-/* ------------------------------ */
-/*         Input color            */
-/* ------------------------------ */
 .color-input {
     -webkit-appearance: none;
        -moz-appearance: none;
@@ -202,9 +191,6 @@
     outline: none;
 }
 
-/* ------------------------------ */
-/*      Animation pour paddle     */
-/* ------------------------------ */
 @keyframes bump {
     0% {
         transform: scale(1);
@@ -225,9 +211,6 @@
     animation: bump 0.2s ease;
 }
 
-/* ------------------------------ */
-/*            Media Queries       */
-/* ------------------------------ */
 @media (max-width: 1160px) {
     #pong-game {
         width: 100%;
@@ -251,9 +234,6 @@
     }
 }
 
-/* ------------------------------ */
-/*         Transitions menus      */
-/* ------------------------------ */
 #pong-menu, #pong-custom-menu {
     opacity: 0;
     visibility: hidden;
@@ -265,7 +245,6 @@
     visibility: visible;
 }
 
-/* Add these styles to your pong-game.css file */
 
 .pong-option-container {
     margin-bottom: 1.5vh;

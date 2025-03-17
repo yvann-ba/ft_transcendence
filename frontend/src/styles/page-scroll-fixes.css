@@ -1,6 +1,3 @@
-Isolated scrolling fix for about and contact pages only
-
-/* These styles apply ONLY to the about page */
 body.about-page {
     overflow-y: auto !important;
     height: auto !important;
@@ -13,7 +10,6 @@ body.about-page #app {
     overflow-y: auto !important;
 }
 
-/* These styles apply ONLY to the contact page */
 body.contact-page {
     overflow-y: auto !important;
     height: auto !important;

@@ -1,4 +1,3 @@
-/* Pong Game Selection Page Styles */
 body, html {
     margin: 0;
     padding: 0;
@@ -19,7 +18,6 @@ body, html {
     justify-content: center;
 }
 
-/* Header Styles */
 .header {
     text-align: center;
     margin-bottom: 4rem;
@@ -55,9 +53,7 @@ body, html {
 .subtitle {
     font-size: 1.2rem;
     opacity: 0.8;
-    margin-top: 1.2rem; /* Slightly increase space below title */
-}
-/* Game Card Styles */
+    margin-top: 1.2rem; }
 .game-cards {
     display: flex;
     justify-content: center;
@@ -198,7 +194,6 @@ body, html {
     font-weight: bold;
 }
 
-/* Navigation */
 .navigation {
     display: flex;
     justify-content: center;
@@ -223,7 +218,6 @@ body, html {
     border-color: white;
 }
 
-/* Animation Keyframes */
 @keyframes fadeInDown {
     from {
         opacity: 0;
@@ -258,7 +252,6 @@ body, html {
     }
 }
 
-/* Responsive Styles */
 @media (max-width: 1024px) {
     .game-cards {
         gap: 1.5rem;

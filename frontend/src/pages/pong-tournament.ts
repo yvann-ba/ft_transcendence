@@ -1,26 +1,16 @@
-// This will be the entry point for the tournament mode
 import "../styles/pong-game.css";
 import "../styles/pong-tournament.css";
-
-// Import the tournament implementation
 export default function initializeTournamentMode() {
-  // All the tournament logic is implemented in this file
-  
-  // Tournament player interface
   interface TournamentPlayer {
       name: string;
       score: number;
   }
-
-  // Tournament match interface
   interface TournamentMatch {
       player1: TournamentPlayer;
       player2: TournamentPlayer;
       winner: TournamentPlayer | null;
       played: boolean;
   }
-
-  // Ball interface (reusing from pong-game.ts)
   interface Ball {
       x: number;
       y: number;
@@ -29,8 +19,6 @@ export default function initializeTournamentMode() {
       radius: number;
       maxSpeed: number;
   }
-
-  // Paddle interface
   interface Paddles {
       width: number;
       height: number;
@@ -38,16 +26,12 @@ export default function initializeTournamentMode() {
       player2Y: number;
       speed: number;
   }
-
-  // Controls interface
   interface Controls {
       player1Up: boolean;
       player1Down: boolean;
       player2Up: boolean;
       player2Down: boolean;
   }
-
-  // Game state interface
   interface GameState {
       ball: Ball;
       paddles: Paddles;
@@ -75,8 +59,6 @@ export default function initializeTournamentMode() {
       console.error("2D context not found");
       return null;
   }
-
-  // UI elements
   const elements = {
       tournamentMenu: document.getElementById("tournament-menu"),
       registrationForm: document.getElementById("registration-form"),
@@ -133,8 +115,6 @@ export default function initializeTournamentMode() {
         lineColor: "#ffffff",
         pointsToWin: 5
     };
-
-  // Tournament state
   const tournamentState = {
       players: [] as TournamentPlayer[],
       matches: [] as TournamentMatch[],
@@ -142,8 +122,6 @@ export default function initializeTournamentMode() {
       tournamentStarted: false,
       tournamentEnded: false
   };
-
-  // Game state (reusing from pong-game.ts but simplified)
   const gameState: GameState = {
       ball: {
           x: canvas.width / 2,
@@ -163,7 +141,7 @@ export default function initializeTournamentMode() {
       scores: {
           player1: 0,
           player2: 0,
-          winning: 5  // Points needed to win a match
+          winning: 5
       },
       controls: {
           player1Up: false,
@@ -177,37 +155,27 @@ export default function initializeTournamentMode() {
       lastTime: performance.now(),
       animationFrameId: null
   };
-
-  // Initialize tournament
   function initTournament(): void {
-      // Get player names from inputs
       const playerNames = elements.playerInputs.map(input => 
           input.value.trim() === "" ? `Player ${elements.playerInputs.indexOf(input) + 1}` : input.value.trim()
       );
-
-      // Create tournament players
       tournamentState.players = playerNames.map(name => ({
           name,
           score: 0
       }));
-
-      // Create tournament matches
       tournamentState.matches = [
-          // Semi-final 1
           {
               player1: tournamentState.players[0],
               player2: tournamentState.players[1],
               winner: null,
               played: false
           },
-          // Semi-final 2
           {
               player1: tournamentState.players[2],
               player2: tournamentState.players[3],
               winner: null,
               played: false
           },
-          // Final - players will be set after semi-finals
           {
               player1: {} as TournamentPlayer,
               player2: {} as TournamentPlayer,
@@ -215,37 +183,26 @@ export default function initializeTournamentMode() {
               played: false
           }
       ];
-
-      // Update bracket display
       updateBracketDisplay();
-
-      // Show tournament bracket
       elements.registrationForm?.classList.add("hidden");
       elements.tournamentBracket?.classList.remove("hidden");
 
       tournamentState.tournamentStarted = true;
       tournamentState.currentMatchIndex = 0;
   }
-
-  // Update the tournament bracket display
   function updateBracketDisplay(): void {
-      // Update semi-final 1
       if (elements.matchElements.match1.player1) {
           elements.matchElements.match1.player1.textContent = tournamentState.matches[0].player1.name;
       }
       if (elements.matchElements.match1.player2) {
           elements.matchElements.match1.player2.textContent = tournamentState.matches[0].player2.name;
       }
-
-      // Update semi-final 2
       if (elements.matchElements.match2.player1) {
           elements.matchElements.match2.player1.textContent = tournamentState.matches[1].player1.name;
       }
       if (elements.matchElements.match2.player2) {
           elements.matchElements.match2.player2.textContent = tournamentState.matches[1].player2.name;
       }
-
-      // Update final
       if (tournamentState.matches[0].winner && tournamentState.matches[1].winner) {
           if (elements.matchElements.match3.player1) {
               elements.matchElements.match3.player1.textContent = tournamentState.matches[0].winner.name;
@@ -254,12 +211,9 @@ export default function initializeTournamentMode() {
               elements.matchElements.match3.player2.textContent = tournamentState.matches[1].winner.name;
           }
       }
-
-      // Add winner class to won matches
       for (let i = 0; i < tournamentState.matches.length; i++) {
           const match = tournamentState.matches[i];
           if (match.played && match.winner) {
-              // Match 1
               if (i === 0) {
                   if (match.winner === match.player1) {
                       elements.matchElements.match1.player1?.classList.add("winner");
@@ -269,7 +223,6 @@ export default function initializeTournamentMode() {
                       elements.matchElements.match1.player1?.classList.remove("winner");
                   }
               }
-              // Match 2
               else if (i === 1) {
                   if (match.winner === match.player1) {
                       elements.matchElements.match2.player1?.classList.add("winner");
@@ -279,7 +232,6 @@ export default function initializeTournamentMode() {
                       elements.matchElements.match2.player1?.classList.remove("winner");
                   }
               }
-              // Final
               else if (i === 2) {
                   if (match.winner === match.player1) {
                       elements.matchElements.match3.player1?.classList.add("winner");
@@ -291,8 +243,6 @@ export default function initializeTournamentMode() {
               }
           }
       }
-
-      // Highlight current match
       const allMatchElements = [
           elements.matchElements.match1.element,
           elements.matchElements.match2.element,
@@ -307,8 +257,6 @@ export default function initializeTournamentMode() {
           allMatchElements[tournamentState.currentMatchIndex]?.classList.add("current-match");
       }
   }
-
-  // Play next match
   function playNextMatch(): void {
       if (tournamentState.currentMatchIndex >= tournamentState.matches.length) {
           endTournament();
@@ -316,22 +264,14 @@ export default function initializeTournamentMode() {
       }
 
       const currentMatch = tournamentState.matches[tournamentState.currentMatchIndex];
-      
-      // If this is the final, set up the players
       if (tournamentState.currentMatchIndex === 2) {
           currentMatch.player1 = tournamentState.matches[0].winner!;
           currentMatch.player2 = tournamentState.matches[1].winner!;
           updateBracketDisplay();
       }
-
-      // Set up the game
       gameState.scores.player1 = 0;
       gameState.scores.player2 = 0;
-      
-      // Hide tournament menu
       elements.tournamentMenu?.classList.add("hidden");
-      
-      // Update scoreboard with player names
       if (elements.score1) {
           elements.score1.textContent = "0";
       }
@@ -347,8 +287,6 @@ export default function initializeTournamentMode() {
           }
           elements.currentMatch.textContent = `${matchName}: ${currentMatch.player1.name} vs ${currentMatch.player2.name}`;
       }
-
-      // Start countdown
       startCountdown();
   }
 
@@ -382,10 +320,7 @@ export default function initializeTournamentMode() {
     }
     
     function applyCustomSettings(): void {
-    // Les couleurs seront appliquées dans les fonctions de dessin
     }
-
-  // Start countdown before match
   function startCountdown(): void {
       gameState.countdown = 3;
       gameState.countdownActive = true;
@@ -416,8 +351,6 @@ export default function initializeTournamentMode() {
           }
       }, 1000);
   }
-
-  // Start the current match
   function startMatch(): void {
       resetBall();
       gameState.running = true;
@@ -429,35 +362,22 @@ export default function initializeTournamentMode() {
       
       gameState.animationFrameId = requestAnimationFrame(gameLoop);
   }
-
-  // End the current match
   function endMatch(winner: number): void {
       gameState.running = false;
       
       const currentMatch = tournamentState.matches[tournamentState.currentMatchIndex];
       currentMatch.played = true;
-      
-      // Set the winner
       if (winner === 1) {
           currentMatch.winner = currentMatch.player1;
       } else {
           currentMatch.winner = currentMatch.player2;
       }
-      
-      // Move to next match
       tournamentState.currentMatchIndex++;
-      
-      // Show tournament menu
       elements.tournamentMenu?.classList.remove("hidden");
-      
-      // Update bracket display
       updateBracketDisplay();
-      
-      // Check if tournament is over
       if (tournamentState.currentMatchIndex >= tournamentState.matches.length) {
           endTournament();
       } else {
-          // Enable play next match button
           if (elements.playNextMatchButton) {
               elements.playNextMatchButton.disabled = false;
           }
@@ -465,73 +385,49 @@ export default function initializeTournamentMode() {
   }
 
     function backToGameModes(): void {
-        // Rediriger vers la page de sélection des jeux
         window.location.href = "/pong-selection";
     }
-
-
-    // End the tournament
     function endTournament(): void {
         tournamentState.tournamentEnded = true;
-        
-        // Show winner announcement
         elements.tournamentBracket?.classList.add("hidden");
         elements.winnerAnnouncement?.classList.remove("hidden");
-        
-        // Set champion name
         if (elements.championName) {
             const finalMatch = tournamentState.matches[2];
             elements.championName.textContent = finalMatch.winner?.name || "Unknown";
         }
     }
-
-  // Reset the tournament
   function resetTournament(): void {
       tournamentState.players = [];
       tournamentState.matches = [];
       tournamentState.currentMatchIndex = 0;
       tournamentState.tournamentStarted = false;
       tournamentState.tournamentEnded = false;
-      
-      // Reset input fields
       elements.playerInputs.forEach(input => {
           input.value = "";
       });
-      
-      // Remove winner classes
       elements.matchElements.match1.player1?.classList.remove("winner");
       elements.matchElements.match1.player2?.classList.remove("winner");
       elements.matchElements.match2.player1?.classList.remove("winner");
       elements.matchElements.match2.player2?.classList.remove("winner");
       elements.matchElements.match3.player1?.classList.remove("winner");
       elements.matchElements.match3.player2?.classList.remove("winner");
-      
-      // Show registration form
       elements.winnerAnnouncement?.classList.add("hidden");
       elements.tournamentBracket?.classList.add("hidden");
       elements.registrationForm?.classList.remove("hidden");
   }
-
-  // Game loop
   function gameLoop(currentTime: number): void {
       if (!ctx || !canvas) return;
       
       const deltaTime = (currentTime - gameState.lastTime) / 1000;
       gameState.lastTime = currentTime;
-      
-      // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       ctx.fillStyle = customSettings.lineColor;
       ctx.fillRect(canvas.width / 2 - 1, 0, 2, canvas.height);
-      
-      // Update game
       if (gameState.running) {
           updatePaddles(deltaTime);
           updateBall(deltaTime);
           checkCollisions();
-          
-          // Check for win condition
           if (gameState.scores.player1 >= gameState.scores.winning) {
               endMatch(1);
               return;
@@ -540,28 +436,27 @@ export default function initializeTournamentMode() {
               return;
           }
       }
-      
-      // Draw game elements
       drawPaddles();
       drawBall();
-      
-      // Request next frame
       gameState.animationFrameId = requestAnimationFrame(gameLoop);
   }
   
-  // Update paddles based on controls
+    function sliderAnimation(event) {
+        const slider = event.target;
+        
+        const min = parseFloat(slider.min);
+        const max = parseFloat(slider.max);
+        const value = 5 + ((parseFloat(slider.value) - min) / (max - min)) * 90;
+        slider.style.setProperty('--slider-track-bg', `linear-gradient(to right, #BB70AD 0%, #BB70AD ${value}%, #ffffff ${value}%)`);
+    }
   function updatePaddles(deltaTime: number): void {
       const paddleSpeed = gameState.paddles.speed * deltaTime;
-      
-      // Player 1 controls (W/S keys)
       if (gameState.controls.player1Up && gameState.paddles.player1Y > 0) {
           gameState.paddles.player1Y -= paddleSpeed;
       }
       if (gameState.controls.player1Down && gameState.paddles.player1Y < canvas.height - gameState.paddles.height) {
           gameState.paddles.player1Y += paddleSpeed;
       }
-      
-      // Player 2 controls (Arrow keys)
       if (gameState.controls.player2Up && gameState.paddles.player2Y > 0) {
           gameState.paddles.player2Y -= paddleSpeed;
       }
@@ -569,55 +464,34 @@ export default function initializeTournamentMode() {
           gameState.paddles.player2Y += paddleSpeed;
       }
   }
-  
-  // Update ball position
   function updateBall(deltaTime: number): void {
       gameState.ball.x += gameState.ball.speedX * deltaTime;
       gameState.ball.y += gameState.ball.speedY * deltaTime;
   }
-  
-  // Check for collisions
   function checkCollisions(): void {
-    // Ball radius
     const radius = gameState.ball.radius;
-    
-    // Wall collisions (top/bottom)
     if (gameState.ball.y - radius <= 0) {
-        gameState.ball.y = radius; // Ensure the ball doesn't get stuck
+        gameState.ball.y = radius;
         gameState.ball.speedY = Math.abs(gameState.ball.speedY);
     } else if (gameState.ball.y + radius >= canvas.height) {
-        gameState.ball.y = canvas.height - radius; // Ensure the ball doesn't get stuck
+        gameState.ball.y = canvas.height - radius;
         gameState.ball.speedY = -Math.abs(gameState.ball.speedY);
     }
-    
-    // Paddle collisions with improved detection
     const paddleWidth = gameState.paddles.width;
     const paddleHeight = gameState.paddles.height;
-    
-    // Left paddle (Player 1)
-    if (gameState.ball.speedX < 0 && // Ball is moving left
+    if (gameState.ball.speedX < 0 &&
         gameState.ball.x - radius <= paddleWidth && 
-        gameState.ball.x + radius >= 0 && // Added to prevent sticking
+        gameState.ball.x + radius >= 0 &&
         gameState.ball.y >= gameState.paddles.player1Y && 
         gameState.ball.y <= gameState.paddles.player1Y + paddleHeight) {
-        
-        // Push ball outside paddle to prevent sticking
         gameState.ball.x = paddleWidth + radius;
-        
-        // Reflect speed
         gameState.ball.speedX = Math.abs(gameState.ball.speedX);
-        
-        // Add angle based on where ball hits paddle
         const hitPosition = (gameState.ball.y - gameState.paddles.player1Y) / paddleHeight;
         gameState.ball.speedY += (hitPosition - 0.5) * gameState.ball.speedX * 1.5;
-        
-        // Limit max vertical speed
         const maxVerticalSpeed = gameState.ball.maxSpeed * 0.8;
         if (Math.abs(gameState.ball.speedY) > maxVerticalSpeed) {
             gameState.ball.speedY = Math.sign(gameState.ball.speedY) * maxVerticalSpeed;
         }
-        
-        // Slightly increase speed to make game more challenging
         const speedMultiplier = 1.05;
         const currentSpeed = Math.sqrt(gameState.ball.speedX * gameState.ball.speedX + gameState.ball.speedY * gameState.ball.speedY);
         const newSpeed = Math.min(currentSpeed * speedMultiplier, gameState.ball.maxSpeed);
@@ -625,31 +499,19 @@ export default function initializeTournamentMode() {
         gameState.ball.speedX = Math.cos(angle) * newSpeed;
         gameState.ball.speedY = Math.sin(angle) * newSpeed;
     }
-    
-    // Right paddle (Player 2)
-    if (gameState.ball.speedX > 0 && // Ball is moving right
+    if (gameState.ball.speedX > 0 &&
         gameState.ball.x + radius >= canvas.width - paddleWidth && 
-        gameState.ball.x - radius <= canvas.width && // Added to prevent sticking
+        gameState.ball.x - radius <= canvas.width &&
         gameState.ball.y >= gameState.paddles.player2Y && 
         gameState.ball.y <= gameState.paddles.player2Y + paddleHeight) {
-        
-        // Push ball outside paddle to prevent sticking
         gameState.ball.x = canvas.width - paddleWidth - radius;
-        
-        // Reflect speed
         gameState.ball.speedX = -Math.abs(gameState.ball.speedX);
-        
-        // Add angle based on where ball hits paddle
         const hitPosition = (gameState.ball.y - gameState.paddles.player2Y) / paddleHeight;
         gameState.ball.speedY += (hitPosition - 0.5) * -gameState.ball.speedX * 1.5;
-        
-        // Limit max vertical speed
         const maxVerticalSpeed = gameState.ball.maxSpeed * 0.8;
         if (Math.abs(gameState.ball.speedY) > maxVerticalSpeed) {
             gameState.ball.speedY = Math.sign(gameState.ball.speedY) * maxVerticalSpeed;
         }
-        
-        // Slightly increase speed to make game more challenging
         const speedMultiplier = 1.05;
         const currentSpeed = Math.sqrt(gameState.ball.speedX * gameState.ball.speedX + gameState.ball.speedY * gameState.ball.speedY);
         const newSpeed = Math.min(currentSpeed * speedMultiplier, gameState.ball.maxSpeed);
@@ -657,44 +519,26 @@ export default function initializeTournamentMode() {
         gameState.ball.speedX = Math.cos(angle) * newSpeed;
         gameState.ball.speedY = Math.sin(angle) * newSpeed;
     }
-    
-    // Score (ball goes out of bounds on left/right)
     if (gameState.ball.x - radius <= 0) {
-        // Player 2 scores
         gameState.scores.player2++;
         updateScoreboard();
         resetBall();
     } else if (gameState.ball.x + radius >= canvas.width) {
-        // Player 1 scores
         gameState.scores.player1++;
         updateScoreboard();
         resetBall();
     }
 }
-  
-    // Remplacer la fonction resetBall dans pong-tournament.ts
 
     function resetBall(): void {
-        // Position au centre
         gameState.ball.x = canvas.width / 2;
         gameState.ball.y = canvas.height / 2;
-        
-        // Direction aléatoire mais plus contrôlée
-        // Angle entre -45° et 45° (±π/4)
         const maxAngle = Math.PI / 4;
         const angle = (Math.random() * maxAngle * 2 - maxAngle);
-        
-        // Direction horizontale aléatoire (gauche ou droite)
         const direction = Math.random() > 0.5 ? 1 : -1;
-        
-        // Vitesse initiale constante
         const initialSpeed = 300;
-        
-        // Calcul des composantes de vitesse
         gameState.ball.speedX = direction * initialSpeed * Math.cos(angle);
         gameState.ball.speedY = initialSpeed * Math.sin(angle);
-        
-        // Ajout d'une petite pause avant de repartir (optionnel)
         if (gameState.running) {
             gameState.running = false;
             setTimeout(() => {
@@ -707,12 +551,8 @@ export default function initializeTournamentMode() {
   
     function drawPaddles(): void {
         if (!ctx) return;
-        
-        // Left paddle (Player 1)
         ctx.fillStyle = customSettings.paddleColor;
         ctx.fillRect(0, gameState.paddles.player1Y, gameState.paddles.width, gameState.paddles.height);
-        
-        // Right paddle (Player 2)
         ctx.fillRect(
             canvas.width - gameState.paddles.width,
             gameState.paddles.player2Y,
@@ -729,8 +569,6 @@ export default function initializeTournamentMode() {
     ctx.fillStyle = customSettings.ballColor;
     ctx.fill();
 }
-  
-  // Update scoreboard
   function updateScoreboard(): void {
       if (elements.score1) {
           elements.score1.textContent = gameState.scores.player1.toString();
@@ -739,8 +577,6 @@ export default function initializeTournamentMode() {
           elements.score2.textContent = gameState.scores.player2.toString();
       }
   }
-  
-  // Event handlers
   function handleKeyDown(e: KeyboardEvent): void {
       switch (e.key) {
           case "w":
@@ -782,8 +618,6 @@ export default function initializeTournamentMode() {
     function initCustomization(): void {
         customizeElements.customizeButton?.addEventListener("click", openCustomizeMenu);
         customizeElements.backButton?.addEventListener("click", closeCustomizeMenu);
-        
-        // Écouteurs pour les changements de couleur
         customizeElements.ballColorInput?.addEventListener("input", () => {
             updateCustomSettings();
         });
@@ -795,25 +629,18 @@ export default function initializeTournamentMode() {
         customizeElements.lineColorInput?.addEventListener("input", () => {
             updateCustomSettings();
         });
-        
-        // Écouteur pour le changement de points
         customizeElements.pointsToWinSlider?.addEventListener("input", () => {
             updateCustomSettings();
+            sliderAnimation(event);
+
         });
     }
-  
-  // Initialize game and tournament
   function init(): void {
-      // Add event listeners
       document.addEventListener("keydown", handleKeyDown);
       document.addEventListener("keyup", handleKeyUp);
-      
-      // Button event listeners
       elements.startTournamentButton?.addEventListener("click", initTournament);
       elements.playNextMatchButton?.addEventListener("click", playNextMatch);
       elements.newTournamentButton?.addEventListener("click", resetTournament);
-      
-      // Set default usernames
       elements.playerInputs[0].value = "Player 1";
       elements.playerInputs[1].value = "Player 2";
       elements.playerInputs[2].value = "Player 3";
@@ -821,8 +648,6 @@ export default function initializeTournamentMode() {
 
       initCustomization();
       document.getElementById("back-to-modes-button")?.addEventListener("click", backToGameModes);
-
-    // Initialiser les valeurs par défaut
     if (customizeElements.ballColorInput) {
         customizeElements.ballColorInput.value = customSettings.ballColor;
     }
@@ -837,11 +662,7 @@ export default function initializeTournamentMode() {
     }
     updateCustomSettings();
   }
-  
-    // Call init to set up the tournament
     init();
-    
-    // Cleanup function for router
     return function cleanup(): void {
         document.removeEventListener("keydown", handleKeyDown);
         document.removeEventListener("keyup", handleKeyUp);

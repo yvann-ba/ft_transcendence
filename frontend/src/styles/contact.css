@@ -1,4 +1,3 @@
-/* Scrolling styles specific to contact page only */
 body.contact-page .contact-container {
     padding: 2rem;
     max-width: 1200px;
@@ -31,7 +30,6 @@ body.contact-page .contact-container {
     font-weight: 300;
 }
 
-/* Team container styles */
 .team-container {
     margin-bottom: 6rem;
     overflow: visible;
@@ -45,14 +43,12 @@ body.contact-page .contact-container {
     line-height: 1.6;
 }
 
-/* Team members grid */
 .team-members {
     display: flex;
     flex-direction: column;
     gap: 6rem;
 }
 
-/* Individual team member styles */
 .team-member {
     display: flex;
     gap: 2.5rem;
@@ -67,7 +63,6 @@ body.contact-page .contact-container {
     transform: translateY(0);
 }
 
-/* Alternate layout for even-numbered team members */
 .team-member:nth-child(even) {
     flex-direction: row-reverse;
     text-align: right;
@@ -81,14 +76,12 @@ body.contact-page .contact-container {
     justify-content: flex-end;
 }
 
-/* Animation delays for staggered appearance */
 .team-member:nth-child(1) { transition-delay: 0.1s; }
 .team-member:nth-child(2) { transition-delay: 0.3s; }
 .team-member:nth-child(3) { transition-delay: 0.5s; }
 .team-member:nth-child(4) { transition-delay: 0.7s; }
 .team-member:nth-child(5) { transition-delay: 0.9s; }
 
-/* Photo container with glow effect */
 .member-photo-container {
     position: relative;
     width: 250px;
@@ -135,7 +128,6 @@ body.contact-page .contact-container {
     opacity: 1;
 }
 
-/* Placeholder for member photos */
 .photo-placeholder {
     background-color: rgba(30, 30, 30, 0.5);
     display: flex;
@@ -169,7 +161,6 @@ body.contact-page .contact-container {
     opacity: 0;
 }
 
-/* Member info styles */
 .member-info {
     flex: 1;
 }
@@ -208,7 +199,6 @@ body.contact-page .contact-container {
     opacity: 0.8;
 }
 
-/* Keyword tags */
 .member-keywords {
     display: flex;
     flex-wrap: wrap;
@@ -237,7 +227,6 @@ body.contact-page .contact-container {
     opacity: 0.9;
 }
 
-/* Social links */
 .social-links {
     display: flex;
     gap: 1rem;
@@ -281,7 +270,6 @@ body.contact-page .contact-container {
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Collaboration timeline section */
 .collaboration-section {
     margin-bottom: 6rem;
     opacity: 0;
@@ -399,13 +387,11 @@ body.contact-page .contact-container {
     font-size: 1rem;
 }
 
-/* Animation delays for timeline items */
 .timeline-item:nth-child(1) { transition-delay: 0.1s; }
 .timeline-item:nth-child(2) { transition-delay: 0.3s; }
 .timeline-item:nth-child(3) { transition-delay: 0.5s; }
 .timeline-item:nth-child(4) { transition-delay: 0.7s; }
 
-/* Contact form section */
 .contact-form-section {
     max-width: 800px;
     margin: 0 auto 6rem;
@@ -493,7 +479,6 @@ body.contact-page .contact-container {
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Form submission animation */
 @keyframes formSubmitPulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.05); }
@@ -523,7 +508,6 @@ body.contact-page .contact-container {
     display: none;
 }
 
-/* Responsive adjustments */
 @media (max-width: 900px) {
     .team-member,
     .team-member:nth-child(even) {

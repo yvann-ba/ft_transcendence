@@ -18,7 +18,7 @@ const routes: { [key: string]: string } = {
 };
 
 const isPublicRoute = (path: string): boolean => {
-  if (path === "/" || path === "/home")
+  if (path === "/" || path === "/home" || path === "/about"|| path === "/contact")
     return true;
   return (false)
 }
@@ -50,7 +50,6 @@ export const navigate = async (): Promise<void> => {
     const urlParams = new URLSearchParams(window.location.search);
     const aiMode = urlParams.get('ai');
     if (aiMode === "true") {
-      // Store AI mode preference to be used when initializing the game
       localStorage.setItem('pongAiMode', 'true');
     } else {
       localStorage.removeItem('pongAiMode');
