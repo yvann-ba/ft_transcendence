@@ -126,7 +126,7 @@ export default function initializeTournamentMode() {
         pointsToWinSlider: document.getElementById("points-to-win") as HTMLInputElement,
         pointsDisplay: document.getElementById("points-display")
     };
-    
+
     const customSettings = {
         ballColor: "#ffffff",
         paddleColor: "#ffffff",
@@ -464,20 +464,26 @@ export default function initializeTournamentMode() {
       }
   }
 
-  // End the tournament
-  function endTournament(): void {
-      tournamentState.tournamentEnded = true;
-      
-      // Show winner announcement
-      elements.tournamentBracket?.classList.add("hidden");
-      elements.winnerAnnouncement?.classList.remove("hidden");
-      
-      // Set champion name
-      if (elements.championName) {
-          const finalMatch = tournamentState.matches[2];
-          elements.championName.textContent = finalMatch.winner?.name || "Unknown";
-      }
-  }
+    function backToGameModes(): void {
+        // Rediriger vers la page de sélection des jeux
+        window.location.href = "/pong-selection";
+    }
+
+
+    // End the tournament
+    function endTournament(): void {
+        tournamentState.tournamentEnded = true;
+        
+        // Show winner announcement
+        elements.tournamentBracket?.classList.add("hidden");
+        elements.winnerAnnouncement?.classList.remove("hidden");
+        
+        // Set champion name
+        if (elements.championName) {
+            const finalMatch = tournamentState.matches[2];
+            elements.championName.textContent = finalMatch.winner?.name || "Unknown";
+        }
+    }
 
   // Reset the tournament
   function resetTournament(): void {
@@ -814,7 +820,8 @@ export default function initializeTournamentMode() {
       elements.playerInputs[3].value = "Player 4";
 
       initCustomization();
-    
+      document.getElementById("back-to-modes-button")?.addEventListener("click", backToGameModes);
+
     // Initialiser les valeurs par défaut
     if (customizeElements.ballColorInput) {
         customizeElements.ballColorInput.value = customSettings.ballColor;
@@ -831,26 +838,27 @@ export default function initializeTournamentMode() {
     updateCustomSettings();
   }
   
-  // Call init to set up the tournament
-  init();
-  
-  // Cleanup function for router
-  return function cleanup(): void {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keyup", handleKeyUp);
-      
-      elements.startTournamentButton?.removeEventListener("click", initTournament);
-      elements.playNextMatchButton?.removeEventListener("click", playNextMatch);
-      elements.newTournamentButton?.removeEventListener("click", resetTournament);
-      
-      if (gameState.animationFrameId !== null) {
-          cancelAnimationFrame(gameState.animationFrameId);
-      }
-      customizeElements.customizeButton?.removeEventListener("click", openCustomizeMenu);
-    customizeElements.backButton?.removeEventListener("click", closeCustomizeMenu);
-    customizeElements.ballColorInput?.removeEventListener("input", updateCustomSettings);
-    customizeElements.paddleColorInput?.removeEventListener("input", updateCustomSettings);
-    customizeElements.lineColorInput?.removeEventListener("input", updateCustomSettings);
-    customizeElements.pointsToWinSlider?.removeEventListener("input", updateCustomSettings);
-  };
+    // Call init to set up the tournament
+    init();
+    
+    // Cleanup function for router
+    return function cleanup(): void {
+        document.removeEventListener("keydown", handleKeyDown);
+        document.removeEventListener("keyup", handleKeyUp);
+        
+        elements.startTournamentButton?.removeEventListener("click", initTournament);
+        elements.playNextMatchButton?.removeEventListener("click", playNextMatch);
+        elements.newTournamentButton?.removeEventListener("click", resetTournament);
+        document.getElementById("back-to-modes-button")?.removeEventListener("click", backToGameModes);
+
+        if (gameState.animationFrameId !== null) {
+            cancelAnimationFrame(gameState.animationFrameId);
+        }
+        customizeElements.customizeButton?.removeEventListener("click", openCustomizeMenu);
+        customizeElements.backButton?.removeEventListener("click", closeCustomizeMenu);
+        customizeElements.ballColorInput?.removeEventListener("input", updateCustomSettings);
+        customizeElements.paddleColorInput?.removeEventListener("input", updateCustomSettings);
+        customizeElements.lineColorInput?.removeEventListener("input", updateCustomSettings);
+        customizeElements.pointsToWinSlider?.removeEventListener("input", updateCustomSettings);
+    };
 }
