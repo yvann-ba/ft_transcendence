@@ -1,114 +1,110 @@
-	<main>
-		<div class="profile-container">
-			<h1 class="page-title">Player Profile</h1>
-			<!-- Tab Navigation -->
-			<ul class="tabs">
-				<li class="tab-link active" data-tab="tab-profile">Profile Info</li>
-				<li class="tab-link" data-tab="tab-stats">Statistics</li>
-				<li class="tab-link" data-tab="tab-history">History</li>
-			</ul>
+<main>
+    <div class="profile-container">
+        <h1 class="page-title" data-i18n="profile.title">Player Profile</h1>
+        <!-- Tab Navigation -->
+        <ul class="tabs">
+            <li class="tab-link active" data-tab="tab-profile" data-i18n="profile.tabs.info">Profile Info</li>
+            <li class="tab-link" data-tab="tab-stats" data-i18n="profile.tabs.stats">Statistics</li>
+            <li class="tab-link" data-tab="tab-history" data-i18n="profile.tabs.history">History</li>
+        </ul>
 
-			<!-- Tab Content -->
-			<div id="tab-profile" class="tab-content active">
-				<div class="profile-info">
-					<img src="../assets/images/avatar.jpg" alt="Player Avatar" class="avatar">
-					<h2 class="username">tsoloher</h2>
-					<p class="name">Name: Thomas Soloherison</p>
-					<button class="btn btn-add-friend">log in</button>
-				</div>
-			</div>
-			<div id="tab-container"></div>
-			<div id="tab-stats" class="tab-content">
-				<ul class="stats-list">
-					<!-- <li>Games Played: 150</li>
-					<li>Wins: 85</li>
-					<li>Losses: 65</li>
-					<li>Win/Loss Ratio: 1.31</li> -->
-					<li class="win-loss-chart-container">
-						<div class="chart-container">
-						  <svg class="donut-chart" viewBox="0 0 100 100">
-							<circle cx="50" cy="50" r="45" fill="transparent" stroke="#444" stroke-width="10" />
-							<circle id="win-segment" cx="50" cy="50" r="45" fill="transparent" 
-							  stroke="#BB70AD" stroke-width="10" 
-							  stroke-dasharray="0 283" 
-							  stroke-dashoffset="0"
-							  transform="rotate(-90 50 50)" />
-							<circle id="loss-segment" cx="50" cy="50" r="45" fill="transparent" 
-							  stroke="white" stroke-width="10" 
-							  stroke-dasharray="0 283" 
-							  stroke-dashoffset="0"
-							  transform="rotate(-90 50 50)" />
-						  </svg>
-						  
-						  <div class="chart-center">
-							<div class="ratio-text">1.31</div>
-							<div class="percentage-text" id="win-percentage">56.7% Wins</div>
-						  </div>
-						  
-						  <div class="chart-tooltip" id="chart-tooltip"></div>
-						</div>
-						
-						<div class="legend">
-						  <div class="legend-item" id="win-legend">
-							<span class="legend-color win-color"></span>
-							<span>85 Wins</span>
-						  </div>
-						  <div class="legend-item" id="loss-legend">
-							<span class="legend-color loss-color"></span>
-							<span>65 Losses</span>
-						  </div>
-						</div>
-					  </li>
-				</ul>
-			</div>
-			
-			<div id="tab-history" class="tab-content">
-				<table class="score-table">
-					<thead>
-						<tr>
-							<th>Date</th>
-							<th>Opponent</th>
-							<th>Result</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>2025-01-01</td>
-							<td>tsoloher</td>
-							<td>win</td>
-						</tr>
-						<tr>
-							<td>2025-01-22</td>
-							<td>roguigna</td>
-							<td>win</td>
-						</tr>
-						<tr>
-							<td>2025-01-02</td>
-							<td>ybarbot</td>
-							<td>Loss</td>
-						</tr>
-						<tr>
-							<td>2025-01-02</td>
-							<td>lauger</td>
-							<td>Loss</td>
-						</tr>
-						<tr>
-							<td>2025-01-02</td>
-							<td>lslater</td>
-							<td>Loss</td>
-						</tr>
-						<tr>
-							<td>2025-01-02</td>
-							<td>tsadouk</td>
-							<td>win</td>
-						</tr>
-						<tr>
-							<td>2025-01-02</td>
-							<td>edbernar</td>
-							<td>Loss</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</main>
+        <!-- Tab Content -->
+        <div id="tab-profile" class="tab-content active">
+            <div class="profile-info">
+                <img src="../assets/images/avatar.jpg" alt="Player Avatar" class="avatar">
+                <h2 class="username">tsoloher</h2>
+                <p class="name">Name: Thomas Soloherison</p>
+                <button class="btn btn-add-friend" data-i18n="profile.login">log in</button>
+            </div>
+        </div>
+        <div id="tab-container"></div>
+        <div id="tab-stats" class="tab-content">
+            <ul class="stats-list">
+                <li class="win-loss-chart-container">
+                    <div class="chart-container">
+                      <svg class="donut-chart" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="transparent" stroke="#444" stroke-width="10" />
+                        <circle id="win-segment" cx="50" cy="50" r="45" fill="transparent" 
+                          stroke="#BB70AD" stroke-width="10" 
+                          stroke-dasharray="0 283" 
+                          stroke-dashoffset="0"
+                          transform="rotate(-90 50 50)" />
+                        <circle id="loss-segment" cx="50" cy="50" r="45" fill="transparent" 
+                          stroke="white" stroke-width="10" 
+                          stroke-dasharray="0 283" 
+                          stroke-dashoffset="0"
+                          transform="rotate(-90 50 50)" />
+                      </svg>
+                      
+                      <div class="chart-center">
+                        <div class="ratio-text">1.31</div>
+                        <div class="percentage-text" id="win-percentage">56.7% Wins</div>
+                      </div>
+                      
+                      <div class="chart-tooltip" id="chart-tooltip"></div>
+                    </div>
+                    
+                    <div class="legend">
+                      <div class="legend-item" id="win-legend">
+                        <span class="legend-color win-color"></span>
+                        <span>85 Wins</span>
+                      </div>
+                      <div class="legend-item" id="loss-legend">
+                        <span class="legend-color loss-color"></span>
+                        <span>65 Losses</span>
+                      </div>
+                    </div>
+                  </li>
+            </ul>
+        </div>
+        
+        <div id="tab-history" class="tab-content">
+            <table class="score-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2025-01-01</td>
+                        <td>tsoloher</td>
+                        <td>win</td>
+                    </tr>
+                    <tr>
+                        <td>2025-01-22</td>
+                        <td>roguigna</td>
+                        <td>win</td>
+                    </tr>
+                    <tr>
+                        <td>2025-01-02</td>
+                        <td>ybarbot</td>
+                        <td>Loss</td>
+                    </tr>
+                    <tr>
+                        <td>2025-01-02</td>
+                        <td>lauger</td>
+                        <td>Loss</td>
+                    </tr>
+                    <tr>
+                        <td>2025-01-02</td>
+                        <td>lslater</td>
+                        <td>Loss</td>
+                    </tr>
+                    <tr>
+                        <td>2025-01-02</td>
+                        <td>tsadouk</td>
+                        <td>win</td>
+                    </tr>
+                    <tr>
+                        <td>2025-01-02</td>
+                        <td>edbernar</td>
+                        <td>Loss</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>

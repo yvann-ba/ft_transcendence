@@ -18,11 +18,11 @@
         
         <div id="pong-menu">
             <h1>PONG</h1>
-            <button id="play-button" class="pong-button">Play</button>
+            <button id="play-button" class="pong-button" data-i18n="game.play">Play</button>
             
             <!-- Only show AI difficulty in AI mode -->
             <div id="difficulty-selector-container" class="hidden">
-                <h1>AI Difficulty</h1>
+                <h1 data-i18n="game.ai_difficulty">AI Difficulty</h1>
                 <select id="ai-difficulty" class="pong-select">
                     <option value="easy">Easy</option>
                     <option value="medium" selected>Medium</option>
@@ -30,31 +30,31 @@
                 </select>
             </div>
             
-            <button id="custom-button" class="pong-button">Customize</button>
+            <button id="custom-button" class="pong-button" data-i18n="game.customize">Customize</button>
         </div>
         
         <div id="pong-custom-menu" class="hidden">
             <div id="custom-menu-content">
-                <h1>Customize</h1>
+                <h1 data-i18n="game.customize">Customize</h1>
                 <div id="custom-settings">
                     <div>
-                        <label for="pong-ground-color">Ground Color</label>
+                        <label for="pong-ground-color" data-i18n="game.colors.ground">Ground Color</label>
                         <input type="color" value="#ffffff" id="pong-ground-color" class="color-input">
                     </div>
                     <div>
-                        <label for="pong-ball-color">Ball Color</label>
+                        <label for="pong-ball-color" data-i18n="game.colors.ball">Ball Color</label>
                         <input type="color" value="#ffffff" id="pong-ball-color" class="color-input">
                     </div>
                     <div>
-                        <label for="pong-paddle-color">Paddle Color</label>
+                        <label for="pong-paddle-color" data-i18n="game.colors.paddle">Paddle Color</label>
                         <input type="color" value="#ffffff" id="pong-paddle-color" class="color-input">
                     </div>
                 </div>
                 <div>
-                    <p id="pong-winning-score">Winning score: 3</p>
+                    <p id="pong-winning-score" data-i18n="game.winning_score">Winning score: 3</p>
                     <input type="range" min="1" max="10" value="3" class="pong-custom-slider" id="winning-score-slider">
                 </div>
-                <button id="custom-back-button" class="pong-button">Back</button>
+                <button id="custom-back-button" class="pong-button" data-i18n="game.back">Back</button>
             </div>
         </div>
     </div>
