@@ -16,7 +16,7 @@ const routes: { [key: string]: string } = {
   "404": "404",
 };
 const isPublicRoute = (path: string): boolean => {
-  if (path === "/" || path === "/home")
+  if (path === "/" || path === "/home" || path === "/about"|| path === "/contact")
     return true;
   return (false)
 }
