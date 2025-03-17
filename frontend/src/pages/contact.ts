@@ -1,14 +1,8 @@
 import "../styles/contact.css";
 
 export default function initializeContactPage(): () => void {
-    // Add class to body for specific styling
     document.body.classList.add('contact-page');
-    
-    // Fix the scroll issue ONLY for contact page
-    // These styles will be removed when navigating away
     const appContainer = document.getElementById('app');
-    
-    // Store original styles to restore later
     const originalBodyOverflow = document.body.style.overflowY;
     const originalBodyHeight = document.body.style.height;
     let originalAppOverflow = '';
@@ -17,17 +11,11 @@ export default function initializeContactPage(): () => void {
     if (appContainer) {
         originalAppOverflow = appContainer.style.overflowY;
         originalAppHeight = appContainer.style.height;
-        
-        // Apply scroll fixes
         appContainer.style.overflowY = 'auto';
         appContainer.style.height = 'auto';
     }
-    
-    // Apply scroll styles to body
     document.body.style.overflowY = 'auto';
     document.body.style.height = 'auto';
-    
-    // Animation for header elements
     const header = document.querySelector<HTMLElement>('.contact-header');
     
     if (header) {
@@ -38,19 +26,13 @@ export default function initializeContactPage(): () => void {
             }
         }, 300);
     }
-    
-    // Handle animations for team members using Intersection Observer
     const teamMembers = document.querySelectorAll<HTMLElement>('.team-member');
     const timelineItems = document.querySelectorAll<HTMLElement>('.timeline-item');
     const sections = document.querySelectorAll<HTMLElement>('.collaboration-section');
-    
-    // Create intersection observer for animation on scroll
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
-                
-                // If it's a timeline item, add a slight animation delay
                 if (entry.target.classList.contains('timeline-item')) {
                     const index = Array.from(timelineItems).indexOf(entry.target as HTMLElement);
                     setTimeout(() => {
@@ -67,13 +49,9 @@ export default function initializeContactPage(): () => void {
         threshold: 0.15,
         rootMargin: '0px 0px -100px 0px'
     });
-    
-    // Observe all elements that should animate on scroll
     teamMembers.forEach(member => observer.observe(member));
     timelineItems.forEach(item => observer.observe(item));
     sections.forEach(section => observer.observe(section));
-    
-    // Photo hover effects
     const photoContainers = document.querySelectorAll<HTMLElement>('.member-photo-container');
     
     const handlePhotoMouseEnter = function(this: HTMLElement) {
@@ -106,8 +84,6 @@ export default function initializeContactPage(): () => void {
         container.addEventListener('mouseenter', handlePhotoMouseEnter);
         container.addEventListener('mouseleave', handlePhotoMouseLeave);
     });
-    
-    // Keywords hover effect
     const keywords = document.querySelectorAll<HTMLElement>('.keyword');
     
     const handleKeywordMouseEnter = function(this: HTMLElement) {
@@ -124,8 +100,6 @@ export default function initializeContactPage(): () => void {
         keyword.addEventListener('mouseenter', handleKeywordMouseEnter);
         keyword.addEventListener('mouseleave', handleKeywordMouseLeave);
     });
-    
-    // Timeline icons hover effect
     const timelineIcons = document.querySelectorAll<HTMLElement>('.timeline-icon');
     
     const handleTimelineIconMouseEnter = function(this: HTMLElement) {
@@ -142,12 +116,8 @@ export default function initializeContactPage(): () => void {
         icon.addEventListener('mouseenter', handleTimelineIconMouseEnter);
         icon.addEventListener('mouseleave', handleTimelineIconMouseLeave);
     });
-    
-    // Create parallax effect on scroll
     const handleScroll = () => {
         const scrollY = window.scrollY;
-        
-        // Parallax effect for photos
         photoContainers.forEach((container, index) => {
             const speed = 0.03;
             const yPos = -(scrollY * speed * (index + 1) % 10);
@@ -160,8 +130,6 @@ export default function initializeContactPage(): () => void {
     };
     
     window.addEventListener('scroll', handleScroll);
-    
-    // Clean up function
     return () => {
         teamMembers.forEach(member => observer.unobserve(member));
         timelineItems.forEach(item => observer.unobserve(item));
@@ -183,11 +151,7 @@ export default function initializeContactPage(): () => void {
         });
         
         window.removeEventListener('scroll', handleScroll);
-        
-        // Remove the body class when unmounting
         document.body.classList.remove('contact-page');
-        
-        // Restore original styles
         document.body.style.overflowY = originalBodyOverflow;
         document.body.style.height = originalBodyHeight;
         
@@ -197,8 +161,6 @@ export default function initializeContactPage(): () => void {
         }
     };
 }
-
-// Initialize the page when it's loaded directly
 if (document.readyState !== 'loading') {
     initializeContactPage();
 } else {

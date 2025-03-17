@@ -9,7 +9,6 @@
 }
 
 
-/* Font */
 @font-face {
     font-family: "Aeonik";
     src: url("https://db.onlinewebfonts.com/t/d95bf2f30035a050142565e03d44da71.eot");
@@ -128,9 +127,7 @@ div {
 .profile-button-label {
     position: relative;
     display: flex;
-    align-items: center; /* Centre verticalement */
-    gap: 0.5rem; /* Espacement entre l'icône et le texte */
-    cursor: pointer;
+    align-items: center;     gap: 0.5rem;     cursor: pointer;
 }
 
 .profile-label-wrapper {
@@ -163,34 +160,26 @@ div {
     height: 100%;
     font-weight: bold;
     color: white;
-    transition: transform 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Animation de translation */
-    transform: translateY(0); /* Position par défaut */
-}
+    transition: transform 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);     transform: translateY(0); }
 
 .profile-label:after {
-    content: attr(data-hover); /* Texte alternatif */
-    position: absolute;
+    content: attr(data-hover);     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
     text-align: center;
     opacity: 0;
-    transform: translateY(0); /* Position par défaut */
-    transition: opacity 500ms ease, transform 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transform: translateY(0);     transition: opacity 500ms ease, transform 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .profile-button-label:hover .profile-label {
-    transform: translateY(-100%) ; /* Le texte monte */
-}
+    transform: translateY(-100%) ; }
 
 .profile-button-label:hover .profile-label:after {
-    opacity: 1; /* Le texte alternatif devient visible */
-    transform: translateY(0); /* Il reste en place */
-}
+    opacity: 1;     transform: translateY(0); }
 
 .profile-button-label:hover .profile-button {
-    background-color: #a14590; /* Changement de couleur pour le bouton */
-}
+    background-color: #a14590; }
 
 
 .flip-effect a {

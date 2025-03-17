@@ -96,11 +96,7 @@ export default function initializePongGame(): (() => void) | null {
 		difficultySelector: document.getElementById("ai-difficulty") as HTMLSelectElement | null,
 		difficultySelectorContainer: document.getElementById("difficulty-selector-container") as HTMLElement | null
 	};
-
-	// Check if we're in AI mode from the URL parameter
 	const isAIMode = window.location.search.includes('ai=true');
-
-	// If we're in AI mode, show the difficulty selector
 	if (isAIMode && elements.difficultySelectorContainer) {
 		elements.difficultySelectorContainer.classList.remove("hidden");
 	}
@@ -153,18 +149,12 @@ export default function initializePongGame(): (() => void) | null {
 		fadingOut: false,
 		lastTime: performance.now(),
 		animationFrameId: 0,
-
-		// AI settings
 		aiEnabled: isAIMode,
 		aiOpponent: null,
 		debugMode: false,
 	};
-
-	// Initialize AI opponent if in AI mode
 	if (state.aiEnabled && canvas) {
 		state.aiOpponent = new AIOpponent(canvas.width, canvas.height);
-		
-		// Set difficulty based on selector (default to medium)
 		const difficulty = elements.difficultySelector ? 
 			elements.difficultySelector.value as AIDifficulty : 'medium';
 		
@@ -493,24 +483,17 @@ export default function initializePongGame(): (() => void) | null {
 				}
 			}
 		});
-	
-		// Update player 1 paddle (always human-controlled)
 		if (state.controls.player1Up && state.paddles.player1Y > 5) {
 			state.paddles.player1Y -= state.paddles.speed * deltaTime;
 		}
 		if (state.controls.player1Down && state.paddles.player1Y < canvas.height - state.paddles.height - 5) {
 			state.paddles.player1Y += state.paddles.speed * deltaTime;
 		}
-	
-		// Update player 2 paddle (AI or human-controlled)
 		if (state.aiEnabled && state.aiOpponent) {
-			// AI controls player 2
 			const aiControls = state.aiOpponent.update(state, currentTime);
 			state.controls.player2Up = aiControls.moveUp;
 			state.controls.player2Down = aiControls.moveDown;
 		}
-		
-		// Move player 2 based on controls (human or AI)
 		if (state.controls.player2Up && state.paddles.player2Y > 5) {
 			state.paddles.player2Y -= state.paddles.speed * deltaTime;
 		}
@@ -649,8 +632,6 @@ export default function initializePongGame(): (() => void) | null {
 		elements.menu?.classList.add("hidden");
 		updateScores();
 		resetBall();
-
-		// Update AI difficulty when game starts (if in AI mode)
 		if (state.aiEnabled && state.aiOpponent && elements.difficultySelector) {
 			const difficulty = elements.difficultySelector.value as AIDifficulty;
 			state.aiOpponent.setDifficulty(difficulty);
@@ -800,12 +781,9 @@ export default function initializePongGame(): (() => void) | null {
 	}
 
 	function init(): void {
-		// Make sure the menu is visible
 		if (elements.menu) {
 			elements.menu.classList.add("show");
 		}
-	
-		// Set up event listeners
 		document.addEventListener("keydown", handleKeyDown);
 		document.addEventListener("keyup", handleKeyUp);
 		elements.playButton?.addEventListener("click", startGame);
@@ -818,16 +796,10 @@ export default function initializePongGame(): (() => void) | null {
 			slider.addEventListener("input", sliderAnimation);
 		});
 		elements.winningScoreSlider?.addEventListener("input", changeWinningScore);
-		
-		// If we're in AI mode, add event listener for difficulty selector
 		if (state.aiEnabled && elements.difficultySelector) {
 			elements.difficultySelector.addEventListener("change", changeAIDifficulty);
 		}
-	
-		// Start the game loop
 		state.animationFrameId = requestAnimationFrame(gameLoop);
-	
-		// Add debug mode toggle (Ctrl+D)
 		document.addEventListener("keydown", (e) => {
 			if (e.key === "d" && e.ctrlKey) {
 				state.debugMode = !state.debugMode;
@@ -835,11 +807,7 @@ export default function initializePongGame(): (() => void) | null {
 			}
 		});
 	}
-
-	// Initialize the game
 	init();
-
-	// Return cleanup function
 	function cleanup() : void {
 		document.removeEventListener("keydown", handleKeyDown);
 		document.removeEventListener("keyup", handleKeyUp);

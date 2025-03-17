@@ -8,15 +8,12 @@
 }
 
 .page-title {
-    font-size: 5rem; /* Même taille que dans home.css */
-    text-transform: uppercase;
+    font-size: 5rem;     text-transform: uppercase;
     font-weight: 700;
-    color: white; /* Harmonisation avec home.css */
-	text-align: center;
+    color: white; 	text-align: center;
 }
 
 
-/* Tab Navigation */
 .tabs {
     display: flex;
     list-style: none;
@@ -43,7 +40,6 @@
     font-weight: bold;
 }
 
-/* Tab Content */
 .tab-content {
     display: none;
 }
@@ -52,7 +48,6 @@
     display: block;
 }
 
-/* Profile Info */
 .profile-info {
     display: flex;
     align-items: center;
@@ -90,7 +85,6 @@
     background-color: #e63946;
 }
 
-/* Stats List */
 .stats-list {
     list-style: none;
     padding: 0;
@@ -100,7 +94,6 @@
     margin: 5px 0;
 }
 
-/* Score Table */
 .score-table {
     width: 100%;
     border-collapse: collapse;
@@ -117,7 +110,6 @@
 }
 
 
-/* Reusing styles from home.css */
 .profile-header {
     text-align: center;
     margin-top: 50px;
@@ -140,7 +132,6 @@
     margin: 0;
 }
 
-/* Applying h-anim animation */
 .profile-header.h-anim .w {
     transition: mask-position 1000ms cubic-bezier(0.6, 0, 0.2, 1);
     mask-image: linear-gradient(90deg, white 33.3%, rgba(0, 0, 0, 0) 66.6%);
@@ -180,7 +171,6 @@
     transition-delay: 1000ms;
 }
 
-/* Media Queries from home.css */
 @media (max-width: 1440px) {
     .profile-header h1 {
         font-size: 11rem;
@@ -220,12 +210,10 @@
         font-size: 3rem;
     }
 }
-/* Smooth transitions for interactive elements */
 .tab-link, .btn-add-friend, .avatar {
     transition: all 0.3s ease-in-out;
 }
 
-/* Smooth hover effects */
 .tab-link:hover {
     transform: translateY(-2px);
     color: #f0f0f0;
@@ -241,7 +229,6 @@
     box-shadow: 0 0 15px rgba(187, 112, 173, 0.5);
 }
 
-/* Smooth tab content transitions */
 .tab-content {
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
@@ -252,7 +239,6 @@
 }
 
 
-/* Chart styles */
 .chart-container {
     position: relative;
     width: 250px;
@@ -327,8 +313,7 @@
     background-color: white;
   }
   
-  /* Tooltip styles */
-  .chart-tooltip {
+    .chart-tooltip {
     position: absolute;
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
@@ -348,8 +333,7 @@
     }
   }
 
-  /* History Tab Styles */
-.header-row-animated {
+  .header-row-animated {
     transform: translateY(-20px);
     opacity: 0;
     transition: transform 0.5s ease-out, opacity 0.5s ease-out;
@@ -370,7 +354,6 @@
     transform: translateY(-2px) !important;
 }
 
-/* Result badges */
 .result-badge {
     display: inline-flex;
     align-items: center;
@@ -410,7 +393,6 @@
     }
 }
 
-/* Win/Loss row styling */
 .win-row td {
     border-left: 3px solid transparent;
     transition: border-color 0.3s ease;
@@ -429,14 +411,12 @@
     border-left-color: #F44336;
 }
 
-/* Opponent highlighting */
 .highlight-opponent {
     color: #BB70AD;
     font-weight: bold;
     text-shadow: 0 0 5px rgba(187, 112, 173, 0.3);
 }
 
-/* Table sorting styles */
 th.sorted-asc::after {
     content: " ▲";
     color: #BB70AD;
@@ -474,7 +454,6 @@ th.sorted-desc::after {
     }
 }
 
-/* Empty state animation for table */
 .score-table:empty::after {
     content: "No match history available";
     display: block;

@@ -40,12 +40,10 @@ export const navigate = async (): Promise<void> => {
   document.getElementById("app")!.innerHTML = pageContent;
   changeProfileLabel();
 
-  // Check for AI mode query parameter
   if (path === "/pong-game") {
     const urlParams = new URLSearchParams(window.location.search);
     const aiMode = urlParams.get('ai');
     if (aiMode === "true") {
-      // Store AI mode preference to be used when initializing the game
       localStorage.setItem('pongAiMode', 'true');
     } else {
       localStorage.removeItem('pongAiMode');
@@ -75,7 +73,6 @@ const loadPageScript = async (path: string): Promise<void> => {
     } else if (path === "/pong-game") {
       const module = await import("./pages/pong-game");
       currentCleanup = module.default() || null;
-    // In your loadPageScript function in router.ts
     } else if (path === "/pong-selection") {
     const module = await import("./pages/pong-selection");
     currentCleanup = module.default() || null;
@@ -101,7 +98,6 @@ const loadPageScript = async (path: string): Promise<void> => {
       const module = await import("./pages/login");
       module.default();
     }
-    // No specific JavaScript needed for pong-selection page
   } catch (error) {
     console.error(`Error loading script for ${path}:`, error);
   }
