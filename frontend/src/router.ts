@@ -12,13 +12,14 @@ const routes: { [key: string]: string } = {
   "/profile-page": "profile-page",
   "/test": "test",
   "/login": "login",
+  "/register": "register",
   "/about": "about",
   "/contact": "contact",
   "404": "404",
 };
 
 const isPublicRoute = (path: string): boolean => {
-  if (path === "/" || path === "/home" || path === "/about"|| path === "/contact")
+  if (path === "/" || path === "/home" || path === "/about"|| path === "/contact" || path === "/login" || path === "/register")
     return true;
   return (false)
 }
@@ -241,6 +242,9 @@ const loadPageScript = async (path: string): Promise<void> => {
       // module.default();
     } else if (path === "/login") {
       const module = await import("./pages/login");
+      module.default();
+    } else if (path === "/register") {
+      const module = await import("./pages/register");
       module.default();
     }
   } catch (error) {
