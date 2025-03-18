@@ -49,6 +49,27 @@ export const checkAuthStatus = async (): Promise<boolean> => {
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
+  // Add the message listener for Google OAuth popup
+  window.addEventListener('message', (event) => {
+    // Verify origin
+    if (event.origin !== window.location.origin) return;
+    
+    // Check for auth success message
+    if (event.data === 'auth-success') {
+      // Update app state
+      localStorage.setItem('token', 'authenticated');
+      
+      // Update UI if needed
+      changeProfileLabel();
+      
+      // Navigate if needed
+      if (window.location.pathname === '/login') {
+        window.history.pushState({}, "", '/home');
+        navigate();
+      }
+    }
+  });
+
   // Initialize language
   const initialLang = getInitialLanguage();
   document.documentElement.lang = initialLang;

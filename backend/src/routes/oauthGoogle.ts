@@ -81,7 +81,27 @@ export default async function oauthGoogleRoutes(fastify: FastifyInstance) {
           sameSite: 'lax',
           secure: process.env.NODE_ENV === 'production'
         })
-        .redirect('/home');
+        const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <script>
+                // This page will be loaded in the popup
+                if (window.opener) {
+                    // Communicate success to the opener window
+                    window.opener.postMessage('auth-success', window.location.origin);
+                    window.close();
+                } else {
+                    // Fallback if somehow not in a popup
+                    window.location.href = '/home';
+                }
+            </script>
+        </head>
+        <body>Authentication successful! You can close this window.</body>
+        </html>
+    `;
+    
+    reply.type('text/html').send(html);
 
     } catch (err) {
       fastify.log.error(err);

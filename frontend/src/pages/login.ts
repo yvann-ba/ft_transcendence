@@ -21,8 +21,44 @@ export default function login() {
         googleButton.className = 'oauth-button google-button';
         googleButton.innerHTML = 'Se connecter avec <img src="/assets/images/Google_Logo.png" alt="Google Logo">';
         
-        googleButton.addEventListener('click', () => {
-            window.location.href = '/api/auth/google';
+        googleButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Open a popup window for Google auth
+            const width = 500;
+            const height = 600;
+            const left = window.screenX + (window.outerWidth - width) / 2;
+            const top = window.screenY + (window.outerHeight - height) / 2;
+            
+            const popup = window.open(
+                '/api/auth/google',
+                'googleAuth',
+                `width=${width},height=${height},left=${left},top=${top}`
+            );
+            
+            // Set up an interval to check when the popup is closed
+            const pollTimer = window.setInterval(() => {
+                if (popup && popup.closed) {
+                    window.clearInterval(pollTimer);
+                    
+                    // Check if authentication was successful by checking cookies or localStorage
+                    const hasAuthCookie = document.cookie.split(';').some(item => 
+                        item.trim().startsWith('auth_token=')
+                    );
+                    
+                    if (hasAuthCookie) {
+                        // Auth successful, update your app state
+                        localStorage.setItem('token', 'authenticated');
+                        messageDiv.textContent = 'Connexion réussie !';
+                        messageDiv.classList.remove('error');
+                        messageDiv.classList.add('success');
+                        
+                        // Navigate to home
+                        window.history.pushState({}, "", '/home');
+                        navigate();
+                    }
+                }
+            }, 500);
         });
         
         const orSeparator = document.createElement('div');
