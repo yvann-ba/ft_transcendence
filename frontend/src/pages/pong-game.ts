@@ -71,6 +71,33 @@ interface GameState {
 	animationFrameId: number | null;
 }
 
+export function backToGameModes(event?: Event): void {
+	// Prevent default form submission behavior if this is in a form
+	if (event) event.preventDefault();
+	
+	// Add a smooth transition overlay to hide the flash
+	const transitionOverlay = document.createElement('div');
+	transitionOverlay.style.position = 'fixed';
+	transitionOverlay.style.top = '0';
+	transitionOverlay.style.left = '0';
+	transitionOverlay.style.width = '100%';
+	transitionOverlay.style.height = '100%';
+	transitionOverlay.style.backgroundColor = '#000';
+	transitionOverlay.style.zIndex = '9999';
+	transitionOverlay.style.opacity = '0';
+	transitionOverlay.style.transition = 'opacity 0.2s ease-in';
+	document.body.appendChild(transitionOverlay);
+	
+	// Fade in the overlay
+	setTimeout(() => {
+	  transitionOverlay.style.opacity = '1';
+	  
+	  // Then navigate after the fade is complete
+	  setTimeout(() => {
+		window.location.href = "/pong-selection";
+	  }, 200);
+	}, 10);
+  }
 export default function initializePongGame(): (() => void) | null {
 	const canvas = document.getElementById("pongCanvas") as HTMLCanvasElement | null;
 	if (!canvas) {
@@ -516,7 +543,76 @@ export default function initializePongGame(): (() => void) | null {
 			endGame();
 		}
 	}
-
+	function setupAIModeUI(): void {
+		const isAIMode = window.location.search.includes('ai=true');
+		
+		// Update title and subtitle
+		const titleElem = document.getElementById('game-title');
+		const subtitleElem = document.getElementById('game-subtitle');
+		
+		if (isAIMode) {
+		  if (titleElem) {
+			titleElem.textContent = 'AI PONG';
+			
+			// Add AI badge to title
+			const badge = document.createElement('span');
+			badge.className = 'ai-mode-badge';
+			badge.textContent = 'AI';
+			titleElem.appendChild(badge);
+		  }
+		  
+		  if (subtitleElem) {
+			subtitleElem.textContent = 'Challenge the Computer';
+		  }
+		  
+		  // Update game rules
+		  const rulesCard = document.getElementById('rules-card');
+		  if (rulesCard) {
+			const rulesPara = rulesCard.querySelector('p');
+			if (rulesPara) {
+			  rulesPara.textContent = 'Play against an AI opponent with multiple difficulty levels. Use precise timing and anticipate the AI\'s movements to win!';
+			}
+		  }
+		  
+		  // Update controls info
+		  const controlsList = document.getElementById('controls-list');
+		  if (controlsList) {
+			controlsList.innerHTML = `
+			  <div><span>Player:</span> W / S Keys</div>
+			  <div><span>AI Opponent:</span> Computer Controlled</div>
+			  <div class="debug-hint">Press Ctrl+D to toggle AI prediction visualization</div>
+			`;
+		  }
+		  
+		  // Show difficulty selector
+		  const difficultyContainer = document.getElementById('difficulty-selector-container');
+		  if (difficultyContainer) {
+			difficultyContainer.classList.remove('hidden');
+		  }
+		  
+		  // Add event listeners to difficulty buttons
+		  const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+		  difficultyBtns.forEach(btn => {
+			btn.addEventListener('click', function() {
+			  // Remove active class from all buttons
+			  difficultyBtns.forEach(b => b.classList.remove('active'));
+			  
+			  // Add active class to clicked button
+			  this.classList.add('active');
+			  
+			  // Update hidden select element for compatibility
+			  const difficultySelector = document.getElementById('ai-difficulty') as HTMLSelectElement;
+			  if (difficultySelector) {
+				difficultySelector.value = this.getAttribute('data-difficulty') || 'medium';
+				
+				// Trigger change event
+				const event = new Event('change');
+				difficultySelector.dispatchEvent(event);
+			  }
+			});
+		  });
+		}
+	  }
 	function resetBall(): void {
 		if (!canvas) return;
 		
@@ -593,6 +689,7 @@ export default function initializePongGame(): (() => void) | null {
 		}
 	  }
 
+	  
 	function drawCountdown(): void {
 		if (state.countdownActive) {
 			const currentCount = Math.ceil(state.countdown);
@@ -810,6 +907,15 @@ export default function initializePongGame(): (() => void) | null {
 				console.log("Debug mode:", state.debugMode);
 			}
 		});
+		const backToModesButton = document.getElementById("back-to-modes-button");
+		if (backToModesButton) {
+		  // Remove any existing event listeners to avoid duplicates
+		  backToModesButton.removeEventListener("click", backToGameModes);
+		  // Add the improved event listener
+		  backToModesButton.addEventListener("click", backToGameModes);
+		};
+  		setupAIModeUI();
+
 	}
 	init();
 	function cleanup() : void {
@@ -839,6 +945,8 @@ export default function initializePongGame(): (() => void) | null {
 		if (state.animationFrameId) {
 		  cancelAnimationFrame(state.animationFrameId);
 		}
+		document.getElementById("back-to-modes-button")?.addEventListener("click", backToGameModes);
+
 	}
 	
 	return cleanup;

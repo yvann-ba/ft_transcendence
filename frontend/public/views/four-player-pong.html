@@ -19,35 +19,42 @@
       <div id="player4-score">0</div>
     </div>
     
-    <div id="game-menu">
-      <h1>BRICK BREAKER</h1>
-      <button id="play-button" class="pong-button">Play</button>
-      <button id="custom-button" class="pong-button">Customize</button>
-    </div>
-    
     <div id="pong-custom-menu" class="hidden">
-      <div id="custom-menu-content">
-        <h1>Customize</h1>
-        <div id="custom-settings">
-          <div>
-            <label for="pong-ground-color">Background Color</label>
-            <input type="color" value="#000000" id="pong-ground-color" class="color-input">
+      <div class="custom-menu-content">
+        <h1 class="custom-title">Customize Game</h1>
+        <div class="custom-settings">
+          <div class="settings-group">
+            <div class="color-setting">
+              <label for="pong-ground-color">Background Color</label>
+              <input type="color" value="#000000" id="pong-ground-color" class="color-input">
+            </div>
+            <div class="color-setting">
+              <label for="pong-ball-color">Ball Color</label>
+              <input type="color" value="#ffffff" id="pong-ball-color" class="color-input">
+            </div>
           </div>
-          <div>
-            <label for="pong-ball-color">Ball Color</label>
-            <input type="color" value="#ffffff" id="pong-ball-color" class="color-input">
+          
+          <div class="settings-group">
+            <div class="slider-setting">
+              <p id="pong-winning-score">Winning score: 10</p>
+              <input type="range" min="5" max="25" value="10" class="pong-custom-slider" id="winning-score-slider">
+              <div class="slider-labels">
+                <span>5</span>
+                <span>25</span>
+              </div>
+            </div>
           </div>
         </div>
-        <div>
-          <p id="pong-winning-score">Winning score: 10</p>
-          <input type="range" min="5" max="25" value="10" class="pong-custom-slider" id="winning-score-slider">
-        </div>
-        <button id="custom-back-button" class="pong-button">Back</button>
+        <button id="custom-back-button" class="pong-button">Back to Menu</button>
       </div>
     </div>
     
+    <div id="countdown-container" class="hidden">
+      <div id="countdown">3</div>
+    </div>
+    
     <div class="controls-info-floating">
-      <h3>Controls (Requires 2 Keyboards)</h3>
+      <h3>Controls</h3>
       <div class="controls-guide">
         <div class="control-item">
           <span class="player-label" style="color: #BB70AD;">Player 1 (Bottom):</span>
@@ -70,3 +77,31 @@
   </div>
 </body>
 </html>
+    <div id="game-menu">
+      <div class="game-title-container">
+        <h1 class="game-title">BRICK BREAKER</h1>
+        <p class="game-subtitle">Multi-player Square Arena Mode</p>
+      </div>
+      
+      <div class="menu-buttons">
+        <button id="play-button" class="pong-button">Play Game</button>
+        <button id="custom-button" class="pong-button">Customize</button>
+        <button id="back-to-modes-button" class="pong-button back-button">Back to Game Modes</button>
+      </div>
+      
+      <div class="game-info">
+        <div class="info-card">
+          <h3>Game Rules</h3>
+          <p>Break your opponents' bricks to score points. First to reach the winning score wins!</p>
+        </div>
+        <div class="info-card">
+          <h3>Controls</h3>
+          <div class="controls-list">
+            <div><span style="color: #BB70AD;">Bottom:</span> ← / → Arrow Keys</div>
+            <div><span style="color: #70BB88;">Top:</span> A / D Keys</div>
+            <div><span style="color: #7088BB;">Left:</span> W / S Keys</div>
+            <div><span style="color: #BBBB70;">Right:</span> ↑ / ↓ Arrow Keys</div>
+          </div>
+        </div>
+      </div>
+    </div>

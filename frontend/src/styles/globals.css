@@ -360,3 +360,74 @@ body.about-page,
 body.contact-page {
     overflow-y: auto !important;
 }
+
+/* Add to globals.css or create a new file for navbar styles */
+
+.navbar {
+    display: flex;
+    padding: 0 5%;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 5.5rem;
+    box-sizing: border-box;
+    text-decoration: none;
+    position: relative;
+    border-style: solid;
+  }
+  
+  .navbar .logo {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: left;
+    flex: 0 0 auto;
+  }
+  
+  .navbar .nav-links {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .navbar .nav-links ul {
+    display: flex;
+    font-size: clamp(1rem, 1.4vw, 1.4rem);
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .navbar .nav-links a {
+    margin: 0 2.5rem;
+    display: inline-block;
+    opacity: 0.7;
+    transition: opacity 500ms ease-in-out;
+  }
+  
+  .profile-link {
+    display: flex;
+    flex: 0 0 auto;
+    height: 3rem;
+    color: white;
+    align-items: center;
+    justify-content: flex-end;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  @media (max-width: 768px) {
+    .navbar .nav-links {
+      display: none;
+    }
+    
+    .profile-link {
+      display: none;
+    }
+    
+    .navbar {
+      justify-content: space-between;
+    }
+  }

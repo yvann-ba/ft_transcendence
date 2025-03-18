@@ -68,44 +68,44 @@ export default function initializeMultiplayerGame(): (() => void) | null {
   const paddleHeight = 20;
   const paddleWidth = 100;
   const playerColors = ["#BB70AD", "#70BB88", "#7088BB", "#BBBB70"];
-const paddles: Paddle[] = [
-  {
-    x: GAME_WIDTH / 2 - paddleWidth / 2,
-    y: GAME_HEIGHT - paddleHeight - 10,
-    width: paddleWidth,
-    height: paddleHeight,
-    color: playerColors[0],  // Purple (#BB70AD)
-    score: 0,
-    lastHitTime: 0
-  },
-  {
-    x: GAME_WIDTH / 2 - paddleWidth / 2,
-    y: 10,
-    width: paddleWidth,
-    height: paddleHeight,
-    color: playerColors[1],  // Green (#70BB88)
-    score: 0,
-    lastHitTime: 0
-  },
-  {
-    x: 10,
-    y: GAME_HEIGHT / 2 - paddleWidth / 2,
-    width: paddleHeight,
-    height: paddleWidth,
-    color: playerColors[2],  // Blue (#7088BB)
-    score: 0,
-    lastHitTime: 0
-  },
-  {
-    x: GAME_WIDTH - paddleHeight - 10,
-    y: GAME_HEIGHT / 2 - paddleWidth / 2,
-    width: paddleHeight,
-    height: paddleWidth,
-    color: playerColors[3],  // Yellow (#BBBB70)
-    score: 0,
-    lastHitTime: 0
-  }
-];
+  const paddles: Paddle[] = [
+    {
+      x: GAME_WIDTH / 2 - paddleWidth / 2,
+      y: GAME_HEIGHT - paddleHeight - 10,
+      width: paddleWidth,
+      height: paddleHeight,
+      color: playerColors[0],  // Purple (#BB70AD)
+      score: 0,
+      lastHitTime: 0
+    },
+    {
+      x: GAME_WIDTH / 2 - paddleWidth / 2,
+      y: 10,
+      width: paddleWidth,
+      height: paddleHeight,
+      color: playerColors[1],  // Green (#70BB88)
+      score: 0,
+      lastHitTime: 0
+    },
+    {
+      x: 10,
+      y: GAME_HEIGHT / 2 - paddleWidth / 2,
+      width: paddleHeight,
+      height: paddleWidth,
+      color: playerColors[2],  // Blue (#7088BB)
+      score: 0,
+      lastHitTime: 0
+    },
+    {
+      x: GAME_WIDTH - paddleHeight - 10,
+      y: GAME_HEIGHT / 2 - paddleWidth / 2,
+      width: paddleHeight,
+      height: paddleWidth,
+      color: playerColors[3],  // Yellow (#BBBB70)
+      score: 0,
+      lastHitTime: 0
+    }
+  ];
   const bricks: Brick[] = [];
   const BRICK_ROWS = 2;
   const BRICK_COLS = 4;
@@ -193,6 +193,7 @@ const paddles: Paddle[] = [
   const elements = {
     playButton: document.getElementById("play-button") as HTMLElement | null,
     customizeButton: document.getElementById("custom-button") as HTMLElement | null,
+    backToModesButton: document.getElementById("back-to-modes-button") as HTMLElement | null,
     menu: document.getElementById("game-menu") as HTMLElement | null,
     customMenu: document.getElementById("pong-custom-menu") as HTMLElement | null,
     winningScoreSlider: document.getElementById("winning-score-slider") as HTMLInputElement | null,
@@ -201,6 +202,8 @@ const paddles: Paddle[] = [
     backgroundColorPicker: document.getElementById("pong-ground-color") as HTMLInputElement | null,
     customBackButton: document.getElementById("custom-back-button") as HTMLElement | null,
     scoreDisplay: document.getElementById("scoreboard") as HTMLElement | null,
+    countdownContainer: document.getElementById("countdown-container") as HTMLElement | null,
+    countdown: document.getElementById("countdown") as HTMLElement | null,
     playerScores: [
       document.getElementById("player1-score") as HTMLElement | null,
       document.getElementById("player2-score") as HTMLElement | null,
@@ -212,6 +215,9 @@ const paddles: Paddle[] = [
   let animationFrameId: number | null = null;
   let winner: number | null = null;
   let lastTime = performance.now();
+  let countdownActive = false;
+  let countdownValue = 3;
+  
   function handleKeyDown(e: KeyboardEvent): void {
     switch(e.key) {
       case "ArrowLeft":
@@ -435,6 +441,7 @@ const paddles: Paddle[] = [
         }
       }
     });
+    
     for (let i = 0; i < bricks.length; i++) {
       const brick = bricks[i];
       if (brick.active) {
@@ -469,6 +476,68 @@ const paddles: Paddle[] = [
               break;
             }
           }
+          break;
+        }
+      }
+    }
+    for (let i = 0; i < bricks.length; i++) {
+      const brick = bricks[i];
+      if (brick.active) {
+        // Calculate the closest point on the brick to the ball's center
+        const closestX = Math.max(brick.x, Math.min(ball.x, brick.x + brick.width));
+        const closestY = Math.max(brick.y, Math.min(ball.y, brick.y + brick.height));
+        
+        // Calculate the distance between the closest point and the ball's center
+        const distanceX = ball.x - closestX;
+        const distanceY = ball.y - closestY;
+        const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+        
+        // Check for collision
+        if (distance <= ball.radius) {
+          // Determine bounce direction (horizontal or vertical)
+          const fromLeft = ball.x < brick.x;
+          const fromRight = ball.x > brick.x + brick.width;
+          const fromTop = ball.y < brick.y;
+          const fromBottom = ball.y > brick.y + brick.height;
+          
+          // Bounce horizontally if hitting left or right side
+          if ((fromLeft || fromRight) && Math.abs(distanceX) > Math.abs(distanceY)) {
+            ball.speedX = -ball.speedX;
+          } 
+          // Bounce vertically if hitting top or bottom
+          else if ((fromTop || fromBottom) && Math.abs(distanceY) >= Math.abs(distanceX)) {
+            ball.speedY = -ball.speedY;
+          }
+          // Edge case: hitting corner (bounce both directions)
+          else if (Math.abs(distanceX) === Math.abs(distanceY)) {
+            ball.speedX = -ball.speedX;
+            ball.speedY = -ball.speedY;
+          }
+          
+          // Slight randomness to avoid predictable patterns
+          ball.speedX += (Math.random() - 0.5) * 0.3;
+          ball.speedY += (Math.random() - 0.5) * 0.3;
+          
+          // Deactivate the brick
+          brick.active = false;
+          
+          // Update scores
+          for (let p = 0; p < PLAYER_COUNT; p++) {
+            if (p !== brick.playerIndex) {
+              paddles[p].score++;
+            }
+          }
+          
+          // Check for winner
+          for (let p = 0; p < PLAYER_COUNT; p++) {
+            if (paddles[p].score >= MAX_SCORE) {
+              winner = p;
+              gameRunning = false;
+              break;
+            }
+          }
+          
+          // Only process one brick collision per frame to avoid double bounces
           break;
         }
       }
@@ -535,15 +604,72 @@ const paddles: Paddle[] = [
     }
   }
   
+  function startCountdown(): void {
+    countdownActive = true;
+    countdownValue = 3;
+    
+    if (elements.countdownContainer) {
+      elements.countdownContainer.classList.remove("hidden");
+    }
+    if (elements.countdown) {
+      elements.countdown.textContent = countdownValue.toString();
+    }
+    
+    const countdownInterval = setInterval(() => {
+      countdownValue--;
+      
+      if (elements.countdown) {
+        elements.countdown.textContent = countdownValue.toString();
+      }
+      
+      if (countdownValue <= 0) {
+        clearInterval(countdownInterval);
+        countdownActive = false;
+        
+        if (elements.countdownContainer) {
+          elements.countdownContainer.classList.add("hidden");
+        }
+        
+        gameRunning = true;
+      }
+    }, 1000);
+  }
+  
   function startGame(): void {
     createBricks();
     resetBall();
     paddles.forEach(paddle => paddle.score = 0);
     winner = null;
+    
+    // Hide menu
     if (elements.menu) {
       elements.menu.classList.add("hidden");
     }
-    gameRunning = true;
+    
+    // Apply custom settings if they exist
+    if (elements.ballColorPicker) {
+      colors.ballColor = elements.ballColorPicker.value;
+    }
+    if (elements.backgroundColorPicker) {
+      colors.backgroundColor = elements.backgroundColorPicker.value;
+    }
+    if (elements.winningScoreSlider) {
+      MAX_SCORE = parseInt(elements.winningScoreSlider.value);
+    }
+    
+    // Initialize paddles positions
+    paddles[0].x = GAME_WIDTH / 2 - paddleWidth / 2;
+    paddles[0].y = GAME_HEIGHT - paddleHeight - 10;
+    paddles[1].x = GAME_WIDTH / 2 - paddleWidth / 2;
+    paddles[1].y = 10;
+    paddles[2].x = 10;
+    paddles[2].y = GAME_HEIGHT / 2 - paddleWidth / 2;
+    paddles[3].x = GAME_WIDTH - paddleHeight - 10;
+    paddles[3].y = GAME_HEIGHT / 2 - paddleWidth / 2;
+    
+    // Start countdown instead of immediately starting the game
+    startCountdown();
+    
     lastTime = performance.now();
     if (animationFrameId !== null) {
       cancelAnimationFrame(animationFrameId);
@@ -595,36 +721,52 @@ const paddles: Paddle[] = [
     if (!ctx) return;
     const deltaTime = (timestamp - lastTime) / 1000; // Convert to seconds
     lastTime = timestamp;
+    
+    // Clear the canvas
     ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+    
+    // If in menu, just draw a plain black background and nothing else
+    if (elements.menu && !elements.menu.classList.contains("hidden") || 
+        elements.customMenu && !elements.customMenu.classList.contains("hidden")) {
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+      animationFrameId = requestAnimationFrame(gameLoop);
+      return; // Don't render anything else
+    }
+    
+    // For the actual game
     ctx.fillStyle = colors.backgroundColor;
     ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
     
+    // Draw game elements
+    drawBricks();
+    drawPaddles();
+    drawBall();
+    drawScoreboard();
+    
+    // Update game logic if game is running
     if (gameRunning) {
       updatePaddles(deltaTime);
       updateBall(deltaTime);
       checkCollisions();
-      drawBricks();
-      drawPaddles();
-      drawBall();
-      drawScoreboard();
-      drawControlsHint();
-      animationFrameId = requestAnimationFrame(gameLoop);
     } else if (winner !== null) {
-      drawBricks();
-      drawPaddles();
-      drawBall();
-      drawScoreboard();
       drawWinner();
-      
-      animationFrameId = requestAnimationFrame(gameLoop);
     }
+    
+    animationFrameId = requestAnimationFrame(gameLoop);
   }
+  
+  function backToGameModes(): void {
+    window.location.href = "/pong-selection";
+  }
+  
   function init(): void {
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keyup", handleKeyUp);
     elements.playButton?.addEventListener("click", startGame);
     elements.customizeButton?.addEventListener("click", openCustomMenu);
     elements.customBackButton?.addEventListener("click", closeCustomMenu);
+    elements.backToModesButton?.addEventListener("click", backToGameModes);
     elements.ballColorPicker?.addEventListener("input", changeColors);
     elements.backgroundColorPicker?.addEventListener("input", changeColors);
     elements.winningScoreSlider?.addEventListener("input", changeWinningScore);
@@ -640,6 +782,7 @@ const paddles: Paddle[] = [
     elements.playButton?.removeEventListener("click", startGame);
     elements.customizeButton?.removeEventListener("click", openCustomMenu);
     elements.customBackButton?.removeEventListener("click", closeCustomMenu);
+    elements.backToModesButton?.removeEventListener("click", backToGameModes);
     
     elements.ballColorPicker?.removeEventListener("input", changeColors);
     elements.backgroundColorPicker?.removeEventListener("input", changeColors);
