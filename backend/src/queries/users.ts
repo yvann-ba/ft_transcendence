@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 
 const getUserById = (userId: number, callback: (err: Error | null, row: any) => void) => {
   const query = `
-    SELECT id, username, email, created_at
+    SELECT id, username, email, first_name, last_name, created_at
     FROM users
     WHERE id = ?;
   `;
@@ -21,16 +21,16 @@ const getUserById = (userId: number, callback: (err: Error | null, row: any) => 
 
 const SALT_ROUNDS = 10;
 
-const createUser = async (username: string, password: string, email: string): Promise<any> => {
+const createUser = async (username: string, password: string, firstName: string, lastName: string, email: string): Promise<any> => {
   return new Promise(async (resolve, reject) => {
     const query = `
-      INSERT INTO users (username, password, email)
-      VALUES (?, ?, ?);
+      INSERT INTO users (username, password, first_name, last_name, email)
+      VALUES (?, ?, ?, ?, ?);
     `;
 
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-    db.run(query, [username, hashedPassword, email], function (err) {
+    db.run(query, [username, hashedPassword, lastName, firstName, email], function (err) {
       if (err) {
         console.error('Erreur lors de la création de l\'utilisateur:', err.message);
         reject(err);
