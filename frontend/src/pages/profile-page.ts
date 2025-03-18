@@ -1,6 +1,14 @@
 import "../styles/profile-page.css";
+import { getCurrentUser } from "../utils/utils";
 
-function initializeProfilePage(): () => void {
+async function initializeProfilePage(): Promise<() => void> {
+
+    const user = await getCurrentUser();
+
+    if (user) {
+        updateProfileInfo(user);
+    }
+
 	const tabLinks = document.querySelectorAll<HTMLElement>('.tab-link');
 	const tabContents = document.querySelectorAll<HTMLElement>('.tab-content');
 	
@@ -281,5 +289,38 @@ if (document.readyState !== 'loading') {
 } else {
     document.addEventListener('DOMContentLoaded', initializeProfilePage);
 }
+
+function updateProfileInfo(user: any): void {
+    const usernameElement = document.querySelector('.profile-info .username');
+    const nameElement = document.querySelector('.profile-info .name');
+    const avatarElement = document.querySelector('.profile-info .avatar') as HTMLImageElement;
+    const loginButton = document.querySelector('.profile-info .btn-add-friend');
+
+    if (usernameElement) {
+        usernameElement.textContent = user.username;
+    }
+    
+    if (nameElement) {
+        const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+        nameElement.textContent = fullName ? `Name: ${fullName}` : '';
+    }
+    
+    if (avatarElement) {
+        if (user.avatar) {
+            avatarElement.src = user.avatar;
+            avatarElement.alt = `${user.username}'s avatar`;
+        } else {
+            avatarElement.alt = `${user.username}'s avatar`;
+        }
+    }
+    
+    if (loginButton) {
+        loginButton.textContent = 'Edit Profile';
+        loginButton.setAttribute('data-i18n', 'profile.edit');
+        
+        // loginButton.addEventListener('click', openProfileEditor);
+    }
+}
+
 
 export default initializeProfilePage;

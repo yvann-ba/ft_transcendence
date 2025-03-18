@@ -13,6 +13,35 @@ export default async function userRoutes(fastify: FastifyInstance) {
 // 	}
 //   });
   
+fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, reply) => {
+	try {
+	  const userId = (request.user as { userId: number }).userId;
+	  
+	  const getUserByIdPromise = (userId: number): Promise<any> => {
+		return new Promise((resolve, reject) => {
+		  userQueries.getUserById(userId, (err, user) => {
+			if (err) reject(err);
+			else resolve(user);
+		  });
+		});
+	  };
+	  
+	  console.log("Fetching user profile for user ID:", userId);
+
+	  const user = await getUserByIdPromise(userId);
+	  
+	  if (!user) {
+		return reply.status(404).send({ error: "Utilisateur non trouvé" });
+	  }
+	  
+	  const { password, ...userWithoutPassword } = user;
+	  
+	  return reply.send(userWithoutPassword);
+	} catch (err) {
+	  fastify.log.error("Error fetching user profile:", err);
+	  return reply.status(500).send({ error: "Erreur serveur" });
+	}
+  });
   
   fastify.get('/users/:id', async (request, reply) => {
 	try {

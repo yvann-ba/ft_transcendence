@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt';
 
 export default async function authRoutes(fastify: FastifyInstance) {
 
-  console.log("la suite");
 
   fastify.post("/login", async (request, reply) => {
     fastify.log.info("Login attempt:", request.body);
