@@ -125,7 +125,6 @@
     box-shadow: 0 0 10px rgba(187, 112, 173, 0.3);
   }
   
-  /* Tournament Buttons */
   .tournament-buttons {
     display: flex;
     flex-direction: column;

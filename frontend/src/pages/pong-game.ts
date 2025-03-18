@@ -71,22 +71,32 @@ interface GameState {
 	animationFrameId: number | null;
 }
 
-export function backToGameModes(): void {
-	window.location.href = "/pong-selection";
-  }
-export function addBackToGameModesButton(): void {
-	// Find all back to modes buttons across different game types
-	const backButtons = [
-	  document.getElementById("back-to-modes-button"),
-	  document.getElementById("back-to-modes-button-winner")
-	];
+export function backToGameModes(event?: Event): void {
+	// Prevent default form submission behavior if this is in a form
+	if (event) event.preventDefault();
 	
-	// Add event listener to each button
-	backButtons.forEach(button => {
-	  if (button) {
-		button.addEventListener("click", backToGameModes);
-	  }
-	});
+	// Add a smooth transition overlay to hide the flash
+	const transitionOverlay = document.createElement('div');
+	transitionOverlay.style.position = 'fixed';
+	transitionOverlay.style.top = '0';
+	transitionOverlay.style.left = '0';
+	transitionOverlay.style.width = '100%';
+	transitionOverlay.style.height = '100%';
+	transitionOverlay.style.backgroundColor = '#000';
+	transitionOverlay.style.zIndex = '9999';
+	transitionOverlay.style.opacity = '0';
+	transitionOverlay.style.transition = 'opacity 0.2s ease-in';
+	document.body.appendChild(transitionOverlay);
+	
+	// Fade in the overlay
+	setTimeout(() => {
+	  transitionOverlay.style.opacity = '1';
+	  
+	  // Then navigate after the fade is complete
+	  setTimeout(() => {
+		window.location.href = "/pong-selection";
+	  }, 200);
+	}, 10);
   }
 export default function initializePongGame(): (() => void) | null {
 	const canvas = document.getElementById("pongCanvas") as HTMLCanvasElement | null;
@@ -899,10 +909,11 @@ export default function initializePongGame(): (() => void) | null {
 		});
 		const backToModesButton = document.getElementById("back-to-modes-button");
 		if (backToModesButton) {
-			backToModesButton.addEventListener("click", () => {
-			window.location.href = "/pong-selection";
-    });
-	  }
+		  // Remove any existing event listeners to avoid duplicates
+		  backToModesButton.removeEventListener("click", backToGameModes);
+		  // Add the improved event listener
+		  backToModesButton.addEventListener("click", backToGameModes);
+		};
   		setupAIModeUI();
 
 	}
@@ -934,6 +945,8 @@ export default function initializePongGame(): (() => void) | null {
 		if (state.animationFrameId) {
 		  cancelAnimationFrame(state.animationFrameId);
 		}
+		document.getElementById("back-to-modes-button")?.addEventListener("click", backToGameModes);
+
 	}
 	
 	return cleanup;

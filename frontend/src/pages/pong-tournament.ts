@@ -402,18 +402,33 @@ function closeCustomMenu(): void {
       }
   }
 
-    function backToGameModes(): void {
+  function backToGameModes(event?: Event): void {
+    // Prevent default form submission behavior if this is in a form
+    if (event) event.preventDefault();
+    
+    // Add a smooth transition overlay to hide the flash
+    const transitionOverlay = document.createElement('div');
+    transitionOverlay.style.position = 'fixed';
+    transitionOverlay.style.top = '0';
+    transitionOverlay.style.left = '0';
+    transitionOverlay.style.width = '100%';
+    transitionOverlay.style.height = '100%';
+    transitionOverlay.style.backgroundColor = '#000';
+    transitionOverlay.style.zIndex = '9999';
+    transitionOverlay.style.opacity = '0';
+    transitionOverlay.style.transition = 'opacity 0.2s ease-in';
+    document.body.appendChild(transitionOverlay);
+    
+    // Fade in the overlay
+    setTimeout(() => {
+      transitionOverlay.style.opacity = '1';
+      
+      // Then navigate after the fade is complete
+      setTimeout(() => {
         window.location.href = "/pong-selection";
-    }
-    function endTournament(): void {
-        tournamentState.tournamentEnded = true;
-        elements.tournamentBracket?.classList.add("hidden");
-        elements.winnerAnnouncement?.classList.remove("hidden");
-        if (elements.championName) {
-            const finalMatch = tournamentState.matches[2];
-            elements.championName.textContent = finalMatch.winner?.name || "Unknown";
-        }
-    }
+      }, 200);
+    }, 10);
+  }
   function resetTournament(): void {
       tournamentState.players = [];
       tournamentState.matches = [];
@@ -676,8 +691,20 @@ function closeCustomMenu(): void {
           elements.playerInputs[3].value = "Player 4";
     
           initCustomization();
-          document.getElementById("back-to-modes-button")?.addEventListener("click", backToGameModes);
-          document.getElementById("back-to-modes-button-winner")?.addEventListener("click", backToGameModes);
+          // Initialize all Back to Game Modes buttons
+        const backButtons = [
+            document.getElementById("back-to-modes-button"),
+            document.getElementById("back-to-modes-button-winner")
+        ];
+        
+        backButtons.forEach(button => {
+            if (button) {
+            // Remove existing event listeners first to avoid duplicates
+            button.removeEventListener('click', backToGameModes);
+            // Add our improved event listener
+            button.addEventListener('click', backToGameModes);
+            }
+        });
         
         // Set initial values for color inputs and slider
         if (customizeElements.ballColorInput) {
