@@ -17,46 +17,79 @@
         </div>
         
         <div id="pong-menu">
-            <h1>PONG</h1>
-            <button id="play-button" class="pong-button" data-i18n="game.play">Play</button>
-            
-            <!-- Only show AI difficulty in AI mode -->
-            <div id="difficulty-selector-container" class="hidden">
-                <h1 data-i18n="game.ai_difficulty">AI Difficulty</h1>
-                <select id="ai-difficulty" class="pong-select">
-                    <option value="easy">Easy</option>
-                    <option value="medium" selected>Medium</option>
-                    <option value="hard">Hard</option>
-                </select>
+            <div class="game-title-container">
+                <h1 class="game-title">PONG</h1>
+                <p class="game-subtitle">Classic 1v1 Experience</p>
             </div>
             
-            <button id="custom-button" class="pong-button" data-i18n="game.customize">Customize</button>
+            <div class="menu-buttons">
+                <button id="play-button" class="pong-button" data-i18n="game.play">Play Game</button>
+                
+                <!-- Only show AI difficulty in AI mode -->
+                <div id="difficulty-selector-container" class="hidden">
+                    <h2 data-i18n="game.ai_difficulty">AI Difficulty</h2>
+                    <select id="ai-difficulty" class="pong-select">
+                        <option value="easy">Easy</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+                
+                <button id="custom-button" class="pong-button" data-i18n="game.customize">Customize</button>
+                <button id="back-to-modes-button" class="pong-button back-button">Back to Game Modes</button>
+            </div>
+            
+            <div class="game-info">
+                <div class="info-card">
+                    <h3>Game Rules</h3>
+                    <p>Score points by getting the ball past your opponent's paddle. First to reach the winning score wins!</p>
+                </div>
+                <div class="info-card">
+                    <h3>Controls</h3>
+                    <div class="controls-list">
+                        <div><span>Player 1:</span> W / S Keys</div>
+                        <div><span>Player 2:</span> ↑ / ↓ Arrow Keys</div>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <div id="pong-custom-menu" class="hidden">
-            <div id="custom-menu-content">
-                <h1 data-i18n="game.customize">Customize</h1>
-                <div id="custom-settings">
-                    <div>
-                        <label for="pong-ground-color" data-i18n="game.colors.ground">Ground Color</label>
-                        <input type="color" value="#ffffff" id="pong-ground-color" class="color-input">
+            <div class="custom-menu-content">
+                <h1 class="custom-title">Customize Game</h1>
+                <div class="custom-settings">
+                    <div class="settings-group">
+                        <div class="color-setting">
+                            <label for="pong-ground-color" data-i18n="game.colors.ground">Ground Color</label>
+                            <input type="color" value="#ffffff" id="pong-ground-color" class="color-input">
+                        </div>
+                        <div class="color-setting">
+                            <label for="pong-ball-color" data-i18n="game.colors.ball">Ball Color</label>
+                            <input type="color" value="#ffffff" id="pong-ball-color" class="color-input">
+                        </div>
+                        <div class="color-setting">
+                            <label for="pong-paddle-color" data-i18n="game.colors.paddle">Paddle Color</label>
+                            <input type="color" value="#ffffff" id="pong-paddle-color" class="color-input">
+                        </div>
                     </div>
-                    <div>
-                        <label for="pong-ball-color" data-i18n="game.colors.ball">Ball Color</label>
-                        <input type="color" value="#ffffff" id="pong-ball-color" class="color-input">
-                    </div>
-                    <div>
-                        <label for="pong-paddle-color" data-i18n="game.colors.paddle">Paddle Color</label>
-                        <input type="color" value="#ffffff" id="pong-paddle-color" class="color-input">
+                    <div class="settings-group">
+                        <div class="slider-setting">
+                            <p id="pong-winning-score" data-i18n="game.winning_score">Winning score: 3</p>
+                            <input type="range" min="1" max="10" value="3" class="pong-custom-slider" id="winning-score-slider">
+                            <div class="slider-labels">
+                                <span>1</span>
+                                <span>10</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <p id="pong-winning-score" data-i18n="game.winning_score">Winning score: 3</p>
-                    <input type="range" min="1" max="10" value="3" class="pong-custom-slider" id="winning-score-slider">
-                </div>
-                <button id="custom-back-button" class="pong-button" data-i18n="game.back">Back</button>
+                <button id="custom-back-button" class="pong-button" data-i18n="game.back">Back to Menu</button>
             </div>
         </div>
+    </div>
+
+    <div id="countdown-container" class="hidden">
+        <div id="countdown">3</div>
     </div>
 
     <div id="chart-tooltip" class="chart-tooltip"></div>

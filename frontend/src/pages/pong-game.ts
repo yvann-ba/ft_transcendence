@@ -71,6 +71,23 @@ interface GameState {
 	animationFrameId: number | null;
 }
 
+export function backToGameModes(): void {
+	window.location.href = "/pong-selection";
+  }
+export function addBackToGameModesButton(): void {
+	// Find all back to modes buttons across different game types
+	const backButtons = [
+	  document.getElementById("back-to-modes-button"),
+	  document.getElementById("back-to-modes-button-winner")
+	];
+	
+	// Add event listener to each button
+	backButtons.forEach(button => {
+	  if (button) {
+		button.addEventListener("click", backToGameModes);
+	  }
+	});
+  }
 export default function initializePongGame(): (() => void) | null {
 	const canvas = document.getElementById("pongCanvas") as HTMLCanvasElement | null;
 	if (!canvas) {
@@ -593,6 +610,7 @@ export default function initializePongGame(): (() => void) | null {
 		}
 	  }
 
+	  
 	function drawCountdown(): void {
 		if (state.countdownActive) {
 			const currentCount = Math.ceil(state.countdown);
@@ -810,6 +828,12 @@ export default function initializePongGame(): (() => void) | null {
 				console.log("Debug mode:", state.debugMode);
 			}
 		});
+		const backToModesButton = document.getElementById("back-to-modes-button");
+		if (backToModesButton) {
+			backToModesButton.addEventListener("click", () => {
+			window.location.href = "/pong-selection";
+    });
+  }
 	}
 	init();
 	function cleanup() : void {
