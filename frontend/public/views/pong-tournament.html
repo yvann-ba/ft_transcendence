@@ -51,35 +51,38 @@
                 </div>
             </div>
             
+            <!-- Replace the customize-menu section in pong-tournament.html -->
             <div id="customize-menu" class="hidden">
-                <h2>Customize Game</h2>
-                <div id="custom-settings">
-                    <div class="settings-group">
-                        <div class="color-setting">
-                            <label for="ball-color">Ball Color</label>
-                            <input type="color" value="#ffffff" id="ball-color" class="color-input">
+                <div class="custom-menu-content">
+                    <h1 class="custom-title">Customize Game</h1>
+                    <div class="custom-settings">
+                        <div class="settings-group">
+                            <div class="color-setting">
+                                <label for="ball-color">Ball Color</label>
+                                <input type="color" value="#ffffff" id="ball-color" class="color-input">
+                            </div>
+                            <div class="color-setting">
+                                <label for="paddle-color">Paddle Color</label>
+                                <input type="color" value="#ffffff" id="paddle-color" class="color-input">
+                            </div>
+                            <div class="color-setting">
+                                <label for="line-color">Line Color</label>
+                                <input type="color" value="#ffffff" id="line-color" class="color-input">
+                            </div>
                         </div>
-                        <div class="color-setting">
-                            <label for="paddle-color">Paddle Color</label>
-                            <input type="color" value="#ffffff" id="paddle-color" class="color-input">
-                        </div>
-                        <div class="color-setting">
-                            <label for="line-color">Line Color</label>
-                            <input type="color" value="#ffffff" id="line-color" class="color-input">
-                        </div>
-                    </div>
-                    <div class="settings-group">
-                        <div class="slider-setting">
-                            <p>Points to Win: <span id="points-display">5 points</span></p>
-                            <input type="range" min="3" max="10" value="5" class="pong-custom-slider" id="points-to-win">
-                            <div class="slider-labels">
-                                <span>3</span>
-                                <span>10</span>
+                        <div class="settings-group">
+                            <div class="slider-setting">
+                                <p id="points-display">Winning score: 5</p>
+                                <input type="range" min="3" max="10" value="5" class="pong-custom-slider" id="points-to-win">
+                                <div class="slider-labels">
+                                    <span>3</span>
+                                    <span>10</span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <button id="back-button" class="pong-button">Back to Menu</button>
                 </div>
-                <button id="back-button" class="pong-button">Back to Menu</button>
             </div>
             
             <div id="tournament-bracket" class="hidden">

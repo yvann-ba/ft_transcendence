@@ -495,3 +495,35 @@
     padding: 12px 24px;
   }
 }
+
+#pong-custom-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000;
+  z-index: 100;
+}
+
+.custom-menu-content {
+  background-color: #000;
+  border-radius: 15px;
+  box-shadow: 0 0 30px rgba(187, 112, 173, 0.3);
+  border: 2px solid rgba(187, 112, 173, 0.5);
+  padding: 40px;
+  max-width: 500px;
+  width: 90%;
+}
+
+/* Remove any background blur or transparency */
+#pong-custom-menu {
+  backdrop-filter: none;
+}
+
+.custom-menu-content {
+  background-color: #000;
+}

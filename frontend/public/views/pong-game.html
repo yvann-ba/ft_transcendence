@@ -18,21 +18,21 @@
         
         <div id="pong-menu">
             <div class="game-title-container">
-                <h1 class="game-title">PONG</h1>
-                <p class="game-subtitle">Classic 1v1 Experience</p>
+                <h1 class="game-title" id="game-title">PONG</h1>
+                <p class="game-subtitle" id="game-subtitle">Classic 1v1 Experience</p>
             </div>
             
             <div class="menu-buttons">
                 <button id="play-button" class="pong-button" data-i18n="game.play">Play Game</button>
                 
-                <!-- Only show AI difficulty in AI mode -->
-                <div id="difficulty-selector-container" class="hidden">
+                <!-- AI difficulty selector with improved styling -->
+                <div id="difficulty-selector-container" class="hidden difficulty-container">
                     <h2 data-i18n="game.ai_difficulty">AI Difficulty</h2>
-                    <select id="ai-difficulty" class="pong-select">
-                        <option value="easy">Easy</option>
-                        <option value="medium" selected>Medium</option>
-                        <option value="hard">Hard</option>
-                    </select>
+                    <div class="difficulty-options">
+                        <button class="difficulty-btn" data-difficulty="easy">Easy</button>
+                        <button class="difficulty-btn active" data-difficulty="medium">Medium</button>
+                        <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+                    </div>
                 </div>
                 
                 <button id="custom-button" class="pong-button" data-i18n="game.customize">Customize</button>
@@ -40,13 +40,13 @@
             </div>
             
             <div class="game-info">
-                <div class="info-card">
+                <div class="info-card" id="rules-card">
                     <h3>Game Rules</h3>
                     <p>Score points by getting the ball past your opponent's paddle. First to reach the winning score wins!</p>
                 </div>
-                <div class="info-card">
+                <div class="info-card" id="controls-card">
                     <h3>Controls</h3>
-                    <div class="controls-list">
+                    <div class="controls-list" id="controls-list">
                         <div><span>Player 1:</span> W / S Keys</div>
                         <div><span>Player 2:</span> ↑ / ↓ Arrow Keys</div>
                     </div>

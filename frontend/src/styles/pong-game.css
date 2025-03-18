@@ -591,3 +591,79 @@
       padding: 12px 24px;
     }
   }
+
+  .difficulty-container {
+    margin: 20px 0;
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  .difficulty-container h2 {
+    color: #BB70AD;
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+  
+  .difficulty-options {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .difficulty-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .difficulty-btn:hover {
+    background: rgba(187, 112, 173, 0.3);
+    border-color: rgba(187, 112, 173, 0.6);
+    transform: translateY(-2px);
+  }
+  
+  .difficulty-btn.active {
+    background: #BB70AD;
+    color: white;
+    border-color: #BB70AD;
+    box-shadow: 0 0 10px rgba(187, 112, 173, 0.5);
+  }
+  
+  /* Additional styles for AI mode */
+  .ai-mode-badge {
+    display: inline-block;
+    background: #BB70AD;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    margin-left: 10px;
+    vertical-align: middle;
+    text-transform: uppercase;
+  }
+  
+  /* Pulse animation for the badge */
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+  
+  .ai-mode-badge {
+    animation: pulse 2s infinite;
+  }
+  
+  /* Debug panel for AI predictions (when enabled) */
+  .debug-hint {
+    color: #aaa;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+    font-style: italic;
+  }
