@@ -7,6 +7,8 @@ const createUsersTable = () => {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT NOT NULL UNIQUE,
         password TEXT,
+        first_name TEXT,
+        last_name TEXT,
         email TEXT,
         avatar TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
