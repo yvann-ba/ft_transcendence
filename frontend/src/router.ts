@@ -230,7 +230,8 @@ const loadPageScript = async (path: string): Promise<void> => {
       currentCleanup = module.default() || null;
     } else if (path === "/profile-page") {
       const module = await import("./pages/profile-page");
-      currentCleanup = module.default() || null;
+      // currentCleanup = module.default() || null;
+      module.default();
     } else if (path === "/about") {
       const module = await import("./pages/about");
       currentCleanup = module.default() || null;
