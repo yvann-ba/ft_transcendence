@@ -1,12 +1,94 @@
 import "../styles/profile-page.css";
 import { getCurrentUser } from "../utils/utils";
 
+async function loadGameHistory(): Promise<void> {
+    try {
+      const response = await fetch('/api/game-history', {
+        credentials: 'include'
+      });
+      
+      if (!response.ok) {
+        throw new Error('Erreur lors de la récupération de l\'historique');
+      }
+      
+      const gameHistory = await response.json();
+      
+      // Sélectionner le tableau dans l'onglet Historique
+      const historyTable = document.querySelector('#tab-history .score-table');
+      if (!historyTable) return;
+      
+      // Vider le tableau existant
+      const tbody = historyTable.querySelector('tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      
+      const thead = historyTable.querySelector('thead');
+      if (thead && thead.innerHTML.trim() === '') {
+        thead.innerHTML = `
+          <tr>
+            <th>Date</th>
+            <th>Opponent</th>
+            <th>Result</th>
+            <th>Winner</th>
+          </tr>
+        `;
+      }
+      
+      // Ajouter chaque partie à l'historique
+      if (gameHistory.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" class="no-data">No game history available</td>
+          </tr>
+        `;
+      } else {
+        gameHistory.forEach(game => {
+          const row = document.createElement('tr');
+          row.className = game.result.toLowerCase(); // Pour pouvoir styliser selon le résultat
+          
+          // Formater la date
+          const date = new Date(game.played_at);
+          const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+          
+          // Déterminer le vainqueur
+          let winner: string;
+          if (game.result === 'WIN') {
+            winner = 'You';
+          } else if (game.result === 'LOSS') {
+            winner = game.opponent_type === 'AI' ? 'AI' : game.opponent_name || 'Opponent';
+          } else {
+            winner = 'Draw';
+          }
+          
+          // Créer la ligne avec le nouveau format
+          row.innerHTML = `
+            <td>${formattedDate}</td>
+            <td>${game.opponent_type === 'AI' ? `AI (${game.difficulty})` : game.opponent_name || 'Player'}</td>
+            <td>${game.user_score} - ${game.opponent_score}</td>
+            <td class="winner ${game.result.toLowerCase()}">${winner}</td>
+          `;
+          
+          tbody.appendChild(row);
+        });
+      }
+
+      // Appliquer les animations et events aux nouvelles lignes
+      initializeHistoryTable();
+    } catch (error) {
+      console.error('Erreur lors du chargement de l\'historique des parties:', error);
+    }
+}
+
 async function initializeProfilePage(): Promise<() => void> {
 
     const user = await getCurrentUser();
 
+    console.log(user);
+
     if (user) {
         updateProfileInfo(user);
+        await loadGameHistory();
+        initializeChart(user.player_wins, user.player_games);
     }
 
 	const tabLinks = document.querySelectorAll<HTMLElement>('.tab-link');
@@ -37,7 +119,6 @@ async function initializeProfilePage(): Promise<() => void> {
 	}
 	
 	tabLinks.forEach(link => link.addEventListener('click', handleTabClick));
-    initializeChart();
     initializeHistoryTable();
 	
 	return () => {
@@ -71,46 +152,48 @@ function initializeHistoryTable(): void {
     const historyTab = document.getElementById('tab-history');
     if (!historyTab) return;
     const rows = historyTab.querySelectorAll('tbody tr');
+    
     rows.forEach(row => {
-        const resultCell = row.querySelector('td:last-child');
-        if (!resultCell) return;
+        // Appliquer les styles en fonction du résultat
+        if (row.classList.contains('win')) {
+            row.classList.add('win-row');
+        } else if (row.classList.contains('loss')) {
+            row.classList.add('loss-row');
+        } else if (row.classList.contains('draw')) {
+            row.classList.add('draw-row');
+        }
         
-        const cellText = resultCell.textContent?.trim().toLowerCase() || '';
-        const isWin = cellText.includes('win') || cellText === 'w' || cellText === 'victory' || cellText === '1';
-        const resultBadge = document.createElement('span');
-        resultBadge.className = `result-badge ${isWin ? 'win' : 'loss'}`;
-        resultBadge.textContent = isWin ? 'W' : 'L';
-        resultCell.textContent = '';
-        resultCell.appendChild(resultBadge);
-        row.classList.add(isWin ? 'win-row' : 'loss-row');
-        row.setAttribute('data-result', isWin ? 'win' : 'loss');
+        // Animation row
         row.classList.add('animated-row');
         row.style.opacity = '0';
         row.style.transform = 'translateY(20px)';
     });
+    
+    // Le reste de votre code existant pour handleHistoryRowHover, etc.
     handleHistoryRowHover = function(this: HTMLElement) {
         this.classList.add('row-hover');
-        const badge = this.querySelector('.result-badge');
-        if (badge) {
-            badge.classList.add('pulse');
+        const winnerCell = this.querySelector('.winner');
+        if (winnerCell) {
+            winnerCell.classList.add('highlight');
         }
-        const opponentCell = this.querySelector('td:nth-child(2)');
-        if (opponentCell) {
-            opponentCell.classList.add('highlight-opponent');
+        const scoreCell = this.querySelector('td:nth-child(3)');
+        if (scoreCell) {
+            scoreCell.classList.add('highlight-score');
         }
     };
     
     handleHistoryRowLeave = function(this: HTMLElement) {
         this.classList.remove('row-hover');
-        const badge = this.querySelector('.result-badge');
-        if (badge) {
-            badge.classList.remove('pulse');
+        const winnerCell = this.querySelector('.winner');
+        if (winnerCell) {
+            winnerCell.classList.remove('highlight');
         }
-        const opponentCell = this.querySelector('td:nth-child(2)');
-        if (opponentCell) {
-            opponentCell.classList.remove('highlight-opponent');
+        const scoreCell = this.querySelector('td:nth-child(3)');
+        if (scoreCell) {
+            scoreCell.classList.remove('highlight-score');
         }
     };
+    
     rows.forEach(row => {
         row.addEventListener('mouseenter', handleHistoryRowHover);
         row.addEventListener('mouseleave', handleHistoryRowLeave);
@@ -150,10 +233,12 @@ function initializeHistoryTable(): void {
 
 function sortTable(columnIndex: number, headerElement: Element): void {
     const historyTable = document.querySelector('#tab-history table');
-    if (!historyTable) return;
+    if (!historyTable)
+        return;
     
     const tbody = historyTable.querySelector('tbody');
-    if (!tbody) return;
+    if (!tbody)
+        return;
     const currentDirection = headerElement.getAttribute('data-sort-direction') || 'none';
     const newDirection = currentDirection === 'asc' ? 'desc' : 'asc';
     const allHeaders = historyTable.querySelectorAll('thead th');
@@ -203,11 +288,13 @@ function sortTable(columnIndex: number, headerElement: Element): void {
     }, 300);
 }
 
-function initializeChart(): void {
-    const wins = 85;
-    const losses = 65;
-    const total = wins + losses;
+function initializeChart(nb_wins: number, nb_games: number): void {
+    const wins = nb_wins;
+    console.log('wins games', wins,  nb_games);
+    const losses = nb_games-nb_wins;
+    const total =  nb_games;
     const winPercentage = (wins / total * 100).toFixed(1);
+    console.log(winPercentage);
     const lossPercentage = (losses / total * 100).toFixed(1);
     const radius = 45;
     const circumference = 2 * Math.PI * radius;

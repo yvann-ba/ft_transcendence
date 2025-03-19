@@ -218,7 +218,8 @@ const loadPageScript = async (path: string): Promise<void> => {
       currentCleanup = module.default() || null;
     } else if (path === "/pong-game") {
       const module = await import("./pages/pong-game");
-      currentCleanup = module.default() || null;
+      // currentCleanup = module.default() || null;
+      module.default();
     } else if (path === "/pong-selection") {
       const module = await import("./pages/pong-selection");
       currentCleanup = module.default() || null;

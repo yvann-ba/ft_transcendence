@@ -98,7 +98,7 @@ export function backToGameModes(event?: Event): void {
 	  }, 200);
 	}, 10);
   }
-export default function initializePongGame(): (() => void) | null {
+ export default async function initializePongGame(): Promise<(() => void) | null> {
 	const canvas = document.getElementById("pongCanvas") as HTMLCanvasElement | null;
 	if (!canvas) {
 		console.error("Canvas not found");
@@ -636,7 +636,7 @@ export default function initializePongGame(): (() => void) | null {
 		}
 	}
 
-	function endGame(): void {
+	async function endGame(): Promise<void> {
 		state.running = false;
 		
 		// Determine the winner
@@ -647,6 +647,33 @@ export default function initializePongGame(): (() => void) | null {
 			winner = state.aiEnabled ? "AI Opponent" : "Player 2";
 		}
 		
+		if (state.aiEnabled) {
+			try {
+			  // Enregistrer le résultat de la partie
+			  const result = winner === "Player 1" ? "WIN" : "LOSS";
+			  const difficulty = elements.difficultySelector?.value || "medium";
+			  
+			  // Envoyer le résultat au serveur
+			  const response = await fetch('/api/game-history', {
+				method: 'POST',
+				headers: {
+				  'Content-Type': 'application/json',
+				},
+				credentials: 'include',
+				body: JSON.stringify({
+				  opponentType: 'AI',
+				  difficulty: difficulty,
+				  userScore: state.scores.player1,
+				  opponentScore: state.scores.player2,
+				  result: result
+				}),
+			  });
+			  
+			} catch (error) {
+			  console.error('Erreur lors de l\'enregistrement de la partie:', error);
+			}
+		  }
+
 		if (winner) {
 			// Update the winner announcement
 			const championName = document.getElementById("pong-champion-name");

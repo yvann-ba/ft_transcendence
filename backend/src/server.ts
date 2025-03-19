@@ -10,9 +10,11 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import config from './config/fastifyconfig';
 import migrateRoutes from './routes/migrate';
 import createUsersTable from '../database/migrations/001_create_users_table'
+import createGameHistoryTable from '../database/migrations/002_create_game_history_table'
 import userRoutes from "./routes/users";
 import authRoutes from "./routes/auth";
 import oauthGoogleRoutes from './routes/oauthGoogle';
+import gameHistoryRoutes from "./routes/game";
 
 const fastify = Fastify({ logger: true });
 fastify.register(oauthGoogleRoutes);
@@ -67,6 +69,7 @@ fastify.get("/", async (request, reply) => {
 //vos routes
 fastify.register(userRoutes);
 fastify.register(authRoutes);
+fastify.register(gameHistoryRoutes);
 
 fastify.get("/auth/status", async (request: FastifyRequest, reply: FastifyReply) => {
   try {
@@ -102,11 +105,14 @@ fastify.get("/debug/auth", async (request: FastifyRequest, reply: FastifyReply) 
   }
 });
 
+
 const start = async () => {
   try {
 
+
     createUsersTable();
-    
+    createGameHistoryTable();
+
     await fastify.listen({ port: 3000, host: "0.0.0.0" });
     fastify.log.info("Server running on http://localhost:3000");
   } catch (err) {

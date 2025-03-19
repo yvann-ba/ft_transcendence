@@ -11,6 +11,8 @@ const createUsersTable = () => {
         last_name TEXT,
         email TEXT,
         avatar TEXT,
+        player_games INTEGER DEFAULT 0,
+        player_wins INTEGER DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     `;

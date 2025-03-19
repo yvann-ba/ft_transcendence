@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 
 const getUserById = (userId: number, callback: (err: Error | null, row: any) => void) => {
   const query = `
-    SELECT id, username, email, first_name, last_name, created_at
+    SELECT id, username, email, first_name, last_name, created_at, player_games, player_wins
     FROM users
     WHERE id = ?;
   `;
