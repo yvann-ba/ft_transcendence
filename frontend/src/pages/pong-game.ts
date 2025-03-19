@@ -593,7 +593,7 @@ export default function initializePongGame(): (() => void) | null {
 		  // Add event listeners to difficulty buttons
 		  const difficultyBtns = document.querySelectorAll('.difficulty-btn');
 		  difficultyBtns.forEach(btn => {
-			btn.addEventListener('click', function() {
+			btn.addEventListener('click', function(this: HTMLElement) {
 			  // Remove active class from all buttons
 			  difficultyBtns.forEach(b => b.classList.remove('active'));
 			  

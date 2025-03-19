@@ -190,6 +190,18 @@ export default function initializeTournamentMode() {
       tournamentState.tournamentStarted = true;
       tournamentState.currentMatchIndex = 0;
   }
+  function endTournament(): void {
+    tournamentState.tournamentEnded = true;
+    elements.tournamentBracket?.classList.add("hidden");
+    elements.winnerAnnouncement?.classList.remove("hidden");
+    
+    // Get the champion (winner of the final match)
+    const champion = tournamentState.matches[2].winner;
+    
+    if (elements.championName && champion) {
+        elements.championName.textContent = champion.name;
+    }
+}
   function updateBracketDisplay(): void {
       if (elements.matchElements.match1.player1) {
           elements.matchElements.match1.player1.textContent = tournamentState.matches[0].player1.name;
@@ -289,7 +301,48 @@ export default function initializeTournamentMode() {
       }
       startCountdown();
   }
+    function resetBall(): void {
+        if (canvas) {
+            gameState.ball.x = canvas.width / 2;
+            gameState.ball.y = canvas.height / 2;
+        }
+        const maxAngle = Math.PI / 4;
+        const angle = (Math.random() * maxAngle * 2 - maxAngle);
+        const direction = Math.random() > 0.5 ? 1 : -1;
+        const initialSpeed = 300;
+        gameState.ball.speedX = direction * initialSpeed * Math.cos(angle);
+        gameState.ball.speedY = initialSpeed * Math.sin(angle);
+        if (gameState.running) {
+            gameState.running = false;
+            setTimeout(() => {
+                if (!gameState.countdownActive) {
+                    gameState.running = true;
+                }
+            }, 500);
+        }
+    }
+    function drawPaddles(): void {
+        if (!ctx) return;
+        ctx.fillStyle = customSettings.paddleColor;
+        ctx.fillRect(0, gameState.paddles.player1Y, gameState.paddles.width, gameState.paddles.height);
+        if (canvas) {
+            ctx.fillRect(
+                canvas.width - gameState.paddles.width,
+                gameState.paddles.player2Y,
+                gameState.paddles.width,
+                gameState.paddles.height
+            );
+        }
+    }
 
+    function drawBall(): void {
+        if (!ctx) return;
+        
+        ctx.beginPath();
+        ctx.arc(gameState.ball.x, gameState.ball.y, gameState.ball.radius, 0, Math.PI * 2);
+        ctx.fillStyle = customSettings.ballColor;
+        ctx.fill();
+    }
   function openCustomMenu(): void {
     // Hide registration form without removing from DOM
     elements.registrationForm?.classList.add("hidden");
@@ -300,7 +353,7 @@ export default function initializeTournamentMode() {
     // This ensures the tournament mode title doesn't show behind the customize menu
     const gameTitle = document.querySelector('.game-title-container');
     if (gameTitle) {
-        gameTitle.style.display = 'none';
+        (gameTitle as HTMLElement).style.display = 'none';
     }
 }
 function closeCustomMenu(): void {
@@ -313,7 +366,7 @@ function closeCustomMenu(): void {
     // Restore title
     const gameTitle = document.querySelector('.game-title-container');
     if (gameTitle) {
-        gameTitle.style.display = '';
+        (gameTitle as HTMLElement).style.display = '';
     }
 }
 
@@ -397,8 +450,8 @@ function closeCustomMenu(): void {
           endTournament();
       } else {
           if (elements.playNextMatchButton) {
-              elements.playNextMatchButton.disabled = false;
-          }
+            (elements.playNextMatchButton as HTMLButtonElement).disabled = false;
+        }
       }
   }
 
@@ -474,8 +527,8 @@ function closeCustomMenu(): void {
       gameState.animationFrameId = requestAnimationFrame(gameLoop);
   }
   
-    function sliderAnimation(event) {
-        const slider = event.target;
+    function sliderAnimation(event: Event): void {
+        const slider = event.target as HTMLInputElement;
         
         const min = parseFloat(slider.min);
         const max = parseFloat(slider.max);
@@ -487,14 +540,14 @@ function closeCustomMenu(): void {
       if (gameState.controls.player1Up && gameState.paddles.player1Y > 0) {
           gameState.paddles.player1Y -= paddleSpeed;
       }
-      if (gameState.controls.player1Down && gameState.paddles.player1Y < canvas.height - gameState.paddles.height) {
-          gameState.paddles.player1Y += paddleSpeed;
+      if (gameState.controls.player1Down && canvas && gameState.paddles.player1Y < canvas.height - gameState.paddles.height) {
+        gameState.paddles.player1Y += paddleSpeed;
       }
       if (gameState.controls.player2Up && gameState.paddles.player2Y > 0) {
           gameState.paddles.player2Y -= paddleSpeed;
       }
-      if (gameState.controls.player2Down && gameState.paddles.player2Y < canvas.height - gameState.paddles.height) {
-          gameState.paddles.player2Y += paddleSpeed;
+      if (gameState.controls.player2Down && canvas && gameState.paddles.player2Y < canvas.height - gameState.paddles.height) {
+        gameState.paddles.player2Y += paddleSpeed;
       }
   }
   function updateBall(deltaTime: number): void {
@@ -508,8 +561,8 @@ function closeCustomMenu(): void {
     if (gameState.ball.y - radius <= 0) {
         gameState.ball.y = radius;
         gameState.ball.speedY = Math.abs(gameState.ball.speedY);
-    } else if (gameState.ball.y + radius >= canvas.height) {
-        gameState.ball.y = canvas.height - radius;
+    } if (canvas && gameState.ball.y + radius >= canvas.height) {
+            gameState.ball.y = canvas.height - radius;
         gameState.ball.speedY = -Math.abs(gameState.ball.speedY);
     }
     const paddleWidth = gameState.paddles.width;
@@ -534,7 +587,7 @@ function closeCustomMenu(): void {
         gameState.ball.speedX = Math.cos(angle) * newSpeed;
         gameState.ball.speedY = Math.sin(angle) * newSpeed;
     }
-    if (gameState.ball.speedX > 0 &&
+    if (gameState.ball.speedX > 0 && canvas &&
         gameState.ball.x + radius >= canvas.width - paddleWidth && 
         gameState.ball.x - radius <= canvas.width &&
         gameState.ball.y >= gameState.paddles.player2Y && 
@@ -558,52 +611,16 @@ function closeCustomMenu(): void {
         gameState.scores.player2++;
         updateScoreboard();
         resetBall();
-    } else if (gameState.ball.x + radius >= canvas.width) {
+    if (canvas && gameState.ball.x + radius >= canvas.width) {
         gameState.scores.player1++;
         updateScoreboard();
         resetBall();
     }
 }
 
-    function resetBall(): void {
-        gameState.ball.x = canvas.width / 2;
-        gameState.ball.y = canvas.height / 2;
-        const maxAngle = Math.PI / 4;
-        const angle = (Math.random() * maxAngle * 2 - maxAngle);
-        const direction = Math.random() > 0.5 ? 1 : -1;
-        const initialSpeed = 300;
-        gameState.ball.speedX = direction * initialSpeed * Math.cos(angle);
-        gameState.ball.speedY = initialSpeed * Math.sin(angle);
-        if (gameState.running) {
-            gameState.running = false;
-            setTimeout(() => {
-                if (!gameState.countdownActive) {
-                    gameState.running = true;
-                }
-            }, 500);
-        }
-    }
-  
-    function drawPaddles(): void {
-        if (!ctx) return;
-        ctx.fillStyle = customSettings.paddleColor;
-        ctx.fillRect(0, gameState.paddles.player1Y, gameState.paddles.width, gameState.paddles.height);
-        ctx.fillRect(
-            canvas.width - gameState.paddles.width,
-            gameState.paddles.player2Y,
-            gameState.paddles.width,
-            gameState.paddles.height
-        );
-    }
-  
-  function drawBall(): void {
-    if (!ctx) return;
-    
-    ctx.beginPath();
-    ctx.arc(gameState.ball.x, gameState.ball.y, gameState.ball.radius, 0, Math.PI * 2);
-    ctx.fillStyle = customSettings.ballColor;
-    ctx.fill();
-}
+
+
+
   function updateScoreboard(): void {
       if (elements.score1) {
           elements.score1.textContent = gameState.scores.player1.toString();
@@ -731,7 +748,7 @@ function closeCustomMenu(): void {
             elements.newTournamentButton?.removeEventListener("click", resetTournament);
             document.getElementById("back-to-modes-button")?.removeEventListener("click", backToGameModes);
             document.getElementById("back-to-modes-button-winner")?.removeEventListener("click", backToGameModes);
-    
+        
             if (gameState.animationFrameId !== null) {
                 cancelAnimationFrame(gameState.animationFrameId);
             }
@@ -741,5 +758,6 @@ function closeCustomMenu(): void {
             customizeElements.paddleColorInput?.removeEventListener("input", updateCustomSettings);
             customizeElements.lineColorInput?.removeEventListener("input", updateCustomSettings);
             customizeElements.pointsToWinSlider?.removeEventListener("input", updateCustomSettings);
-        };
-    }
+          };
+        }
+}

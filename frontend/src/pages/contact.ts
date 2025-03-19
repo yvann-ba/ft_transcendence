@@ -32,23 +32,23 @@ export default function initializeContactPage(): () => void {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                if (entry.target.classList.contains('timeline-item')) {
-                    const index = Array.from(timelineItems).indexOf(entry.target as HTMLElement);
-                    setTimeout(() => {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }, index * 200);
-                }
-                
-                observer.unobserve(entry.target);
+              entry.target.classList.add('visible');
+              if (entry.target.classList.contains('timeline-item')) {
+                const index = Array.from(timelineItems).indexOf(entry.target as HTMLElement);
+                setTimeout(() => {
+                  (entry.target as HTMLElement).style.opacity = '1';
+                  (entry.target as HTMLElement).style.transform = 'translateY(0)';
+                }, index * 200);
+              }
+              
+              observer.unobserve(entry.target);
             }
+          });
+        }, {
+          root: null,
+          threshold: 0.15,
+          rootMargin: '0px 0px -100px 0px'
         });
-    }, {
-        root: null,
-        threshold: 0.15,
-        rootMargin: '0px 0px -100px 0px'
-    });
     teamMembers.forEach(member => observer.observe(member));
     timelineItems.forEach(item => observer.observe(item));
     sections.forEach(section => observer.observe(section));
