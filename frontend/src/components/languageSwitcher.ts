@@ -52,7 +52,26 @@ export function createLanguageSwitcher(): HTMLElement {
   }
   
   function updatePageContent() {
-    // This will trigger a re-render of the current page
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+      const page = link.getAttribute('data-page');
+      if (page) {
+        let translationKey = '';
+        if (page === 'home') translationKey = 'nav.home';
+        else if (page === 'about') translationKey = 'nav.about';
+        else if (page === 'contact') translationKey = 'nav.contact';
+        else if (page === 'profile-page') translationKey = 'nav.profile';
+        
+        if (translationKey) {
+          const translated = languageService.translate(translationKey);
+          // Mettre à jour à la fois le texte et l'attribut data-hover
+          const span = link.querySelector('span');
+          if (span) span.textContent = translated;
+          link.setAttribute('data-hover', translated);
+        }
+      }
+    });
+    
     window.dispatchEvent(new CustomEvent('languageChanged'));
   }
   

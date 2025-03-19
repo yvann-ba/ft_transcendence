@@ -1,7 +1,7 @@
 {
   "nav": {
     "home": "Accueil",
-    "about": "À propos",
+    "about": "À Propos",
     "contact": "Contact",
     "profile": "Profil",
     "back_to_home": "Retour à l'accueil"
@@ -17,12 +17,15 @@
   "game": {
     "play": "Jouer",
     "customize": "Personnaliser",
-    "back": "Retour à l'accueil",
+    "back": "Retour",
+    "back_to_home": "Retour à l'accueil",
     "winning_score": "Score gagnant: {score}",
     "ai_difficulty": "Difficulté IA",
     "classic_pong": "Pong Classique",
     "ai_challenge": "Défi IA Pong",
     "brick_breaker": "Casse-Briques",
+    "tournament": "Mode Tournoi",
+    "tournament_description": "Participez au championnat !",
     "controls": "Contrôles",
     "original_experience": "L'expérience originale 1 contre 1",
     "test_skills": "Testez vos compétences contre l'IA",
@@ -49,10 +52,12 @@
       "fast_paced": "Action rapide"
     },
     "colors": {
-      "ground": "Couleur du sol",
+      "ground": "Couleur du fond",
       "ball": "Couleur de la balle",
-      "paddle": "Couleur de la raquette"
-    }
+      "paddle": "Couleur de la raquette",
+      "line": "Couleur de la ligne"
+    },
+    "select_mode": "Sélectionnez un mode de jeu Pong"
   },
   "profile": {
     "title": "Profil du Joueur",
@@ -62,12 +67,20 @@
       "history": "Historique"
     },
     "add_friend": "Ajouter un Ami",
+    "edit": "Modifier le Profil",
     "login": "Se connecter",
     "name": "Nom:",
+    "username_placeholder": "Nom d'utilisateur",
+    "name_placeholder": "Nom",
     "history": {
       "date": "Date",
       "opponent": "Adversaire",
       "result": "Résultat"
+    },
+    "stats": {
+      "wins": "Victoires",
+      "losses": "Défaites",
+      "win_percentage": "{percent}% de victoires"
     }
   },
   "about": {
@@ -170,5 +183,19 @@
     "en": "Anglais",
     "fr": "Français",
     "es": "Espagnol"
+  },
+  "auth": {
+    "login": "Se connecter",
+    "login_with": "Se connecter avec",
+    "register": "S'inscrire",
+    "register_with": "S'inscrire avec",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "confirm_password": "Confirmer le mot de passe",
+    "first_name": "Prénom",
+    "last_name": "Nom",
+    "or": "ou",
+    "no_account": "Vous n'avez pas de compte ?",
+    "has_account": "Vous avez déjà un compte ?"
   }
 }
