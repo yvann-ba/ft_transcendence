@@ -71,11 +71,14 @@ interface GameState {
 	animationFrameId: number | null;
 }
 
-export function backToGameModes(event?: Event): void {
+function backToGameModes(event?: Event): void {
 	// Prevent default form submission behavior if this is in a form
 	if (event) event.preventDefault();
 	
-	// Add a smooth transition overlay to hide the flash
+	// Get the href attribute from the button that was clicked
+	const href = (event?.target as HTMLElement)?.getAttribute('href') || '/pong-selection';
+	
+	// Add a smooth transition overlay
 	const transitionOverlay = document.createElement('div');
 	transitionOverlay.style.position = 'fixed';
 	transitionOverlay.style.top = '0';
@@ -94,7 +97,7 @@ export function backToGameModes(event?: Event): void {
 	  
 	  // Then navigate after the fade is complete
 	  setTimeout(() => {
-		window.location.href = "/pong-selection";
+		window.location.href = href;
 	  }, 200);
 	}, 10);
   }
