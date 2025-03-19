@@ -556,67 +556,68 @@ function closeCustomMenu(): void {
   }
 
   
-  function checkCollisions(): void {
-    const radius = gameState.ball.radius;
-    if (gameState.ball.y - radius <= 0) {
-        gameState.ball.y = radius;
-        gameState.ball.speedY = Math.abs(gameState.ball.speedY);
-    } if (canvas && gameState.ball.y + radius >= canvas.height) {
+    function checkCollisions(): void {
+        const radius = gameState.ball.radius;
+        if (gameState.ball.y - radius <= 0) {
+            gameState.ball.y = radius;
+            gameState.ball.speedY = Math.abs(gameState.ball.speedY);
+        } if (canvas && gameState.ball.y + radius >= canvas.height) {
             gameState.ball.y = canvas.height - radius;
-        gameState.ball.speedY = -Math.abs(gameState.ball.speedY);
-    }
-    const paddleWidth = gameState.paddles.width;
-    const paddleHeight = gameState.paddles.height;
-    if (gameState.ball.speedX < 0 &&
-        gameState.ball.x - radius <= paddleWidth && 
-        gameState.ball.x + radius >= 0 &&
-        gameState.ball.y >= gameState.paddles.player1Y && 
-        gameState.ball.y <= gameState.paddles.player1Y + paddleHeight) {
-        gameState.ball.x = paddleWidth + radius;
-        gameState.ball.speedX = Math.abs(gameState.ball.speedX);
-        const hitPosition = (gameState.ball.y - gameState.paddles.player1Y) / paddleHeight;
-        gameState.ball.speedY += (hitPosition - 0.5) * gameState.ball.speedX * 1.5;
-        const maxVerticalSpeed = gameState.ball.maxSpeed * 0.8;
-        if (Math.abs(gameState.ball.speedY) > maxVerticalSpeed) {
-            gameState.ball.speedY = Math.sign(gameState.ball.speedY) * maxVerticalSpeed;
+            gameState.ball.speedY = -Math.abs(gameState.ball.speedY);
         }
-        const speedMultiplier = 1.05;
-        const currentSpeed = Math.sqrt(gameState.ball.speedX * gameState.ball.speedX + gameState.ball.speedY * gameState.ball.speedY);
-        const newSpeed = Math.min(currentSpeed * speedMultiplier, gameState.ball.maxSpeed);
-        const angle = Math.atan2(gameState.ball.speedY, gameState.ball.speedX);
-        gameState.ball.speedX = Math.cos(angle) * newSpeed;
-        gameState.ball.speedY = Math.sin(angle) * newSpeed;
-    }
-    if (gameState.ball.speedX > 0 && canvas &&
-        gameState.ball.x + radius >= canvas.width - paddleWidth && 
-        gameState.ball.x - radius <= canvas.width &&
-        gameState.ball.y >= gameState.paddles.player2Y && 
-        gameState.ball.y <= gameState.paddles.player2Y + paddleHeight) {
-        gameState.ball.x = canvas.width - paddleWidth - radius;
-        gameState.ball.speedX = -Math.abs(gameState.ball.speedX);
-        const hitPosition = (gameState.ball.y - gameState.paddles.player2Y) / paddleHeight;
-        gameState.ball.speedY += (hitPosition - 0.5) * -gameState.ball.speedX * 1.5;
-        const maxVerticalSpeed = gameState.ball.maxSpeed * 0.8;
-        if (Math.abs(gameState.ball.speedY) > maxVerticalSpeed) {
-            gameState.ball.speedY = Math.sign(gameState.ball.speedY) * maxVerticalSpeed;
+        const paddleWidth = gameState.paddles.width;
+        const paddleHeight = gameState.paddles.height;
+        if (gameState.ball.speedX < 0 &&
+            gameState.ball.x - radius <= paddleWidth && 
+            gameState.ball.x + radius >= 0 &&
+            gameState.ball.y >= gameState.paddles.player1Y && 
+            gameState.ball.y <= gameState.paddles.player1Y + paddleHeight) {
+            gameState.ball.x = paddleWidth + radius;
+            gameState.ball.speedX = Math.abs(gameState.ball.speedX);
+            const hitPosition = (gameState.ball.y - gameState.paddles.player1Y) / paddleHeight;
+            gameState.ball.speedY += (hitPosition - 0.5) * gameState.ball.speedX * 1.5;
+            const maxVerticalSpeed = gameState.ball.maxSpeed * 0.8;
+            if (Math.abs(gameState.ball.speedY) > maxVerticalSpeed) {
+                gameState.ball.speedY = Math.sign(gameState.ball.speedY) * maxVerticalSpeed;
+            }
+            const speedMultiplier = 1.05;
+            const currentSpeed = Math.sqrt(gameState.ball.speedX * gameState.ball.speedX + gameState.ball.speedY * gameState.ball.speedY);
+            const newSpeed = Math.min(currentSpeed * speedMultiplier, gameState.ball.maxSpeed);
+            const angle = Math.atan2(gameState.ball.speedY, gameState.ball.speedX);
+            gameState.ball.speedX = Math.cos(angle) * newSpeed;
+            gameState.ball.speedY = Math.sin(angle) * newSpeed;
         }
-        const speedMultiplier = 1.05;
-        const currentSpeed = Math.sqrt(gameState.ball.speedX * gameState.ball.speedX + gameState.ball.speedY * gameState.ball.speedY);
-        const newSpeed = Math.min(currentSpeed * speedMultiplier, gameState.ball.maxSpeed);
-        const angle = Math.atan2(gameState.ball.speedY, gameState.ball.speedX);
-        gameState.ball.speedX = Math.cos(angle) * newSpeed;
-        gameState.ball.speedY = Math.sin(angle) * newSpeed;
+        if (gameState.ball.speedX > 0 && canvas &&
+            gameState.ball.x + radius >= canvas.width - paddleWidth && 
+            gameState.ball.x - radius <= canvas.width &&
+            gameState.ball.y >= gameState.paddles.player2Y && 
+            gameState.ball.y <= gameState.paddles.player2Y + paddleHeight) {
+            gameState.ball.x = canvas.width - paddleWidth - radius;
+            gameState.ball.speedX = -Math.abs(gameState.ball.speedX);
+            const hitPosition = (gameState.ball.y - gameState.paddles.player2Y) / paddleHeight;
+            gameState.ball.speedY += (hitPosition - 0.5) * -gameState.ball.speedX * 1.5;
+            const maxVerticalSpeed = gameState.ball.maxSpeed * 0.8;
+            if (Math.abs(gameState.ball.speedY) > maxVerticalSpeed) {
+                gameState.ball.speedY = Math.sign(gameState.ball.speedY) * maxVerticalSpeed;
+            }
+            const speedMultiplier = 1.05;
+            const currentSpeed = Math.sqrt(gameState.ball.speedX * gameState.ball.speedX + gameState.ball.speedY * gameState.ball.speedY);
+            const newSpeed = Math.min(currentSpeed * speedMultiplier, gameState.ball.maxSpeed);
+            const angle = Math.atan2(gameState.ball.speedY, gameState.ball.speedX);
+            gameState.ball.speedX = Math.cos(angle) * newSpeed;
+            gameState.ball.speedY = Math.sin(angle) * newSpeed;
+        }
+        if (gameState.ball.x - radius <= 0) {
+            gameState.scores.player2++;
+            updateScoreboard();
+            resetBall();
+        }  // Added closing bracket here
+        if (canvas && gameState.ball.x + radius >= canvas.width) {
+            gameState.scores.player1++;
+            updateScoreboard();
+            resetBall();
+        }
     }
-    if (gameState.ball.x - radius <= 0) {
-        gameState.scores.player2++;
-        updateScoreboard();
-        resetBall();
-    if (canvas && gameState.ball.x + radius >= canvas.width) {
-        gameState.scores.player1++;
-        updateScoreboard();
-        resetBall();
-    }
-}
 
 
 
@@ -739,7 +740,7 @@ function closeCustomMenu(): void {
         updateCustomSettings();
       }
         init();
-        return function cleanup(): void {
+        function cleanup(): void {
             document.removeEventListener("keydown", handleKeyDown);
             document.removeEventListener("keyup", handleKeyUp);
             
@@ -758,6 +759,6 @@ function closeCustomMenu(): void {
             customizeElements.paddleColorInput?.removeEventListener("input", updateCustomSettings);
             customizeElements.lineColorInput?.removeEventListener("input", updateCustomSettings);
             customizeElements.pointsToWinSlider?.removeEventListener("input", updateCustomSettings);
-          };
         }
-}
+        return cleanup;
+    }
