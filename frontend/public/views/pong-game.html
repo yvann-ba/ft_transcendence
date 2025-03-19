@@ -54,38 +54,39 @@
             </div>
         </div>
         
-        <div id="pong-custom-menu" class="hidden">
-            <div class="custom-menu-content">
-                <h1 class="custom-title">Customize Game</h1>
-                <div class="custom-settings">
-                    <div class="settings-group">
-                        <div class="color-setting">
-                            <label for="pong-ground-color" data-i18n="game.colors.ground">Ground Color</label>
-                            <input type="color" value="#ffffff" id="pong-ground-color" class="color-input">
-                        </div>
-                        <div class="color-setting">
-                            <label for="pong-ball-color" data-i18n="game.colors.ball">Ball Color</label>
-                            <input type="color" value="#ffffff" id="pong-ball-color" class="color-input">
-                        </div>
-                        <div class="color-setting">
-                            <label for="pong-paddle-color" data-i18n="game.colors.paddle">Paddle Color</label>
-                            <input type="color" value="#ffffff" id="pong-paddle-color" class="color-input">
-                        </div>
-                    </div>
-                    <div class="settings-group">
-                        <div class="slider-setting">
-                            <p id="pong-winning-score" data-i18n="game.winning_score">Winning score: 3</p>
-                            <input type="range" min="1" max="10" value="3" class="pong-custom-slider" id="winning-score-slider">
-                            <div class="slider-labels">
-                                <span>1</span>
-                                <span>10</span>
-                            </div>
-                        </div>
+<div id="pong-custom-menu" class="hidden">
+    <div class="custom-menu-content">
+        <h1 class="custom-title">Customize Game</h1>
+        <div class="custom-settings">
+            <div class="settings-group">
+                <div class="color-setting">
+                    <label for="pong-ground-color" data-i18n="game.colors.ground">Ground Color</label>
+                    <input type="color" value="#ffffff" id="pong-ground-color" class="color-input">
+                </div>
+                <div class="color-setting">
+                    <label for="pong-ball-color" data-i18n="game.colors.ball">Ball Color</label>
+                    <input type="color" value="#ffffff" id="pong-ball-color" class="color-input">
+                </div>
+                <div class="color-setting">
+                    <label for="pong-paddle-color" data-i18n="game.colors.paddle">Paddle Color</label>
+                    <input type="color" value="#ffffff" id="pong-paddle-color" class="color-input">
+                </div>
+            </div>
+            <div class="settings-group">
+                <div class="slider-setting">
+                    <p id="pong-winning-score">Winning score: 3</p>
+                    <input type="range" min="1" max="10" value="3" class="pong-custom-slider" id="winning-score-slider">
+                    <div class="slider-labels">
+                        <span>1</span>
+                        <span>10</span>
                     </div>
                 </div>
-                <button id="back-to-modes-button" class="pong-button back-button" href="/pong-selection" data-i18n="game.back">Back</button>
             </div>
         </div>
+        <!-- Change this button to use id="custom-back-button" to match the event listener -->
+        <button id="custom-back-button" class="pong-button">Back to Menu</button>
+    </div>
+</div>
         <div id="pong-winner-announcement" class="hidden">
             <div class="winner-content">
                 <h2>Champion!</h2>
