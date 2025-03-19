@@ -1,4 +1,5 @@
 import { languageService } from "./utils/languageContext";
+import { changeProfileLabel } from "./app";
 
 // Cache for preloaded HTML content
 const pageCache: { [key: string]: string } = {};
@@ -6,9 +7,29 @@ const pageCache: { [key: string]: string } = {};
 // Flag to track if a transition is in progress
 let isTransitioning = false;
 
-export const navigate = async (path?: string): Promise<void> => {
+// Store query parameters for routes
+const routeParams: { [key: string]: string } = {};
+
+export const navigate = async (path?: string, preserveParams = false): Promise<void> => {
   // If no path is provided, use the current path
-  const targetPath = path || window.location.pathname;
+  let targetPath = path || window.location.pathname;
+  
+  // Handle query parameters
+  let queryString = '';
+  if (path && path.includes('?')) {
+    const [basePath, params] = path.split('?');
+    targetPath = basePath;
+    queryString = `?${params}`;
+    
+    // Parse and store query parameters
+    const urlParams = new URLSearchParams(params);
+    urlParams.forEach((value, key) => {
+      routeParams[key] = value;
+    });
+  } else if (preserveParams && window.location.search) {
+    // Preserve existing query parameters if requested
+    queryString = window.location.search;
+  }
   
   // If transition is already in progress, ignore
   if (isTransitioning) return;
@@ -23,26 +44,27 @@ export const navigate = async (path?: string): Promise<void> => {
   setTimeout(async () => {
     try {
       // Get the page content (from cache or fetch)
-      let pageContent = pageCache[targetPath];
+      const fullPath = targetPath + queryString;
+      let pageContent = pageCache[fullPath];
       if (!pageContent) {
         pageContent = await loadPage(getViewName(targetPath));
         // Store in cache for future use
-        pageCache[targetPath] = pageContent;
+        pageCache[fullPath] = pageContent;
       }
       
       // Update the content while overlay is visible
       document.getElementById("app")!.innerHTML = pageContent;
       
       // Update URL if necessary (when called with a specific path)
-      if (path && path !== window.location.pathname) {
-        window.history.pushState({}, "", path);
+      if (path || queryString) {
+        window.history.pushState({}, "", targetPath + queryString);
       }
       
       // Apply translations
       applyTranslationsToPage();
       
       // Initialize any scripts needed for the new page
-      await loadPageScript(targetPath);
+      await loadPageScript(targetPath + queryString);
       
       // Fade out the overlay
       setTimeout(() => {
@@ -149,7 +171,8 @@ function applyTranslationsToPage(): void {
     }
   });
   
-  // Other specific element translations can be added here
+  // Update profile button based on auth status
+  changeProfileLabel();
 }
 
 // Add a shared cleanup function to handle navigation transition cleanup
@@ -163,47 +186,40 @@ async function loadPageScript(path: string): Promise<void> {
     currentCleanup = null;
   }
 
-  // Special handling for AI mode
-  if (path === "/pong-game") {
-    const urlParams = new URLSearchParams(window.location.search);
-    const aiMode = urlParams.get('ai');
-    if (aiMode === "true") {
-      localStorage.setItem('pongAiMode', 'true');
-    } else {
-      localStorage.removeItem('pongAiMode');
-    }
-  }
+  // Parse path to get main route and query parameters
+  const [route, queryParams] = path.split('?');
+  const urlParams = new URLSearchParams(queryParams || '');
 
   try {
     // Import the appropriate module based on the path
-    if (path === "/" || path === "/home") {
+    if (route === "/" || route === "/home") {
       const module = await import("./pages/home");
       currentCleanup = module.default() || null;
-    } else if (path === "/pong-game") {
+    } else if (route === "/pong-game") {
       const module = await import("./pages/pong-game");
       currentCleanup = module.default() || null;
-    } else if (path === "/pong-selection") {
+    } else if (route === "/pong-selection") {
       const module = await import("./pages/pong-selection");
       currentCleanup = module.default() || null;
-    } else if (path === "/four-player-pong") {
+    } else if (route === "/four-player-pong") {
       const module = await import("./game/four-player-pong");
       currentCleanup = module.default() || null;
-    } else if (path === "/pong-tournament") {
+    } else if (route === "/pong-tournament") {
       const module = await import("./pages/pong-tournament");
       currentCleanup = module.default() || null;
-    } else if (path === "/profile-page") {
+    } else if (route === "/profile-page") {
       const module = await import("./pages/profile-page");
       currentCleanup = module.default() || null;
-    } else if (path === "/about") {
+    } else if (route === "/about") {
       const module = await import("./pages/about");
       currentCleanup = module.default() || null;
-    } else if (path === "/contact") {
+    } else if (route === "/contact") {
       const module = await import("./pages/contact");
       currentCleanup = module.default() || null;
-    } else if (path === "/login") {
+    } else if (route === "/login") {
       const module = await import("./pages/login");
       module.default();
-    } else if (path === "/register") {
+    } else if (route === "/register") {
       const module = await import("./pages/register");
       module.default();
     }
@@ -235,6 +251,12 @@ window.addEventListener("popstate", () => {
 export function isAuthenticated(): boolean {
   const token = localStorage.getItem('token');
   return token !== null && token !== "";
+}
+
+// Get a query parameter value for the current page
+export function getQueryParam(key: string): string | null {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(key) || routeParams[key] || null;
 }
 
 // Preload common pages in the background
