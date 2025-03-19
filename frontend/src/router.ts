@@ -1,52 +1,169 @@
-import initializeHomeAnimations from "./pages/home";
-import { changeProfileLabel } from "./app";
 import { languageService } from "./utils/languageContext";
 
-const routes: { [key: string]: string } = {
-  "/": "home",
-  "/home": "home",
-  "/pong-selection": "pong-selection",
-  "/pong-game": "pong-game",
-  "/four-player-pong" : "four-player-pong",
-  "/pong-tournament": "pong-tournament", 
-  "/profile-page": "profile-page",
-  "/test": "test",
-  "/login": "login",
-  "/register": "register",
-  "/about": "about",
-  "/contact": "contact",
-  "404": "404",
+// Cache for preloaded HTML content
+const pageCache: { [key: string]: string } = {};
+
+// Flag to track if a transition is in progress
+let isTransitioning = false;
+
+export const navigate = async (path?: string): Promise<void> => {
+  // If no path is provided, use the current path
+  const targetPath = path || window.location.pathname;
+  
+  // If transition is already in progress, ignore
+  if (isTransitioning) return;
+  
+  isTransitioning = true;
+  
+  // Create transition overlay
+  const overlay = createTransitionOverlay();
+  document.body.appendChild(overlay);
+  
+  // Fade in the overlay
+  setTimeout(async () => {
+    try {
+      // Get the page content (from cache or fetch)
+      let pageContent = pageCache[targetPath];
+      if (!pageContent) {
+        pageContent = await loadPage(getViewName(targetPath));
+        // Store in cache for future use
+        pageCache[targetPath] = pageContent;
+      }
+      
+      // Update the content while overlay is visible
+      document.getElementById("app")!.innerHTML = pageContent;
+      
+      // Update URL if necessary (when called with a specific path)
+      if (path && path !== window.location.pathname) {
+        window.history.pushState({}, "", path);
+      }
+      
+      // Apply translations
+      applyTranslationsToPage();
+      
+      // Initialize any scripts needed for the new page
+      await loadPageScript(targetPath);
+      
+      // Fade out the overlay
+      setTimeout(() => {
+        overlay.style.opacity = "0";
+        
+        setTimeout(() => {
+          // Remove overlay when fade out completes
+          document.body.removeChild(overlay);
+          isTransitioning = false;
+        }, 300);
+      }, 200);
+    } catch (error) {
+      console.error("Navigation error:", error);
+      isTransitioning = false;
+      
+      // Still remove overlay in case of error
+      overlay.style.opacity = "0";
+      setTimeout(() => {
+        if (document.body.contains(overlay)) {
+          document.body.removeChild(overlay);
+        }
+      }, 300);
+    }
+  }, 10);
 };
 
-const isPublicRoute = (path: string): boolean => {
-  if (path === "/" || path === "/home" || path === "/about"|| path === "/contact" || path === "/login" || path === "/register")
-    return true;
-  return (false)
+function createTransitionOverlay(): HTMLElement {
+  const overlay = document.createElement('div');
+  overlay.style.position = 'fixed';
+  overlay.style.top = '0';
+  overlay.style.left = '0';
+  overlay.style.width = '100%';
+  overlay.style.height = '100%';
+  overlay.style.backgroundColor = '#000';
+  overlay.style.zIndex = '9999';
+  overlay.style.opacity = '0';
+  overlay.style.transition = 'opacity 0.3s ease';
+  overlay.style.pointerEvents = 'none'; // Allow clicking through during fade
+  
+  // Force a reflow before changing opacity
+  void overlay.offsetWidth;
+  overlay.style.opacity = '1';
+  
+  return overlay;
 }
 
-export const navigate = async (): Promise<void> => {
-  const hasAuthCookie = document.cookie.split(';').some(item => item.trim().startsWith('auth_token='));
-  if (hasAuthCookie && !isAuthenticated()) {
-    localStorage.setItem('token', 'authenticated');
+function getViewName(path: string): string {
+  // Default to home if path is root
+  if (path === "/") return "home";
+  
+  // Remove the leading slash
+  let routeName = path.substring(1);
+  
+  // Remove any query parameters
+  const queryParamIndex = routeName.indexOf('?');
+  if (queryParamIndex > -1) {
+    routeName = routeName.substring(0, queryParamIndex);
+  }
+  
+  // If empty after processing, default to home
+  return routeName || "home";
+}
+
+async function loadPage(viewName: string): Promise<string> {
+  try {
+    const response = await fetch(`/views/${viewName}.html`);
+    if (!response.ok) throw new Error(`Failed to load page: ${viewName}`);
+    return await response.text();
+  } catch (error) {
+    console.error(`Error loading view ${viewName}:`, error);
+    return "<section>Page not found</section>";
+  }
+}
+
+// Function to apply translations to the current page
+function applyTranslationsToPage(): void {
+  // Find all elements with data-i18n attribute
+  const elements = document.querySelectorAll('[data-i18n]');
+  elements.forEach(element => {
+    const key = element.getAttribute('data-i18n');
+    if (key) {
+      element.textContent = languageService.translate(key);
+    }
+  });
+  
+  // Update navigation links hover state
+  const navLinks = document.querySelectorAll('.nav-link');
+  navLinks.forEach(link => {
+    const dataHover = link.getAttribute('data-hover');
+    if (dataHover) {
+      const page = link.getAttribute('data-page');
+      if (page) {
+        let translationKey = '';
+        if (page === 'home') translationKey = 'nav.home';
+        else if (page === 'about') translationKey = 'nav.about';
+        else if (page === 'contact') translationKey = 'nav.contact';
+        else if (page === 'profile-page') translationKey = 'nav.profile';
+        
+        if (translationKey) {
+          const translated = languageService.translate(translationKey);
+          link.setAttribute('data-hover', translated);
+        }
+      }
+    }
+  });
+  
+  // Other specific element translations can be added here
+}
+
+// Add a shared cleanup function to handle navigation transition cleanup
+let currentCleanup: (() => void) | null = null;
+
+// Function to load and execute page-specific JavaScript
+async function loadPageScript(path: string): Promise<void> {
+  // Clean up previous page if needed
+  if (currentCleanup) {
+    currentCleanup();
+    currentCleanup = null;
   }
 
-  let path = window.location.pathname;
-  if (!isPublicRoute(path) && !isAuthenticated()) {
-    path = "/login";
-  }
-  if (path === '/login' && isAuthenticated()) {
-    path = "/home";
-  }
-
-  let page = routes[path] || routes["404"];
-  const pageContent = await loadPage(page);
-  document.getElementById("app")!.innerHTML = pageContent;
-  changeProfileLabel();
-
-  // Apply translations to the loaded page
-  applyTranslationsToPage();
-
-  // Check for AI mode query parameter
+  // Special handling for AI mode
   if (path === "/pong-game") {
     const urlParams = new URLSearchParams(window.location.search);
     const aiMode = urlParams.get('ai');
@@ -57,162 +174,8 @@ export const navigate = async (): Promise<void> => {
     }
   }
 
-  await loadPageScript(path);
-
-  if (page === "home") {
-    initializeHomeAnimations();
-  }
-};
-
-// Function to apply translations to the current page
-function applyTranslationsToPage() {
-  // Find all elements with data-i18n attribute
-  const elements = document.querySelectorAll('[data-i18n]');
-  elements.forEach(element => {
-    const key = element.getAttribute('data-i18n');
-    if (key) {
-      element.textContent = languageService.translate(key);
-    }
-  });
-  
-  // Update specific elements based on their IDs or classes
-  
-  // Home page
-  const homeHeader = document.querySelector('.home-header-heading');
-  if (homeHeader) {
-    const clickElem = homeHeader.querySelector('[data-i="1"]');
-    const toElem = homeHeader.querySelector('[data-i="2"]');
-    const playElem = homeHeader.querySelector('[data-i="3"]');
-    const pongElem = homeHeader.querySelector('[data-i="4"]');
-    
-    if (clickElem) clickElem.textContent = languageService.translate('home.title.click', 'Click');
-    if (toElem) toElem.textContent = languageService.translate('home.title.to', 'To');
-    if (playElem) playElem.textContent = languageService.translate('home.title.play', 'Play');
-    if (pongElem) pongElem.textContent = languageService.translate('home.title.pong', 'Pong');
-  }
-  
-  // Pong selection page
-  const gameCards = document.querySelectorAll('.game-card');
-  if (gameCards.length > 0) {
-    const playButtons = document.querySelectorAll('.play-button');
-    playButtons.forEach(btn => {
-      btn.textContent = languageService.translate('game.play', 'PLAY NOW');
-    });
-    
-    // Update game card titles
-    const classicModeCard = document.getElementById('classic-mode');
-    const aiModeCard = document.getElementById('ai-mode');
-    const multiplayerModeCard = document.getElementById('multiplayer-mode');
-    
-    if (classicModeCard) {
-      const title = classicModeCard.querySelector('h2');
-      if (title) title.textContent = languageService.translate('game.classic_pong', 'Classic Pong');
-      
-      const featuresList = classicModeCard.querySelectorAll('.features li');
-      if (featuresList.length >= 3) {
-        featuresList[0].textContent = languageService.translate('game.features.two_players', 'Two players');
-        featuresList[1].textContent = languageService.translate('game.features.same_keyboard', 'Same keyboard');
-        featuresList[2].textContent = languageService.translate('game.features.addictive', 'Truly addictive...');
-      }
-    }
-    
-    if (aiModeCard) {
-      const title = aiModeCard.querySelector('h2');
-      if (title) title.textContent = languageService.translate('game.ai_challenge', 'AI Pong Challenge');
-      
-      const featuresList = aiModeCard.querySelectorAll('.features li');
-      if (featuresList.length >= 3) {
-        featuresList[0].textContent = languageService.translate('game.features.single_player', 'Single player');
-        featuresList[1].textContent = languageService.translate('game.features.difficulty_levels', 'Three difficulty levels');
-        featuresList[2].textContent = languageService.translate('game.features.adaptive_ai', 'Adaptive AI opponent');
-      }
-    }
-    
-    if (multiplayerModeCard) {
-      const title = multiplayerModeCard.querySelector('h2');
-      if (title) title.textContent = languageService.translate('game.brick_breaker', 'Brick Breaker');
-      
-      const featuresList = multiplayerModeCard.querySelectorAll('.features li');
-      if (featuresList.length >= 3) {
-        featuresList[0].textContent = languageService.translate('game.features.four_players', 'Four players');
-        featuresList[1].textContent = languageService.translate('game.features.square_arena', 'Square arena');
-        featuresList[2].textContent = languageService.translate('game.features.fast_paced', 'Fast-paced action');
-      }
-    }
-  }
-  
-  // Profile page
-  const profileTitle = document.querySelector('.page-title');
-  if (profileTitle && profileTitle.textContent?.includes('Profile')) {
-    profileTitle.textContent = languageService.translate('profile.title', 'Player Profile');
-    
-    // Update tabs
-    const tabLinks = document.querySelectorAll('.tab-link');
-    if (tabLinks.length >= 3) {
-      tabLinks[0].textContent = languageService.translate('profile.tabs.info', 'Profile Info');
-      tabLinks[1].textContent = languageService.translate('profile.tabs.stats', 'Statistics');
-      tabLinks[2].textContent = languageService.translate('profile.tabs.history', 'History');
-    }
-    
-    // Update add friend button
-    const addFriendBtn = document.querySelector('.btn-add-friend');
-    if (addFriendBtn) {
-      addFriendBtn.textContent = languageService.translate('profile.login', 'log in');
-    }
-  }
-  
-  // About page
-  const aboutHeader = document.querySelector('.about-header h1');
-  if (aboutHeader) {
-    const aboutSpan = aboutHeader.querySelector('[data-i="1"]');
-    const ftTranscendenceSpan = aboutHeader.querySelector('[data-i="2"]');
-    
-    if (aboutSpan) aboutSpan.textContent = languageService.translate('about.title', 'About');
-    // Keep ft_transcendence as is, no translation needed for the project name
-  }
-  
-  const aboutSections = document.querySelectorAll('.section-title h2');
-  aboutSections.forEach(section => {
-    const text = section.textContent?.trim();
-    if (text === 'Project Overview') {
-      section.textContent = languageService.translate('about.project', 'Project Overview');
-    } else if (text === 'Technology Stack') {
-      section.textContent = languageService.translate('about.tech_stack', 'Technology Stack');
-    } else if (text === 'Key Features') {
-      section.textContent = languageService.translate('about.features', 'Key Features');
-    } else if (text === 'Our Team') {
-      section.textContent = languageService.translate('about.team', 'Our Team');
-    }
-  });
-  
-  // Contact page
-  const contactHeader = document.querySelector('.contact-header h1');
-  if (contactHeader) {
-    const meetSpan = contactHeader.querySelector('[data-i="1"]');
-    const theSpan = contactHeader.querySelector('[data-i="2"]');
-    const teamSpan = contactHeader.querySelector('[data-i="3"]');
-    
-    if (meetSpan) meetSpan.textContent = languageService.translate('contact.title', 'Meet');
-    if (theSpan) theSpan.textContent = languageService.translate('contact.the', 'The');
-    if (teamSpan) teamSpan.textContent = languageService.translate('contact.team', 'Team');
-    
-    const subtitle = document.querySelector('.contact-subtitle');
-    if (subtitle) subtitle.textContent = languageService.translate('contact.subtitle', 'The masterminds behind ft_transcendence');
-    
-    const intro = document.querySelector('.team-intro p');
-    if (intro) intro.textContent = languageService.translate('contact.intro', 'Our team of five developers worked together to create this immersive Pong experience. Each member brought unique skills and perspectives to make ft_transcendence a reality.');
-  }
-}
-
-let currentCleanup: (() => void) | null = null;
-
-const loadPageScript = async (path: string): Promise<void> => {
-  if (currentCleanup) {
-    currentCleanup();
-    currentCleanup = null;
-  }
-
   try {
+    // Import the appropriate module based on the path
     if (path === "/" || path === "/home") {
       const module = await import("./pages/home");
       currentCleanup = module.default() || null;
@@ -230,17 +193,13 @@ const loadPageScript = async (path: string): Promise<void> => {
       currentCleanup = module.default() || null;
     } else if (path === "/profile-page") {
       const module = await import("./pages/profile-page");
-      // currentCleanup = module.default() || null;
-      module.default();
+      currentCleanup = module.default() || null;
     } else if (path === "/about") {
       const module = await import("./pages/about");
       currentCleanup = module.default() || null;
     } else if (path === "/contact") {
       const module = await import("./pages/contact");
       currentCleanup = module.default() || null;
-    } else if (path === "/test") {
-      // const module = await import("./pages/test");
-      // module.default();
     } else if (path === "/login") {
       const module = await import("./pages/login");
       module.default();
@@ -251,38 +210,98 @@ const loadPageScript = async (path: string): Promise<void> => {
   } catch (error) {
     console.error(`Error loading script for ${path}:`, error);
   }
-};
-  
-export const isAuthenticated = (): boolean => {
-  const token = localStorage.getItem('token');
-  return token !== null && token !== "";
-};
+}
 
-const loadPage = async (page: string): Promise<string> => {
-  try {
-    const response = await fetch(`/views/${page}.html`);
-    if (!response.ok) throw new Error("Page not found");
-    const html = await response.text();
-    
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-    return doc.body.innerHTML;
-  } catch (error) {
-    return "<section>Page not found</section>";
-  }
-};
-
-document.body.addEventListener("click", (event: MouseEvent) : void => {
+// Global click handler for navigation links
+document.body.addEventListener("click", (event: MouseEvent) => {
   const target = event.target as HTMLElement;
   const link = target.closest("a");
-  if (link) {
+  if (link && !link.hasAttribute('target')) {
     const href = link.getAttribute("href");
-    const profileLabel = document.querySelector(".profile-label") as HTMLElement;
-
+    
+    // Only handle internal links
     if (href && href.startsWith("/")) {
       event.preventDefault();
-      window.history.pushState({}, "", href);
-      navigate();
+      navigate(href);
     }
   }
 });
+
+// Handle browser back/forward buttons
+window.addEventListener("popstate", () => {
+  navigate();
+});
+
+export function isAuthenticated(): boolean {
+  const token = localStorage.getItem('token');
+  return token !== null && token !== "";
+}
+
+// Preload common pages in the background
+export function preloadCommonPages(): void {
+  // List of commonly accessed pages to preload
+  const pagesToPreload = [
+    "/home",
+    "/pong-selection",
+    "/login"
+  ];
+  
+  // Preload pages in the background
+  setTimeout(() => {
+    pagesToPreload.forEach(async (path) => {
+      try {
+        const viewName = getViewName(path);
+        if (!pageCache[path]) {
+          const content = await loadPage(viewName);
+          pageCache[path] = content;
+        }
+      } catch (error) {
+        // Silently fail - this is just preloading
+      }
+    });
+  }, 2000); // Wait a bit after initial page load
+}
+
+// Export this for backward compatibility
+export const checkAuthStatus = async (): Promise<boolean> => {
+  try {
+    // First check if we have a token in localStorage
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      return true;
+    }
+    
+    // Check auth_token non-httpOnly cookie
+    const hasAuthCookie = document.cookie.split(';').some(item => item.trim().startsWith('auth_token='));
+    if (hasAuthCookie) {
+      localStorage.setItem('token', 'authenticated');
+      return true;
+    }
+    
+    // If no local token, check with the server
+    const response = await fetch("/api/auth/status", {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Accept": "application/json"
+      }
+    });
+    
+    if (!response.ok) return false;
+    
+    try {
+      const data = await response.json();
+      if (data.authenticated) {
+        localStorage.setItem('token', 'authenticated');
+        return true;
+      }
+      return false;
+    } catch (jsonError) {
+      console.error("Received non-JSON response from auth status endpoint");
+      return false;
+    }
+  } catch (err) {
+    console.error("Error checking auth status:", err);
+    return false;
+  }
+};
