@@ -8,24 +8,27 @@
   },
   "home": {
     "title": {
-      "click": "Haz Clic",
+      "click": "Haz clic",
       "to": "Para",
       "play": "Jugar",
       "pong": "Pong"
     }
   },
   "game": {
-    "play": "Jugar Ahora",
+    "play": "Jugar",
     "customize": "Personalizar",
-    "back": "Volver al inicio",
+    "back": "Volver",
+    "back_to_home": "Volver al inicio",
     "winning_score": "Puntuación ganadora: {score}",
-    "ai_difficulty": "Dificultad IA",
+    "ai_difficulty": "Dificultad de la IA",
     "classic_pong": "Pong Clásico",
-    "ai_challenge": "Desafío de IA Pong",
+    "ai_challenge": "Desafío IA Pong",
     "brick_breaker": "Rompe Ladrillos",
+    "tournament": "Modo Torneo",
+    "tournament_description": "¡Participa en el campeonato!",
     "controls": "Controles",
     "original_experience": "La experiencia original 1 contra 1",
-    "test_skills": "Prueba tus habilidades contra la IA",
+    "test_skills": "Pon a prueba tus habilidades contra la IA",
     "chaotic_fun": "Diversión multijugador caótica",
     "controls_info": {
       "player1": "Jugador 1:",
@@ -35,7 +38,7 @@
       "bottom": "Abajo:",
       "right": "Derecha:",
       "controls": "Controles:",
-      "see_ai": "Ver predicciones de IA con:"
+      "see_ai": "Ver predicciones de la IA con:"
     },
     "features": {
       "two_players": "Dos jugadores",
@@ -43,16 +46,18 @@
       "addictive": "Realmente adictivo...",
       "single_player": "Un jugador",
       "difficulty_levels": "Tres niveles de dificultad",
-      "adaptive_ai": "Oponente IA adaptativo",
+      "adaptive_ai": "IA adaptativa",
       "four_players": "Cuatro jugadores",
       "square_arena": "Arena cuadrada", 
       "fast_paced": "Acción rápida"
     },
     "colors": {
-      "ground": "Color del suelo",
+      "ground": "Color del fondo",
       "ball": "Color de la pelota",
-      "paddle": "Color de la pala"
-    }
+      "paddle": "Color de la raqueta",
+      "line": "Color de la línea"
+    },
+    "select_mode": "Selecciona un modo de juego Pong"
   },
   "profile": {
     "title": "Perfil del Jugador",
@@ -61,24 +66,32 @@
       "stats": "Estadísticas",
       "history": "Historial"
     },
-    "add_friend": "Añadir Amigo",
-    "login": "Iniciar Sesión",
+    "add_friend": "Agregar Amigo",
+    "edit": "Editar Perfil",
+    "login": "Iniciar sesión",
     "name": "Nombre:",
+    "username_placeholder": "Nombre de usuario",
+    "name_placeholder": "Nombre",
     "history": {
       "date": "Fecha",
       "opponent": "Oponente",
       "result": "Resultado"
+    },
+    "stats": {
+      "wins": "Victorias",
+      "losses": "Derrotas",
+      "win_percentage": "{percent}% de victorias"
     }
   },
   "about": {
     "title": "Acerca de",
-    "project": "Visión General del Proyecto",
-    "tech_stack": "Stack Tecnológico",
-    "features": "Características Principales",
-    "team": "Nuestro Equipo",
+    "project": "Visión general del proyecto",
+    "tech_stack": "Stack tecnológico",
+    "features": "Características clave",
+    "team": "Nuestro equipo",
     "project_description": {
-      "part1": "ft_transcendence es una plataforma de juego Pong en tiempo real desarrollada como parte del plan de estudios de la escuela 42. Este proyecto nos desafía a crear una aplicación web completa con autenticación de usuarios, juego en tiempo real, sistemas de torneos y características sociales.",
-      "part2": "Nuestra implementación incluye juego local y contra IA, opciones de personalización de juego, perfiles de usuario y una interfaz moderna y elegante diseñada para proporcionar una experiencia de juego excepcional."
+      "part1": "ft_transcendence es una plataforma de juego Pong en tiempo real desarrollada como parte del programa de la escuela 42. Este proyecto nos desafía a crear una aplicación web completa con autenticación de usuarios, juego en tiempo real, torneos y funciones sociales.",
+      "part2": "Nuestra implementación incluye modos de juego locales y contra la IA, opciones de personalización, perfiles de usuario y una interfaz moderna y elegante diseñada para brindar una experiencia de juego excepcional."
     },
     "tech_categories": {
       "frontend": "Frontend",
@@ -93,82 +106,43 @@
       "customization": "Personalización",
       "authentication": "Autenticación segura",
       "responsive": "Diseño responsivo"
-    },
-    "feature_descriptions": {
-      "realtime": "Juega al Pong clásico con gráficos modernos y jugabilidad fluida",
-      "ai": "Desafía a nuestra IA inteligente con niveles de dificultad ajustables",
-      "profiles": "Crea tu perfil, sigue tus estadísticas y ve tu historial de partidas",
-      "customization": "Personaliza tu experiencia de juego con varias opciones visuales",
-      "authentication": "Sistema de autenticación robusto con integración OAuth 42",
-      "responsive": "Disfruta del juego en varios dispositivos y tamaños de pantalla"
-    },
-    "team_description": "ft_transcendence fue desarrollado por un equipo dedicado de estudiantes de 42, combinando experiencia en desarrollo web, diseño de juegos y experiencia de usuario para crear esta plataforma inmersiva de Pong en línea."
+    }
   },
   "contact": {
-    "title": "Conoce",
-    "the": "Al",
+    "title": "Conoce al",
+    "the": "equipo",
     "team": "Equipo",
-    "subtitle": "Las mentes maestras detrás de ft_transcendence",
-    "intro": "Nuestro equipo de cinco desarrolladores trabajó juntos para crear esta experiencia inmersiva de Pong. Cada miembro aportó habilidades y perspectivas únicas para hacer realidad ft_transcendence.",
+    "subtitle": "Las mentes detrás de ft_transcendence",
+    "intro": "Nuestro equipo de cinco desarrolladores trabajó juntos para crear esta experiencia inmersiva de Pong. Cada miembro aportó habilidades y perspectivas únicas para hacer de ft_transcendence una realidad.",
     "roles": {
       "frontend": "Desarrollador Frontend",
       "backend": "Desarrollador Backend",
       "game": "Desarrollador de Juegos",
       "devops": "Ingeniero DevOps",
       "fullstack": "Desarrollador Full Stack"
-    },
-    "keywords": {
-      "uiux": "UI/UX",
-      "typescript": "TypeScript",
-      "responsive": "Diseño Responsive",
-      "fastify": "Fastify",
-      "api": "Diseño de API",
-      "database": "Base de datos",
-      "game_logic": "Lógica de juego",
-      "ai_opponent": "Oponente IA",
-      "physics": "Física",
-      "docker": "Docker",
-      "nginx": "Nginx",
-      "security": "Seguridad",
-      "profiles": "Perfiles de usuario",
-      "oauth": "OAuth",
-      "websockets": "WebSockets"
-    },
-    "descriptions": {
-      "frontend": "Desarrolló la interfaz de usuario responsive e implementó elementos interactivos en toda la aplicación. Creó las animaciones fluidas y efectos visuales que mejoran la experiencia del usuario.",
-      "backend": "Diseñó la infraestructura backend utilizando Fastify y Node.js. Diseñó el esquema de base de datos e implementó los endpoints de API para un flujo de datos fluido entre frontend y backend.",
-      "game": "Implementó la mecánica principal del juego y la física para Pong. Desarrolló el oponente IA con múltiples niveles de dificultad y creó el sistema de emparejamiento para torneos.",
-      "devops": "Configuró la infraestructura con Docker y Nginx. Configuró SSL/TLS para conexiones seguras e implementó mecanismos de autenticación en toda la aplicación.",
-      "fullstack": "Implementó la autenticación de usuarios con integración OAuth 42. Creó funciones en tiempo real usando WebSockets y desarrolló el sistema de perfil de usuario y amigos."
-    },
-    "socials": {
-      "github": "GitHub",
-      "linkedin": "LinkedIn",
-      "profile": "Perfil 42"
-    },
-    "collaboration": {
-      "title": "Cómo construimos ft_transcendence",
-      "phases": {
-        "planning": "Fase de planificación",
-        "development": "Fase de desarrollo",
-        "polishing": "Fase de pulido",
-        "deployment": "Fase de despliegue"
-      },
-      "descriptions": {
-        "planning": "Comenzamos desglosando los requisitos y planificando nuestra arquitectura. Esto implicó elegir tecnologías, diseñar esquemas de base de datos y crear wireframes.",
-        "development": "Con un plan claro, construimos las características principales de forma iterativa. Comenzando con el juego Pong básico, añadimos autenticación, perfiles de usuario y capacidades multijugador.",
-        "polishing": "Después de implementar la funcionalidad principal, mejoramos la UI/UX, optimizamos el rendimiento e implementamos características adicionales como oponentes IA y opciones de personalización.",
-        "deployment": "Finalmente, contenerizamos la aplicación con Docker, configuramos Nginx para el enrutamiento e implementamos medidas de seguridad para un despliegue listo para producción."
-      }
     }
   },
   "error": {
     "not_found": "Página no encontrada",
-    "sorry": "Lo sentimos, la página que estás buscando no existe."
+    "sorry": "Lo sentimos, la página que buscas no existe."
   },
   "language": {
     "en": "Inglés",
     "fr": "Francés",
     "es": "Español"
+  },
+  "auth": {
+    "login": "Iniciar sesión",
+    "login_with": "Iniciar sesión con",
+    "register": "Registrarse",
+    "register_with": "Registrarse con",
+    "username": "Nombre de usuario",
+    "password": "Contraseña",
+    "confirm_password": "Confirmar contraseña",
+    "first_name": "Nombre",
+    "last_name": "Apellido",
+    "or": "o",
+    "no_account": "¿No tienes una cuenta?",
+    "has_account": "¿Ya tienes una cuenta?"
   }
 }

@@ -17,12 +17,15 @@
   "game": {
     "play": "Play Now",
     "customize": "Customize",
-    "back": "Back to Home",
+    "back": "Back",
+    "back_to_home": "Back to Home",
     "winning_score": "Winning score: {score}",
     "ai_difficulty": "AI Difficulty",
     "classic_pong": "Classic Pong",
     "ai_challenge": "AI Pong Challenge",
     "brick_breaker": "Brick Breaker",
+    "tournament": "Tournament Mode",
+    "tournament_description": "Compete for the championship!",
     "controls": "Controls",
     "original_experience": "The original 1v1 experience",
     "test_skills": "Test your skills against AI",
@@ -51,8 +54,10 @@
     "colors": {
       "ground": "Ground Color",
       "ball": "Ball Color",
-      "paddle": "Paddle Color"
-    }
+      "paddle": "Paddle Color",
+      "line": "Line Color"
+    },
+    "select_mode": "Select Pong Game Mode"
   },
   "profile": {
     "title": "Player Profile",
@@ -62,12 +67,20 @@
       "history": "History"
     },
     "add_friend": "Add Friend",
+    "edit": "Edit Profile",
     "login": "Log in",
     "name": "Name:",
+    "username_placeholder": "Username placeholder",
+    "name_placeholder": "Name placeholder",
     "history": {
       "date": "Date",
       "opponent": "Opponent",
       "result": "Result"
+    },
+    "stats": {
+      "wins": "Wins",
+      "losses": "Losses",
+      "win_percentage": "{percent}% Wins"
     }
   },
   "about": {
@@ -170,5 +183,19 @@
     "en": "English",
     "fr": "French",
     "es": "Spanish"
+  },
+  "auth": {
+    "login": "Log in",
+    "login_with": "Log in with",
+    "register": "Sign Up",
+    "register_with": "Sign Up with",
+    "username": "Username",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "or": "or",
+    "no_account": "Don't have an account?",
+    "has_account": "Already have an account?"
   }
 }
