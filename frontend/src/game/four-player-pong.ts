@@ -50,7 +50,7 @@ export default function initializeMultiplayerGame(): (() => void) | null {
   }
   const GAME_WIDTH = canvas.width;
   const GAME_HEIGHT = canvas.height;
-  let MAX_SCORE = 10;
+  let MAX_SCORE = 5;
   const PLAYER_COUNT = 4;
   const PADDLE_COOLDOWN = 300; // ms delay between paddle hits to prevent lag
   const ball: Ball = {

@@ -53,7 +53,7 @@
 
 :root {
   --ground-color: #000000;
-  --slider-track-bg: linear-gradient(to right, #BB70AD 0%, #BB70AD 25%, #ffffff 25%);
+  --slider-track-bg: linear-gradient(to right, #BB70AD 0%, #BB70AD 9%, #ffffff 25%);
 }
 
 #multiplayerCanvas {
@@ -299,7 +299,7 @@
 
 #pong-winning-score {
   color: white;
-  font-size: 1.2rem;
+  font-size: 1.2rem;  
   margin-bottom: 10px;
 }
 

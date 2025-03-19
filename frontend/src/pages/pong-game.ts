@@ -580,7 +580,7 @@ export default function initializePongGame(): (() => void) | null {
 			controlsList.innerHTML = `
 			  <div><span>Player:</span> W / S Keys</div>
 			  <div><span>AI Opponent:</span> Computer Controlled</div>
-			  <div class="debug-hint">Press Ctrl+D to toggle AI prediction visualization</div>
+			  <div class="debug-hint">Press Alt+Q to toggle AI prediction visualization</div>
 			`;
 		  }
 		  
@@ -638,8 +638,33 @@ export default function initializePongGame(): (() => void) | null {
 
 	function endGame(): void {
 		state.running = false;
-		elements.menu?.classList.remove("hidden");
-		elements.menu?.classList.add("show");
+		
+		// Determine the winner
+		let winner = null;
+		if (state.scores.player1 >= state.scores.winning) {
+			winner = "Player 1";
+		} else if (state.scores.player2 >= state.scores.winning) {
+			winner = state.aiEnabled ? "AI Opponent" : "Player 2";
+		}
+		
+		if (winner) {
+			// Update the winner announcement
+			const championName = document.getElementById("pong-champion-name");
+			if (championName) {
+				championName.textContent = winner;
+			}
+			
+			// Show winner announcement
+			const winnerAnnouncement = document.getElementById("pong-winner-announcement");
+			if (winnerAnnouncement) {
+				winnerAnnouncement.classList.remove("hidden");
+			}
+		} else {
+			// Fallback to old behavior if no winner determined
+			elements.menu?.classList.remove("hidden");
+			elements.menu?.classList.add("show");
+		}
+		
 		resetBall();
 	}
 
@@ -902,7 +927,8 @@ export default function initializePongGame(): (() => void) | null {
 		}
 		state.animationFrameId = requestAnimationFrame(gameLoop);
 		document.addEventListener("keydown", (e) => {
-			if (e.key === "d" && e.ctrlKey) {
+			if (e.key === "q" && e.altKey) {
+				e.preventDefault();
 				state.debugMode = !state.debugMode;
 				console.log("Debug mode:", state.debugMode);
 			}
@@ -914,6 +940,28 @@ export default function initializePongGame(): (() => void) | null {
 		  // Add the improved event listener
 		  backToModesButton.addEventListener("click", backToGameModes);
 		};
+		const newGameButton = document.getElementById("new-game-button");
+		if (newGameButton) {
+			newGameButton.addEventListener("click", () => {
+				// Hide winner announcement
+				const winnerAnnouncement = document.getElementById("pong-winner-announcement");
+				if (winnerAnnouncement) {
+					winnerAnnouncement.classList.add("hidden");
+				}
+				
+				// Reset game and start a new one
+				state.scores.player1 = 0;
+				state.scores.player2 = 0;
+				updateScores();
+				startGame();
+			});
+		}
+		
+		const backToModesButtonWinner = document.getElementById("back-to-modes-button-winner");
+		if (backToModesButtonWinner) {
+			backToModesButtonWinner.removeEventListener("click", backToGameModes);
+			backToModesButtonWinner.addEventListener("click", backToGameModes);
+		}
   		setupAIModeUI();
 
 	}
@@ -946,7 +994,8 @@ export default function initializePongGame(): (() => void) | null {
 		  cancelAnimationFrame(state.animationFrameId);
 		}
 		document.getElementById("back-to-modes-button")?.addEventListener("click", backToGameModes);
-
+		document.getElementById("new-game-button")?.removeEventListener("click", () => {});
+		document.getElementById("back-to-modes-button-winner")?.removeEventListener("click", backToGameModes);
 	}
 	
 	return cleanup;

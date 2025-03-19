@@ -1,5 +1,5 @@
 :root {
-    --slider-track-bg: linear-gradient(to right, #BB70AD 0%, #BB70AD 25%, #ffffff 25%);
+    --slider-track-bg: linear-gradient(to right, #BB70AD 10%, #BB70AD 25%, #ffffff 25%);
   }
   
   /* Tournament Game Layout */

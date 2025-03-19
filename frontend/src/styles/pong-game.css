@@ -667,3 +667,57 @@
     text-align: center;
     font-style: italic;
   }
+
+  #pong-winner-announcement {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 999;
+}
+
+.winner-content {
+    background-color: #000;
+    border-radius: 15px;
+    box-shadow: 0 0 30px rgba(187, 112, 173, 0.3);
+    border: 2px solid rgba(187, 112, 173, 0.5);
+    padding: 40px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+}
+
+#pong-winner-announcement h2 {
+    color: #BB70AD;
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+
+#pong-champion-name {
+    font-size: 2.5rem;
+    color: white;
+    margin: 1.5rem 0;
+    font-weight: bold;
+}
+
+#pong-winner-announcement .trophy-icon {
+    font-size: 4rem;
+    margin: 2rem 0;
+    animation: trophy-glow 2s infinite alternate;
+}
+
+#pong-winner-announcement .pong-button {
+    margin-top: 20px;
+}
+
+/* Make sure the buttons are stacked and centered */
+#pong-winner-announcement .pong-button {
+    width: 200px;
+    margin: 10px auto;
+    display: block;
+}

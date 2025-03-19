@@ -113,7 +113,7 @@ export default function initializeTournamentMode() {
         ballColor: "#ffffff",
         paddleColor: "#ffffff",
         lineColor: "#ffffff",
-        pointsToWin: 5
+        pointsToWin: 3
     };
   const tournamentState = {
       players: [] as TournamentPlayer[],
@@ -141,7 +141,7 @@ export default function initializeTournamentMode() {
       scores: {
           player1: 0,
           player2: 0,
-          winning: 5
+          winning: 3
       },
       controls: {
           player1Up: false,
