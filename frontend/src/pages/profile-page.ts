@@ -302,14 +302,23 @@ function initializeChart(nb_wins: number, nb_games: number): void {
     const ratioText = document.querySelector('.ratio-text');
     const lossLegend = document.getElementById('loss-legend');
     const tooltip = document.getElementById('chart-tooltip');
+    const winNum = document.getElementById('win-num');
+    const lossNum = document.getElementById('loss-num');
+
     
-    if (!winSegment || !lossSegment || !winPercentageText || !winLegend || !lossLegend || !tooltip || !ratioText) {
+    if (!winSegment || !lossSegment || !winPercentageText || !winLegend || !lossLegend || !tooltip || !ratioText || !winNum || !lossNum) {
         return;
     }
     const winRatio = losses > 0 ? (wins / losses).toFixed(2) : wins > 0 ? "∞" : "0";
     
     ratioText.textContent = String(winRatio);
+
+    winNum.textContent = String(wins) + " Wins";
+    lossNum.textContent = String(losses) + " Losses";
+
     winPercentageText.textContent = `${winPercentage}% Wins`;
+
+
     animateChart = () => {
         const winDashArray = `${circumference * wins / total} ${circumference}`;
         const lossDashArray = `${circumference * losses / total} ${circumference}`;
