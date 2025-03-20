@@ -1,6 +1,7 @@
 import "../styles/pong-game.css";
 import "../styles/pong-selection.css";
 import { AIOpponent, AIDifficulty } from '../game/ai/ai-opponent';
+import { languageService } from "../utils/languageContext";
 
 declare global {
   interface Window {
@@ -540,7 +541,7 @@ export default function initializePongGame(): (() => void) | null {
     
     if (isAIMode) {
       if (titleElem) {
-        titleElem.textContent = 'AI PONG';
+        titleElem.textContent = languageService.translate('game.ai_mode.title', 'AI PONG');
         
         const badge = document.createElement('span');
         badge.className = 'ai-mode-badge';
@@ -549,23 +550,24 @@ export default function initializePongGame(): (() => void) | null {
       }
       
       if (subtitleElem) {
-        subtitleElem.textContent = 'Challenge the Computer';
+        subtitleElem.textContent = languageService.translate('game.ai_mode.subtitle', 'Challenge the Computer');
       }
       
       const rulesCard = document.getElementById('rules-card');
       if (rulesCard) {
         const rulesPara = rulesCard.querySelector('p');
         if (rulesPara) {
-          rulesPara.textContent = 'Play against an AI opponent with multiple difficulty levels. Use precise timing and anticipate the AI\'s movements to win!';
+          rulesPara.textContent = languageService.translate('game.ai_mode.description', 
+            'Play against an AI opponent with multiple difficulty levels. Use precise timing and anticipate the AI\'s movements to win!');
         }
       }
       
       const controlsList = document.getElementById('controls-list');
       if (controlsList) {
         controlsList.innerHTML = `
-          <div><span>Player:</span> W / S Keys</div>
-          <div><span>AI Opponent:</span> Computer Controlled</div>
-          <div class="debug-hint">Press Alt+Q to toggle AI prediction visualization</div>
+          <div><span>${languageService.translate('game.controls_info.player', 'Player')}:</span> W / S ${languageService.translate('game.controls_info.keys', 'Keys')}</div>
+          <div><span>${languageService.translate('game.controls_info.ai_opponent', 'AI Opponent')}:</span> ${languageService.translate('game.controls_info.computer_controlled', 'Computer Controlled')}</div>
+          <div class="debug-hint">${languageService.translate('game.controls_info.toggle_ai_debug', 'Press Alt+Q to toggle AI prediction visualization')}</div>
         `;
       }
       
@@ -576,6 +578,10 @@ export default function initializePongGame(): (() => void) | null {
       
       const difficultyBtns = document.querySelectorAll('.difficulty-btn');
       difficultyBtns.forEach(btn => {
+        const difficultyKey = btn.getAttribute('data-difficulty') || 'medium';
+        btn.textContent = languageService.translate(`game.ai_mode.difficulty.${difficultyKey}`, 
+          difficultyKey.charAt(0).toUpperCase() + difficultyKey.slice(1));
+        
         btn.addEventListener('click', function(this: HTMLElement) {
           difficultyBtns.forEach(b => b.classList.remove('active'));
           
@@ -590,6 +596,37 @@ export default function initializePongGame(): (() => void) | null {
           }
         });
       });
+    } else {
+      // Classic mode text
+      if (titleElem) {
+        titleElem.textContent = languageService.translate('game.classic_pong', 'PONG');
+      }
+      
+      if (subtitleElem) {
+        subtitleElem.textContent = languageService.translate('game.original_experience', 'Classic 1v1 Experience');
+      }
+      
+      const rulesCard = document.getElementById('rules-card');
+      if (rulesCard) {
+        const rulesTitle = rulesCard.querySelector('h3');
+        if (rulesTitle) {
+          rulesTitle.textContent = languageService.translate('game.rules', 'Game Rules');
+        }
+        
+        const rulesPara = rulesCard.querySelector('p');
+        if (rulesPara) {
+          rulesPara.textContent = languageService.translate('game.rules_description', 
+            'Score points by getting the ball past your opponent\'s paddle. First to reach the winning score wins!');
+        }
+      }
+      
+      const controlsList = document.getElementById('controls-list');
+      if (controlsList) {
+        controlsList.innerHTML = `
+          <div><span>${languageService.translate('game.controls_info.player1', 'Player 1')}:</span> W / S ${languageService.translate('game.controls_info.keys', 'Keys')}</div>
+          <div><span>${languageService.translate('game.controls_info.player2', 'Player 2')}:</span> ↑ / ↓ ${languageService.translate('game.controls_info.arrow_keys', 'Arrow Keys')}</div>
+        `;
+      }
     }
   }
 
@@ -621,15 +658,27 @@ export default function initializePongGame(): (() => void) | null {
     
     let winner = null;
     if (state.scores.player1 >= state.scores.winning) {
-      winner = "Player 1";
+      winner = languageService.translate('game.player1', "Player 1");
     } else if (state.scores.player2 >= state.scores.winning) {
-      winner = state.aiEnabled ? "AI Opponent" : "Player 2";
+      winner = state.aiEnabled ? 
+        languageService.translate('game.ai_opponent', "AI Opponent") : 
+        languageService.translate('game.player2', "Player 2");
     }
     
     if (winner) {
       const championName = document.getElementById("pong-champion-name");
       if (championName) {
         championName.textContent = winner;
+      }
+      
+      const winnerTitle = document.querySelector("#pong-winner-announcement h2");
+      if (winnerTitle) {
+        winnerTitle.textContent = languageService.translate('game.champion', "Champion!");
+      }
+      
+      const newGameButton = document.getElementById("new-game-button");
+      if (newGameButton) {
+        newGameButton.textContent = languageService.translate('game.new_game', "New Game");
       }
       
       const winnerAnnouncement = document.getElementById("pong-winner-announcement");
@@ -833,14 +882,16 @@ export default function initializePongGame(): (() => void) | null {
 	const max = parseFloat(slider.max);
 	const value = 5 + ((parseFloat(slider.value) - min) / (max - min)) * 90;
 	slider.style.setProperty('--slider-track-bg', `linear-gradient(to right, #BB70AD 0%, #BB70AD ${value}%, #ffffff ${value}%)`);}
-	function changeWinningScore(event: Event): void {
-	const slider = event.target as HTMLInputElement;
-	state.scores.winning = Math.floor(parseFloat(slider.value));
-	const winningScoreElem = document.getElementById("pong-winning-score");
-	if (winningScoreElem) {
-	winningScoreElem.textContent = "Winning score: " + state.scores.winning;
-	}
-	}
+	
+  function changeWinningScore(event: Event): void {
+    const slider = event.target as HTMLInputElement;
+    state.scores.winning = Math.floor(parseFloat(slider.value));
+    const winningScoreElem = document.getElementById("pong-winning-score");
+    if (winningScoreElem) {
+      winningScoreElem.textContent = languageService.translate('game.winning_score', "Winning score: ") + state.scores.winning;
+    }
+  }
+
 	function changeAIDifficulty(): void {
 	if (state.aiEnabled && state.aiOpponent && elements.difficultySelector) {
 	const difficulty = elements.difficultySelector.value as AIDifficulty;

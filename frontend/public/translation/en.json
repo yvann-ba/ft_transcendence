@@ -57,6 +57,9 @@
       "subtitle": "Square Arena Multiplayer Mode",
       "rules": "Break your opponents' bricks to earn points. The first to reach the winning score wins!"
     },
+    "winning_score_display": "Winning Score",
+  "back_to_menu": "Back to Menu",
+  "customize_title": "Custom Game",
     "tournament_mode": {
       "title": "TOURNAMENT MODE",
       "subtitle": "4-player Championship"

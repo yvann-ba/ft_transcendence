@@ -57,6 +57,9 @@
       "subtitle": "Modo multijugador Square Arena",
       "rules": "Rompe los ladrillos de tus oponentes para ganar puntos. ¡El primero en alcanzar la puntuación ganadora gana!"
     },
+    "winning_score_display": "Puntuación Ganadora",
+    "back_to_menu": "Volver",
+    "customize_title": "Partida Personalizada",
     "tournament_mode": {
       "title": "MODO TORNEO",
       "subtitle": "Campeonato de 4 jugadores"

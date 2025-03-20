@@ -57,6 +57,9 @@
       "subtitle": "Mode Multijoueur Arena Carrée",
       "rules": "Cassez les briques de vos adversaires pour marquer des points. Le premier à atteindre le score gagnant remporte la partie !"
     },
+    "winning_score_display": "Score Gagnant",
+    "back_to_menu": "Retour",
+    "customize_title": "Partie Personnaliser",
     "tournament_mode": {
       "title": "MODE TOURNOI",
       "subtitle": "Championnat à 4 joueurs"
