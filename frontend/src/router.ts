@@ -197,7 +197,7 @@ async function loadPageScript(path: string): Promise<void> {
       currentCleanup = module.default() || null;
     } else if (route === "/pong-game") {
       const module = await import("./pages/pong-game");
-      currentCleanup = module.default() || null;
+      module.default();
     } else if (path === "/pong-selection") {
       const module = await import("./pages/pong-selection");
       currentCleanup = module.default() || null;
@@ -209,7 +209,7 @@ async function loadPageScript(path: string): Promise<void> {
       currentCleanup = module.default() || null;
     } else if (route === "/profile-page") {
       const module = await import("./pages/profile-page");
-      currentCleanup = module.default() || null;
+      module.default();
     } else if (route === "/about") {
       const module = await import("./pages/about");
       currentCleanup = module.default() || null;

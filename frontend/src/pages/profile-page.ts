@@ -83,8 +83,6 @@ async function initializeProfilePage(): Promise<() => void> {
 
     const user = await getCurrentUser();
 
-    console.log(user);
-
     if (user) {
         updateProfileInfo(user);
         await loadGameHistory();
@@ -290,11 +288,9 @@ function sortTable(columnIndex: number, headerElement: Element): void {
 
 function initializeChart(nb_wins: number, nb_games: number): void {
     const wins = nb_wins;
-    console.log('wins games', wins,  nb_games);
     const losses = nb_games-nb_wins;
     const total =  nb_games;
     const winPercentage = (wins / total * 100).toFixed(1);
-    console.log(winPercentage);
     const lossPercentage = (losses / total * 100).toFixed(1);
     const radius = 45;
     const circumference = 2 * Math.PI * radius;
@@ -302,12 +298,16 @@ function initializeChart(nb_wins: number, nb_games: number): void {
     const lossSegment = document.getElementById('loss-segment');
     const winPercentageText = document.getElementById('win-percentage');
     const winLegend = document.getElementById('win-legend');
+    const ratioText = document.querySelector('.ratio-text');
     const lossLegend = document.getElementById('loss-legend');
     const tooltip = document.getElementById('chart-tooltip');
     
-    if (!winSegment || !lossSegment || !winPercentageText || !winLegend || !lossLegend || !tooltip) {
+    if (!winSegment || !lossSegment || !winPercentageText || !winLegend || !lossLegend || !tooltip || !ratioText) {
         return;
     }
+    const winRatio = losses > 0 ? (wins / losses).toFixed(2) : wins > 0 ? "∞" : "0";
+    
+    ratioText.textContent = String(winRatio);
     winPercentageText.textContent = `${winPercentage}% Wins`;
     animateChart = () => {
         const winDashArray = `${circumference * wins / total} ${circumference}`;
