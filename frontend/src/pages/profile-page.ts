@@ -1,5 +1,6 @@
 import "../styles/profile-page.css";
 import { getCurrentUser } from "../utils/utils";
+import { redirectAfterAuth } from "../router";
 
 async function loadGameHistory(): Promise<void> {
     try {

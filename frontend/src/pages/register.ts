@@ -1,5 +1,5 @@
 import '../styles/register.css';
-import { navigate } from '../router';
+import { redirectAfterAuth } from '../router';
 
 interface RegisterResponse {
     message: string;
@@ -82,12 +82,7 @@ export default function register() {
 
             // Store token and redirect
             localStorage.setItem('token', data.token);
-            
-            // Redirect to home page
-            setTimeout(() => {
-                window.history.pushState({}, "", '/home');
-                navigate();
-            }, 1000);
+            redirectAfterAuth();
 
         } catch (error: any) {
             messageDiv.textContent = error.message;

@@ -1,6 +1,7 @@
 import { languageService } from "./utils/languageContext";
 import { changeProfileLabel } from "./app";
 
+
 // Cache for preloaded HTML content
 const pageCache: { [key: string]: string } = {};
 
@@ -27,28 +28,34 @@ export const navigate = async (path?: string, preserveParams = false): Promise<v
       routeParams[key] = value;
     });
   } else if (preserveParams && window.location.search) {
-    // Preserve existing query parameters if requested
     queryString = window.location.search;
   }
   
+  if ((targetPath === "/login" || targetPath === "/register") && isAuthenticated()) {
+    targetPath = "/profile-page";
+    queryString = "";
+  }
+
+  if (requiresAuthentication(targetPath) && !isAuthenticated()) {
+    const returnUrl = encodeURIComponent(targetPath + queryString);
+    targetPath = "/login";
+    queryString = `?redirect=${returnUrl}`;
+  }
+
   // If transition is already in progress, ignore
   if (isTransitioning) return;
   
   isTransitioning = true;
   
-  // Create transition overlay
   const overlay = createTransitionOverlay();
   document.body.appendChild(overlay);
   
-  // Fade in the overlay
   setTimeout(async () => {
     try {
-      // Get the page content (from cache or fetch)
       const fullPath = targetPath + queryString;
       let pageContent = pageCache[fullPath];
       if (!pageContent) {
         pageContent = await loadPage(getViewName(targetPath));
-        // Store in cache for future use
         pageCache[fullPath] = pageContent;
       }
       
@@ -109,6 +116,21 @@ function createTransitionOverlay(): HTMLElement {
   overlay.style.opacity = '1';
   
   return overlay;
+}
+
+function requiresAuthentication(path: string): boolean {
+  const publicRoutes = [
+    "/", 
+    "/home", 
+    "/about", 
+    "/contact", 
+    "/login", 
+    "/register"
+  ];
+  
+  const cleanPath = path.split('?')[0];
+  
+  return !publicRoutes.includes(cleanPath);
 }
 
 function getViewName(path: string): string {
@@ -190,6 +212,12 @@ async function loadPageScript(path: string): Promise<void> {
   const [route, queryParams] = path.split('?');
   const urlParams = new URLSearchParams(queryParams || '');
 
+  if (requiresAuthentication(route) && !isAuthenticated()) {
+    // Don't load the script for protected routes when not authenticated
+    console.warn("Attempted to access protected route without authentication");
+    return;
+  }
+
   try {
     // Import the appropriate module based on the path
     if (route === "/" || route === "/home") {
@@ -243,8 +271,29 @@ document.body.addEventListener("click", (event: MouseEvent) => {
   }
 });
 
+export function redirectAfterAuth(): void {
+  // Check if there's a redirect parameter
+  const redirect = getQueryParam('redirect');
+  if (redirect) {
+    // Decode the URL and navigate to it
+    navigate(decodeURIComponent(redirect));
+  } else {
+    // Default redirection to profile or home
+    navigate('/profile-page');
+  }
+}
+
 // Handle browser back/forward buttons
 window.addEventListener("popstate", () => {
+
+  const currentPath = window.location.pathname;
+  
+  if (requiresAuthentication(currentPath) && !isAuthenticated()) {
+    const returnUrl = encodeURIComponent(currentPath + window.location.search);
+    navigate(`/login?redirect=${returnUrl}`, false);
+    return;
+  }
+
   navigate();
 });
 
@@ -288,6 +337,7 @@ export function preloadCommonPages(): void {
 export const checkAuthStatus = async (): Promise<boolean> => {
   try {
     // First check if we have a token in localStorage
+    console.log('Check auth : ', localStorage);
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
       return true;
