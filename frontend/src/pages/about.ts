@@ -1,4 +1,15 @@
 import "../styles/about.css";
+import { languageService } from '../utils/languageContext';
+
+function updatePageTranslations() {
+    const elements = document.querySelectorAll('[data-i18n]');
+    elements.forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (key) {
+            element.textContent = languageService.translate(key);
+        }
+    });
+}
 
 export default function initializeAboutPage(): () => void {
     document.body.classList.add('about-page');
@@ -27,6 +38,10 @@ export default function initializeAboutPage(): () => void {
             }
         }, 300);
     }
+    updatePageTranslations();
+
+    window.addEventListener('languageChanged', updatePageTranslations);
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -123,6 +138,7 @@ export default function initializeAboutPage(): () => void {
         document.body.classList.remove('about-page');
         document.body.style.overflowY = originalBodyOverflow;
         document.body.style.height = originalBodyHeight;
+        window.removeEventListener('languageChanged', updatePageTranslations);
         
         if (appContainer) {
             appContainer.style.overflowY = originalAppOverflow;
