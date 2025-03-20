@@ -1,50 +1,22 @@
 import "./styles/globals.css";
 import "./styles/404.css";
-import { navigate, isAuthenticated } from "./router";
-import initializeHomeAnimations from "./pages/home";
+import { navigate, checkAuthStatus, preloadCommonPages } from "./router";
 import { languageService, getInitialLanguage } from "./utils/languageContext";
 import { createLanguageSwitcher } from "./components/languageSwitcher";
 
-export const checkAuthStatus = async (): Promise<boolean> => {
-  try {
-    // First check if we have a token in localStorage
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
-      return true;
+export const changeProfileLabel = (): void => {
+  const profileLabel = document.querySelector(".profile-label") as HTMLElement;
+  
+  if (profileLabel) {
+    const isAuth = localStorage.getItem('token') !== null;
+    
+    if (isAuth) {
+      profileLabel.textContent = languageService.translate("nav.profile", "Profile");
+      profileLabel.setAttribute("data-hover", languageService.translate("nav.profile", "Profile"));
+    } else {
+      profileLabel.textContent = languageService.translate("profile.login", "Login");
+      profileLabel.setAttribute("data-hover", languageService.translate("profile.login", "Login"));
     }
-    
-    // Check auth_token non-httpOnly cookie
-    const hasAuthCookie = document.cookie.split(';').some(item => item.trim().startsWith('auth_token='));
-    if (hasAuthCookie) {
-      localStorage.setItem('token', 'authenticated');
-      return true;
-    }
-    
-    // If no local token, check with the server
-    const response = await fetch("/api/auth/status", {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "Accept": "application/json"
-      }
-    });
-    
-    if (!response.ok) return false;
-    
-    try {
-      const data = await response.json();
-      if (data.authenticated) {
-        localStorage.setItem('token', 'authenticated');
-        return true;
-      }
-      return false;
-    } catch (jsonError) {
-      console.error("Received non-JSON response from auth status endpoint");
-      return false;
-    }
-  } catch (err) {
-    console.error("Error checking auth status:", err);
-    return false;
   }
 };
 
@@ -64,8 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       
       // Navigate if needed
       if (window.location.pathname === '/login') {
-        window.history.pushState({}, "", '/home');
-        navigate();
+        navigate('/home');
       }
     }
   });
@@ -81,35 +52,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   // Set up language change listener
   window.addEventListener('languageChanged', async () => {
-    await navigate(); // Re-render the current page
+    await navigate(); // Re-render the current page with new language
   });
   
-  checkAuthStatus();
+  // Check authentication status
+  await checkAuthStatus();
+  
+  // Initialize navbar animation
   initializeNavbarAnimation();
+  
+  // Navigate to initial page with smooth transition
   await navigate();
-
-  if (window.location.pathname === "/" || window.location.pathname === "/home") {
-    initializeHomeAnimations();
-  }
   
+  // Preload common pages for faster navigation
+  preloadCommonPages();
+  
+  // Initialize burger menu for mobile
   initializeBurgerMenu();
-  
-  window.addEventListener("popstate", async () => {
-    await navigate();
-  });
 });
-
-export const changeProfileLabel = (): void => {
-  const profileLabel = document.querySelector(".profile-label") as HTMLElement;
-  
-  if (isAuthenticated()) {
-    profileLabel.textContent = languageService.translate("nav.profile", "Profile");
-    profileLabel.setAttribute("data-hover", languageService.translate("nav.profile", "Profile"));
-  } else {
-    profileLabel.textContent = languageService.translate("profile.login", "Login");
-    profileLabel.setAttribute("data-hover", languageService.translate("profile.login", "Login"));
-  }
-};
 
 const initializeNavbarAnimation = (): void => {
   const nav = document.querySelector(".nav");
@@ -119,7 +79,7 @@ const initializeNavbarAnimation = (): void => {
   if (nav) {
     setTimeout(() => {
       nav.classList.add("in");
-    }, 500);
+    }, 300);
   }
   
   // Update navbar links with translations
@@ -140,18 +100,41 @@ const initializeNavbarAnimation = (): void => {
 
 const initializeBurgerMenu = (): void => {
   const burgerButton = document.querySelector<HTMLButtonElement>('.burger-menu-button');
-  const burgerMenu = document.querySelector<HTMLUListElement>('.ham-menu');
+  const burgerMenu = document.querySelector<HTMLDivElement>('.ham-menu');
 
-  if (burgerButton) {
-    burgerButton.addEventListener('click', () => {
-      burgerButton.classList.toggle('opened');
-      const isOpened = burgerButton.classList.contains('opened');
-      burgerButton.setAttribute('aria-expanded', isOpened.toString());
+  if (burgerButton && burgerMenu) {
+    // Remove any existing event listeners and recreate them
+    const newBurger = burgerButton.cloneNode(true) as HTMLButtonElement;
+    burgerButton.parentNode?.replaceChild(newBurger, burgerButton);
+    
+    newBurger.addEventListener('click', () => {
+      newBurger.classList.toggle('opened');
+      const isOpened = newBurger.classList.contains('opened');
+      newBurger.setAttribute('aria-expanded', isOpened.toString());
+      
       if (isOpened) {
-        burgerMenu?.classList.remove('hidden');
+        burgerMenu.classList.remove('hidden');
       } else {
-        burgerMenu?.classList.add('hidden');
+        burgerMenu.classList.add('hidden');
       }
+    });
+    
+    // Set up navigation in the hamburger menu
+    const menuLinks = burgerMenu.querySelectorAll('a');
+    menuLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = link.getAttribute('href');
+        if (href) {
+          // Close menu before navigating
+          burgerMenu.classList.add('hidden');
+          newBurger.classList.remove('opened');
+          newBurger.setAttribute('aria-expanded', 'false');
+          
+          // Navigate to the destination
+          navigate(href);
+        }
+      });
     });
   }
 };

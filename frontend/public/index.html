@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="--app-height: 1035px">
+<html lang="en" style="--app-height: 100vh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,66 +7,129 @@
     <title>Pong Game</title>
     <script src="https://kit.fontawesome.com/3de3c501a5.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/style.css">
+    <style>
+        /* Initial loading spinner */
+        .initial-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(187, 112, 173, 0.3);
+            border-radius: 50%;
+            border-top-color: #BB70AD;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        /* Prevent FOUC (Flash of Unstyled Content) */
+        .no-fouc {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .no-fouc.ready {
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
-    <nav class="nav" id="nav">
-        <div class="navbar">
-            <a href="/" class="logo">Pong Game</a>
-            <div class="nav-links flip-effect">
-                <div>
-                    <a href="/home" data-page="home" class="nav-link" data-hover="Home">
-                        <span data-i18n="nav.home">Home</span>
-                    </a>
-                    <a href="/about" data-page="about" class="nav-link" data-hover="About">
-                        <span data-i18n="nav.about">About</span>
-                    </a>
-                    <a href="/contact" data-page="contact" class="nav-link" data-hover="Contact">
-                        <span data-i18n="nav.contact">Contact</span>
+    <!-- Initial loading spinner -->
+    <div class="initial-loader" id="initialLoader">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <!-- Main content -->
+    <div class="no-fouc" id="mainContent">
+        <nav class="nav fixed-nav" id="nav">
+            <div class="navbar">
+                <a href="/" class="logo">Pong Game</a>
+                <div class="nav-links flip-effect">
+                    <div>
+                        <a href="/home" data-page="home" class="nav-link" data-hover="Home">
+                            <span data-i18n="nav.home">Home</span>
+                        </a>
+                        <a href="/about" data-page="about" class="nav-link" data-hover="About">
+                            <span data-i18n="nav.about">About</span>
+                        </a>
+                        <a href="/contact" data-page="contact" class="nav-link" data-hover="Contact">
+                            <span data-i18n="nav.contact">Contact</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="profile-link">
+                    <a href="/profile-page" class="profile-button-label">
+                        <span class="profile-button"> 
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path d="M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464l349.5 0c-8.9-63.3-63.3-112-129-112l-91.4 0c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3z"/>
+                            </svg>
+                        </span>
+                        <div class="profile-label-wrapper">
+                            <span class="profile-label" data-i18n="nav.profile" data-hover="Profile">Profile</span>
+                        </div>
                     </a>
                 </div>
+                <button class="burger-menu-button" aria-label="Main menu">
+                    <svg width="75" height="75" viewBox="0 0 100 100">
+                      <path class="line line1" d="M 20,29.000046 H 80.000231 C 80.000231,29.000046 94.498839,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058" />
+                      <path class="line line2" d="M 20,50 H 80" />
+                      <path class="line line3" d="M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942" />
+                    </svg>
+                </button>
             </div>
-            <div class="profile-link">
-                <a href="/profile-page" class="profile-button-label">
-                    <span class="profile-button"> 
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            <path d="M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464l349.5 0c-8.9-63.3-63.3-112-129-112l-91.4 0c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3z"/>
-                        </svg>
-                    </span>
-                    <div class="profile-label-wrapper">
-                        <span class="profile-label" data-i18n="nav.profile" data-hover="Profile">Profile</span>
-                    </div>
+        </nav>
+        <div class="ham-menu hidden">
+            <div class="ham-menu-content">
+                <a href="/home" data-page="home" class="nav-link flip-effect" data-hover="Home">
+                    <span data-i18n="nav.home">Home</span>
+                </a>
+                <a href="/about" data-page="about" class="nav-link" data-hover="About">
+                    <span data-i18n="nav.about">About</span>
+                </a>
+                <a href="/contact" data-page="contact" class="nav-link" data-hover="Contact">
+                    <span data-i18n="nav.contact">Contact</span>
+                </a>
+                <a href="/profile-page" data-page="profile-page" class="nav-link" data-hover="Profile Page">
+                    <span data-i18n="nav.profile">Profile</span>
                 </a>
             </div>
-            <button class="burger-menu-button" aria-label="Main menu">
-                <svg width="75" height="75" viewBox="0 0 100 100">
-                  <path class="line line1" d="M 20,29.000046 H 80.000231 C 80.000231,29.000046 94.498839,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058" />
-                  <path class="line line2" d="M 20,50 H 80" />
-                  <path class="line line3" d="M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942" />
-                </svg>
-              </button>
-            
-            </div>
-            </div>
         </div>
-
-    </nav>
-    <div class="ham-menu hidden">
-        <div class="ham-menu-content">
-            <a href="/home" data-page="home" class="nav-link flip-effect" data-hover="Home">
-                <span data-i18n="nav.home">Home</span>
-            </a>
-            <a href="/about" data-page="about" class="nav-link" data-hover="About">
-                <span data-i18n="nav.about">About</span>
-            </a>
-            <a href="/contact" data-page="contact" class="nav-link" data-hover="Contact">
-                <span data-i18n="nav.contact">Contact</span>
-            </a>
-            <a href="/profile-page" data-page="profile-page" class="nav-link" data-hover="Profile Page">
-                <span data-i18n="nav.profile">Profile</span>
-            </a>
-        </div>
+        <div id="app"></div>
     </div>
-    <div id="app"></div>
+
+    <!-- Page transition overlay -->
+    <div id="pageTransitionOverlay" class="page-transition-overlay"></div>
+
+    <script type="module">
+        // Helper to show initial content when ready
+        document.addEventListener('DOMContentLoaded', () => {
+            // Hide loader and show main content with a slight delay for smoother transition
+            setTimeout(() => {
+                const initialLoader = document.getElementById('initialLoader');
+                const mainContent = document.getElementById('mainContent');
+                
+                if (initialLoader && mainContent) {
+                    initialLoader.style.opacity = '0';
+                    mainContent.classList.add('ready');
+                    
+                    // Remove loader from DOM after transition completes
+                    setTimeout(() => {
+                        initialLoader.style.display = 'none';
+                    }, 300);
+                }
+            }, 500);
+        });
+    </script>
+
     <script type="module" src="/app/src/app.ts"></script>
 </body>
 </html>

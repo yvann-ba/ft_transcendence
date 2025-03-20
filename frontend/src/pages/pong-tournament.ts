@@ -1,5 +1,6 @@
 import "../styles/pong-game.css";
 import "../styles/pong-tournament.css";
+
 export default function initializeTournamentMode() {
   interface TournamentPlayer {
       name: string;
@@ -459,7 +460,10 @@ function closeCustomMenu(): void {
     // Prevent default form submission behavior if this is in a form
     if (event) event.preventDefault();
     
-    // Add a smooth transition overlay to hide the flash
+    // Get the href attribute from the button that was clicked
+    const href = (event?.target as HTMLElement)?.getAttribute('href') || '/pong-selection';
+    
+    // Add a smooth transition overlay
     const transitionOverlay = document.createElement('div');
     transitionOverlay.style.position = 'fixed';
     transitionOverlay.style.top = '0';
@@ -478,7 +482,7 @@ function closeCustomMenu(): void {
       
       // Then navigate after the fade is complete
       setTimeout(() => {
-        window.location.href = "/pong-selection";
+        window.location.href = href;
       }, 200);
     }, 10);
   }

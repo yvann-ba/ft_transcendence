@@ -1,4 +1,15 @@
 import "../styles/contact.css";
+import { languageService } from '../utils/languageContext';
+
+function updatePageTranslations() {
+    const elements = document.querySelectorAll('[data-i18n]');
+    elements.forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (key) {
+            element.textContent = languageService.translate(key);
+        }
+    });
+}
 
 export default function initializeContactPage(): () => void {
     document.body.classList.add('contact-page');
@@ -26,6 +37,10 @@ export default function initializeContactPage(): () => void {
             }
         }, 300);
     }
+    updatePageTranslations();
+
+    window.addEventListener('languageChanged', updatePageTranslations);
+
     const teamMembers = document.querySelectorAll<HTMLElement>('.team-member');
     const timelineItems = document.querySelectorAll<HTMLElement>('.timeline-item');
     const sections = document.querySelectorAll<HTMLElement>('.collaboration-section');
@@ -154,6 +169,8 @@ export default function initializeContactPage(): () => void {
         document.body.classList.remove('contact-page');
         document.body.style.overflowY = originalBodyOverflow;
         document.body.style.height = originalBodyHeight;
+
+        window.removeEventListener('languageChanged', updatePageTranslations);
         
         if (appContainer) {
             appContainer.style.overflowY = originalAppOverflow;

@@ -19,34 +19,32 @@
       <div id="player4-score">0</div>
     </div>
     
-    <div id="pong-custom-menu" class="hidden">
-      <div class="custom-menu-content">
-        <h1 class="custom-title">Customize Game</h1>
-        <div class="custom-settings">
+    <div class="custom-menu-content">
+      <h1 class="custom-title" data-i18n="game.customize_title">Customize Game</h1>
+      <div class="custom-settings">
           <div class="settings-group">
-            <div class="color-setting">
-              <label for="pong-ground-color">Background Color</label>
-              <input type="color" value="#000000" id="pong-ground-color" class="color-input">
-            </div>
-            <div class="color-setting">
-              <label for="pong-ball-color">Ball Color</label>
-              <input type="color" value="#ffffff" id="pong-ball-color" class="color-input">
-            </div>
+              <div class="color-setting">
+                  <label for="pong-ground-color" data-i18n="game.colors.ground">Background Color</label>
+                  <input type="color" value="#000000" id="pong-ground-color" class="color-input">
+              </div>
+              <div class="color-setting">
+                  <label for="pong-ball-color" data-i18n="game.colors.ball">Ball Color</label>
+                  <input type="color" value="#ffffff" id="pong-ball-color" class="color-input">
+              </div>
           </div>
           
           <div class="settings-group">
-            <div class="slider-setting">
-              <p id="pong-winning-score">Winning score: 5</p>
-              <input type="range" min="3" max="25" value="5" class="pong-custom-slider" id="winning-score-slider">
-              <div class="slider-labels">
-                <span>3</span>
-                <span>25</span>
+              <div class="slider-setting">
+                  <p id="pong-winning-score" data-i18n="game.winning_score_display">Winning score: 5</p>
+                  <input type="range" min="3" max="25" value="5" class="pong-custom-slider" id="winning-score-slider">
+                  <div class="slider-labels">
+                      <span>3</span>
+                      <span>25</span>
+                  </div>
               </div>
-            </div>
           </div>
-        </div>
-        <button id="custom-back-button" class="pong-button">Back to Menu</button>
       </div>
+      <button id="custom-back-button" class="pong-button" data-i18n="game.back_to_menu">Back to Menu</button>
     </div>
     
     <div id="countdown-container" class="hidden">
@@ -79,24 +77,24 @@
 </html>
     <div id="game-menu">
       <div class="game-title-container">
-        <h1 class="game-title">BRICK BREAKER</h1>
-        <p class="game-subtitle">Multi-player Square Arena Mode</p>
+        <h1 class="game-title" data-i18n="game.brick_breaker.title">BRICK BREAKER</h1>
+        <p class="game-subtitle" data-i18n="game.brick_breaker.subtitle">Multi-player Square Arena Mode</p>
       </div>
       
       <div class="menu-buttons">
-        <button id="play-button" class="pong-button">Play Game</button>
-        <button id="custom-button" class="pong-button">Customize</button>
-        <button id="back-to-modes-button" class="pong-button back-button">Back to Game Modes</button>
+        <button id="play-button" class="pong-button" data-i18n="game.play">Play Game</button>
+        <button id="custom-button" class="pong-button" data-i18n="game.customize">Customize</button>
+        <button id="back-to-modes-button" class="pong-button back-button" data-i18n="game.back">Back</button>
       </div>
       
       <div class="game-info">
         <div class="info-card">
-          <h3>Game Rules</h3>
-          <p>Break your opponents' bricks to score points. First to reach the winning score wins!</p>
+            <h3 data-i18n="game.rules">Game Rules</h3>
+            <p data-i18n="game.brick_breaker.rules">Break your opponents' bricks to score points. First to reach the winning score wins!</p>
         </div>
         <div class="info-card">
-          <h3>Controls</h3>
-          <div class="controls-list">
+            <h3 data-i18n="game.controls">Controls</h3>
+            <div class="controls-list">
             <div><span style="color: #BB70AD;">Bottom:</span> ← / → Arrow Keys</div>
             <div><span style="color: #70BB88;">Top:</span> A / D Keys</div>
             <div><span style="color: #7088BB;">Left:</span> W / S Keys</div>

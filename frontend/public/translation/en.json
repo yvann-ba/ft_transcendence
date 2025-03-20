@@ -1,54 +1,245 @@
 {
-    "nav": {
-      "home": "Home",
-      "about": "About",
-      "contact": "Contact",
-      "profile": "Profile"
-    },
-    "home": {
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "profile": "Profile",
+    "back_to_home": "Back to Home"
+  },
+  "home": {
+    "title": {
       "click": "Click",
       "to": "To",
       "play": "Play",
       "pong": "Pong"
+    }
+  },
+  "game": {
+    "play": "Play Now",
+    "customize": "Customize",
+    "back": "Back",
+    "back_to_home": "Back to Home",
+    "winning_score": "Winning Score: {score}",
+    "ai_difficulty": "AI Difficulty",
+    "classic_pong": "Classic Pong",
+    "ai_challenge": "AI Challenge",
+    "tournament": "Tournament Mode",
+    "tournament_description": "Compete for the championship!",
+    "controls": "Controls",
+    "original_experience": "The original 1v1 experience",
+    "test_skills": "Test your skills against the AI",
+    "chaotic_fun": "Chaotic multiplayer fun",
+    "rules": "Game Rules",
+    "rules_description": "Earn points by getting the ball past your opponent's paddle. The first to reach the winning score wins!",
+    "controls_info": {
+      "player1": "Player 1:",
+      "player2": "Player 2:",
+      "top": "Up:",
+      "left": "Left:",
+      "bottom": "Down:",
+      "right": "Right:",
+      "controls": "Controls:",
+      "see_ai": "View AI predictions with:"
     },
-    "profile": {
-      "title": "Player Profile",
+    "play_now": "Play Now",
+    "ai_mode": {
+      "title": "AI PONG",
+      "subtitle": "Challenge the computer",
+      "description": "Play against an AI opponent with multiple difficulty levels. Use precise timing and anticipate the AI's moves to win.",
+      "difficulty": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Hard"
+      }
+    },
+    "brick_breaker": {
+      "title": "BRICK BREAKER",
+      "subtitle": "Square Arena Multiplayer Mode",
+      "rules": "Break your opponents' bricks to earn points. The first to reach the winning score wins!"
+    },
+    "winning_score_display": "Winning Score",
+  "back_to_menu": "Back to Menu",
+  "customize_title": "Custom Game",
+    "tournament_mode": {
+      "title": "TOURNAMENT MODE",
+      "subtitle": "4-Player Championship Battle",
+      "enter_names": "Enter Player Names",
+      "player1": "Player 1:",
+      "player2": "Player 2:",
+      "player3": "Player 3:",
+      "player4": "Player 4:",
+      "default_player1": "Player 1",
+      "default_player2": "Player 2",
+      "default_player3": "Player 3",
+      "default_player4": "Player 4",
+      "start": "Start Tournament",
+      "bracket": "Tournament Bracket",
+      "semifinals": "Semi-Finals",
+      "semifinal1": "Semi-Final 1",
+      "semifinal2": "Semi-Final 2",
+      "final": "Final",
+      "vs": "VS",
+      "waiting": "Waiting...",
+      "play_next": "Play Next Match",
+      "champion": "Tournament Champion",
+      "new": "New Tournament"
+    },
+    "features": {
+      "two_players": "Two Players",
+      "same_keyboard": "Same Keyboard",
+      "addictive": "Truly addictive...",
+      "single_player": "Single Player",
+      "difficulty_levels": "Three Difficulty Levels",
+      "adaptive_ai": "Adaptive AI Opponent",
+      "four_players": "Four Players",
+      "square_arena": "Square Arena",
+      "fast_paced": "Fast-paced Action"
+    },
+    "colors": {
+      "ground": "Ground Color",
+      "ball": "Ball Color",
+      "paddle": "Paddle Color",
+      "line": "Line Color"
+    },
+    "select_mode": "Select Pong Game Mode"
+  },
+  "profile": {
+    "title": "Player Profile",
+    "tabs": {
       "info": "Profile Info",
       "stats": "Statistics",
-      "history": "History",
-      "addFriend": "Add Friend",
-      "login": "Log in"
+      "history": "History"
     },
-    "about": {
-      "title": "About",
-      "projectOverview": "Project Overview",
-      "techStack": "Technology Stack",
-      "keyFeatures": "Key Features",
-      "ourTeam": "Our Team"
+    "add_friend": "Add Friend",
+    "edit": "Edit Profile",
+    "login": "Log In",
+    "name": "Name:",
+    "username_placeholder": "Username",
+    "name_placeholder": "Name",
+    "history": {
+      "date": "Date",
+      "opponent": "Opponent",
+      "result": "Result"
     },
-    "contact": {
-      "title": "Meet",
-      "the": "The",
-      "team": "Team",
-      "subtitle": "The masterminds behind ft_transcendence"
-    },
-    "pong": {
-      "play": "Play Now",
-      "classic": "Classic Pong",
-      "ai": "AI Pong Challenge",
-      "multiplayer": "Brick Breaker",
-      "originalExperience": "The original 1v1 experience",
-      "aiChallenge": "Test your skills against AI",
-      "brickBreaker": "Chaotic multiplayer fun",
-      "customize": "Customize",
-      "back": "Back"
-    },
-    "common": {
-      "settings": "Settings",
-      "language": "Language",
-      "english": "English",
-      "french": "French",
-      "spanish": "Spanish",
-      "selectLanguage": "Select Language"
+    "stats": {
+      "wins": "Wins",
+      "losses": "Losses",
+      "win_percentage": "{percent}% Wins"
     }
+  },
+  "about": {
+    "title": "About",
+    "project": "Project Summary",
+    "tech_stack": "Technologies",
+    "features": "Key Features",
+    "team": "Our Team",
+    "project_description": {
+      "part1": "ft_transcendence is a real-time online Pong platform developed as part of the 42 school program. This project challenges us to create a full web application with user authentication, real-time gameplay, tournament systems, and social features.",
+      "part2": "Our implementation includes local and AI-based gameplay, customizable settings, user profiles, and a modern interface designed for an exceptional gaming experience."
+    },
+    "tech_categories": {
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "database": "Database",
+      "devops": "DevOps"
+    },
+    "feature_categories": {
+      "realtime": "Real-time Pong",
+      "ai": "AI Opponent",
+      "profiles": "User Profiles",
+      "customization": "Customization",
+      "authentication": "Secure Authentication",
+      "responsive": "Responsive Design"
+    },
+    "feature_descriptions": {
+      "realtime": "Play the classic Pong with modern graphics and smooth gameplay",
+      "ai": "Challenge our AI with adjustable difficulty levels",
+      "profiles": "Create your profile, track your stats, and review your match history",
+      "customization": "Customize your gaming experience with various visual options",
+      "authentication": "Robust authentication system with 42 OAuth integration",
+      "responsive": "Enjoy the game on different devices and screen sizes"
+    },
+    "team_description": "ft_transcendence was developed by a dedicated team of 42 school students, combining expertise in web development, game design, and user experience to create this immersive online Pong platform."
+  },
+  "contact": {
+    "title": "Meet",
+    "the": "the",
+    "team": "Team",
+    "subtitle": "The minds behind ft_transcendence",
+    "intro": "Our team of five developers worked together to create this immersive Pong experience. Each member contributed unique skills and perspectives to bring ft_transcendence to life.",
+    "roles": {
+      "frontend": "Frontend Developer",
+      "backend": "Backend Developer",
+      "game": "Game Developer",
+      "devops": "DevOps Engineer",
+      "fullstack": "Full Stack Developer"
+    },
+    "keywords": {
+      "uiux": "UI/UX",
+      "typescript": "TypeScript",
+      "responsive": "Responsive Design",
+      "fastify": "Fastify",
+      "api": "API Design",
+      "database": "Database",
+      "game_logic": "Game Logic",
+      "ai_opponent": "AI Opponent",
+      "physics": "Physics",
+      "docker": "Docker",
+      "nginx": "Nginx",
+      "security": "Security",
+      "profiles": "User Profiles",
+      "oauth": "OAuth",
+      "websockets": "WebSockets"
+    },
+    "descriptions": {
+      "frontend": "Developed the responsive user interface and implemented interactive elements throughout the application. Created smooth animations and visuals that enhance the user experience.",
+      "backend": "Architected the backend infrastructure with Fastify and Node.js. Designed the database schema and implemented APIs for efficient data flow between the frontend and backend.",
+      "game": "Implemented the core Pong mechanics and physics. Developed the AI opponent with multiple difficulty levels and built the matchmaking system for tournaments.",
+      "devops": "Configured the infrastructure with Docker and Nginx. Implemented security measures and set up SSL/TLS connections.",
+      "fullstack": "Implemented user authentication with 42 OAuth. Built real-time features with WebSockets and developed the user profile and friends system."
+    },
+    "socials": {
+      "github": "GitHub",
+      "linkedin": "LinkedIn",
+      "profile": "42 Profile"
+    },
+    "collaboration": {
+      "title": "How We Built ft_transcendence",
+      "phases": {
+        "planning": "Planning Phase",
+        "development": "Development Phase",
+        "polishing": "Polishing Phase",
+        "deployment": "Deployment Phase"
+      },
+      "descriptions": {
+        "planning": "We began by breaking down requirements and planning our architecture. This included choosing technologies, designing database schemas, and creating wireframes.",
+        "development": "With a clear plan, we iteratively built the core features. Starting with the basic Pong game, we added authentication, user profiles, and multiplayer capabilities.",
+        "polishing": "After implementing the main functionality, we refined the UI/UX, optimized performance, and introduced extra features like AI opponents and customization options.",
+        "deployment": "Finally, we containerized the application with Docker, set up Nginx for routing, and implemented security measures for a production-ready deployment."
+      }
+    }
+  },
+  "error": {
+    "not_found": "Page not found",
+    "sorry": "Sorry, the page you are looking for does not exist."
+  },
+  "language": {
+    "en": "English",
+    "fr": "French",
+    "es": "Spanish"
+  },
+  "auth": {
+    "login": "Log In",
+    "login_with": "Log in with",
+    "register": "Register",
+    "register_with": "Register with",
+    "username": "Username",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "or": "or",
+    "no_account": "Don't have an account?",
+    "has_account": "Already have an account?"
   }
+}
