@@ -62,7 +62,27 @@
   "customize_title": "Custom Game",
     "tournament_mode": {
       "title": "TOURNAMENT MODE",
-      "subtitle": "4-player Championship"
+      "subtitle": "4-Player Championship Battle",
+      "enter_names": "Enter Player Names",
+      "player1": "Player 1:",
+      "player2": "Player 2:",
+      "player3": "Player 3:",
+      "player4": "Player 4:",
+      "default_player1": "Player 1",
+      "default_player2": "Player 2",
+      "default_player3": "Player 3",
+      "default_player4": "Player 4",
+      "start": "Start Tournament",
+      "bracket": "Tournament Bracket",
+      "semifinals": "Semi-Finals",
+      "semifinal1": "Semi-Final 1",
+      "semifinal2": "Semi-Final 2",
+      "final": "Final",
+      "vs": "VS",
+      "waiting": "Waiting...",
+      "play_next": "Play Next Match",
+      "champion": "Tournament Champion",
+      "new": "New Tournament"
     },
     "features": {
       "two_players": "Two Players",

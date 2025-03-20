@@ -62,7 +62,27 @@
     "customize_title": "Partie Personnaliser",
     "tournament_mode": {
       "title": "MODE TOURNOI",
-      "subtitle": "Championnat à 4 joueurs"
+      "subtitle": "Bataille de Championnat à 4 Joueurs",
+      "enter_names": "Entrez les Noms des Joueurs",
+      "player1": "Joueur 1 :",
+      "player2": "Joueur 2 :",
+      "player3": "Joueur 3 :",
+      "player4": "Joueur 4 :",
+      "default_player1": "Joueur 1",
+      "default_player2": "Joueur 2",
+      "default_player3": "Joueur 3",
+      "default_player4": "Joueur 4",
+      "start": "Démarrer le Tournoi",
+      "bracket": "Tableau du Tournoi",
+      "semifinals": "Demi-Finales",
+      "semifinal1": "Demi-Finale 1",
+      "semifinal2": "Demi-Finale 2",
+      "final": "Finale",
+      "vs": "CONTRE",
+      "waiting": "En attente...",
+      "play_next": "Jouer le Prochain Match",
+      "champion": "Champion du Tournoi",
+      "new": "Nouveau Tournoi"
     },
     "features": {
       "two_players": "Deux joueurs",

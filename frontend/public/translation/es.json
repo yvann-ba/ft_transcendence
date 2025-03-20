@@ -62,7 +62,27 @@
     "customize_title": "Partida Personalizada",
     "tournament_mode": {
       "title": "MODO TORNEO",
-      "subtitle": "Campeonato de 4 jugadores"
+      "subtitle": "Batalla de Campeonato para 4 Jugadores",
+      "enter_names": "Ingresa los nombres de los jugadores",
+      "player1": "Jugador 1:",
+      "player2": "Jugador 2:",
+      "player3": "Jugador 3:",
+      "player4": "Jugador 4:",
+      "default_player1": "Jugador 1",
+      "default_player2": "Jugador 2",
+      "default_player3": "Jugador 3",
+      "default_player4": "Jugador 4",
+      "start": "Iniciar Torneo",
+      "bracket": "Cuadro del Torneo",
+      "semifinals": "Semifinales",
+      "semifinal1": "Semifinal 1",
+      "semifinal2": "Semifinal 2",
+      "final": "Final",
+      "vs": "VS",
+      "waiting": "Esperando...",
+      "play_next": "Jugar el Siguiente Partido",
+      "champion": "Campeón del Torneo",
+      "new": "Nuevo Torneo"
     },
     "features": {
       "two_players": "Dos jugadores",
