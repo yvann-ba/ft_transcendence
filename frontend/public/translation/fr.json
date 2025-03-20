@@ -30,6 +30,8 @@
     "original_experience": "L'expérience originale 1 contre 1",
     "test_skills": "Testez vos compétences contre l'IA",
     "chaotic_fun": "Amusement multijoueur chaotique",
+    "rules": "Regles du jeu",
+    "rules_description": "Marquez des points en envoyant la balle derrière la raquette de votre adversaire. Le premier à atteindre le score gagnant remporte la partie !",
     "controls_info": {
       "player1": "Joueur 1:",
       "player2": "Joueur 2:",
