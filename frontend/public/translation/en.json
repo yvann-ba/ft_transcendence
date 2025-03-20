@@ -15,43 +15,62 @@
     }
   },
   "game": {
-    "rules": "Game Rules",
-    "rules_description": "Score points by getting the ball past your opponent's paddle. First to reach the winning score wins!",
     "play": "Play Now",
     "customize": "Customize",
     "back": "Back",
     "back_to_home": "Back to Home",
-    "winning_score": "Winning score: {score}",
+    "winning_score": "Winning Score: {score}",
     "ai_difficulty": "AI Difficulty",
     "classic_pong": "Classic Pong",
-    "ai_challenge": "AI Pong Challenge",
-    "brick_breaker": "Brick Breaker",
+    "ai_challenge": "AI Challenge",
     "tournament": "Tournament Mode",
     "tournament_description": "Compete for the championship!",
     "controls": "Controls",
     "original_experience": "The original 1v1 experience",
-    "test_skills": "Test your skills against AI",
+    "test_skills": "Test your skills against the AI",
     "chaotic_fun": "Chaotic multiplayer fun",
+    "rules": "Game Rules",
+    "rules_description": "Earn points by getting the ball past your opponent's paddle. The first to reach the winning score wins!",
     "controls_info": {
       "player1": "Player 1:",
       "player2": "Player 2:",
-      "top": "Top:",
+      "top": "Up:",
       "left": "Left:",
-      "bottom": "Bottom:",
+      "bottom": "Down:",
       "right": "Right:",
       "controls": "Controls:",
-      "see_ai": "See AI predictions with:"
+      "see_ai": "View AI predictions with:"
+    },
+    "play_now": "Play Now",
+    "ai_mode": {
+      "title": "AI PONG",
+      "subtitle": "Challenge the computer",
+      "description": "Play against an AI opponent with multiple difficulty levels. Use precise timing and anticipate the AI's moves to win.",
+      "difficulty": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Hard"
+      }
+    },
+    "brick_breaker": {
+      "title": "BRICK BREAKER",
+      "subtitle": "Square Arena Multiplayer Mode",
+      "rules": "Break your opponents' bricks to earn points. The first to reach the winning score wins!"
+    },
+    "tournament_mode": {
+      "title": "TOURNAMENT MODE",
+      "subtitle": "4-player Championship"
     },
     "features": {
-      "two_players": "Two players",
-      "same_keyboard": "Same keyboard",
+      "two_players": "Two Players",
+      "same_keyboard": "Same Keyboard",
       "addictive": "Truly addictive...",
-      "single_player": "Single player",
-      "difficulty_levels": "Three difficulty levels",
-      "adaptive_ai": "Adaptive AI opponent",
-      "four_players": "Four players",
-      "square_arena": "Square arena", 
-      "fast_paced": "Fast-paced action"
+      "single_player": "Single Player",
+      "difficulty_levels": "Three Difficulty Levels",
+      "adaptive_ai": "Adaptive AI Opponent",
+      "four_players": "Four Players",
+      "square_arena": "Square Arena",
+      "fast_paced": "Fast-paced Action"
     },
     "colors": {
       "ground": "Ground Color",
@@ -70,10 +89,10 @@
     },
     "add_friend": "Add Friend",
     "edit": "Edit Profile",
-    "login": "Log in",
+    "login": "Log In",
     "name": "Name:",
-    "username_placeholder": "Username placeholder",
-    "name_placeholder": "Name placeholder",
+    "username_placeholder": "Username",
+    "name_placeholder": "Name",
     "history": {
       "date": "Date",
       "opponent": "Opponent",
@@ -87,13 +106,13 @@
   },
   "about": {
     "title": "About",
-    "project": "Project Overview",
-    "tech_stack": "Technology Stack",
+    "project": "Project Summary",
+    "tech_stack": "Technologies",
     "features": "Key Features",
     "team": "Our Team",
     "project_description": {
-      "part1": "ft_transcendence is a web-based real-time Pong game platform developed as part of the 42 school curriculum. This project challenges us to create a complete web application featuring user authentication, real-time gameplay, tournament systems, and social features.",
-      "part2": "Our implementation features both local and AI gameplay, customizable game settings, user profiles, and a sleek, modern interface designed to provide an exceptional gaming experience."
+      "part1": "ft_transcendence is a real-time online Pong platform developed as part of the 42 school program. This project challenges us to create a full web application with user authentication, real-time gameplay, tournament systems, and social features.",
+      "part2": "Our implementation includes local and AI-based gameplay, customizable settings, user profiles, and a modern interface designed for an exceptional gaming experience."
     },
     "tech_categories": {
       "frontend": "Frontend",
@@ -110,21 +129,21 @@
       "responsive": "Responsive Design"
     },
     "feature_descriptions": {
-      "realtime": "Play the classic Pong game with modern graphics and smooth gameplay",
-      "ai": "Challenge our intelligent AI with adjustable difficulty levels",
-      "profiles": "Create your profile, track your stats, and view your match history",
-      "customization": "Personalize your game experience with various visual options",
+      "realtime": "Play the classic Pong with modern graphics and smooth gameplay",
+      "ai": "Challenge our AI with adjustable difficulty levels",
+      "profiles": "Create your profile, track your stats, and review your match history",
+      "customization": "Customize your gaming experience with various visual options",
       "authentication": "Robust authentication system with 42 OAuth integration",
-      "responsive": "Enjoy the game on various devices and screen sizes"
+      "responsive": "Enjoy the game on different devices and screen sizes"
     },
-    "team_description": "ft_transcendence was developed by a dedicated team of 42 students, combining expertise in web development, game design, and user experience to create this immersive online Pong platform."
+    "team_description": "ft_transcendence was developed by a dedicated team of 42 school students, combining expertise in web development, game design, and user experience to create this immersive online Pong platform."
   },
   "contact": {
     "title": "Meet",
-    "the": "The",
+    "the": "the",
     "team": "Team",
-    "subtitle": "The masterminds behind ft_transcendence",
-    "intro": "Our team of five developers worked together to create this immersive Pong experience. Each member brought unique skills and perspectives to make ft_transcendence a reality.",
+    "subtitle": "The minds behind ft_transcendence",
+    "intro": "Our team of five developers worked together to create this immersive Pong experience. Each member contributed unique skills and perspectives to bring ft_transcendence to life.",
     "roles": {
       "frontend": "Frontend Developer",
       "backend": "Backend Developer",
@@ -150,11 +169,11 @@
       "websockets": "WebSockets"
     },
     "descriptions": {
-      "frontend": "Developed the responsive user interface and implemented interactive elements throughout the application. Created the smooth animations and visual effects that enhance the user experience.",
-      "backend": "Architected the backend infrastructure using Fastify and Node.js. Designed the database schema and implemented the API endpoints for seamless data flow between frontend and backend.",
-      "game": "Implemented the core game mechanics and physics for Pong. Developed the AI opponent with multiple difficulty levels and created the matchmaking system for tournaments.",
-      "devops": "Set up the infrastructure with Docker and Nginx. Configured SSL/TLS for secure connections and implemented authentication mechanisms throughout the application.",
-      "fullstack": "Implemented user authentication with 42 OAuth integration. Created real-time features using WebSockets and developed the user profile and friend system."
+      "frontend": "Developed the responsive user interface and implemented interactive elements throughout the application. Created smooth animations and visuals that enhance the user experience.",
+      "backend": "Architected the backend infrastructure with Fastify and Node.js. Designed the database schema and implemented APIs for efficient data flow between the frontend and backend.",
+      "game": "Implemented the core Pong mechanics and physics. Developed the AI opponent with multiple difficulty levels and built the matchmaking system for tournaments.",
+      "devops": "Configured the infrastructure with Docker and Nginx. Implemented security measures and set up SSL/TLS connections.",
+      "fullstack": "Implemented user authentication with 42 OAuth. Built real-time features with WebSockets and developed the user profile and friends system."
     },
     "socials": {
       "github": "GitHub",
@@ -170,9 +189,9 @@
         "deployment": "Deployment Phase"
       },
       "descriptions": {
-        "planning": "We started by breaking down the requirements and planning our architecture. This involved choosing technologies, designing database schemas, and creating wireframes.",
-        "development": "With a clear plan in place, we built the core features iteratively. Starting with the basic Pong game, we added authentication, user profiles, and multiplayer capabilities.",
-        "polishing": "After implementing the core functionality, we enhanced the UI/UX, optimized performance, and implemented additional features like AI opponents and customization options.",
+        "planning": "We began by breaking down requirements and planning our architecture. This included choosing technologies, designing database schemas, and creating wireframes.",
+        "development": "With a clear plan, we iteratively built the core features. Starting with the basic Pong game, we added authentication, user profiles, and multiplayer capabilities.",
+        "polishing": "After implementing the main functionality, we refined the UI/UX, optimized performance, and introduced extra features like AI opponents and customization options.",
         "deployment": "Finally, we containerized the application with Docker, set up Nginx for routing, and implemented security measures for a production-ready deployment."
       }
     }
@@ -187,10 +206,10 @@
     "es": "Spanish"
   },
   "auth": {
-    "login": "Log in",
+    "login": "Log In",
     "login_with": "Log in with",
-    "register": "Sign Up",
-    "register_with": "Sign Up with",
+    "register": "Register",
+    "register_with": "Register with",
     "username": "Username",
     "password": "Password",
     "confirm_password": "Confirm Password",

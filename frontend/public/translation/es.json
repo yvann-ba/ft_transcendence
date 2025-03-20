@@ -23,7 +23,6 @@
     "ai_difficulty": "Dificultad de la IA",
     "classic_pong": "Pong Clásico",
     "ai_challenge": "Desafío de la IA",
-    "brick_breaker": "Rompe Ladrillos",
     "tournament": "Modo Torneo",
     "tournament_description": "¡Compite por el campeonato!",
     "controls": "Controles",
@@ -41,6 +40,26 @@
       "right": "Derecha:",
       "controls": "Controles:",
       "see_ai": "Ver predicciones de la IA con:"
+    },
+    "play_now": "jugar ahora",
+    "ai_mode": {
+      "title": "AI PONG",
+      "subtitle": "Desafía al ordenador",
+      "description": "Juega contra un oponente de la IA con múltiples niveles de dificultad. Utiliza un ritmo preciso y anticipa los movimientos de la IA para ganar.",
+      "difficulty": {
+        "easy": "Fácil",
+        "medium": "Medio",
+        "hard": "Duro"
+      }
+    },
+    "brick_breaker": {
+      "title": "ROMPE LADRILLOS",
+      "subtitle": "Modo multijugador Square Arena",
+      "rules": "Rompe los ladrillos de tus oponentes para ganar puntos. ¡El primero en alcanzar la puntuación ganadora gana!"
+    },
+    "tournament_mode": {
+      "title": "MODO TORNEO",
+      "subtitle": "Campeonato de 4 jugadores"
     },
     "features": {
       "two_players": "Dos jugadores",
