@@ -1,6 +1,6 @@
 import "../styles/profile-page.css";
 import { getCurrentUser } from "../utils/utils";
-import { redirectAfterAuth } from "../router";
+import { navigate, redirectAfterAuth } from "../router";
 
 async function loadGameHistory(): Promise<void> {
     try {
@@ -391,7 +391,7 @@ function updateProfileInfo(user: any): void {
     const usernameElement = document.querySelector('.profile-info .username');
     const nameElement = document.querySelector('.profile-info .name');
     const avatarElement = document.querySelector('.profile-info .avatar') as HTMLImageElement;
-    const loginButton = document.querySelector('.profile-info .btn-add-friend');
+    const logoutButton = document.querySelector('.profile-info .btn-add-friend');
 
     if (usernameElement) {
         usernameElement.textContent = user.username;
@@ -411,13 +411,48 @@ function updateProfileInfo(user: any): void {
         }
     }
     
-    if (loginButton) {
-        loginButton.textContent = 'Edit Profile';
-        loginButton.setAttribute('data-i18n', 'profile.edit');
+    if (logoutButton) {
+        logoutButton.textContent = 'Log out';
+        logoutButton.classList.add('logout-button');
         
-        // loginButton.addEventListener('click', openProfileEditor);
+        // Add logout functionality
+        logoutButton.addEventListener('click', handleLogout);
     }
 }
 
+// Function to handle logout
+async function handleLogout(): Promise<void> {
+    try {
+        // 1. Clear local storage token
+        localStorage.removeItem('token');
+        
+        // 2. Clear cookies
+        document.cookie = 'sessionid=; Max-Age=0; path=/; domain=' + window.location.hostname;
+        document.cookie = 'auth_token=; Max-Age=0; path=/; domain=' + window.location.hostname;
+        
+        // 3. Call logout API endpoint if you have one
+        try {
+            await fetch('/api/logout', {
+                method: 'POST',
+                credentials: 'include',
+            });
+        } catch (apiError) {
+            console.log('API logout failed, but continuing with client-side logout');
+        }
+        
+        // 4. Update UI elements that depend on auth state
+        const profileLabel = document.querySelector(".profile-label") as HTMLElement;
+        if (profileLabel) {
+            profileLabel.textContent = "Login";
+            profileLabel.setAttribute("data-hover", "Login");
+        }
+        
+        // 5. Redirect to home page
+        navigate('/');
+        
+    } catch (error) {
+        console.error('Error during logout:', error);
+    }
+}
 
 export default initializeProfilePage;

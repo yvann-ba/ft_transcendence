@@ -51,5 +51,26 @@ export default async function authRoutes(fastify: FastifyInstance) {
       return reply.status(401).send({ authenticated: false });
     }
   });
+  
+  fastify.post('/logout', async (request, reply) => {
+    try {
+      // Clear the session cookie
+      reply.clearCookie('sessionid', {
+        path: '/',
+        httpOnly: true,
+        secure: true
+      });
+      
+      reply.clearCookie('auth_token', {
+        path: '/',
+        httpOnly: false
+      });
+      
+      return { success: true, message: 'Logout successful' };
+    } catch (err) {
+      request.log.error(err);
+      return reply.status(500).send({ error: 'Logout failed' });
+    }
+  });
 
 }
