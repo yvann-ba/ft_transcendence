@@ -71,6 +71,7 @@ div {
     text-decoration: none;
     position: relative;
     border-style: solid;
+	background-image: linear-gradient(black, 85%, rgba(0, 0, 0, 0.05));
 }
 
 .navbar a {
