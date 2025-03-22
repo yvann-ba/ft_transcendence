@@ -1,6 +1,6 @@
 import "../styles/profile-page.css";
 import { getCurrentUser } from "../utils/utils";
-import { navigate, redirectAfterAuth } from "../router";
+import { navigate } from "../router";
 
 async function loadGameHistory(): Promise<void> {
     try {
@@ -43,7 +43,7 @@ async function loadGameHistory(): Promise<void> {
           </tr>
         `;
       } else {
-        gameHistory.forEach(game => {
+        gameHistory.forEach((game: any) => {
           const row = document.createElement('tr');
           row.className = game.result.toLowerCase(); // Pour pouvoir styliser selon le résultat
           
@@ -139,11 +139,11 @@ async function initializeProfilePage(): Promise<() => void> {
         });
 	};
 }
-let handleSegmentMouseEnter: (event: MouseEvent) => void;
-let handleSegmentMouseLeave: (event: MouseEvent) => void;
+let handleSegmentMouseEnter: (this: HTMLElement, event: Event) => void;
+let handleSegmentMouseLeave: (event: Event) => void;
 let handleSegmentMouseMove: (event: MouseEvent) => void;
-let handleHistoryRowHover: (event: MouseEvent) => void;
-let handleHistoryRowLeave: (event: MouseEvent) => void;
+let handleHistoryRowHover: (this: HTMLElement, event: Event) => void;
+let handleHistoryRowLeave: (this: HTMLElement, event: Event) => void;
 let animateChart: () => void;
 let animateHistoryTable: () => void;
 
@@ -164,12 +164,12 @@ function initializeHistoryTable(): void {
         
         // Animation row
         row.classList.add('animated-row');
-        row.style.opacity = '0';
-        row.style.transform = 'translateY(20px)';
+        (row as HTMLElement).style.opacity = '0';
+        (row as HTMLElement).style.transform = 'translateY(20px)';
     });
     
     // Le reste de votre code existant pour handleHistoryRowHover, etc.
-    handleHistoryRowHover = function(this: HTMLElement) {
+    handleHistoryRowHover = function(this: HTMLElement, event: Event) {
         this.classList.add('row-hover');
         const winnerCell = this.querySelector('.winner');
         if (winnerCell) {
@@ -181,7 +181,7 @@ function initializeHistoryTable(): void {
         }
     };
     
-    handleHistoryRowLeave = function(this: HTMLElement) {
+    handleHistoryRowLeave = function(this: HTMLElement, event: Event) {
         this.classList.remove('row-hover');
         const winnerCell = this.querySelector('.winner');
         if (winnerCell) {
@@ -199,7 +199,7 @@ function initializeHistoryTable(): void {
     });
     const headerCells = historyTab.querySelectorAll('thead th');
     headerCells.forEach((header, index) => {
-        header.style.cursor = 'pointer';
+        (header as HTMLElement).style.cursor = 'pointer';
         header.setAttribute('data-sort-direction', 'none');
         header.addEventListener('click', () => sortTable(index, header));
     });
@@ -209,9 +209,9 @@ function initializeHistoryTable(): void {
     }
     animateHistoryTable = () => {
         rows.forEach(row => {
-            row.style.opacity = '0';
-            row.style.transform = 'translateY(20px)';
-            row.style.transition = 'none';
+            (row as HTMLElement).style.opacity = '0';
+            (row as HTMLElement).style.transform = 'translateY(20px)';
+            (row as HTMLElement).style.transition = 'none';
         });
         void historyTab.offsetWidth;
         if (headerRow) {
@@ -219,9 +219,9 @@ function initializeHistoryTable(): void {
         }
         rows.forEach((row, index) => {
             setTimeout(() => {
-                row.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                row.style.opacity = '1';
-                row.style.transform = 'translateY(0)';
+                (row as HTMLElement).style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                (row as HTMLElement).style.opacity = '1';
+                (row as HTMLElement).style.transform = 'translateY(0)';
             }, 150 + (index * 100));
         });
     };
@@ -272,13 +272,13 @@ function sortTable(columnIndex: number, headerElement: Element): void {
     tbody.classList.add('sorting');
     setTimeout(() => {
         rows.forEach((row, index) => {
-            row.style.opacity = '0';
-            row.style.transform = 'translateY(10px)';
+            (row as HTMLElement).style.opacity = '0';
+            (row as HTMLElement).style.transform = 'translateY(10px)';
             tbody.appendChild(row);
             setTimeout(() => {
-                row.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                row.style.opacity = '1';
-                row.style.transform = 'translateY(0)';
+                (row as HTMLElement).style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                (row as HTMLElement).style.opacity = '1';
+                (row as HTMLElement).style.transform = 'translateY(0)';
             }, 50 * index);
         });
         setTimeout(() => {
@@ -345,22 +345,22 @@ function initializeChart(nb_wins: number, nb_games: number): void {
     };
     const chartContainer = document.querySelector('.chart-container');
     if (!chartContainer) return;
-    handleSegmentMouseEnter = function(this: HTMLElement, e: MouseEvent) {
+    handleSegmentMouseEnter = function(this: HTMLElement, e: Event) {
         tooltip.style.opacity = '1';
         
         if (this === winSegment) {
             tooltip.textContent = `Wins: ${wins} (${winPercentage}%)`;
-            winSegment.style.stroke = '#5dca60';
+            (winSegment as HTMLElement).style.stroke = '#5dca60';
         } else {
             tooltip.textContent = `Losses: ${losses} (${lossPercentage}%)`;
-            lossSegment.style.stroke = '#ff5c50';
+            (lossSegment as HTMLElement).style.stroke = '#ff5c50';
         }
     };
     
-    handleSegmentMouseLeave = function(e: MouseEvent) {
+    handleSegmentMouseLeave = function(e: Event) {
         tooltip.style.opacity = '0';
-        winSegment.style.stroke = '#4CAF50';
-        lossSegment.style.stroke = '#F44336';
+        (winSegment as HTMLElement).style.stroke = '#4CAF50';
+        (lossSegment as HTMLElement).style.stroke = '#F44336';
     };
     
     handleSegmentMouseMove = function(e: MouseEvent) {
