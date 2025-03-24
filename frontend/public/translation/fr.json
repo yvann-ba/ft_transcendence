@@ -15,6 +15,10 @@
     }
   },
   "game": {
+    "select_mode_class": {
+      "intro": "SÉLECTIONNEZ VOTRE",
+      "mode": "MODE DE JEU"
+    },
     "play": "Jouer maintenant",
     "customize": "Personnaliser",
     "back": "Retour",
