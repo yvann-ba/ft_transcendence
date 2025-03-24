@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 
 const getUserById = (userId: number, callback: (err: Error | null, row: any) => void) => {
   const query = `
-    SELECT id, username, email, first_name, last_name, created_at, player_games, player_wins
+    SELECT id, username, email, first_name, last_name, created_at, player_games, player_wins, avatar
     FROM users
     WHERE id = ?;
   `;
@@ -67,17 +67,17 @@ export const checkUserLogin = async (username: string): Promise<any> => {
 
 export const createUserOAuth = (username: string, email: string, avatar: string) => {
   return new Promise((resolve, reject) => {
-    const query = `INSERT INTO users (username, password, email) VALUES (?, ?, ?)`;
-    db.run(query, [username, 'google_oauth', email], function (err) {
+    const query = `INSERT INTO users (username, password, email, avatar) VALUES (?, ?, ?, ?)`;
+    db.run(query, [username, 'google_oauth', email, avatar], function (err) {
       if (err) return reject(err);
-      resolve({ id: this.lastID, username, email });
+      resolve({ id: this.lastID, username, email, avatar});
     });
   });
 };
 
 export const checkUserByEmail = async (email: string): Promise<any> => {
   return new Promise((resolve, reject) => {
-    const query = `SELECT id, username, email, password FROM users WHERE email = ?`;
+    const query = `SELECT id, username, email, password, avatar FROM users WHERE email = ?`;
 
     db.get(query, [email], (err, row) => {
       if (err) {
@@ -85,6 +85,25 @@ export const checkUserByEmail = async (email: string): Promise<any> => {
         return reject(err);
       }
       resolve(row || null);
+    });
+  });
+};
+
+export const updateUserAvatar = async (userId: number, avatar: string): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    const query = `UPDATE users SET avatar = ? WHERE id = ?`;
+    
+    db.run(query, [avatar, userId], function(err) {
+      if (err) {
+        console.error("Error updating user avatar:", err.message);
+        return reject(err);
+      }
+      
+      // Get the updated user
+      getUserById(userId, (err, user) => {
+        if (err) return reject(err);
+        resolve(user);
+      });
     });
   });
 };

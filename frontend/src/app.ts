@@ -22,21 +22,37 @@ export const changeProfileLabel = (): void => {
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Add the message listener for Google OAuth popup
-  window.addEventListener('message', (event) => {
+  window.addEventListener('message', async (event) => {
     // Verify origin
     if (event.origin !== window.location.origin) return;
     
     // Check for auth success message
     if (event.data === 'auth-success') {
-      // Update app state
-      localStorage.setItem('token', 'authenticated');
-      
-      // Update UI if needed
-      changeProfileLabel();
-      
-      // Navigate if needed
-      if (window.location.pathname === '/login') {
-        navigate('/home');
+      // Fetch user data
+      try {
+        const response = await fetch('/api/users/me', {
+          credentials: 'include'
+        });
+        
+        if (response.ok) {
+          const userData = await response.json();
+          console.log('User data after OAuth login:', userData);
+          
+          // Store avatar URL in localStorage
+          if (userData.avatar) {
+            localStorage.setItem('userAvatar', userData.avatar);
+            console.log('Stored avatar URL in localStorage:', userData.avatar);
+          }
+          
+          // Set auth token and update UI
+          localStorage.setItem('token', 'authenticated');
+          changeProfileLabel();
+          
+          // Redirect to home or refresh the page
+          window.location.href = '/home';
+        }
+      } catch (error) {
+        console.error('Error fetching user data after OAuth login:', error);
       }
     }
   });
