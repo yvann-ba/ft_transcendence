@@ -412,8 +412,16 @@ function updateProfileInfo(user: any): void {
     }
     
     if (logoutButton) {
-        logoutButton.textContent = 'Log out';
+        // Remove the existing class first
+        logoutButton.classList.remove('btn-add-friend');
+        // Add the logout-button class
         logoutButton.classList.add('logout-button');
+        logoutButton.textContent = 'Log out';
+        
+        // Set explicit width and other styles to prevent horizontal spread
+        (logoutButton as HTMLElement).style.width = 'auto';
+        (logoutButton as HTMLElement).style.minWidth = '120px';
+        (logoutButton as HTMLElement).style.display = 'inline-block';
         
         // Add logout functionality
         logoutButton.addEventListener('click', handleLogout);

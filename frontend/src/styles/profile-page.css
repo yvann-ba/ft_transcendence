@@ -483,6 +483,12 @@ th.sorted-desc::after {
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
+    display: inline-block;
+    width: auto;
+    min-width: 120px;
+    max-width: 200px;
+    margin: 10px auto;
+    text-align: center;
 }
 
 .logout-button:hover {
