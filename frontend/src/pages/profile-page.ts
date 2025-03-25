@@ -411,16 +411,34 @@ function updateProfileInfo(user: any): void {
         let avatarUrl = user.avatar || user.picture || user.profile_picture || user.avatar_url;
         console.log("Avatar URL from user object:", avatarUrl);
         
-        if (avatarUrl) {
+        // Add URL validation
+        const isValidUrl = (url: string): boolean => {
+            try {
+                new URL(url);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        };
+        
+        if (avatarUrl && isValidUrl(avatarUrl)) {
             console.log("Setting avatar URL:", avatarUrl);
-            avatarElement.src = avatarUrl;
-            avatarElement.alt = `${user.username}'s avatar`;
             
-            // Add onload and onerror handlers for debugging
-            avatarElement.onload = () => console.log("Avatar image loaded successfully");
-            avatarElement.onerror = (e) => console.error("Error loading avatar image:", e);
+            // Create a new image to test loading before assigning to the avatar element
+            const testImg = new Image();
+            testImg.onload = () => {
+                avatarElement.src = avatarUrl;
+                avatarElement.alt = `${user.username}'s avatar`;
+                console.log("Avatar image loaded successfully");
+            };
+            testImg.onerror = (e) => {
+                console.error("Error pre-loading avatar image, using default:", e);
+                avatarElement.src = "/assets/images/avatar.jpg";
+                avatarElement.alt = `${user.username}'s avatar`;
+            };
+            testImg.src = avatarUrl;
         } else {
-            console.log("No avatar URL found, using default");
+            console.log("No valid avatar URL found, using default");
             avatarElement.src = "/assets/images/avatar.jpg";
             avatarElement.alt = `${user.username}'s avatar`;
         }
@@ -437,7 +455,6 @@ function updateProfileInfo(user: any): void {
     }
 }
 
-// Function to handle logout
 // Function to handle logout
 async function handleLogout(): Promise<void> {
     try {
