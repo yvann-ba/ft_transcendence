@@ -388,6 +388,8 @@ if (document.readyState !== 'loading') {
 }
 
 function updateProfileInfo(user: any): void {
+    console.log("User data in updateProfileInfo:", JSON.stringify(user, null, 2));
+    
     const usernameElement = document.querySelector('.profile-info .username');
     const nameElement = document.querySelector('.profile-info .name');
     const avatarElement = document.querySelector('.profile-info .avatar') as HTMLImageElement;
@@ -403,12 +405,27 @@ function updateProfileInfo(user: any): void {
     }
     
     if (avatarElement) {
-        if (user.avatar) {
-            avatarElement.src = user.avatar;
+        console.log("Avatar element found:", avatarElement);
+        
+        // Check multiple possible property names for the avatar URL
+        let avatarUrl = user.avatar || user.picture || user.profile_picture || user.avatar_url;
+        console.log("Avatar URL from user object:", avatarUrl);
+        
+        if (avatarUrl) {
+            console.log("Setting avatar URL:", avatarUrl);
+            avatarElement.src = avatarUrl;
             avatarElement.alt = `${user.username}'s avatar`;
+            
+            // Add onload and onerror handlers for debugging
+            avatarElement.onload = () => console.log("Avatar image loaded successfully");
+            avatarElement.onerror = (e) => console.error("Error loading avatar image:", e);
         } else {
+            console.log("No avatar URL found, using default");
+            avatarElement.src = "/assets/images/avatar.jpg";
             avatarElement.alt = `${user.username}'s avatar`;
         }
+    } else {
+        console.log("Avatar element not found in the DOM");
     }
     
     if (logoutButton) {
@@ -421,24 +438,30 @@ function updateProfileInfo(user: any): void {
 }
 
 // Function to handle logout
+// Function to handle logout
 async function handleLogout(): Promise<void> {
     try {
-        // 1. Clear local storage token
+        // 1. Call server-side logout endpoint first
+        const response = await fetch('/api/logout', {
+            method: 'POST',
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            console.warn('Server logout failed, continuing with client-side logout');
+        }
+        
+        // 2. Clear client-side auth state
         localStorage.removeItem('token');
         
-        // 2. Clear cookies
+        // 3. Clear cookies with proper attributes
+        // Be thorough with different cookie clearing approaches
+        document.cookie = 'sessionid=; Max-Age=0; path=/;';
+        document.cookie = 'auth_token=; Max-Age=0; path=/;';
+        
+        // Also try with domain specified
         document.cookie = 'sessionid=; Max-Age=0; path=/; domain=' + window.location.hostname;
         document.cookie = 'auth_token=; Max-Age=0; path=/; domain=' + window.location.hostname;
-        
-        // 3. Call logout API endpoint if you have one
-        try {
-            await fetch('/api/logout', {
-                method: 'POST',
-                credentials: 'include',
-            });
-        } catch (apiError) {
-            console.log('API logout failed, but continuing with client-side logout');
-        }
         
         // 4. Update UI elements that depend on auth state
         const profileLabel = document.querySelector(".profile-label") as HTMLElement;
@@ -447,11 +470,15 @@ async function handleLogout(): Promise<void> {
             profileLabel.setAttribute("data-hover", "Login");
         }
         
-        // 5. Redirect to home page
-        navigate('/');
+        // 5. Redirect to home page with a small delay to ensure cleanup completes
+        setTimeout(() => {
+            navigate('/');
+        }, 100);
         
     } catch (error) {
         console.error('Error during logout:', error);
+        // Even if there's an error, attempt to navigate away
+        navigate('/');
     }
 }
 
