@@ -1,8 +1,8 @@
 .env
 staticfiles
-.gitignore
 node_modules
 test.*
 core.1.9
 credentials.json
 backend/database/db.sqlite
+backend\database\db.sqlite
