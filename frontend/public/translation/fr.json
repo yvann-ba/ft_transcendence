@@ -196,11 +196,11 @@
       "websockets": "WebSockets"
     },
     "descriptions": {
-      "frontend": "A développé l'interface utilisateur adaptative et implémenté des éléments interactifs à travers l'application. A créé des animations fluides et des visuels qui améliorent l'expérience utilisateur.",
-      "backend": "A conçu l'infrastructure backend avec Fastify et Node.js. A défini le schéma de la base de données et implémenté les API pour un flux de données efficace entre le frontend et le backend.",
-      "game": "A implémenté la mécanique centrale et la physique de Pong. A développé l'adversaire IA avec plusieurs niveaux de difficulté et mis en place le système de matchmaking pour les tournois.",
-      "devops": "A configuré l'infrastructure avec Docker et Nginx. A implémenté des mesures de sécurité et établi des connexions SSL/TLS.",
-      "fullstack": "A mis en place l'authentification utilisateur avec OAuth 42. A développé les fonctionnalités en temps réel avec WebSockets et le système de profil et d'amis."
+      "frontend": "Conteneurisation des différents services et mise en place d'un serveur global pour optimiser la gestion, la sécurité et la performance du site.",
+      "backend": "Développement de la fonctionnalité d'enregistrement, ainsi que des outils de stockage et de gestion des données utilisateurs, garantissant une sécurité maximale et une expérience fluide.",
+      "game": "Création et intégration de plusieurs versions du jeu Pong, ainsi que des plateformes et interfaces visuelles pour offrir une expérience immersive.",
+      "devops": " Implémentation de la traduction dynamique du site en plusieurs langues pour garantir une accessibilité optimale.",
+      "fullstack": "Support au développement des modes de jeu et de leurs interfaces, visant à améliorer l'interaction utilisateur."
     },
     "socials": {
       "github": "GitHub",
