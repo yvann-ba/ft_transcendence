@@ -34,7 +34,6 @@ export async function getCurrentUser(): Promise<User | null> {
     }
     
     const userData = await response.json();
-    console.log("User data retrieved from /api/users/me:", userData); // Log the data
     return userData;
   } catch (error) {
     console.error('Complete error:', error);

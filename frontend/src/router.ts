@@ -336,8 +336,6 @@ export function preloadCommonPages(): void {
 // Export this for backward compatibility
 export const checkAuthStatus = async (): Promise<boolean> => {
   try {
-    // First check if we have a token in localStorage
-    console.log('Check auth : ', localStorage);
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
       return true;
