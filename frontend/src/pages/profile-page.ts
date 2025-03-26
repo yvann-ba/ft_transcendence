@@ -1,6 +1,26 @@
 import "../styles/profile-page.css";
 import { getCurrentUser } from "../utils/utils";
 import { navigate } from "../router";
+import { languageService } from "../utils/languageContext";
+
+function updatePageTranslations(): void {
+    const elements = document.querySelectorAll('[data-i18n]');
+    elements.forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (key) {
+            element.textContent = languageService.translate(key);
+        }
+    });
+    
+    // Update dynamic content that might need translation
+    const winPercentage = document.getElementById('win-percentage');
+    if (winPercentage) {
+        const percentValue = winPercentage.getAttribute('data-percent') || '0';
+        const translatedText = languageService.translate('profile.stats.win_percentage')
+            .replace('{percent}', percentValue);
+        winPercentage.textContent = translatedText;
+    }
+}
 
 async function loadGameHistory(): Promise<void> {
     try {
@@ -33,6 +53,7 @@ async function loadGameHistory(): Promise<void> {
             <th>Winner</th>
           </tr>
         `;
+        updatePageTranslations();
       }
       
       // Ajouter chaque partie à l'historique
@@ -82,6 +103,9 @@ async function loadGameHistory(): Promise<void> {
 
 async function initializeProfilePage(): Promise<() => void> {
 
+    updatePageTranslations();
+    window.addEventListener('languageChanged', updatePageTranslations);
+
     const user = await getCurrentUser();
 
     if (user) {
@@ -94,28 +118,31 @@ async function initializeProfilePage(): Promise<() => void> {
 	const tabContents = document.querySelectorAll<HTMLElement>('.tab-content');
 	
 	function handleTabClick(this: HTMLElement): void {
-		tabLinks.forEach(tab => tab.classList.remove('active'));
-		tabContents.forEach(content => {
-			content.classList.remove('active');
-			content.classList.add('fade-out');
-		});
-		this.classList.add('active');
-		const tabId = this.getAttribute('data-tab');
-		if (tabId) {
-			const content = document.getElementById(tabId);
-			if (content) {
-				setTimeout(() => {
-					content.classList.remove('fade-out');
-					content.classList.add('active', 'fade-in');
+        tabLinks.forEach(tab => tab.classList.remove('active'));
+        tabContents.forEach(content => {
+            content.classList.remove('active');
+            content.classList.add('fade-out');
+        });
+        this.classList.add('active');
+        const tabId = this.getAttribute('data-tab');
+        if (tabId) {
+            const content = document.getElementById(tabId);
+            if (content) {
+                setTimeout(() => {
+                    content.classList.remove('fade-out');
+                    content.classList.add('active', 'fade-in');
                     if (tabId === 'tab-stats') {
                         setTimeout(animateChart, 300);
                     } else if (tabId === 'tab-history') {
                         animateHistoryTable();
                     }
-				}, 150);
-			}
-		}
-	}
+                    
+                    // Refresh translations when changing tabs
+                    updatePageTranslations();
+                }, 150);
+            }
+        }
+    }
 	
 	tabLinks.forEach(link => link.addEventListener('click', handleTabClick));
     initializeHistoryTable();
@@ -137,6 +164,8 @@ async function initializeProfilePage(): Promise<() => void> {
             row.removeEventListener('mouseenter', handleHistoryRowHover);
             row.removeEventListener('mouseleave', handleHistoryRowLeave);
         });
+
+        window.removeEventListener('languageChanged', updatePageTranslations);
 	};
 }
 let handleSegmentMouseEnter: (this: HTMLElement, event: Event) => void;
