@@ -1,10 +1,10 @@
 <div class="login-container">
-	<h2>Se connecter</h2>
+	<h2 data-i18n="auth.login">Se connecter</h2>
 	<form id="login-form">
-		<input type="text" id="username" placeholder="Nom d'utilisateur" required />
-		<input type="password" id="password" placeholder="Mot de passe" required />
-		<button type="submit">Se connecter</button>
+		<input type="text" id="username" placeholder="Nom d'utilisateur" data-i18n-placeholder="auth.username" required />
+		<input type="password" id="password" placeholder="Mot de passe" data-i18n-placeholder="auth.password" required />
+		<button type="submit" data-i18n="auth.login">Se connecter</button>
 	</form>
 	<div id="message"></div>
-	<p class="signup-link">Don't have an account? <a href="/register">Sign Up</a></p>
+	<p class="signup-link" data-i18n="auth.no_account">Don't have an account? <a href="/register" data-i18n="auth.register">Sign Up</a></p>
 </div>

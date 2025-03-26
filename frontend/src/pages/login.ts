@@ -1,6 +1,8 @@
 import '../styles/login.css';
 import { navigate } from '../router';
 import { redirectAfterAuth, getQueryParam } from '../router';
+import { languageService } from '../utils/languageContext';
+
 
 interface LoginResponse {
     message: string;
@@ -108,6 +110,20 @@ export default function login() {
             messageDiv.classList.add('error');
         }
     });
+
+    function updatePlaceholders() {
+        const inputs = document.querySelectorAll('[data-i18n-placeholder]');
+        inputs.forEach(input => {
+          const key = input.getAttribute('data-i18n-placeholder');
+          if (key) {
+            (input as HTMLInputElement).placeholder = languageService.translate(key);
+          }
+        });
+    }
+
+    window.addEventListener('languageChanged', updatePlaceholders);
+
+    updatePlaceholders();
     
     // Vérifier s'il y a une erreur dans l'URL (pour redirection après échec OAuth)
     const urlParams = new URLSearchParams(window.location.search);

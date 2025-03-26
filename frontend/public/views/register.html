@@ -1,13 +1,13 @@
 <div class="register-container">
-    <h2>S'inscrire</h2>
+    <h2 data-i18n="auth.register">S'inscrire</h2>
     <form id="register-form">
-        <input type="text" id="username" placeholder="Nom d'utilisateur" required />
-        <input type="text" id="first-name" placeholder="Prénom" required />
-        <input type="text" id="last-name" placeholder="Nom" required />
-        <input type="password" id="password" placeholder="Mot de passe" required />
-        <input type="password" id="confirm-password" placeholder="Confirmation mot de passe" required />
-        <button type="submit">Créer le compte</button>
+        <input type="text" id="username" placeholder="Nom d'utilisateur" data-i18n-placeholder="auth.username" required />
+        <input type="text" id="first-name" placeholder="Prénom" data-i18n-placeholder="auth.first_name" required />
+        <input type="text" id="last-name" placeholder="Nom" data-i18n-placeholder="auth.last_name" required />
+        <input type="password" id="password" placeholder="Mot de passe" data-i18n-placeholder="auth.password" required />
+        <input type="password" id="confirm-password" placeholder="Confirmation mot de passe" data-i18n-placeholder="auth.confirm_password" required />
+        <button type="submit" data-i18n="auth.register">Créer le compte</button>
     </form>
     <div id="message"></div>
-    <p class="signup-link">Déjà un compte ? <a href="/login">Se connecter</a></p>
+    <p class="signup-link" data-i18n="auth.has_account">Déjà un compte ? <a href="/login" data-i18n="auth.login">Se connecter</a></p>
 </div>
