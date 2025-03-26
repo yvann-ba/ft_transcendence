@@ -22,7 +22,7 @@ export default function login() {
         googleButton.type = 'button';
         googleButton.id = 'google-button';
         googleButton.className = 'oauth-button google-button';
-        googleButton.innerHTML = 'Se connecter avec <img src="/assets/images/Google_Logo.png" alt="Google Logo">';
+        googleButton.innerHTML = `${languageService.translate('auth.login_with', 'Login with')} <img src="/assets/images/Google_Logo.png" alt="Google Logo">`;
         
         googleButton.addEventListener('click', (e) => {
             e.preventDefault();
@@ -66,7 +66,7 @@ export default function login() {
         
         const orSeparator = document.createElement('div');
         orSeparator.className = 'separator';
-        orSeparator.innerHTML = '<span>ou</span>';
+        orSeparator.innerHTML = `<span>${languageService.translate('auth.or', 'or')}</span>`;
         
         // Insérer avant le formulaire
         form.parentNode?.insertBefore(orSeparator, form);

@@ -23,7 +23,7 @@
     "customize": "Customize",
     "back": "Back",
     "back_to_home": "Back to Home",
-    "winning_score": "Winning Score: {score}",
+    "winning_score": "Winning Score: ",
     "ai_difficulty": "AI Difficulty",
     "classic_pong": "Classic Pong",
     "ai_challenge": "AI Challenge",

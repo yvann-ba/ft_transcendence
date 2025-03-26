@@ -23,7 +23,7 @@
     "customize": "Personalizar",
     "back": "Volver",
     "back_to_home": "Volver a Inicio",
-    "winning_score": "Puntuación ganadora: {score}",
+    "winning_score": "Puntuación ganadora: ",
     "ai_difficulty": "Dificultad de la IA",
     "classic_pong": "Pong Clásico",
     "ai_challenge": "Desafío de la IA",
