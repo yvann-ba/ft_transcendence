@@ -8,18 +8,19 @@ function updatePageTranslations(): void {
     elements.forEach(element => {
         const key = element.getAttribute('data-i18n');
         if (key) {
-            element.textContent = languageService.translate(key);
+            if (element.id === 'win-percentage') {
+                let currentText = element.textContent || '';
+                let percentMatch = currentText.match(/(\d+\.?\d*)%/);
+                let percentValue = percentMatch ? percentMatch[1] : '0';
+                
+                const translatedText = languageService.translate(key)
+                    .replace('{percent}', percentValue);
+                element.textContent = translatedText;
+            } else {
+                element.textContent = languageService.translate(key);
+            }
         }
     });
-    
-    // Update dynamic content that might need translation
-    const winPercentage = document.getElementById('win-percentage');
-    if (winPercentage) {
-        const percentValue = winPercentage.getAttribute('data-percent') || '0';
-        const translatedText = languageService.translate('profile.stats.win_percentage')
-            .replace('{percent}', percentValue);
-        winPercentage.textContent = translatedText;
-    }
 }
 
 async function loadGameHistory(): Promise<void> {
@@ -72,7 +73,6 @@ async function loadGameHistory(): Promise<void> {
           const date = new Date(game.played_at);
           const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
           
-          // Déterminer le vainqueur
           let winner: string;
           if (game.result === 'WIN') {
             winner = 'You';
