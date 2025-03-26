@@ -1,5 +1,6 @@
 import "../styles/pong-game.css";
 import "../styles/pong-tournament.css";
+import { languageService } from "../utils/languageContext";
 
 export default function initializeTournamentMode() {
   interface TournamentPlayer {
@@ -47,6 +48,16 @@ export default function initializeTournamentMode() {
       countdownActive: boolean;
       lastTime: number;
       animationFrameId: number | null;
+  }
+
+  function updatePageTranslations(): void {
+    const elements = document.querySelectorAll('[data-i18n]');
+    elements.forEach(element => {
+      const key = element.getAttribute('data-i18n');
+      if (key) {
+        element.textContent = languageService.translate(key);
+      }
+    });
   }
 
   const canvas = document.getElementById("tournamentCanvas") as HTMLCanvasElement | null;
@@ -701,6 +712,8 @@ function closeCustomMenu(): void {
         updateCustomSettings();
     }
       function init(): void {
+          updatePageTranslations();
+          window.addEventListener('languageChanged', updatePageTranslations);
           document.addEventListener("keydown", handleKeyDown);
           document.addEventListener("keyup", handleKeyUp);
           elements.startTournamentButton?.addEventListener("click", initTournament);
@@ -747,6 +760,8 @@ function closeCustomMenu(): void {
         function cleanup(): void {
             document.removeEventListener("keydown", handleKeyDown);
             document.removeEventListener("keyup", handleKeyUp);
+
+            window.removeEventListener('languageChanged', updatePageTranslations);
             
             elements.startTournamentButton?.removeEventListener("click", initTournament);
             elements.playNextMatchButton?.removeEventListener("click", playNextMatch);

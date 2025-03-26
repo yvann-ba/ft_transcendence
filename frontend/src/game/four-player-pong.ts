@@ -694,26 +694,34 @@ export default function initializeMultiplayerGame(): (() => void) | null {
   }
   
   function openCustomMenu(): void {
-    elements.menu?.classList.add("hidden");
-    elements.customMenu?.classList.remove("hidden");
-    elements.customMenu?.classList.add("show");
-
-    const pongGame = document.getElementById("game-container");
-    if (pongGame) {
-      pongGame.classList.remove("main-menu");
-      pongGame.classList.add("pong-custom-menu-canvas");
+    const menu = document.getElementById("game-menu");
+    const customMenu = document.getElementById("pong-custom-menu");
+    
+    if (menu && customMenu) {
+      menu.classList.add("hidden");
+      customMenu.classList.remove("hidden");
+    }
+    
+    const gameContainer = document.getElementById("game-container");
+    if (gameContainer) {
+      gameContainer.classList.remove("main-menu");
+      gameContainer.classList.add("pong-custom-menu-canvas");
     }
   }
 
   function closeCustomMenu(): void {
-    elements.customMenu?.classList.remove("show");
-    elements.customMenu?.classList.add("hidden");
-    elements.menu?.classList.remove("hidden");
-
-    const pongGame = document.getElementById("game-container");
-    if (pongGame) {
-      pongGame.classList.remove("pong-custom-menu-canvas");
-      pongGame.classList.add("main-menu");
+    const menu = document.getElementById("game-menu");
+    const customMenu = document.getElementById("pong-custom-menu");
+    
+    if (menu && customMenu) {
+      customMenu.classList.add("hidden");
+      menu.classList.remove("hidden");
+    }
+    
+    const gameContainer = document.getElementById("game-container");
+    if (gameContainer) {
+      gameContainer.classList.remove("pong-custom-menu-canvas");
+      gameContainer.classList.add("main-menu");
     }
   }
   

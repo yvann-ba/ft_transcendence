@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import config from '../config/fastifyconfig';
-import { checkUserLogin, createUserOAuth, checkUserByEmail } from '../queries/users';
+import { checkUserLogin, createUserOAuth, checkUserByEmail, updateUserAvatar } from '../queries/users';
 
 export default async function oauthGoogleRoutes(fastify: FastifyInstance) {
 
@@ -12,10 +12,14 @@ export default async function oauthGoogleRoutes(fastify: FastifyInstance) {
 
   // Callback Google
   fastify.get('/auth/google/callback', async (request, reply) => {
+    
+    console.log("1. Callback route reached");
     const code = (request.query as any).code as string;
+    console.log("2. Auth code received:", code ? "Yes" : "No");
     if (!code) return reply.redirect('/login?error=auth_failed');
 
     try {
+      console.log("3. Starting token exchange with Google");
       // Échange le code contre un token
       const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
         method: 'POST',
@@ -29,36 +33,51 @@ export default async function oauthGoogleRoutes(fastify: FastifyInstance) {
         }),
       });
 
+      console.log("4. Token response received:", tokenRes.status);
       const tokenData = await tokenRes.json();
+      console.log("5. Token data parsed");
       if (!tokenRes.ok) throw new Error(tokenData.error_description || 'Erreur OAuth Google');
 
       const accessToken = tokenData.access_token;
+      console.log("6. Access token extracted:", accessToken ? "Yes" : "No");
       if (!accessToken) throw new Error('Access token not received from Google');
 
       // Récupérer les informations de l'utilisateur
+      console.log("7. Fetching user info from Google");
       const userRes = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
       
+      console.log("8. User info response:", userRes.status);
       if (!userRes.ok) {
         throw new Error(`Failed to fetch user info: ${userRes.status} ${userRes.statusText}`);
       }
 
+      console.log("9. Parsing user data from Google");
       const googleUser = await userRes.json();
+      console.log("10. Google user data:", JSON.stringify(googleUser));
 
       const userData = {
         username: googleUser.name,
         email: googleUser.email,
         avatar: googleUser.picture,
       };
-
-      fastify.log.info(`Google user data: ${JSON.stringify(userData)}`);
+      
+      console.log('11. Formatted user data:', userData);
+      fastify.log.info(`12. User data for fastify logger: ${JSON.stringify(userData)}`);
+      console.log("13. Google picture URL:", googleUser.picture);
 
       // Vérifier si utilisateur existe, sinon le créer
       let user = await checkUserByEmail(userData.email);
       fastify.log.info(`User found: ${JSON.stringify(user)}`);
       if (user === null) {
         user = await createUserOAuth(userData.username, userData.email, userData.avatar);
+      } else {
+        // Update the avatar for existing users
+        if (user.avatar !== userData.avatar) {
+          user = await updateUserAvatar(user.id, userData.avatar);
+          fastify.log.info(`Updated user avatar: ${user.avatar}`);
+        }
       }
 
       // Générer JWT et cookie

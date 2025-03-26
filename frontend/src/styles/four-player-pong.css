@@ -1,5 +1,5 @@
 .main-menu {
-  position: absolute;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,14 +9,13 @@
 }
 
 .pong-custom-menu-canvas {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  padding: 0 7.2vh 0 0;
+  justify-content: center;
   height: 100vh;
   width: 100%;
   font-family: Aeonik, sans-serif;
-  font-size: 2vh;
 }
 
 #pong-custom-menu {
@@ -30,12 +29,10 @@
   align-items: center;
   background: rgba(0, 0, 0, 0.95);
   z-index: 100;
-  backdrop-filter: blur(5px);
 }
 
 .custom-menu-content {
   position: relative;
-  z-index: 30;
   background-color: #000;
   border-radius: 15px;
   box-shadow: 0 0 30px rgba(187, 112, 173, 0.3);
@@ -70,13 +67,12 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: #000;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background: rgba(0, 0, 0, 0.95);
   z-index: 100;
-  padding: 0 20px;
 }
 
 .game-title-container {
@@ -188,12 +184,16 @@
   display: flex;
   justify-content: center;
   color: rgb(250, 250, 250);
-  top: 10vh;
+  top: 5vh; /* Move it higher up */
   font-size: 5vh;
   font-weight: 700;
   width: 800px;
   gap: 1.5rem;
   z-index: 5;
+  background-color: rgba(0, 0, 0, 0.6); /* Add slight background for visibility */
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 20px; /* Add margin to create more space */
 }
 
 .pong-custom-slider {

@@ -1,5 +1,6 @@
 import "../styles/profile-page.css";
 import { getCurrentUser } from "../utils/utils";
+import { navigate } from "../router";
 
 async function loadGameHistory(): Promise<void> {
     try {
@@ -42,7 +43,7 @@ async function loadGameHistory(): Promise<void> {
           </tr>
         `;
       } else {
-        gameHistory.forEach(game => {
+        gameHistory.forEach((game: any) => {
           const row = document.createElement('tr');
           row.className = game.result.toLowerCase(); // Pour pouvoir styliser selon le résultat
           
@@ -138,11 +139,11 @@ async function initializeProfilePage(): Promise<() => void> {
         });
 	};
 }
-let handleSegmentMouseEnter: (event: MouseEvent) => void;
-let handleSegmentMouseLeave: (event: MouseEvent) => void;
+let handleSegmentMouseEnter: (this: HTMLElement, event: Event) => void;
+let handleSegmentMouseLeave: (event: Event) => void;
 let handleSegmentMouseMove: (event: MouseEvent) => void;
-let handleHistoryRowHover: (event: MouseEvent) => void;
-let handleHistoryRowLeave: (event: MouseEvent) => void;
+let handleHistoryRowHover: (this: HTMLElement, event: Event) => void;
+let handleHistoryRowLeave: (this: HTMLElement, event: Event) => void;
 let animateChart: () => void;
 let animateHistoryTable: () => void;
 
@@ -163,12 +164,12 @@ function initializeHistoryTable(): void {
         
         // Animation row
         row.classList.add('animated-row');
-        row.style.opacity = '0';
-        row.style.transform = 'translateY(20px)';
+        (row as HTMLElement).style.opacity = '0';
+        (row as HTMLElement).style.transform = 'translateY(20px)';
     });
     
     // Le reste de votre code existant pour handleHistoryRowHover, etc.
-    handleHistoryRowHover = function(this: HTMLElement) {
+    handleHistoryRowHover = function(this: HTMLElement, event: Event) {
         this.classList.add('row-hover');
         const winnerCell = this.querySelector('.winner');
         if (winnerCell) {
@@ -180,7 +181,7 @@ function initializeHistoryTable(): void {
         }
     };
     
-    handleHistoryRowLeave = function(this: HTMLElement) {
+    handleHistoryRowLeave = function(this: HTMLElement, event: Event) {
         this.classList.remove('row-hover');
         const winnerCell = this.querySelector('.winner');
         if (winnerCell) {
@@ -198,7 +199,7 @@ function initializeHistoryTable(): void {
     });
     const headerCells = historyTab.querySelectorAll('thead th');
     headerCells.forEach((header, index) => {
-        header.style.cursor = 'pointer';
+        (header as HTMLElement).style.cursor = 'pointer';
         header.setAttribute('data-sort-direction', 'none');
         header.addEventListener('click', () => sortTable(index, header));
     });
@@ -208,9 +209,9 @@ function initializeHistoryTable(): void {
     }
     animateHistoryTable = () => {
         rows.forEach(row => {
-            row.style.opacity = '0';
-            row.style.transform = 'translateY(20px)';
-            row.style.transition = 'none';
+            (row as HTMLElement).style.opacity = '0';
+            (row as HTMLElement).style.transform = 'translateY(20px)';
+            (row as HTMLElement).style.transition = 'none';
         });
         void historyTab.offsetWidth;
         if (headerRow) {
@@ -218,9 +219,9 @@ function initializeHistoryTable(): void {
         }
         rows.forEach((row, index) => {
             setTimeout(() => {
-                row.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                row.style.opacity = '1';
-                row.style.transform = 'translateY(0)';
+                (row as HTMLElement).style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                (row as HTMLElement).style.opacity = '1';
+                (row as HTMLElement).style.transform = 'translateY(0)';
             }, 150 + (index * 100));
         });
     };
@@ -271,13 +272,13 @@ function sortTable(columnIndex: number, headerElement: Element): void {
     tbody.classList.add('sorting');
     setTimeout(() => {
         rows.forEach((row, index) => {
-            row.style.opacity = '0';
-            row.style.transform = 'translateY(10px)';
+            (row as HTMLElement).style.opacity = '0';
+            (row as HTMLElement).style.transform = 'translateY(10px)';
             tbody.appendChild(row);
             setTimeout(() => {
-                row.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                row.style.opacity = '1';
-                row.style.transform = 'translateY(0)';
+                (row as HTMLElement).style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                (row as HTMLElement).style.opacity = '1';
+                (row as HTMLElement).style.transform = 'translateY(0)';
             }, 50 * index);
         });
         setTimeout(() => {
@@ -301,14 +302,23 @@ function initializeChart(nb_wins: number, nb_games: number): void {
     const ratioText = document.querySelector('.ratio-text');
     const lossLegend = document.getElementById('loss-legend');
     const tooltip = document.getElementById('chart-tooltip');
+    const winNum = document.getElementById('win-num');
+    const lossNum = document.getElementById('loss-num');
+
     
-    if (!winSegment || !lossSegment || !winPercentageText || !winLegend || !lossLegend || !tooltip || !ratioText) {
+    if (!winSegment || !lossSegment || !winPercentageText || !winLegend || !lossLegend || !tooltip || !ratioText || !winNum || !lossNum) {
         return;
     }
     const winRatio = losses > 0 ? (wins / losses).toFixed(2) : wins > 0 ? "∞" : "0";
     
     ratioText.textContent = String(winRatio);
+
+    winNum.textContent = String(wins) + " Wins";
+    lossNum.textContent = String(losses) + " Losses";
+
     winPercentageText.textContent = `${winPercentage}% Wins`;
+
+
     animateChart = () => {
         const winDashArray = `${circumference * wins / total} ${circumference}`;
         const lossDashArray = `${circumference * losses / total} ${circumference}`;
@@ -335,22 +345,22 @@ function initializeChart(nb_wins: number, nb_games: number): void {
     };
     const chartContainer = document.querySelector('.chart-container');
     if (!chartContainer) return;
-    handleSegmentMouseEnter = function(this: HTMLElement, e: MouseEvent) {
+    handleSegmentMouseEnter = function(this: HTMLElement, e: Event) {
         tooltip.style.opacity = '1';
         
         if (this === winSegment) {
             tooltip.textContent = `Wins: ${wins} (${winPercentage}%)`;
-            winSegment.style.stroke = '#5dca60';
+            (winSegment as HTMLElement).style.stroke = '#5dca60';
         } else {
             tooltip.textContent = `Losses: ${losses} (${lossPercentage}%)`;
-            lossSegment.style.stroke = '#ff5c50';
+            (lossSegment as HTMLElement).style.stroke = '#ff5c50';
         }
     };
     
-    handleSegmentMouseLeave = function(e: MouseEvent) {
+    handleSegmentMouseLeave = function(e: Event) {
         tooltip.style.opacity = '0';
-        winSegment.style.stroke = '#4CAF50';
-        lossSegment.style.stroke = '#F44336';
+        (winSegment as HTMLElement).style.stroke = '#4CAF50';
+        (lossSegment as HTMLElement).style.stroke = '#F44336';
     };
     
     handleSegmentMouseMove = function(e: MouseEvent) {
@@ -378,10 +388,11 @@ if (document.readyState !== 'loading') {
 }
 
 function updateProfileInfo(user: any): void {
+    
     const usernameElement = document.querySelector('.profile-info .username');
     const nameElement = document.querySelector('.profile-info .name');
     const avatarElement = document.querySelector('.profile-info .avatar') as HTMLImageElement;
-    const loginButton = document.querySelector('.profile-info .btn-add-friend');
+    const logoutButton = document.querySelector('.profile-info .btn-add-friend');
 
     if (usernameElement) {
         usernameElement.textContent = user.username;
@@ -393,21 +404,179 @@ function updateProfileInfo(user: any): void {
     }
     
     if (avatarElement) {
-        if (user.avatar) {
-            avatarElement.src = user.avatar;
+        // Check multiple possible property names for the avatar URL
+        let avatarUrl = user.avatar || user.picture || user.profile_picture || user.avatar_url;
+        
+        // Additional check for common Google avatar URL patterns
+        if (typeof user === 'object' && user !== null) {
+            // Handle nested property paths that Google might use
+            if (!avatarUrl && user.photos && user.photos.length > 0) {
+                avatarUrl = user.photos[0].value;
+            }
+            
+            // Google OAuth specific format
+            if (!avatarUrl && user.picture) {
+                if (typeof user.picture === 'string') {
+                    avatarUrl = user.picture;
+                } else if (typeof user.picture === 'object' && user.picture.data && user.picture.data.url) {
+                    avatarUrl = user.picture.data.url;
+                }
+            }
+        }
+        
+        // Add URL validation
+        const isValidUrl = (url: string): boolean => {
+            try {
+                new URL(url);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        };
+        
+        // Convert HTTP URLs to HTTPS for better compatibility
+        if (avatarUrl && typeof avatarUrl === 'string' && avatarUrl.startsWith('http:')) {
+            avatarUrl = avatarUrl.replace('http:', 'https:');
+        }
+        
+        // Debug the avatar URL
+        console.log("Processing avatar URL:", avatarUrl);
+        
+        if (avatarUrl && isValidUrl(avatarUrl)) {
+            console.log("Valid avatar URL found, attempting to load:", avatarUrl);
+            
+            // First set a default immediately to ensure we have something displayed
+            avatarElement.src = "/assets/images/avatar.jpg";
             avatarElement.alt = `${user.username}'s avatar`;
+            
+            // Create a new image to test loading before assigning to the avatar element
+            const testImg = new Image();
+            
+            // Set up crossOrigin to help with CORS issues
+            testImg.crossOrigin = "anonymous";
+            
+            testImg.onload = () => {
+                console.log("Avatar image loaded successfully");
+                avatarElement.src = avatarUrl;
+                avatarElement.alt = `${user.username}'s avatar`;
+                
+                // Store successful URL in localStorage as a backup
+                try {
+                    localStorage.setItem('lastSuccessfulAvatarUrl', avatarUrl);
+                } catch (e) {
+                    console.warn("Could not save avatar URL to localStorage:", e);
+                }
+            };
+            
+            testImg.onerror = (e) => {
+                console.error("Error pre-loading avatar image, using default:", e);
+                
+                // Try the backup URL from localStorage if available
+                const backupUrl = localStorage.getItem('lastSuccessfulAvatarUrl');
+                if (backupUrl && backupUrl !== avatarUrl) {
+                    console.log("Attempting to use backup avatar URL:", backupUrl);
+                    const backupImg = new Image();
+                    backupImg.crossOrigin = "anonymous";
+                    backupImg.onload = () => {
+                        avatarElement.src = backupUrl;
+                        avatarElement.alt = `${user.username}'s avatar`;
+                    };
+                    backupImg.onerror = () => {
+                        console.log("Backup avatar also failed, using default");
+                        avatarElement.src = "/assets/images/avatar.jpg";
+                        avatarElement.alt = `${user.username}'s avatar`;
+                    };
+                    backupImg.src = backupUrl;
+                } else {
+                    avatarElement.src = "/assets/images/avatar.jpg";
+                    avatarElement.alt = `${user.username}'s avatar`;
+                }
+            };
+            
+            // Set a timeout to handle very slow loading
+            const timeoutId = setTimeout(() => {
+                if (!testImg.complete) {
+                    console.log("Avatar image load timed out, using default");
+                    testImg.src = ""; // Cancel the current loading
+                    avatarElement.src = "/assets/images/avatar.jpg";
+                    avatarElement.alt = `${user.username}'s avatar`;
+                }
+            }, 5000); // 5 second timeout
+            
+            testImg.onload = () => {
+                clearTimeout(timeoutId);
+                avatarElement.src = avatarUrl;
+                avatarElement.alt = `${user.username}'s avatar`;
+                
+                // Store successful URL in localStorage as a backup
+                try {
+                    localStorage.setItem('lastSuccessfulAvatarUrl', avatarUrl);
+                } catch (e) {
+                    console.warn("Could not save avatar URL to localStorage:", e);
+                }
+            };
+            
+            testImg.src = avatarUrl;
         } else {
+            console.log("No valid avatar URL found, using default");
+            avatarElement.src = "/assets/images/avatar.jpg";
             avatarElement.alt = `${user.username}'s avatar`;
         }
+    } else {
+        console.log("Avatar element not found in the DOM");
     }
     
-    if (loginButton) {
-        loginButton.textContent = 'Edit Profile';
-        loginButton.setAttribute('data-i18n', 'profile.edit');
+    if (logoutButton) {
+        logoutButton.textContent = 'Log out';
+        logoutButton.classList.add('logout-button');
         
-        // loginButton.addEventListener('click', openProfileEditor);
+        // Add logout functionality
+        logoutButton.addEventListener('click', handleLogout);
     }
 }
 
+// Function to handle logout
+async function handleLogout(): Promise<void> {
+    try {
+        // 1. Call server-side logout endpoint first
+        const response = await fetch('/api/logout', {
+            method: 'POST',
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            console.warn('Server logout failed, continuing with client-side logout');
+        }
+        
+        // 2. Clear client-side auth state
+        localStorage.removeItem('token');
+        
+        // 3. Clear cookies with proper attributes
+        // Be thorough with different cookie clearing approaches
+        document.cookie = 'sessionid=; Max-Age=0; path=/;';
+        document.cookie = 'auth_token=; Max-Age=0; path=/;';
+        
+        // Also try with domain specified
+        document.cookie = 'sessionid=; Max-Age=0; path=/; domain=' + window.location.hostname;
+        document.cookie = 'auth_token=; Max-Age=0; path=/; domain=' + window.location.hostname;
+        
+        // 4. Update UI elements that depend on auth state
+        const profileLabel = document.querySelector(".profile-label") as HTMLElement;
+        if (profileLabel) {
+            profileLabel.textContent = "Login";
+            profileLabel.setAttribute("data-hover", "Login");
+        }
+        
+        // 5. Redirect to home page with a small delay to ensure cleanup completes
+        setTimeout(() => {
+            navigate('/');
+        }, 100);
+        
+    } catch (error) {
+        console.error('Error during logout:', error);
+        // Even if there's an error, attempt to navigate away
+        navigate('/');
+    }
+}
 
 export default initializeProfilePage;

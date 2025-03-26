@@ -474,3 +474,23 @@ th.sorted-desc::after {
         transform: translateY(0);
     }
 }
+
+.logout-button {
+    background-color: #f44336;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: inline-block;
+    width: auto;
+    min-width: 120px;
+    max-width: 200px;
+    margin: 10px auto;
+    text-align: center;
+}
+
+.logout-button:hover {
+    background-color: #d32f2f;
+}

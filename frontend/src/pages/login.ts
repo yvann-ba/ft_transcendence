@@ -1,5 +1,6 @@
 import '../styles/login.css';
 import { navigate } from '../router';
+import { redirectAfterAuth, getQueryParam } from '../router';
 
 interface LoginResponse {
     message: string;
@@ -92,14 +93,8 @@ export default function login() {
 
             const data: LoginResponse = await response.json();
 
-            let path = window.location.href;
-            if (path === '/login')
-                path = '/home'
-
-            window.history.pushState({}, "", path);
-            setTimeout(() => {
-                navigate();
-            }, 100);
+            localStorage.setItem('token', data.token); // Store the token
+            redirectAfterAuth();
 
             messageDiv.textContent = 'Connexion réussie !';
             messageDiv.classList.remove('error');

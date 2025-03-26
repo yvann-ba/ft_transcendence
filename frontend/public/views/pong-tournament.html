@@ -1,3 +1,6 @@
+<!-- In frontend/public/views/pong-tournament.html -->
+<!-- Replace the existing content with: -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,25 +54,25 @@
             
             <div id="customize-menu" class="hidden">
                 <div class="custom-menu-content">
-                    <h1 class="custom-title">Customize Game</h1>
+                    <h1 class="custom-title" data-i18n="game.customize_title">Customize Game</h1>
                     <div class="custom-settings">
                         <div class="settings-group">
                             <div class="color-setting">
-                                <label for="ball-color">Ball Color</label>
+                                <label for="ball-color" data-i18n="game.colors.ball">Ball Color</label>
                                 <input type="color" value="#ffffff" id="ball-color" class="color-input">
                             </div>
                             <div class="color-setting">
-                                <label for="paddle-color">Paddle Color</label>
+                                <label for="paddle-color" data-i18n="game.colors.paddle">Paddle Color</label>
                                 <input type="color" value="#ffffff" id="paddle-color" class="color-input">
                             </div>
                             <div class="color-setting">
-                                <label for="line-color">Line Color</label>
+                                <label for="line-color" data-i18n="game.colors.line">Line Color</label>
                                 <input type="color" value="#ffffff" id="line-color" class="color-input">
                             </div>
                         </div>
                         <div class="settings-group">
                             <div class="slider-setting">
-                                <p id="points-display">Winning score: 5</p>
+                                <p id="points-display" data-i18n="game.winning_score_display">Winning score: 5</p>
                                 <input type="range" min="1" max="10" value="5" class="pong-custom-slider" id="points-to-win">
                                 <div class="slider-labels">
                                     <span>1</span>
@@ -78,23 +81,23 @@
                             </div>
                         </div>
                     </div>
-                    <button id="back-button" class="pong-button">Back to Menu</button>
+                    <button id="back-button" class="pong-button" data-i18n="game.back_to_menu">Back to Menu</button>
                 </div>
             </div>
             
             <div id="tournament-bracket" class="hidden">
-                <h2>Tournament Bracket</h2>
+                <h2 data-i18n="game.tournament_mode.bracket">Tournament Bracket</h2>
                 <div class="bracket-container">
                     <div class="round">
-                        <div class="round-title">Semi-Finals</div>
+                        <div class="round-title" data-i18n="game.tournament_mode.semifinals">Semi-Finals</div>
                         <div class="match" id="match1">
                             <div class="match-player" id="match1-player1">Player 1</div>
-                            <div class="vs">VS</div>
+                            <div class="vs" data-i18n="game.tournament_mode.vs">VS</div>
                             <div class="match-player" id="match1-player2">Player 2</div>
                         </div>
                         <div class="match" id="match2">
                             <div class="match-player" id="match2-player1">Player 3</div>
-                            <div class="vs">VS</div>
+                            <div class="vs" data-i18n="game.tournament_mode.vs">VS</div>
                             <div class="match-player" id="match2-player2">Player 4</div>
                         </div>
                     </div>
@@ -106,23 +109,23 @@
                         <div class="connector-line bottom"></div>
                     </div>
                     <div class="round">
-                        <div class="round-title">Final</div>
+                        <div class="round-title" data-i18n="game.tournament_mode.final">Final</div>
                         <div class="match" id="match3">
-                            <div class="match-player" id="match3-player1">Waiting...</div>
-                            <div class="vs">VS</div>
-                            <div class="match-player" id="match3-player2">Waiting...</div>
+                            <div class="match-player" id="match3-player1" data-i18n="game.tournament_mode.waiting">Waiting...</div>
+                            <div class="vs" data-i18n="game.tournament_mode.vs">VS</div>
+                            <div class="match-player" id="match3-player2" data-i18n="game.tournament_mode.waiting">Waiting...</div>
                         </div>
                     </div>
                 </div>
-                <button id="play-next-match-button" class="pong-button">Play Next Match</button>
+                <button id="play-next-match-button" class="pong-button" data-i18n="game.tournament_mode.play_next">Play Next Match</button>
             </div>
             
             <div id="winner-announcement" class="hidden">
-                <h2>Tournament Champion</h2>
+                <h2 data-i18n="game.tournament_mode.champion">Tournament Champion</h2>
                 <div class="winner-name" id="champion-name">Player Name</div>
                 <div class="trophy-icon">🏆</div>
-                <button id="new-tournament-button" class="pong-button">New Tournament</button>
-                <button id="back-to-modes-button-winner" class="pong-button back-button" href="/pong-selection" data-i18n="game.back">Back</button>
+                <button id="new-tournament-button" class="pong-button" data-i18n="game.tournament_mode.new">New Tournament</button>
+                <button id="back-to-modes-button-winner" class="pong-button back-button" data-i18n="game.back">Back</button>
             </div>
         </div>
         

@@ -15,6 +15,10 @@
     }
   },
   "game": {
+    "select_mode_class": {
+      "intro": "SELECT YOUR",
+      "mode": "GAME MODE"
+    },
     "play": "Play Now",
     "customize": "Customize",
     "back": "Back",
@@ -192,11 +196,11 @@
       "websockets": "WebSockets"
     },
     "descriptions": {
-      "frontend": "Developed the responsive user interface and implemented interactive elements throughout the application. Created smooth animations and visuals that enhance the user experience.",
-      "backend": "Architected the backend infrastructure with Fastify and Node.js. Designed the database schema and implemented APIs for efficient data flow between the frontend and backend.",
-      "game": "Implemented the core Pong mechanics and physics. Developed the AI opponent with multiple difficulty levels and built the matchmaking system for tournaments.",
-      "devops": "Configured the infrastructure with Docker and Nginx. Implemented security measures and set up SSL/TLS connections.",
-      "fullstack": "Implemented user authentication with 42 OAuth. Built real-time features with WebSockets and developed the user profile and friends system."
+      "frontend": "Containerization of various services and implementation of a global server to optimize site management, security, and performance.",
+      "backend": "Development of the registration feature, as well as tools for storing and managing user data, ensuring maximum security and a smooth user experience.",
+      "game": "Creation and integration of multiple versions of the Pong game, alongside platforms and visual interfaces to provide an immersive experience.",
+      "devops": "Implementation of dynamic site translation into multiple languages to ensure optimal accessibility.",
+      "fullstack": "Support for the development of game modes and their interfaces, aiming to enhance user interaction."
     },
     "socials": {
       "github": "GitHub",

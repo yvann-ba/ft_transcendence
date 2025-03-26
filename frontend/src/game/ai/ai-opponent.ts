@@ -144,10 +144,10 @@ export class AIOpponent {
         let imperfectionRange = 0;
         switch (this.difficulty) {
             case 'easy':
-                imperfectionRange = 70;
+                imperfectionRange = 200;
                 break;
             case 'medium':
-                imperfectionRange = 25;
+                imperfectionRange = 75;
                 break;
             case 'hard':
                 imperfectionRange = 5;
