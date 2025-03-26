@@ -433,6 +433,22 @@ function updateProfileInfo(user: any): void {
     }
     
     if (avatarElement) {
+        // Try to load from cache first
+        const cachedAvatar = localStorage.getItem('cachedAvatarImage');
+        const cachedTimestamp = localStorage.getItem('cachedAvatarTimestamp');
+        const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+        
+        if (cachedAvatar && cachedTimestamp) {
+            // Check if cache is still valid (less than 1 day old)
+            const cacheAge = Date.now() - parseInt(cachedTimestamp);
+            if (cacheAge < ONE_DAY) {
+                console.log("Using cached avatar image");
+                avatarElement.src = cachedAvatar;
+                avatarElement.alt = `${user.username}'s avatar`;
+                // Still continue with the rest of the function to update cache if possible
+            }
+        }
+        
         // Check multiple possible property names for the avatar URL
         let avatarUrl = user.avatar || user.picture || user.profile_picture || user.avatar_url;
         
@@ -485,15 +501,29 @@ function updateProfileInfo(user: any): void {
             testImg.crossOrigin = "anonymous";
             
             testImg.onload = () => {
-                console.log("Avatar image loaded successfully");
+                clearTimeout(timeoutId);
                 avatarElement.src = avatarUrl;
                 avatarElement.alt = `${user.username}'s avatar`;
                 
-                // Store successful URL in localStorage as a backup
+                // Store the actual image data as base64 in localStorage
                 try {
-                    localStorage.setItem('lastSuccessfulAvatarUrl', avatarUrl);
+                    // Create a canvas to convert image to base64
+                    const canvas = document.createElement('canvas');
+                    canvas.width = testImg.width;
+                    canvas.height = testImg.height;
+                    const ctx = canvas.getContext('2d');
+                    if (ctx) {
+                        ctx.drawImage(testImg, 0, 0);
+                        const dataUrl = canvas.toDataURL('image/jpeg');
+                        
+                        // Store both URL and actual image data
+                        localStorage.setItem('lastSuccessfulAvatarUrl', avatarUrl);
+                        localStorage.setItem('cachedAvatarImage', dataUrl);
+                        localStorage.setItem('cachedAvatarTimestamp', Date.now().toString());
+                        console.log("Avatar image cached successfully as base64");
+                    }
                 } catch (e) {
-                    console.warn("Could not save avatar URL to localStorage:", e);
+                    console.warn("Could not cache avatar image:", e);
                 }
             };
             
@@ -537,11 +567,25 @@ function updateProfileInfo(user: any): void {
                 avatarElement.src = avatarUrl;
                 avatarElement.alt = `${user.username}'s avatar`;
                 
-                // Store successful URL in localStorage as a backup
+                // Store the actual image data as base64 in localStorage
                 try {
-                    localStorage.setItem('lastSuccessfulAvatarUrl', avatarUrl);
+                    // Create a canvas to convert image to base64
+                    const canvas = document.createElement('canvas');
+                    canvas.width = testImg.width;
+                    canvas.height = testImg.height;
+                    const ctx = canvas.getContext('2d');
+                    if (ctx) {
+                        ctx.drawImage(testImg, 0, 0);
+                        const dataUrl = canvas.toDataURL('image/jpeg');
+                        
+                        // Store both URL and actual image data
+                        localStorage.setItem('lastSuccessfulAvatarUrl', avatarUrl);
+                        localStorage.setItem('cachedAvatarImage', dataUrl);
+                        localStorage.setItem('cachedAvatarTimestamp', Date.now().toString());
+                        console.log("Avatar image cached successfully as base64");
+                    }
                 } catch (e) {
-                    console.warn("Could not save avatar URL to localStorage:", e);
+                    console.warn("Could not cache avatar image:", e);
                 }
             };
             
