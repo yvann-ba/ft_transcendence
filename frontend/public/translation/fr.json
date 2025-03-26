@@ -43,7 +43,13 @@
       "bottom": "Bas :",
       "right": "Droite :",
       "controls": "Contrôles :",
-      "see_ai": "Voir les prédictions de l'IA avec :"
+      "see_ai": "Voir les prédictions de l'IA avec :",
+      "player": "Joueur",
+      "arrow_keys": "Touches fléchées",
+      "keys": "Touches",
+      "ai_opponent": "IA Adversaire",
+      "computer_controlled": "Contrôlé par Ordinateur",
+      "toggle_ai_debug": "Appuyez sur Alt+Q pour afficher/masquer les prédictions de l'IA"
     },
     "play_now": "Jouer maintenant",
     "ai_mode": {

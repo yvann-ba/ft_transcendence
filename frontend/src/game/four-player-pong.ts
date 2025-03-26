@@ -1,4 +1,6 @@
 import "../styles/four-player-pong.css";
+import "../styles/four-player-pong.css";
+import { languageService } from "../utils/languageContext";
 
 interface Ball {
   x: number;
@@ -106,6 +108,13 @@ export default function initializeMultiplayerGame(): (() => void) | null {
       lastHitTime: 0
     }
   ];
+
+  const updateTranslations = () => {
+    drawControlsHint();
+  };
+
+  window.addEventListener('languageChanged', updateTranslations);
+
   const bricks: Brick[] = [];
   const BRICK_ROWS = 2;
   const BRICK_COLS = 4;
@@ -373,6 +382,16 @@ export default function initializeMultiplayerGame(): (() => void) | null {
   }
   
   function drawControlsHint(): void {
+    // Update the controls-list HTML content
+    const controlsList = document.querySelector('.controls-list');
+    if (controlsList) {
+      controlsList.innerHTML = `
+        <div><span style="color: #BB70AD;">${languageService.translate('game.controls_info.bottom', 'Bottom')}:</span> ← / → ${languageService.translate('game.controls_info.arrow_keys', 'Arrow Keys')}</div>
+        <div><span style="color: #70BB88;">${languageService.translate('game.controls_info.top', 'Top')}:</span> A / D ${languageService.translate('game.controls_info.keys', 'Keys')}</div>
+        <div><span style="color: #7088BB;">${languageService.translate('game.controls_info.left', 'Left')}:</span> W / S ${languageService.translate('game.controls_info.keys', 'Keys')}</div>
+        <div><span style="color: #BBBB70;">${languageService.translate('game.controls_info.right', 'Right')}:</span> ↑ / ↓ ${languageService.translate('game.controls_info.keys', 'Keys')}</div>
+      `;
+    }
   }
   
   function drawWinner(): void {
@@ -796,6 +815,8 @@ export default function initializeMultiplayerGame(): (() => void) | null {
     elements.backgroundColorPicker?.removeEventListener("input", changeColors);
     elements.winningScoreSlider?.removeEventListener("input", changeWinningScore);
     elements.winningScoreSlider?.removeEventListener("input", sliderAnimation);
+
+    window.removeEventListener('languageChanged', updateTranslations);
     
     if (animationFrameId !== null) {
       cancelAnimationFrame(animationFrameId);

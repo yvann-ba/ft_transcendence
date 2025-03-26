@@ -43,7 +43,13 @@
       "bottom": "Down:",
       "right": "Right:",
       "controls": "Controls:",
-      "see_ai": "View AI predictions with:"
+      "see_ai": "View AI predictions with:",
+      "player": "Player",
+      "arrow_keys": "Arrow Keys",
+      "keys": "Keys",
+      "ai_opponent": "AI Opponent",
+      "computer_controlled": "Computer Controlled",
+      "toggle_ai_debug": "Press Alt+Q to toggle AI prediction visualization"
     },
     "play_now": "Play Now",
     "ai_mode": {

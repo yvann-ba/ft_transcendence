@@ -565,9 +565,8 @@ export default async function initializePongGame(): Promise<(() => void) | null>
       const controlsList = document.getElementById('controls-list');
       if (controlsList) {
         controlsList.innerHTML = `
-          <div><span>${languageService.translate('game.controls_info.player', 'Player')}:</span> W / S ${languageService.translate('game.controls_info.keys', 'Keys')}</div>
-          <div><span>${languageService.translate('game.controls_info.ai_opponent', 'AI Opponent')}:</span> ${languageService.translate('game.controls_info.computer_controlled', 'Computer Controlled')}</div>
-          <div class="debug-hint">${languageService.translate('game.controls_info.toggle_ai_debug', 'Press Alt+Q to toggle AI prediction visualization')}</div>
+          <div><span>${languageService.translate('game.controls_info.player1', 'Player 1')}:</span> W / S ${languageService.translate('game.controls_info.keys', 'Keys')}</div>
+          <div><span>${languageService.translate('game.controls_info.player2', 'Player 2')}:</span> ↑ / ↓ ${languageService.translate('game.controls_info.arrow_keys', 'Arrow Keys')}</div>
         `;
       }
       
@@ -623,8 +622,9 @@ export default async function initializePongGame(): Promise<(() => void) | null>
       const controlsList = document.getElementById('controls-list');
       if (controlsList) {
         controlsList.innerHTML = `
-          <div><span>${languageService.translate('game.controls_info.player1', 'Player 1')}:</span> W / S ${languageService.translate('game.controls_info.keys', 'Keys')}</div>
-          <div><span>${languageService.translate('game.controls_info.player2', 'Player 2')}:</span> ↑ / ↓ ${languageService.translate('game.controls_info.arrow_keys', 'Arrow Keys')}</div>
+          <div><span>${languageService.translate('game.controls_info.player', 'Player')}:</span> W / S ${languageService.translate('game.controls_info.keys', 'Keys')}</div>
+          <div><span>${languageService.translate('game.controls_info.ai_opponent', 'AI Opponent')}:</span> ${languageService.translate('game.controls_info.computer_controlled', 'Computer Controlled')}</div>
+          <div class="debug-hint">${languageService.translate('game.controls_info.toggle_ai_debug', 'Press Alt+Q to toggle AI prediction visualization')}</div>
         `;
       }
     }
