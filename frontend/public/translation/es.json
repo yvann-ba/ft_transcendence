@@ -19,6 +19,10 @@
       "intro": "SELECCIONA TU",
       "mode": "MODO DE JUEGO"
     },
+    "new_game": "Nuevo Juego",
+    "champion": "¡Campeón!",
+    "player1": "Jugador 1",
+    "player2": "Jugador 2",
     "play": "Jugar ahora",
     "customize": "Personalizar",
     "back": "Volver",

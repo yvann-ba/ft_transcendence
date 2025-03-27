@@ -19,6 +19,10 @@
       "intro": "SELECT YOUR",
       "mode": "GAME MODE"
     },
+    "new_game": "New Game",
+    "champion": "Champion!",
+    "player1": "Player 1",
+    "player2": "Player 2",
     "play": "Play Now",
     "customize": "Customize",
     "back": "Back",
