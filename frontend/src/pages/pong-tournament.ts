@@ -51,6 +51,7 @@ export default function initializeTournamentMode() {
   }
 
   function updatePageTranslations(): void {
+    // Translate all elements with data-i18n attribute
     const elements = document.querySelectorAll('[data-i18n]');
     elements.forEach(element => {
       const key = element.getAttribute('data-i18n');
@@ -58,6 +59,38 @@ export default function initializeTournamentMode() {
         element.textContent = languageService.translate(key);
       }
     });
+    
+    // Update input placeholders
+    const inputs = document.querySelectorAll('[data-i18n-placeholder]');
+    inputs.forEach(input => {
+      const key = input.getAttribute('data-i18n-placeholder');
+      if (key) {
+        (input as HTMLInputElement).placeholder = languageService.translate(key);
+      }
+    });
+    
+    // Get player input fields directly
+    const player1Input = document.getElementById("player1-name") as HTMLInputElement;
+    const player2Input = document.getElementById("player2-name") as HTMLInputElement;
+    const player3Input = document.getElementById("player3-name") as HTMLInputElement;
+    const player4Input = document.getElementById("player4-name") as HTMLInputElement;
+    
+    // Update default values if they match any of the standard translations
+    if (player1Input && (player1Input.value === "Player 1" || player1Input.value === "Joueur 1" || player1Input.value === "Jugador 1")) {
+      player1Input.value = languageService.translate("game.tournament_mode.default_player1", "Player 1");
+    }
+    
+    if (player2Input && (player2Input.value === "Player 2" || player2Input.value === "Joueur 2" || player2Input.value === "Jugador 2")) {
+      player2Input.value = languageService.translate("game.tournament_mode.default_player2", "Player 2");
+    }
+    
+    if (player3Input && (player3Input.value === "Player 3" || player3Input.value === "Joueur 3" || player3Input.value === "Jugador 3")) {
+      player3Input.value = languageService.translate("game.tournament_mode.default_player3", "Player 3");
+    }
+    
+    if (player4Input && (player4Input.value === "Player 4" || player4Input.value === "Joueur 4" || player4Input.value === "Jugador 4")) {
+      player4Input.value = languageService.translate("game.tournament_mode.default_player4", "Player 4");
+    }
   }
 
   const canvas = document.getElementById("tournamentCanvas") as HTMLCanvasElement | null;
@@ -720,10 +753,10 @@ function closeCustomMenu(): void {
           elements.playNextMatchButton?.addEventListener("click", playNextMatch);
           elements.newTournamentButton?.addEventListener("click", resetTournament);
           // Initialize player input fields with default values
-          elements.playerInputs[0].value = "Player 1";
-          elements.playerInputs[1].value = "Player 2";
-          elements.playerInputs[2].value = "Player 3";
-          elements.playerInputs[3].value = "Player 4";
+          elements.playerInputs[0].value = languageService.translate("game.tournament_mode.default_player1", "Player 1");
+          elements.playerInputs[1].value = languageService.translate("game.tournament_mode.default_player2", "Player 2");
+          elements.playerInputs[2].value = languageService.translate("game.tournament_mode.default_player3", "Player 3");
+          elements.playerInputs[3].value = languageService.translate("game.tournament_mode.default_player4", "Player 4");
     
           initCustomization();
           // Initialize all Back to Game Modes buttons
