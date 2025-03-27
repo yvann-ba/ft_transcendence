@@ -72,6 +72,9 @@ export const navigate = async (path?: string, preserveParams = false): Promise<v
       
       // Initialize any scripts needed for the new page
       await loadPageScript(targetPath + queryString);
+
+      const { changeProfileLabel } = await import("./app");
+      changeProfileLabel();
       
       // Fade out the overlay
       setTimeout(() => {

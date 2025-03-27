@@ -133,4 +133,22 @@ export default function login() {
         messageDiv.classList.remove('success');
         messageDiv.classList.add('error');
     }
+
+    const signupLinkContainer = document.querySelector('.signup-link') as HTMLElement;
+    if (signupLinkContainer) {
+        // First, check if the link exists
+        const existingLink = signupLinkContainer.querySelector('a[href="/register"]');
+        
+        // If the link doesn't exist, create it properly
+        if (!existingLink) {
+            const registerText = languageService.translate('auth.register', 'S\'inscrire');
+            signupLinkContainer.innerHTML = `${languageService.translate('auth.no_account', 'Pas encore de compte ?')} <a href="/register" style="color: #BB70AD; font-weight: bold;">${registerText}</a>`;
+        }
+        
+        // Make sure link is visible
+        signupLinkContainer.style.display = 'block';
+        signupLinkContainer.style.visibility = 'visible';
+        signupLinkContainer.style.marginTop = '15px';
+        signupLinkContainer.style.textAlign = 'center';
+    }
 }

@@ -91,7 +91,8 @@ button:hover {
     text-align: center;
     margin-top: 15px;
     font-size: 14px;
-	color: black;
+    color: black;
+    display: block;
 }
 
 .signup-link a {
