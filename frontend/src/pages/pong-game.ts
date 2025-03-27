@@ -596,7 +596,6 @@ export default async function initializePongGame(): Promise<(() => void) | null>
         });
       });
     } else {
-      // Classic mode text
       if (titleElem) {
         titleElem.textContent = languageService.translate('game.classic_pong', 'PONG');
       }
@@ -656,7 +655,6 @@ export default async function initializePongGame(): Promise<(() => void) | null>
   async function endGame(): Promise<void> {
 		state.running = false;
 		
-		// Determine the winner
 		let winner = null;
 		if (state.scores.player1 >= state.scores.winning) {
 			winner = languageService.translate('game.player1', "Player 1");
@@ -668,11 +666,9 @@ export default async function initializePongGame(): Promise<(() => void) | null>
 
 		if (state.aiEnabled) {
 			try {
-			  // Enregistrer le résultat de la partie
 			  const result = winner === "Player 1" ? "WIN" : "LOSS";
-			  const difficulty = elements.difficultySelector?.value || "medium";
+			  const difficulty = document.getElementsByClassName("difficulty-btn active")[0].getAttribute("data-difficulty");
 			  
-			  // Envoyer le résultat au serveur
 			  const response = await fetch('/api/game-history', {
 				method: 'POST',
 				headers: {
