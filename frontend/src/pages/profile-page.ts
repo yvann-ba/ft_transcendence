@@ -556,7 +556,7 @@ function updateProfileInfo(user: any): void {
     }
     
     if (logoutButton) {
-        logoutButton.textContent = 'Log out';
+        logoutButton.textContent = languageService.translate('profile.logout', 'Log out');
         logoutButton.classList.add('logout-button');
         
         // Add logout functionality

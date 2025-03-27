@@ -116,6 +116,7 @@
   },
   "profile": {
     "title": "Player Profile",
+    "logout": "Log out",
     "tabs": {
       "info": "Profile Info",
       "stats": "Statistics",

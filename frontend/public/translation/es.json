@@ -116,6 +116,7 @@
   },
   "profile": {
     "title": "Perfil del Jugador",
+    "logout": "Cerrar sesión",
     "tabs": {
       "info": "Información del Perfil",
       "stats": "Estadísticas",
