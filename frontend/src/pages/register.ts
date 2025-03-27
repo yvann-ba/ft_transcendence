@@ -1,9 +1,43 @@
 import '../styles/register.css';
 import { redirectAfterAuth } from '../router';
+import { languageService } from '../utils/languageContext';
 
 interface RegisterResponse {
     message: string;
     token: string;
+}
+
+function updatePageTranslations(): void {
+    // Update all elements with data-i18n attribute
+    const elements = document.querySelectorAll('[data-i18n]');
+    elements.forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (key) {
+            element.textContent = languageService.translate(key);
+        }
+    });
+    
+    // Update input placeholders
+    const inputs = document.querySelectorAll('[data-i18n-placeholder]');
+    inputs.forEach(input => {
+        const key = input.getAttribute('data-i18n-placeholder');
+        if (key) {
+            (input as HTMLInputElement).placeholder = languageService.translate(key);
+        }
+    });
+    
+    // Update Google button if it exists
+    const googleButton = document.getElementById('google-button');
+    if (googleButton) {
+        const registerWithText = languageService.translate('auth.register_with', 'S\'inscrire avec');
+        googleButton.innerHTML = `${registerWithText} <img src="/assets/images/Google_Logo.png" alt="Google Logo">`;
+    }
+    
+    // Update separator if it exists
+    const separator = document.querySelector('.separator span');
+    if (separator) {
+        separator.textContent = languageService.translate('auth.or', 'ou');
+    }
 }
 
 export default function register() {
@@ -22,7 +56,8 @@ export default function register() {
         googleButton.type = 'button';
         googleButton.id = 'google-button';
         googleButton.className = 'oauth-button google-button';
-        googleButton.innerHTML = 'S\'inscrire avec <img src="/assets/images/Google_Logo.png" alt="Google Logo">';
+        const registerWithText = languageService.translate('auth.register_with', 'S\'inscrire avec');
+        googleButton.innerHTML = `${registerWithText} <img src="/assets/images/Google_Logo.png" alt="Google Logo">`;
         
         googleButton.addEventListener('click', () => {
             window.location.href = '/api/auth/google';
@@ -30,12 +65,16 @@ export default function register() {
         
         const orSeparator = document.createElement('div');
         orSeparator.className = 'separator';
-        orSeparator.innerHTML = '<span>ou</span>';
+        orSeparator.innerHTML = `<span>${languageService.translate('auth.or', 'ou')}</span>`;
         
         // Insert before the form
         form.parentNode?.insertBefore(orSeparator, form);
         form.parentNode?.insertBefore(googleButton, orSeparator);
     }
+
+    // Update translations now and when language changes
+    updatePageTranslations();
+    window.addEventListener('languageChanged', updatePageTranslations);
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -91,12 +130,22 @@ export default function register() {
         }
     });
     
-    // Check for error in URL (for OAuth redirect failures)
-    const urlParams = new URLSearchParams(window.location.search);
-    const errorParam = urlParams.get('error');
-    if (errorParam === 'auth_failed') {
-        messageDiv.textContent = "L'authentification avec Google a échoué. Veuillez réessayer.";
-        messageDiv.classList.remove('success');
-        messageDiv.classList.add('error');
+    // Make sure the login link is visible
+    const loginLinkContainer = document.querySelector('.signup-link') as HTMLElement;
+    if (loginLinkContainer) {
+        // Check if the link exists
+        const existingLink = loginLinkContainer.querySelector('a[href="/login"]');
+        
+        // If the link doesn't exist, create it properly
+        if (!existingLink) {
+            const loginText = languageService.translate('auth.login', 'Se connecter');
+            loginLinkContainer.innerHTML = `${languageService.translate('auth.has_account', 'Vous avez déjà un compte ?')} <a href="/login" style="color: #BB70AD; font-weight: bold;">${loginText}</a>`;
+        }
+        
+        // Make sure link is visible
+        loginLinkContainer.style.display = 'block';
+        loginLinkContainer.style.visibility = 'visible';
+        loginLinkContainer.style.marginTop = '15px';
+        loginLinkContainer.style.textAlign = 'center';
     }
 }
