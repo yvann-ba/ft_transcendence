@@ -211,18 +211,15 @@ async function loadPageScript(path: string): Promise<void> {
     currentCleanup = null;
   }
 
-  // Parse path to get main route and query parameters
   const [route, queryParams] = path.split('?');
   const urlParams = new URLSearchParams(queryParams || '');
 
   if (requiresAuthentication(route) && !isAuthenticated()) {
-    // Don't load the script for protected routes when not authenticated
     console.warn("Attempted to access protected route without authentication");
     return;
   }
-
+  console.log("route", route);
   try {
-    // Import the appropriate module based on the path
     if (route === "/" || route === "/home") {
       const module = await import("./pages/home");
       currentCleanup = module.default() || null;
@@ -253,7 +250,13 @@ async function loadPageScript(path: string): Promise<void> {
     } else if (route === "/register") {
       const module = await import("./pages/register");
       module.default();
-    }
+    } else if (route === "/profile-page") {
+      const module = await import("./pages/profile-page");
+      module.default();
+    } else if (route === "/profile-edit") {
+      const module = await import("./pages/profile-edit");
+      module.default();
+    } 
   } catch (error) {
     console.error(`Error loading script for ${path}:`, error);
   }
