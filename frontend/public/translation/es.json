@@ -97,7 +97,11 @@
       "waiting": "Esperando...",
       "play_next": "Jugar el Siguiente Partido",
       "champion": "Campeón del Torneo",
-      "new": "Nuevo Torneo"
+      "new": "Nuevo Torneo",
+      "tag": "quoicoubeh",
+      "feature1": "Torneo de 4 jugadores",
+      "feature2": "Sistema de brackets",
+      "feature3": "Alias temporal por jugador"
     },
     "features": {
       "two_players": "Dos jugadores",
