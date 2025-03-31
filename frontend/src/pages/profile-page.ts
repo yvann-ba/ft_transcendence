@@ -429,7 +429,7 @@
         
         if (nameElement) {
             const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim();
-            nameElement.textContent = fullName ? `Name: ${fullName}` : '';
+            nameElement.textContent = fullName ? `${fullName}` : '';
         }
         
         if (avatarElement) {
