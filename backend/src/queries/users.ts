@@ -261,12 +261,12 @@ export const getUserData = async (userId: number): Promise<any> => {
       
       const gameHistoryPromise = new Promise<any[]>((resolveGames) => {
         const query = `
-          SELECT * FROM games 
-          WHERE player1_id = ? OR player2_id = ? 
-          ORDER BY created_at DESC
+          SELECT * FROM game_history
+          WHERE user_id = ?
+          ORDER BY played_at DESC
         `;
         
-        db.all(query, [userId, userId], (err, rows) => {
+        db.all(query, [userId], (err, rows) => {
           if (err) {
             console.error("Error fetching game history:", err.message);
             resolveGames([]);
@@ -276,51 +276,12 @@ export const getUserData = async (userId: number): Promise<any> => {
         });
       });
       
-      const friendsPromise = new Promise<any[]>((resolveFriends) => {
-        const query = `
-          SELECT u.id, u.username, u.avatar 
-          FROM friendships f
-          JOIN users u ON (
-            (f.user1_id = ? AND f.user2_id = u.id) OR
-            (f.user2_id = ? AND f.user1_id = u.id)
-          )
-          WHERE f.status = 'accepted'
-        `;
-        
-        db.all(query, [userId, userId], (err, rows) => {
-          if (err) {
-            console.error("Error fetching friends:", err.message);
-            resolveFriends([]);
-          } else {
-            resolveFriends(rows || []);
-          }
-        });
-      });
       
-      const messagesPromise = new Promise<any[]>((resolveMessages) => {
-        const query = `
-          SELECT * FROM messages
-          WHERE sender_id = ? OR receiver_id = ?
-          ORDER BY created_at DESC
-        `;
-        
-        db.all(query, [userId, userId], (err, rows) => {
-          if (err) {
-            console.error("Error fetching messages:", err.message);
-            resolveMessages([]);
-          } else {
-            resolveMessages(rows || []);
-          }
-        });
-      });
-      
-      Promise.all([gameHistoryPromise, friendsPromise, messagesPromise])
-        .then(([gameHistory, friends, messages]) => {
+      Promise.all([gameHistoryPromise])
+        .then(([gameHistory]) => {
           const userData = {
             user: userCopy,
             gameHistory,
-            friends,
-            messages
           };
           
           resolve(userData);
@@ -334,67 +295,6 @@ export const getUserData = async (userId: number): Promise<any> => {
             messages: []
           });
         });
-    });
-  });
-};
-
-const getUserGameHistory = async (userId: number): Promise<any[]> => {
-  return new Promise((resolve, reject) => {
-    const query = `
-      SELECT * FROM games 
-      WHERE player1_id = ? OR player2_id = ? 
-      ORDER BY created_at DESC
-    `;
-    
-    db.all(query, [userId, userId], (err, rows) => {
-      if (err) {
-        console.error("Error fetching game history:", err.message);
-        return reject(err);
-      }
-      
-      resolve(rows || []);
-    });
-  });
-};
-
-const getUserFriends = async (userId: number): Promise<any[]> => {
-  return new Promise((resolve, reject) => {
-    const query = `
-      SELECT u.id, u.username, u.avatar 
-      FROM friendships f
-      JOIN users u ON (
-        (f.user1_id = ? AND f.user2_id = u.id) OR
-        (f.user2_id = ? AND f.user1_id = u.id)
-      )
-      WHERE f.status = 'accepted'
-    `;
-    
-    db.all(query, [userId, userId], (err, rows) => {
-      if (err) {
-        console.error("Error fetching friends:", err.message);
-        return reject(err);
-      }
-      
-      resolve(rows || []);
-    });
-  });
-};
-
-const getUserMessages = async (userId: number): Promise<any[]> => {
-  return new Promise((resolve, reject) => {
-    const query = `
-      SELECT * FROM messages
-      WHERE sender_id = ? OR receiver_id = ?
-      ORDER BY created_at DESC
-    `;
-    
-    db.all(query, [userId, userId], (err, rows) => {
-      if (err) {
-        console.error("Error fetching messages:", err.message);
-        return reject(err);
-      }
-      
-      resolve(rows || []);
     });
   });
 };
