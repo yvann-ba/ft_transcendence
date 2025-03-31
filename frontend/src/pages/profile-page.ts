@@ -1,26 +1,33 @@
 import "../styles/profile-page.css";
-    import { getCurrentUser } from "../utils/utils";
-    import { navigate } from "../router";
-    import { languageService } from "../utils/languageContext";
+import { getCurrentUser } from "../utils/utils";
+import { navigate } from "../router";
+import { languageService } from "../utils/languageContext";
+
+    function updateButtonTranslations(): void {
+        // Update Log out button
+        const logoutButton = document.querySelector('.btn-add-friend') as HTMLElement;
+        if (logoutButton) {
+        logoutButton.textContent = languageService.translate('profile.logout', 'Log out');
+        }
+        
+        // Update Edit profile link
+        const editProfileLink = document.querySelector('.btn a') as HTMLElement;
+        if (editProfileLink) {
+        editProfileLink.textContent = languageService.translate('profile.edit', 'Edit profile');
+        }
+    }
 
     function updatePageTranslations(): void {
         const elements = document.querySelectorAll('[data-i18n]');
         elements.forEach(element => {
-            const key = element.getAttribute('data-i18n');
-            if (key) {
-                if (element.id === 'win-percentage') {
-                    let currentText = element.textContent || '';
-                    let percentMatch = currentText.match(/(\d+\.?\d*)%/);
-                    let percentValue = percentMatch ? percentMatch[1] : '0';
-                    
-                    const translatedText = languageService.translate(key)
-                        .replace('{percent}', percentValue);
-                    element.textContent = translatedText;
-                } else {
-                    element.textContent = languageService.translate(key);
-                }
-            }
+          const key = element.getAttribute('data-i18n');
+          if (key) {
+            element.textContent = languageService.translate(key);
+          }
         });
+        
+        // Add this line to update button texts
+        updateButtonTranslations();
     }
 
     async function loadGameHistory(): Promise<void> {
@@ -35,11 +42,9 @@ import "../styles/profile-page.css";
         
         const gameHistory = await response.json();
         
-        // Sélectionner le tableau dans l'onglet Historique
         const historyTable = document.querySelector('#tab-history .score-table');
         if (!historyTable) return;
         
-        // Vider le tableau existant
         const tbody = historyTable.querySelector('tbody');
         if (!tbody) return;
         tbody.innerHTML = '';
@@ -57,7 +62,6 @@ import "../styles/profile-page.css";
             updatePageTranslations();
         }
         
-        // Ajouter chaque partie à l'historique
         if (gameHistory.length === 0) {
             tbody.innerHTML = `
             <tr>
@@ -67,9 +71,8 @@ import "../styles/profile-page.css";
         } else {
             gameHistory.forEach((game: any) => {
             const row = document.createElement('tr');
-            row.className = game.result.toLowerCase(); // Pour pouvoir styliser selon le résultat
+            row.className = game.result.toLowerCase();
             
-            // Formater la date
             const date = new Date(game.played_at);
             const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
             
@@ -82,7 +85,6 @@ import "../styles/profile-page.css";
                 winner = 'Draw';
             }
             
-            // Créer la ligne avec le nouveau format
             row.innerHTML = `
                 <td>${formattedDate}</td>
                 <td>${game.opponent_type === 'AI' ? `AI (${game.difficulty})` : game.opponent_name || 'Player'}</td>
@@ -94,7 +96,6 @@ import "../styles/profile-page.css";
             });
         }
 
-        // Appliquer les animations et events aux nouvelles lignes
         initializeHistoryTable();
         } catch (error) {
         console.error('Erreur lors du chargement de l\'historique des parties:', error);
@@ -149,6 +150,7 @@ import "../styles/profile-page.css";
             updateProfileInfo(user);
             await loadGameHistory();
             initializeChart(user.player_wins, user.player_games);
+            updateButtonTranslations();
         }
 
         const tabLinks = document.querySelectorAll<HTMLElement>('.tab-link');

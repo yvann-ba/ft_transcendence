@@ -124,7 +124,7 @@
   },
   "profile": {
     "title": "Profil du Joueur",
-    
+    "logout": "Se Deconnecter",
     "tabs": {
       "info": "Informations du Profil",
       "stats": "Statistiques",
