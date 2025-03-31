@@ -3,7 +3,7 @@
 all:
 	@echo "Starting ft_transcendence"
 	docker-compose -f ./docker-compose.yml up --build
-	@echo "Services started successfully. Access the application at https://localhost:8443"
+	@echo "Access the application at https://localhost:8443"
 
 stop:
 	@echo "Stopping services..."
