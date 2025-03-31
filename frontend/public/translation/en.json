@@ -143,40 +143,34 @@
       "win_percentage": "{percent}% Wins"
     }
   },
-  "about": {
-    "title": "About",
-    "project": "Project Summary",
-    "tech_stack": "Technologies",
-    "features": "Key Features",
-    "team": "Our Team",
-    "project_description": {
-      "part1": "ft_transcendence is a real-time online Pong platform developed as part of the 42 school program. This project challenges us to create a full web application with user authentication, real-time gameplay, tournament systems, and social features.",
-      "part2": "Our implementation includes local and AI-based gameplay, customizable settings, user profiles, and a modern interface designed for an exceptional gaming experience."
+    "about": {
+      "title": "About",
+      "project": "Project Overview",
+      "project_description": {
+        "part1": "ft_transcendence is a comprehensive web-based platform featuring real-time Pong gameplay. This 42 school project demonstrates our ability to create a complete web application with modern technologies, featuring user authentication, tournament systems, and multiplayer capabilities.",
+        "part2": "Our implementation includes classic Pong, AI-powered gameplay with multiple difficulty levels, a four-player brick breaker mode, and a tournament system with customizable settings. The platform offers responsive design, user profiles, match history tracking, and a visually appealing interface."
+      },
+      "tech_stack": "Technology Stack",
+      "features": "Key Features",
+      "feature_categories": {
+        "realtime": "Multiple Game Modes",
+        "ai": "Intelligent AI",
+        "profiles": "User Management",
+        "customization": "Game Customization",
+        "authentication": "Secure Authentication",
+        "responsive": "Multilingual Support"
+      },
+      "feature_descriptions": {
+        "realtime": "Classic Pong, AI opponent, four-player brick breaker, and tournament system",
+        "ai": "Adaptive computer opponent with three difficulty levels for solo play",
+        "profiles": "Secure authentication, profiles, game history, and win/loss statistics",
+        "customization": "Adjust colors, winning scores, and game parameters for a personalized experience",
+        "authentication": "Local account creation and Google OAuth integration",
+        "responsive": "Available in English, French, and Spanish with easy language switching"
+      },
+      "team": "Our Team",
+      "team_description": "ft_transcendence was developed by a dedicated team of 42 students, combining expertise in game development, web technologies, UI/UX design, and backend architecture to create this comprehensive online Pong platform."
     },
-    "tech_categories": {
-      "frontend": "Frontend",
-      "backend": "Backend",
-      "database": "Database",
-      "devops": "DevOps"
-    },
-    "feature_categories": {
-      "realtime": "Real-time Pong",
-      "ai": "AI Opponent",
-      "profiles": "User Profiles",
-      "customization": "Customization",
-      "authentication": "Secure Authentication",
-      "responsive": "Responsive Design"
-    },
-    "feature_descriptions": {
-      "realtime": "Play the classic Pong with modern graphics and smooth gameplay",
-      "ai": "Challenge our AI with adjustable difficulty levels",
-      "profiles": "Create your profile, track your stats, and review your match history",
-      "customization": "Customize your gaming experience with various visual options",
-      "authentication": "Robust authentication system with 42 OAuth integration",
-      "responsive": "Enjoy the game on different devices and screen sizes"
-    },
-    "team_description": "ft_transcendence was developed by a dedicated team of 42 school students, combining expertise in web development, game design, and user experience to create this immersive online Pong platform."
-  },
   "contact": {
     "title": "Meet",
     "the": "the",

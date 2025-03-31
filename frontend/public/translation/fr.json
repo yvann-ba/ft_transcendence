@@ -144,38 +144,32 @@
     }
   },
   "about": {
-    "title": "À propos",
-    "project": "Résumé du Projet",
-    "tech_stack": "Technologies",
-    "features": "Fonctionnalités Clés",
-    "team": "Notre Équipe",
+    "title": "À Propos",
+    "project": "Aperçu du Projet",
     "project_description": {
-      "part1": "ft_transcendence est une plateforme en ligne de Pong en temps réel développée dans le cadre du programme de l'école 42. Ce projet nous met au défi de créer une application web complète avec authentification des utilisateurs, jeu en temps réel, systèmes de tournois et fonctionnalités sociales.",
-      "part2": "Notre implémentation inclut un mode local ou contre l'IA, des configurations personnalisables, des profils utilisateurs et une interface moderne conçue pour offrir une expérience de jeu exceptionnelle."
+      "part1": "ft_transcendence est une plateforme web complète proposant le jeu Pong en temps réel. Ce projet de l'école 42 démontre notre capacité à créer une application web complète avec des technologies modernes, incluant l'authentification des utilisateurs, des systèmes de tournoi et des fonctionnalités multijoueur.",
+      "part2": "Notre implémentation comprend le Pong classique, un mode de jeu contre IA avec plusieurs niveaux de difficulté, un mode casse-briques à quatre joueurs, et un système de tournoi avec paramètres personnalisables. La plateforme offre un design responsive, des profils utilisateurs, un suivi de l'historique des matchs et une interface visuellement attrayante."
     },
-    "tech_categories": {
-      "frontend": "Frontend",
-      "backend": "Backend",
-      "database": "Base de données",
-      "devops": "DevOps"
-    },
+    "tech_stack": "Stack Technologique",
+    "features": "Fonctionnalités Clés",
     "feature_categories": {
-      "realtime": "Pong en temps réel",
-      "ai": "IA Adversaire",
-      "profiles": "Profils Utilisateur",
-      "customization": "Personnalisation",
+      "realtime": "Multiples Modes de Jeu",
+      "ai": "IA Intelligente",
+      "profiles": "Gestion des Utilisateurs",
+      "customization": "Personnalisation du Jeu",
       "authentication": "Authentification Sécurisée",
-      "responsive": "Design Adaptatif"
+      "responsive": "Support Multilingue"
     },
     "feature_descriptions": {
-      "realtime": "Jouez au Pong classique avec des graphismes modernes et une jouabilité fluide",
-      "ai": "Défiez notre IA avec des niveaux de difficulté ajustables",
-      "profiles": "Créez votre profil, suivez vos statistiques et consultez votre historique de parties",
-      "customization": "Personnalisez votre expérience de jeu avec diverses options visuelles",
-      "authentication": "Système d'authentification robuste avec intégration OAuth 42",
-      "responsive": "Profitez du jeu sur différents appareils et tailles d'écran"
+      "realtime": "Pong classique, adversaire IA, casse-briques à quatre joueurs et système de tournoi",
+      "ai": "Adversaire informatique adaptatif avec trois niveaux de difficulté pour le jeu en solo",
+      "profiles": "Authentification sécurisée, profils, historique des parties et statistiques de victoires/défaites",
+      "customization": "Ajustez les couleurs, les scores gagnants et les paramètres de jeu pour une expérience personnalisée",
+      "authentication": "Création de compte local et intégration OAuth Google",
+      "responsive": "Disponible en anglais, français et espagnol avec changement facile de langue"
     },
-    "team_description": "ft_transcendence a été développé par une équipe dévouée d'étudiants de l'école 42, combinant leurs compétences en développement web, conception de jeux et expérience utilisateur pour créer cette plateforme immersive de Pong en ligne."
+    "team": "Notre Équipe",
+    "team_description": "ft_transcendence a été développé par une équipe dédiée d'étudiants de 42, combinant expertise en développement de jeux, technologies web, design UI/UX et architecture backend pour créer cette plateforme complète de Pong en ligne."
   },
   "contact": {
     "title": "Rencontrez",
