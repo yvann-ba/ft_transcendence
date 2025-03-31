@@ -38,7 +38,6 @@ export default function login() {
                 `width=${width},height=${height},left=${left},top=${top}`
             );
             
-            // Set up an interval to check when the popup is closed
             const pollTimer = window.setInterval(() => {
                 if (popup && popup.closed) {
                     window.clearInterval(pollTimer);
@@ -55,7 +54,6 @@ export default function login() {
                         messageDiv.classList.remove('error');
                         messageDiv.classList.add('success');
                         
-                        // Navigate to home
                         window.history.pushState({}, "", '/home');
                         navigate();
                     }
@@ -67,7 +65,6 @@ export default function login() {
         orSeparator.className = 'separator';
         orSeparator.innerHTML = `<span>${languageService.translate('auth.or', 'or')}</span>`;
         
-        // Insert before the form
         form.parentNode?.insertBefore(orSeparator, form);
         form.parentNode?.insertBefore(googleButton, orSeparator);
     }
@@ -134,10 +131,8 @@ export default function login() {
 
     const signupLinkContainer = document.querySelector('.signup-link') as HTMLElement;
     if (signupLinkContainer) {
-        // First, check if the link exists
         const existingLink = signupLinkContainer.querySelector('a[href="/register"]');
         
-        // If the link doesn't exist, create it properly
         if (!existingLink) {
             const registerText = languageService.translate('auth.register', 'Register');
             signupLinkContainer.innerHTML = `${languageService.translate('auth.no_account', 'Don\'t have an account yet?')} <a href="/register" style="color: #BB70AD; font-weight: bold;">${registerText}</a>`;

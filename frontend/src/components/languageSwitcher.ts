@@ -5,8 +5,8 @@ export function createLanguageSwitcher(): HTMLElement {
   container.className = 'language-switcher';
   container.style.position = 'fixed';
   container.style.top = '20px';
-  container.style.right = '300px'; // Setting a larger value to ensure it's far from profile
-  container.style.zIndex = '998'; // Lower z-index to ensure it doesn't overlap important elements
+  container.style.right = '300px';
+  container.style.zIndex = '998';
   container.style.display = 'flex';
   container.style.gap = '10px';
   container.style.background = 'rgba(0, 0, 0, 0.5)';
@@ -19,12 +19,10 @@ export function createLanguageSwitcher(): HTMLElement {
   const positionLanguageSwitcher = () => {
     const currentWidth = window.innerWidth;
     
-    // If window is resized at all (smaller than initial width)
     if (currentWidth < initialWindowWidth) {
-      container.style.top = '60px'; // Position below profile
+      container.style.top = '60px';
       container.style.right = '20px';
     } else {
-      // At full width or larger
       container.style.top = '20px';
       container.style.right = '300px';
     }
@@ -32,9 +30,7 @@ export function createLanguageSwitcher(): HTMLElement {
 
   window.addEventListener('load', () => {
     const fullLoadWidth = window.innerWidth;
-    // Update initial width if it changed during full page load
     if (fullLoadWidth > initialWindowWidth) {
-      // Use a closure to capture the updated value
       const updatedInitialWidth = fullLoadWidth;
       const updatedPositionFunction = () => {
         const currentWidth = window.innerWidth;
@@ -47,14 +43,12 @@ export function createLanguageSwitcher(): HTMLElement {
         }
       };
       
-      // Replace the event listener
       window.removeEventListener('resize', positionLanguageSwitcher);
       window.addEventListener('resize', () => {
         if (resizeTimeout) window.clearTimeout(resizeTimeout);
         resizeTimeout = window.setTimeout(updatedPositionFunction, 50);
       });
       
-      // Run with updated values
       updatedPositionFunction();
     }
   });
@@ -64,7 +58,7 @@ export function createLanguageSwitcher(): HTMLElement {
   let resizeTimeout: number | null = null;
   window.addEventListener('resize', () => {
     if (resizeTimeout) window.clearTimeout(resizeTimeout);
-    resizeTimeout = window.setTimeout(positionLanguageSwitcher, 50); // Reduced timeout for faster response
+    resizeTimeout = window.setTimeout(positionLanguageSwitcher, 50);
   });
 
   window.addEventListener('orientationchange', positionLanguageSwitcher);
@@ -120,7 +114,6 @@ export function createLanguageSwitcher(): HTMLElement {
         
         if (translationKey) {
           const translated = languageService.translate(translationKey);
-          // Mettre à jour à la fois le texte et l'attribut data-hover
           const span = link.querySelector('span');
           if (span) span.textContent = translated;
           link.setAttribute('data-hover', translated);
@@ -131,7 +124,6 @@ export function createLanguageSwitcher(): HTMLElement {
     window.dispatchEvent(new CustomEvent('languageChanged'));
   }
   
-  // Update buttons when language changes
   languageService.addListener(updateActiveButton);
   
   return container;

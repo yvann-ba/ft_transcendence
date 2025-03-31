@@ -1,314 +1,205 @@
 import "../styles/profile-edit.css";
+import { UserService } from "../services/user-service";
+import { navigate } from "../router";
 
-// ========== FONCTIONS UTILITAIRES ==========
-
-function showNotification(type: 'success' | 'error' | 'info', message: string) {
-  // Créer un élément de notification
-  const notification = document.createElement('div');
-  notification.className = `notification ${type}`;
-  notification.textContent = message;
-  
-  // Ajouter à la page
-  document.body.appendChild(notification);
-  
-  // Afficher avec une animation
-  setTimeout(() => {
-    notification.classList.add('show');
-  }, 10);
-  
-  // Supprimer après un délai
-  setTimeout(() => {
-    notification.classList.remove('show');
-    setTimeout(() => {
-      document.body.removeChild(notification);
-    }, 300);
-  }, 3000);
-}
-
-// ========== GESTION DE LA MODAL DE CONFIRMATION ==========
-
-function closeConfirmationModal() {
-  const modal = document.getElementById('confirmation-modal') as HTMLElement;
-  if (modal) {
-    modal.style.display = 'none';
-  }
-}
-
-function openConfirmationModal(title: string, message: string, confirmAction: () => void) {
-  const modal = document.getElementById('confirmation-modal') as HTMLElement;
-  const modalTitle = document.getElementById('modal-title') as HTMLElement;
-  const modalMessage = document.getElementById('modal-message') as HTMLElement;
-  const confirmBtn = document.getElementById('modal-confirm') as HTMLElement;
-  
-  if (!modal || !modalTitle || !modalMessage || !confirmBtn) {
-    console.error('Modal elements not found');
-    return;
-  }
-  
-  // Configurer le contenu de la modal
-  modalTitle.textContent = title;
-  modalMessage.textContent = message;
-  
-  // Configurer l'action de confirmation
-  confirmBtn.onclick = () => {
-    confirmAction();
-    closeConfirmationModal();
-  };
-  
-  // Afficher la modal
-  modal.style.display = 'flex';
-}
-
-function initConfirmationModal() {
-  const modal = document.getElementById('confirmation-modal');
-  const closeBtn = document.querySelector('.close-modal');
-  const cancelBtn = document.getElementById('modal-cancel');
-  
-  // Fermer la modal au clic sur le X ou sur Annuler
-  closeBtn?.addEventListener('click', closeConfirmationModal);
-  cancelBtn?.addEventListener('click', closeConfirmationModal);
-  
-  // Fermer la modal si on clique en dehors
-  window.addEventListener('click', (event) => {
-    if (event.target === modal) {
-      closeConfirmationModal();
-    }
-  });
-}
-
-// ========== GESTION DU PROFIL ==========
-
-function fillProfileForm(userData: any) {
-  // Remplir les champs du formulaire avec les données de l'utilisateur
-  const usernameInput = document.getElementById('username') as HTMLInputElement;
-  const displayNameInput = document.getElementById('display-name') as HTMLInputElement;
-  const avatarPreview = document.getElementById('avatar-preview-img') as HTMLImageElement;
-  
-  if (usernameInput) usernameInput.value = userData.username || '';
-  if (displayNameInput) displayNameInput.value = userData.displayName || '';
-  
-  // Affichage de l'avatar s'il existe
-  if (userData.avatarUrl) {
-    avatarPreview.src = userData.avatarUrl;
-    avatarPreview.style.display = 'block';
-  } else {
-    avatarPreview.style.display = 'none';
-  }
-}
-
-async function loadUserData() {
-  try {
-    const response = await fetch(`/api/users/me`, {
-      method: 'GET',
-      credentials: 'include'
-    });
-    
-    if (!response.ok) {
-      if (response.status === 401) {
-        window.location.href = '/login'; // Redirection si non connecté
-        return;
-      }
-      throw new Error('Failed to fetch user data');
-    }
-    
-    const userData = await response.json();
-    fillProfileForm(userData);
-  } catch (error) {
-    console.error('Error loading user data:', error);
-    showNotification('error', 'Impossible de charger vos informations personnelles.');
-  }
-}
-
-function initProfileForm() {
+export default function ProfileEdit() {
   const personalInfoForm = document.getElementById('personal-info-form') as HTMLFormElement;
-  const avatarInput = document.getElementById('avatar') as HTMLInputElement;
-  const avatarPreview = document.getElementById('avatar-preview-img') as HTMLImageElement;
+  const usernameInput = document.getElementById('username') as HTMLInputElement;
+  const firstnameInput = document.getElementById('firstname') as HTMLInputElement;
+  const lastnameInput = document.getElementById('lastname') as HTMLInputElement;
+  const avatarPreviewImg = document.getElementById('avatar-preview-img') as HTMLImageElement;
+  const avatarDeleteBtn = document.getElementById('avatar-delete-btn') as HTMLButtonElement;
   
-  if (!personalInfoForm || !avatarInput || !avatarPreview) {
-    console.error('Form elements not found');
-    return;
+  const downloadDataBtn = document.getElementById('download-data-btn') as HTMLButtonElement;
+  const anonymizeBtn = document.getElementById('anonymize-btn') as HTMLButtonElement;
+  const deleteAccountBtn = document.getElementById('delete-account-btn') as HTMLButtonElement;
+  
+  const confirmationModal = document.getElementById('confirmation-modal') as HTMLDivElement;
+  const modalTitle = document.getElementById('modal-title') as HTMLHeadingElement;
+  const modalMessage = document.getElementById('modal-message') as HTMLParagraphElement;
+  const modalCancelBtn = document.getElementById('modal-cancel') as HTMLButtonElement;
+  const modalConfirmBtn = document.getElementById('modal-confirm') as HTMLButtonElement;
+  const closeModalBtn = document.querySelector('.close-modal') as HTMLSpanElement;
+
+  let currentAction: 'download' | 'anonymize' | 'delete' | null = null;
+  const userService = new UserService();
+
+
+  async function initializeUserData() {
+    try {
+      const userData = await userService.getCurrentUser();
+      console.log(userData);
+      if (userData) {
+        usernameInput.value = userData.username || '';
+        firstnameInput.value = userData.first_name || '';
+        lastnameInput.value = userData.last_name || '';
+        
+        const avatarSection = document.querySelector('.avatar-preview-section') as HTMLDivElement;
+        
+        // Handle avatar display and section visibility
+        if (userData.avatar) {
+          avatarPreviewImg.src = userData.avatar;
+          avatarDeleteBtn.style.display = 'inline-block'; // Show delete button
+          avatarSection.style.display = 'block'; // Show avatar preview section
+        } else {
+          avatarPreviewImg.src = '/assets/default-avatar.png';
+          avatarDeleteBtn.style.display = 'none'; // Hide delete button
+          // Keep the preview visible but with default avatar
+          // If you want to hide the entire section, uncomment the next line
+          // avatarSection.style.display = 'none';
+        }
+      }
+    } catch (error) {
+      showError('Failed to load user data. Please try again later.');
+    }
   }
   
-  // Chargement initial des données utilisateur
-  loadUserData();
-  
-  // Prévisualisation de l'avatar
-  avatarInput.addEventListener('change', (event) => {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        if (e.target?.result) {
-          avatarPreview.src = e.target.result as string;
-          avatarPreview.style.display = 'block';
-        }
-      };
-      reader.readAsDataURL(file);
+  // Update the avatar delete handler
+  avatarDeleteBtn.addEventListener('click', async () => {
+    try {
+      await userService.deleteAvatar();
+      avatarPreviewImg.src = '/assets/default-avatar.png';
+      avatarDeleteBtn.style.display = 'none'; // Hide the button after deletion
+      
+      // Optionally hide the entire avatar section
+      // const avatarSection = document.querySelector('.avatar-preview-section') as HTMLDivElement;
+      // avatarSection.style.display = 'none';
+      
+      showSuccess('Avatar deleted successfully!');
+    } catch (error) {
+      showError('Failed to delete avatar. Please try again.');
     }
   });
-  
-  // Soumission du formulaire de modification de profil
-  personalInfoForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
+
+  personalInfoForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
     
     try {
-      const formData = new FormData(personalInfoForm);
+      const updatedData = {
+        username: usernameInput.value,
+        firstname: firstnameInput.value,
+        lastname: lastnameInput.value
+      };
       
-      const response = await fetch(`/api/users/profile`, {
-        method: 'PUT',
-        credentials: 'include',
-        body: formData
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to update profile');
-      }
-      
-      showNotification('success', 'Profil mis à jour avec succès!');
+      await userService.updateUserProfile(updatedData);
+      showSuccess('Profile updated successfully!');
     } catch (error) {
-      console.error('Error updating profile:', error);
-      showNotification('error', 'Erreur lors de la mise à jour du profil.');
+      showError('Failed to update profile. Please try again.');
     }
   });
-}
 
-// ========== FONCTIONNALITÉS RGPD ==========
-
-async function handleAccountDeletion() {
-  try {
-    const response = await fetch(`/api/users/delete-account`, {
-      method: 'DELETE',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    
-    if (!response.ok) {
-      throw new Error('Failed to delete account');
+  avatarDeleteBtn.addEventListener('click', async () => {
+    try {
+      await userService.deleteAvatar();
+      avatarPreviewImg.src = '/assets/default-avatar.png';
+      showSuccess('Avatar deleted successfully!');
+    } catch (error) {
+      showError('Failed to delete avatar. Please try again.');
     }
-    
-    // Supprimer tout cookie ou stockage local lié à l'authentification
-    document.cookie = 'sessionid=; Max-Age=0; path=/;';
-    document.cookie = 'auth_token=; Max-Age=0; path=/;';
-    
-    // Aussi avec le domaine spécifié
-    document.cookie = 'sessionid=; Max-Age=0; path=/; domain=' + window.location.hostname;
-    document.cookie = 'auth_token=; Max-Age=0; path=/; domain=' + window.location.hostname;
-    
-    // Supprimer les données locales
-    localStorage.removeItem('token');
-    
-    showNotification('success', 'Votre compte a été supprimé avec succès.');
-    
-    // Redirection vers la page d'accueil après un court délai
-    setTimeout(() => {
-      window.location.href = '/';
-    }, 2000);
-  } catch (error) {
-    console.error('Error deleting account:', error);
-    showNotification('error', 'Erreur lors de la suppression de votre compte.');
-  }
-}
+  });
 
-async function handleAnonymization() {
-  try {
-    const response = await fetch(`/api/users/anonymize`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+  function showModal(title: string, message: string, action: 'download' | 'anonymize' | 'delete') {
+    modalTitle.textContent = title;
+    modalMessage.textContent = message;
+    currentAction = action;
+    confirmationModal.style.display = 'block';
     
-    if (!response.ok) {
-      throw new Error('Failed to anonymize account');
+    if (action === 'delete') {
+      modalConfirmBtn.className = 'btn btn-danger';
+    } else if (action === 'anonymize') {
+      modalConfirmBtn.className = 'btn btn-warning';
+    } else {
+      modalConfirmBtn.className = 'btn btn-primary';
     }
-    
-    showNotification('success', 'Votre compte a été anonymisé avec succès.');
-    
-    // Recharger les données pour afficher les changements
-    setTimeout(() => {
-      loadUserData();
-    }, 1500);
-  } catch (error) {
-    console.error('Error anonymizing account:', error);
-    showNotification('error', 'Erreur lors de l\'anonymisation de votre compte.');
   }
-}
 
-async function handleDataDownload() {
-  try {
-    // Notification indiquant que la préparation des données est en cours
-    showNotification('info', 'Préparation de vos données...');
-    
-    const response = await fetch(`/api/users/data-export`, {
-      method: 'GET',
-      credentials: 'include'
-    });
-    
-    if (!response.ok) {
-      throw new Error('Failed to download data');
+  function closeModal() {
+    confirmationModal.style.display = 'none';
+    currentAction = null;
+  }
+
+  closeModalBtn.addEventListener('click', closeModal);
+  modalCancelBtn.addEventListener('click', closeModal);
+  window.addEventListener('click', (e) => {
+    if (e.target === confirmationModal) {
+      closeModal();
     }
-    
-    // Télécharger le fichier
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'my_data.json';
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-    
-    showNotification('success', 'Téléchargement terminé!');
-  } catch (error) {
-    console.error('Error downloading user data:', error);
-    showNotification('error', 'Erreur lors du téléchargement de vos données.');
-  }
-}
+  });
 
-function initGDPRFeatures() {
-  // Téléchargement des données
-  const downloadDataBtn = document.getElementById('download-data-btn');
-  downloadDataBtn?.addEventListener('click', handleDataDownload);
-  
-  // Anonymisation du compte
-  const anonymizeBtn = document.getElementById('anonymize-btn');
-  anonymizeBtn?.addEventListener('click', () => {
-    openConfirmationModal(
-      'Anonymiser votre compte',
-      'Cette action remplacera vos informations personnelles par des données anonymes. Votre historique de jeu sera conservé, mais ne sera plus lié à votre identité réelle. Cette action est irréversible. Voulez-vous continuer?',
-      handleAnonymization
+  downloadDataBtn.addEventListener('click', () => {
+    showModal(
+      'Download Your Data',
+      'Are you sure you want to download all your personal data? The process may take a few moments.',
+      'download'
     );
   });
-  
-  // Suppression du compte
-  const deleteAccountBtn = document.getElementById('delete-account-btn');
-  deleteAccountBtn?.addEventListener('click', () => {
-    openConfirmationModal(
-      'Supprimer votre compte',
-      'Cette action supprimera définitivement votre compte et toutes les données associées. Cette opération est irréversible. Voulez-vous vraiment supprimer votre compte?',
-      handleAccountDeletion
+
+  anonymizeBtn.addEventListener('click', () => {
+    showModal(
+      'Anonymize Your Account',
+      'This will remove all personal identifying information while keeping your game statistics. This action cannot be undone. Are you sure you want to continue?',
+      'anonymize'
     );
   });
-}
 
-// ========== INITIALISATION DE LA PAGE ==========
+  deleteAccountBtn.addEventListener('click', () => {
+    showModal(
+      'Delete Your Account',
+      'Warning! This will permanently delete your account and ALL associated data. This action cannot be undone. Are you sure you want to proceed?',
+      'delete'
+    );
+  });
 
-function initProfileEditPage() {
-  initProfileForm();
-  initGDPRFeatures();
-  initConfirmationModal();
-}
+  // Confirmation action handler
+  modalConfirmBtn.addEventListener('click', async () => {
+    try {
+      switch (currentAction) {
+        case 'download':
+          const data = await userService.downloadUserData();
+          downloadJsonFile(data, 'my-account-data.json');
+          showSuccess('Your data has been downloaded!');
+          break;
 
-// Export de la fonction principale
-export default function() {
-  initProfileEditPage();
-  // Vous pouvez retourner une fonction de nettoyage si nécessaire
-  return () => {
-    // Nettoyage des event listeners si nécessaire
-    console.log("Nettoyage de la page profile-edit");
-  };
+        case 'anonymize':
+          await userService.anonymizeAccount();
+          showSuccess('Your account has been anonymized. You will be logged out.');
+          setTimeout(() => {
+            navigate('/');
+          }, 2000);
+          break;
+
+        case 'delete':
+          await userService.deleteAccount();
+          showSuccess('Your account has been deleted. You will be redirected.');
+          setTimeout(() => {
+            navigate('/');
+          }, 2000);
+          break;
+      }
+      closeModal();
+    } catch (error) {
+      showError(`Failed to ${currentAction} data. Please try again.`);
+      closeModal();
+    }
+  });
+
+  function downloadJsonFile(data: any, filename: string) {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", filename);
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  }
+
+  function showSuccess(message: string) {
+    alert(message);
+  }
+
+  function showError(message: string) {
+    alert(message);
+  }
+
+  initializeUserData();
 }
