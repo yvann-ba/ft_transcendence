@@ -99,7 +99,6 @@ export const updateUserAvatar = async (userId: number, avatar: string): Promise<
         return reject(err);
       }
       
-      // Get the updated user
       getUserById(userId, (err, user) => {
         if (err) return reject(err);
         resolve(user);
