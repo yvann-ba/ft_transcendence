@@ -61,7 +61,7 @@ export default async function oauthGoogleRoutes(fastify: FastifyInstance) {
       const firstName = googleUser.given_name || "Firstname";
       const lastName = googleUser.family_name || "Lastname";
 
-      const username = lastName.toLowerCase() + firstName.toLowerCase + Math.floor(Math.random() * 100000);
+      const username = lastName.toLowerCase() + firstName.toLowerCase() + Math.floor(Math.random() * 100000);
 
       const userData = {
         username: username,
