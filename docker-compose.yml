@@ -6,7 +6,7 @@ services:
       - .env
     volumes:
       - ./backend:/app
-      - /app/node_modules
+      - backend_node_modules:/app/node_modules
     depends_on:
       - database
     ports:
@@ -18,7 +18,7 @@ services:
     container_name: frontend
     volumes:
       - ./frontend:/app
-      - /app/node_modules
+      - frontend_node_modules:/app/node_modules
     command: npm run dev
     ports:
       - "8080:8080"
@@ -38,5 +38,10 @@ services:
     image: nouchka/sqlite3
     container_name: sqlite_db
     volumes:
-      - ./backend/database:/data
+      - sqlite_data:/data
     restart: on-failure
+
+volumes:
+  backend_node_modules:
+  frontend_node_modules:
+  sqlite_data:
