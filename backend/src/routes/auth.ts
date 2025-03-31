@@ -12,12 +12,12 @@ export default async function authRoutes(fastify: FastifyInstance) {
       const user = await checkUserLogin(username);
 
       if (!user) {
-        return reply.status(401).send({ error: "Utilisateur non trouvé" });
+        return reply.status(401).send({ error: "User not found" });
       }
 
       const passwordMatch = await bcrypt.compare(password, user.password);
       if (!passwordMatch) {
-        return reply.status(401).send({ error: "Mot de passe incorrect" });
+        return reply.status(401).send({ error: "Incorrect password" });
       }
 
       const token = fastify.jwt.sign({ userId: user.id });
@@ -29,10 +29,10 @@ export default async function authRoutes(fastify: FastifyInstance) {
           maxAge: 60 * 60 * 24,
           sameSite: "none", 
         })
-        .send({ message: "Connexion réussie" });
+        .send({ message: "Login successful" });
     } catch (err) {
       fastify.log.error("Login error:", err);
-      return reply.status(500).send({ error: "Erreur lors de la connexion", details: err });
+      return reply.status(500).send({ error: "Error during login", details: err });
     }
   });
 
@@ -40,7 +40,7 @@ export default async function authRoutes(fastify: FastifyInstance) {
 	
     const user = request.user;
 
-    return reply.send({ message: 'Bienvenue sur votre profil', user });
+    return reply.send({ message: 'Welcome to your profile', user });
   });
 
   fastify.get("/check-auth", async (request, reply) => {

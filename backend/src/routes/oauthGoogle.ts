@@ -53,7 +53,6 @@ export default async function oauthGoogleRoutes(fastify: FastifyInstance) {
       const googleUser = await userRes.json();
       console.log("10. Google user data:", JSON.stringify(googleUser));
 
-      // Formater les données de l'utilisateur
       const firstName = googleUser.given_name || "Firstname";
       const lastName = googleUser.family_name || "Lastname";
 

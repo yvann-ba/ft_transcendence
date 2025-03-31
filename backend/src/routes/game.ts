@@ -10,7 +10,7 @@ export default async function gameHistoryRoutes(fastify: FastifyInstance) {
       return reply.send(gameHistory);
     } catch (err) {
       fastify.log.error("Error fetching game history:", err);
-      return reply.status(500).send({ error: "Erreur serveur" });
+      return reply.status(500).send({ error: "Server Error" });
     }
   });
 
@@ -43,12 +43,12 @@ export default async function gameHistoryRoutes(fastify: FastifyInstance) {
       await updateUserGameStats(userId, result === 'WIN');
       
       return reply.status(201).send({
-        message: 'Partie enregistrée avec succès',
+        message: 'Game successfully registered',
         gameId: gameRecord.id
       });
     } catch (err) {
       fastify.log.error("Error saving game history:", err);
-      return reply.status(500).send({ error: "Erreur serveur" });
+      return reply.status(500).send({ error: "Server error" });
     }
   });
 }
