@@ -23,7 +23,8 @@ const validRoutes = [
   "/pong-game",
   "/pong-tournament",
   "/four-player-pong",
-  "/profile-page"
+  "/profile-page",
+  "/profile-edit"
 ];
 
 export const navigate = async (path?: string, preserveParams = false): Promise<void> => {
@@ -288,7 +289,7 @@ async function loadPageScript(path: string): Promise<void> {
       // No special scripts needed for 404 page
       console.log("Loading 404 page");
     }
-    else if (route === "profile-edit") {
+    else if (route === "/profile-edit") {
       const module = await import("./pages/profile-edit");
       module.default
     }
