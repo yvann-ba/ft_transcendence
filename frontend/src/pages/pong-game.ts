@@ -644,29 +644,30 @@ export default async function initializePongGame(): Promise<(() => void) | null>
 		}
 
 		if (state.aiEnabled) {
-			try {
-			  const result = winner === "Player 1" ? "WIN" : "LOSS";
-			  const difficulty = document.getElementsByClassName("difficulty-btn active")[0].getAttribute("data-difficulty");
-			  
-			  const response = await fetch('/api/game-history', {
-				method: 'POST',
-				headers: {
-				  'Content-Type': 'application/json',
-				},
-				credentials: 'include',
-				body: JSON.stringify({
-				  opponentType: 'AI',
-				  difficulty: difficulty,
-				  userScore: state.scores.player1,
-				  opponentScore: state.scores.player2,
-				  result: result
-				}),
-			  });
-			  
-			} catch (error) {
-			  console.error('Erreur lors de l\'enregistrement de la partie:', error);
-			}
-		  }
+      try {
+        // Check who is the winner - Player 1 is YOU in AI mode
+        const result = state.scores.player1 >= state.scores.winning ? "WIN" : "LOSS";
+        const difficulty = document.querySelector(".difficulty-btn.active")?.getAttribute("data-difficulty") || "medium";
+        
+        const response = await fetch('/api/game-history', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                opponentType: 'AI',
+                difficulty: difficulty,
+                userScore: state.scores.player1,
+                opponentScore: state.scores.player2,
+                result: result
+            }),
+        });
+        
+      } catch (error) {
+          console.error('Erreur lors de l\'enregistrement de la partie:', error);
+      }
+		}
 
 		  if (winner) {
 			const championName = document.getElementById("pong-champion-name");
