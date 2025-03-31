@@ -27,7 +27,6 @@ export default function initializeHomeAnimations(): () => void {
 	  };
 	}
   
-	// Add window resize handler to adjust sizes dynamically
 	const handleResize = () => {
 	  const viewportHeight = window.innerHeight;
 	  const headerElement = document.querySelector<HTMLElement>('.home-header');
@@ -36,7 +35,6 @@ export default function initializeHomeAnimations(): () => void {
 	  }
 	};
   
-	// Set initial size and add resize listener
 	handleResize();
 	window.addEventListener('resize', handleResize);
 	

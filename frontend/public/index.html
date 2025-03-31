@@ -6,7 +6,6 @@
     <link rel="icon" type="image/x-icon" href="../assets/images/favicon.svg">
     <title>Pong Game</title>
     <script src="https://kit.fontawesome.com/3de3c501a5.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/style.css">
     <style>
         /* Initial loading spinner */
         .initial-loader {
@@ -48,7 +47,6 @@
         <div class="loader-spinner"></div>
     </div>
 
-    <!-- Main content -->
     <div class="no-fouc" id="mainContent">
         <nav class="nav fixed-nav" id="nav">
             <div class="navbar">
@@ -112,7 +110,6 @@
     <script type="module">
         // Helper to show initial content when ready
         document.addEventListener('DOMContentLoaded', () => {
-            // Hide loader and show main content with a slight delay for smoother transition
             setTimeout(() => {
                 const initialLoader = document.getElementById('initialLoader');
                 const mainContent = document.getElementById('mainContent');

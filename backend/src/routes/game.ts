@@ -2,20 +2,18 @@ import { FastifyInstance } from 'fastify';
 import { addGameToHistory, getUserGameHistory, updateUserGameStats } from '../queries/game';
 
 export default async function gameHistoryRoutes(fastify: FastifyInstance) {
-  // Récupérer l'historique des parties pour l'utilisateur connecté
   fastify.get('/game-history', { preHandler: fastify.authenticate }, async (request, reply) => {
     try {
       const userId = (request.user as { userId: number }).userId;
-      const gameHistory = await getUserGameHistory(userId, 10); // Récupérer les 10 dernières parties
+      const gameHistory = await getUserGameHistory(userId, 10);
       
       return reply.send(gameHistory);
     } catch (err) {
       fastify.log.error("Error fetching game history:", err);
-      return reply.status(500).send({ error: "Erreur serveur" });
+      return reply.status(500).send({ error: "Server Error" });
     }
   });
 
-  // Enregistrer un nouveau résultat de partie
   fastify.post('/game-history', { preHandler: fastify.authenticate }, async (request, reply) => {
     try {
       const userId = (request.user as { userId: number }).userId;
@@ -45,12 +43,12 @@ export default async function gameHistoryRoutes(fastify: FastifyInstance) {
       await updateUserGameStats(userId, result === 'WIN');
       
       return reply.status(201).send({
-        message: 'Partie enregistrée avec succès',
+        message: 'Game successfully registered',
         gameId: gameRecord.id
       });
     } catch (err) {
       fastify.log.error("Error saving game history:", err);
-      return reply.status(500).send({ error: "Erreur serveur" });
+      return reply.status(500).send({ error: "Server error" });
     }
   });
 }

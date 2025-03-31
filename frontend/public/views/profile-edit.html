@@ -10,14 +10,20 @@
           <input type="text" id="username" name="username">
         </div>
         <div class="form-group">
-          <label for="display-name" data-i18n="profile_edit.display_name">Display Name:</label>
-          <input type="text" id="display-name" name="display-name">
+          <label for="firstname">Firstname</label>
+          <input type="text" id="firstname" name="firstname">
         </div>
         <div class="form-group">
-          <label for="avatar" data-i18n="profile_edit.avatar">Avatar:</label>
-          <input type="file" id="avatar" name="avatar" accept="image/*">
-          <div class="avatar-preview">
-            <img id="avatar-preview-img" src="" alt="Avatar Preview">
+          <label for="lastname">Lastname</label>
+          <input type="text" id="lastname" name="lastname">
+        </div>
+        <div class="form-group">
+          <label for="avatar">Avatar:</label>
+          <div class="avatar-preview-section">
+            <btn class="btn btn-secondary" id="avatar-delete-btn">Delete Avatar</btn>
+            <div class="avatar-preview">
+              <img id="avatar-preview-img" src="" alt="Avatar Preview">
+            </div>
           </div>
         </div>
         <button type="submit" class="btn btn-primary" data-i18n="profile_edit.save">Save Changes</button>
