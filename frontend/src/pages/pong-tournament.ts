@@ -1,6 +1,7 @@
 import "../styles/pong-game.css";
 import "../styles/pong-tournament.css";
 import { languageService } from "../utils/languageContext";
+import { navigate } from "../router";
 
 export default function initializeTournamentMode() {
   interface TournamentPlayer {
@@ -501,34 +502,7 @@ function closeCustomMenu(): void {
   }
 
   function backToGameModes(event?: Event): void {
-    // Prevent default form submission behavior if this is in a form
-    if (event) event.preventDefault();
-    
-    // Get the href attribute from the button that was clicked
-    const href = (event?.target as HTMLElement)?.getAttribute('href') || '/pong-selection';
-    
-    // Add a smooth transition overlay
-    const transitionOverlay = document.createElement('div');
-    transitionOverlay.style.position = 'fixed';
-    transitionOverlay.style.top = '0';
-    transitionOverlay.style.left = '0';
-    transitionOverlay.style.width = '100%';
-    transitionOverlay.style.height = '100%';
-    transitionOverlay.style.backgroundColor = '#000';
-    transitionOverlay.style.zIndex = '9999';
-    transitionOverlay.style.opacity = '0';
-    transitionOverlay.style.transition = 'opacity 0.2s ease-in';
-    document.body.appendChild(transitionOverlay);
-    
-    // Fade in the overlay
-    setTimeout(() => {
-      transitionOverlay.style.opacity = '1';
-      
-      // Then navigate after the fade is complete
-      setTimeout(() => {
-        window.location.href = href;
-      }, 200);
-    }, 10);
+    navigate("/pong-selection");
   }
   function resetTournament(): void {
       tournamentState.players = [];

@@ -12,7 +12,7 @@ export function handleNavigation(event?: Event, path: string = '/pong-selection'
     event.preventDefault();
   }
   
-  // Use the improved navigation system
+  // Use the SPA navigation system
   navigate(path);
 }
 

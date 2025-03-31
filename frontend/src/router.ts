@@ -11,6 +11,22 @@ let isTransitioning = false;
 // Store query parameters for routes
 const routeParams: { [key: string]: string } = {};
 
+// List of valid routes in the application
+const validRoutes = [
+  "/", 
+  "/home", 
+  "/about", 
+  "/contact",
+  "/login",
+  "/register",
+  "/pong-selection",
+  "/pong-game",
+  "/pong-tournament",
+  "/four-player-pong",
+  "/profile-page",
+  "/profile-edit"
+];
+
 export const navigate = async (path?: string, preserveParams = false): Promise<void> => {
   // If no path is provided, use the current path
   let targetPath = path || window.location.pathname;
@@ -29,6 +45,16 @@ export const navigate = async (path?: string, preserveParams = false): Promise<v
     });
   } else if (preserveParams && window.location.search) {
     queryString = window.location.search;
+  }
+  
+  // Check if the path exists in our valid routes
+  const cleanPath = targetPath.split('?')[0];
+  const pathExists = validRoutes.includes(cleanPath);
+
+  // If path doesn't exist, redirect to 404 page
+  if (!pathExists && cleanPath !== "/404") {
+    targetPath = "/404";
+    queryString = "";
   }
   
   if ((targetPath === "/login" || targetPath === "/register") && isAuthenticated()) {
@@ -128,7 +154,8 @@ function requiresAuthentication(path: string): boolean {
     "/about", 
     "/contact", 
     "/login", 
-    "/register"
+    "/register",
+    "/404"
   ];
   
   const cleanPath = path.split('?')[0];
@@ -137,6 +164,9 @@ function requiresAuthentication(path: string): boolean {
 }
 
 function getViewName(path: string): string {
+  // Special case for 404
+  if (path === "/404") return "404";
+  
   // Default to home if path is root
   if (path === "/") return "home";
   
@@ -156,7 +186,12 @@ function getViewName(path: string): string {
 async function loadPage(viewName: string): Promise<string> {
   try {
     const response = await fetch(`/views/${viewName}.html`);
-    if (!response.ok) throw new Error(`Failed to load page: ${viewName}`);
+    if (!response.ok) {
+      if (viewName !== "404") {
+        return await loadPage("404");
+      }
+      throw new Error(`Failed to load page: ${viewName}`);
+    }
     return await response.text();
   } catch (error) {
     console.error(`Error loading view ${viewName}:`, error);
@@ -211,18 +246,15 @@ async function loadPageScript(path: string): Promise<void> {
     currentCleanup = null;
   }
 
-  // Parse path to get main route and query parameters
   const [route, queryParams] = path.split('?');
   const urlParams = new URLSearchParams(queryParams || '');
 
   if (requiresAuthentication(route) && !isAuthenticated()) {
-    // Don't load the script for protected routes when not authenticated
     console.warn("Attempted to access protected route without authentication");
     return;
   }
-
+  console.log("route", route);
   try {
-    // Import the appropriate module based on the path
     if (route === "/" || route === "/home") {
       const module = await import("./pages/home");
       currentCleanup = module.default() || null;
@@ -253,6 +285,13 @@ async function loadPageScript(path: string): Promise<void> {
     } else if (route === "/register") {
       const module = await import("./pages/register");
       module.default();
+    } else if (route === "/404") {
+      // No special scripts needed for 404 page
+      console.log("Loading 404 page");
+    }
+    else if (route === "/profile-edit") {
+      const module = await import("./pages/profile-edit");
+      module.default
     }
   } catch (error) {
     console.error(`Error loading script for ${path}:`, error);
@@ -288,7 +327,6 @@ export function redirectAfterAuth(): void {
 
 // Handle browser back/forward buttons
 window.addEventListener("popstate", () => {
-
   const currentPath = window.location.pathname;
   
   if (requiresAuthentication(currentPath) && !isAuthenticated()) {
@@ -317,7 +355,8 @@ export function preloadCommonPages(): void {
   const pagesToPreload = [
     "/home",
     "/pong-selection",
-    "/login"
+    "/login",
+    "/404"  // Also preload the 404 page
   ];
   
   // Preload pages in the background

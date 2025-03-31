@@ -1,6 +1,7 @@
 import "../styles/four-player-pong.css";
 import "../styles/four-player-pong.css";
 import { languageService } from "../utils/languageContext";
+import { navigate } from "../router";
 
 interface Ball {
   x: number;
@@ -784,7 +785,7 @@ export default function initializeMultiplayerGame(): (() => void) | null {
   }
   
   function backToGameModes(): void {
-    window.location.href = "/pong-selection";
+    navigate("/pong-selection");
   }
   
   function init(): void {

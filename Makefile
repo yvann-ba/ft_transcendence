@@ -1,11 +1,21 @@
+.PHONY: all down logs clean re dev
+
 all:
+	@echo "Starting ft_transcendence"
 	docker-compose -f ./docker-compose.yml up --build
+	@echo "Access the application at https://localhost:8443"
+
 stop:
-	docker compose -f ./docker-compose.yml stop
+	@echo "Stopping services..."
+	docker-compose -f ./docker-compose.yml stop
 
 down:
+	@echo "Removing containers..."
 	docker-compose -f ./docker-compose.yml down
 
-re: down all
+clean:
+	@echo "Cleaning up Docker resources..."
+	docker-compose -f ./docker-compose.yml down -v
+	docker system prune -f
 
-.PHONY: all down  erase re
+re: down all

@@ -17,9 +17,9 @@ const createGameHistoryTable = () => {
 
     db.run(query, (err) => {
         if (err) {
-            console.error('Erreur lors de la création de la table game_history:', err.message);
+            console.error('Error creating game_history table:', err.message);
         } else {
-            console.log('Table game_history créée avec succès');
+            console.log('Table game_history created successfully');
         }
     });
 };

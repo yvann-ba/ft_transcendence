@@ -234,8 +234,11 @@
     }
   },
   "error": {
+    "oops": "¡ups!",
     "not_found": "Página no encontrada",
-    "sorry": "Lo sentimos, la página que buscas no existe."
+    "looking_for": "Lo sentimos, la página que buscas",
+    "does_not_exist": "no existe.",
+    "back_home": "Volver a Inicio"
   },
   "language": {
     "en": "Inglés",

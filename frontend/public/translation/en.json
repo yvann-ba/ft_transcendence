@@ -234,8 +234,11 @@
     }
   },
   "error": {
+    "oops": "oops!",
     "not_found": "Page not found",
-    "sorry": "Sorry, the page you are looking for does not exist."
+    "looking_for": "Sorry, the page you are looking for",
+    "does_not_exist": "does not exist.",
+    "back_home": "Back to Home"
   },
   "language": {
     "en": "English",
@@ -257,3 +260,4 @@
     "has_account": "Already have an account?"
   }
 }
+

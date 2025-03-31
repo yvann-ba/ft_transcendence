@@ -57,12 +57,23 @@ export default async function oauthGoogleRoutes(fastify: FastifyInstance) {
       const googleUser = await userRes.json();
       console.log("10. Google user data:", JSON.stringify(googleUser));
 
+      // Formater les données de l'utilisateur
+      const firstName = googleUser.given_name || "Firstname";
+      const lastName = googleUser.family_name || "Lastname";
+
+      const username = lastName.toLowerCase() + firstName.toLowerCase() + Math.floor(Math.random() * 100000);
+
       const userData = {
-        username: googleUser.name,
+        username: username,
+        googleID: googleUser.id,
+        firstName: firstName,
+        lastName: lastName,
         email: googleUser.email,
         avatar: googleUser.picture,
       };
       
+      fastify.log.info(`User data: ${JSON.stringify(userData)}`);
+
       console.log('11. Formatted user data:', userData);
       fastify.log.info(`12. User data for fastify logger: ${JSON.stringify(userData)}`);
       console.log("13. Google picture URL:", googleUser.picture);
@@ -71,7 +82,7 @@ export default async function oauthGoogleRoutes(fastify: FastifyInstance) {
       let user = await checkUserByEmail(userData.email);
       fastify.log.info(`User found: ${JSON.stringify(user)}`);
       if (user === null) {
-        user = await createUserOAuth(userData.username, userData.email, userData.avatar);
+        user = await createUserOAuth(userData.googleID, userData.username, userData.firstName, userData.lastName, userData.email, userData.avatar);
       } else {
         // Update the avatar for existing users
         if (user.avatar !== userData.avatar) {

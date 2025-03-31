@@ -5,6 +5,7 @@ const createUsersTable = () => {
     const query = `
         CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        google_id TEXT,
         username TEXT NOT NULL UNIQUE,
         password TEXT,
         first_name TEXT,
