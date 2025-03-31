@@ -1,4 +1,5 @@
 .env
+frontend/public/translation/.nfs*
 staticfiles
 node_modules
 test.*

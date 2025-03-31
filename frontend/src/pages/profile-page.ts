@@ -355,8 +355,30 @@ import "../styles/profile-page.css";
 
     function initializeChart(nb_wins: number, nb_games: number): void {
         const wins = nb_wins;
-        const losses = nb_games-nb_wins;
-        const total =  nb_games;
+        const losses = nb_games - nb_wins;
+        const total = nb_games;
+        
+        // Handle the case where there are no games played
+        if (total === 0) {
+            // Set default values when no games have been played
+            const winSegment = document.getElementById('win-segment');
+            const lossSegment = document.getElementById('loss-segment');
+            const winPercentageText = document.getElementById('win-percentage');
+            const ratioText = document.querySelector('.ratio-text');
+            const winNum = document.getElementById('win-num');
+            const lossNum = document.getElementById('loss-num');
+            
+            if (winSegment && lossSegment && winPercentageText && ratioText && winNum && lossNum) {
+                winSegment.style.strokeDasharray = `0 ${2 * Math.PI * 45}`;
+                lossSegment.style.strokeDasharray = `0 ${2 * Math.PI * 45}`;
+                ratioText.textContent = "0";
+                winPercentageText.textContent = "0% Wins";
+                winNum.textContent = "0 Wins";
+                lossNum.textContent = "0 Losses";
+            }
+            return;
+        }
+        
         const winPercentage = (wins / total * 100).toFixed(1);
         const lossPercentage = (losses / total * 100).toFixed(1);
         const radius = 45;
@@ -370,7 +392,6 @@ import "../styles/profile-page.css";
         const tooltip = document.getElementById('chart-tooltip');
         const winNum = document.getElementById('win-num');
         const lossNum = document.getElementById('loss-num');
-
         
         if (!winSegment || !lossSegment || !winPercentageText || !winLegend || !lossLegend || !tooltip || !ratioText || !winNum || !lossNum) {
             return;
@@ -379,27 +400,42 @@ import "../styles/profile-page.css";
         
         ratioText.textContent = String(winRatio);
 
-        winNum.textContent = String(wins) + " Wins";
-        lossNum.textContent = String(losses) + " Losses";
+        winNum.textContent = `${wins} ${languageService.translate("profile.stats.wins", "Wins")}`;
+        lossNum.textContent = `${losses} ${languageService.translate("profile.stats.losses", "Losses")}`;
 
-        winPercentageText.textContent = `${winPercentage}% Wins`;
+        const translatedPercentText = languageService.translate("profile.stats.win_percentage", "{percent}% Wins")
+        .replace("{percent}", winPercentage);
+        winPercentageText.textContent = translatedPercentText;
 
 
         animateChart = () => {
+            // Calculate the correct stroke dash array values
             const winDashArray = `${circumference * wins / total} ${circumference}`;
             const lossDashArray = `${circumference * losses / total} ${circumference}`;
+            
+            // Reset transitions
             winSegment.style.transition = 'none';
             lossSegment.style.transition = 'none';
+            
+            // Set initial state
             winSegment.style.strokeDasharray = `0 ${circumference}`;
             lossSegment.style.strokeDasharray = `0 ${circumference}`;
             lossSegment.style.strokeDashoffset = `${-circumference * wins / total}`;
+            
+            // Force reflow
             void winSegment.offsetWidth;
+            
+            // Reset legend visibility
             winLegend.classList.remove('visible');
             lossLegend.classList.remove('visible');
+            
+            // Animate win segment
             setTimeout(() => {
                 winSegment.style.transition = 'stroke-dasharray 1.5s ease-in-out';
                 winSegment.style.strokeDasharray = winDashArray;
             }, 300);
+            
+            // Animate loss segment
             setTimeout(() => {
                 lossSegment.style.transition = 'stroke-dasharray 1.5s ease-in-out';
                 lossSegment.style.strokeDasharray = lossDashArray;
@@ -409,6 +445,7 @@ import "../styles/profile-page.css";
                 }, 500);
             }, 600);
         };
+
         const chartContainer = document.querySelector('.chart-container');
         if (!chartContainer) return;
         handleSegmentMouseEnter = function(this: HTMLElement, e: Event) {
