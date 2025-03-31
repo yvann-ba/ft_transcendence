@@ -512,7 +512,6 @@ export default function initializeMultiplayerGame(): (() => void) | null {
         const distanceY = ball.y - closestY;
         const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
         
-        // Check for collision
         if (distance <= ball.radius) {
           // Determine bounce direction (horizontal or vertical)
           const fromLeft = ball.x < brick.x;
@@ -520,15 +519,12 @@ export default function initializeMultiplayerGame(): (() => void) | null {
           const fromTop = ball.y < brick.y;
           const fromBottom = ball.y > brick.y + brick.height;
           
-          // Bounce horizontally if hitting left or right side
           if ((fromLeft || fromRight) && Math.abs(distanceX) > Math.abs(distanceY)) {
             ball.speedX = -ball.speedX;
           } 
-          // Bounce vertically if hitting top or bottom
           else if ((fromTop || fromBottom) && Math.abs(distanceY) >= Math.abs(distanceX)) {
             ball.speedY = -ball.speedY;
           }
-          // Edge case: hitting corner (bounce both directions)
           else if (Math.abs(distanceX) === Math.abs(distanceY)) {
             ball.speedX = -ball.speedX;
             ball.speedY = -ball.speedY;
@@ -538,7 +534,6 @@ export default function initializeMultiplayerGame(): (() => void) | null {
           ball.speedX += (Math.random() - 0.5) * 0.3;
           ball.speedY += (Math.random() - 0.5) * 0.3;
           
-          // Deactivate the brick
           brick.active = false;
           
           // Update scores
@@ -557,7 +552,6 @@ export default function initializeMultiplayerGame(): (() => void) | null {
             }
           }
           
-          // Only process one brick collision per frame to avoid double bounces
           break;
         }
       }
@@ -661,12 +655,10 @@ export default function initializeMultiplayerGame(): (() => void) | null {
     paddles.forEach(paddle => paddle.score = 0);
     winner = null;
     
-    // Hide menu
     if (elements.menu) {
       elements.menu.classList.add("hidden");
     }
     
-    // Apply custom settings if they exist
     if (elements.ballColorPicker) {
       colors.ballColor = elements.ballColorPicker.value;
     }
@@ -677,7 +669,6 @@ export default function initializeMultiplayerGame(): (() => void) | null {
       MAX_SCORE = parseInt(elements.winningScoreSlider.value);
     }
     
-    // Initialize paddles positions
     paddles[0].x = GAME_WIDTH / 2 - paddleWidth / 2;
     paddles[0].y = GAME_HEIGHT - paddleHeight - 10;
     paddles[1].x = GAME_WIDTH / 2 - paddleWidth / 2;
@@ -687,7 +678,6 @@ export default function initializeMultiplayerGame(): (() => void) | null {
     paddles[3].x = GAME_WIDTH - paddleHeight - 10;
     paddles[3].y = GAME_HEIGHT / 2 - paddleWidth / 2;
     
-    // Start countdown instead of immediately starting the game
     startCountdown();
     
     lastTime = performance.now();
@@ -753,26 +743,22 @@ export default function initializeMultiplayerGame(): (() => void) | null {
     // Clear the canvas
     ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
     
-    // If in menu, just draw a plain black background and nothing else
     if (elements.menu && !elements.menu.classList.contains("hidden") || 
         elements.customMenu && !elements.customMenu.classList.contains("hidden")) {
       ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
       animationFrameId = requestAnimationFrame(gameLoop);
-      return; // Don't render anything else
+      return;
     }
     
-    // For the actual game
     ctx.fillStyle = colors.backgroundColor;
     ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
     
-    // Draw game elements
     drawBricks();
     drawPaddles();
     drawBall();
     drawScoreboard();
     
-    // Update game logic if game is running
     if (gameRunning) {
       updatePaddles(deltaTime);
       updateBall(deltaTime);
