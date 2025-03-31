@@ -1,14 +1,14 @@
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  root: "public", // Définit le dossier où se trouve index.html
+  root: "public",
   server: {
-    port: 8080, // Le frontend tourne sur ce port
+    port: 8080, 
     strictPort: true,
-    host: "0.0.0.0", // Permet d'exposer le serveur dans Docker
+    host: "0.0.0.0",
   },
   build: {
-    outDir: "dist", // Dossier de build
+    outDir: "dist",
     emptyOutDir: true,
   },
 });
