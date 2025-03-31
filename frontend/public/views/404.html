@@ -1,15 +1,26 @@
-<section>
-	<div class="not-found-error">
-		<span class="error-code" data-page="404 oops">
-			<p>404</p>
-			<p>oops!</p>
-		</span>
-		<span class="error-message">
-			<p>Page not found</p>
-			<span>
-				<p>Sorry, the page you are looking for </p>
-				<p>does not exist.</p>
-			</span>
-		</span>
-	</div>
-</section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found</title>
+</head>
+<body>
+    <div class="not-found-container">
+        <div class="not-found-error">
+            <div class="error-code">
+                <span class="glitch" data-text="404">404</span>
+                <p class="highlight" data-i18n="error.oops">oops!</p>
+            </div>
+            <div class="error-message">
+                <p data-i18n="error.not_found">Page not found</p>
+                <span>
+                    <p data-i18n="error.looking_for">Sorry, the page you are looking for </p>
+                    <p class="highlight" data-i18n="error.does_not_exist">does not exist.</p>
+                </span>
+            </div>
+            <a href="/home" class="back-home-button" data-i18n="error.back_home">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

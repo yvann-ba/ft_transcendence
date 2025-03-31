@@ -230,8 +230,11 @@
     }
   },
   "error": {
-    "not_found": "Page introuvable",
-    "sorry": "Désolé, la page que vous recherchez n'existe pas."
+    "oops": "oups !",
+    "not_found": "Page non trouvée",
+    "looking_for": "Désolé, la page que vous recherchez",
+    "does_not_exist": "n'existe pas.",
+    "back_home": "Retour à l'accueil"
   },
   "language": {
     "en": "Anglais",

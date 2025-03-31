@@ -27,7 +27,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(0, 0, 0, 0.95);
+  background: #000000; /* Solid black background */
   z-index: 100;
 }
 
@@ -71,7 +71,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: rgba(0, 0, 0, 0.95);
+  background: #000000; /* Solid black background */
   z-index: 100;
 }
 
@@ -146,7 +146,7 @@
 }
 
 .info-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(30, 30, 30, 0.5);
   border-radius: 10px;
   padding: 20px;
   flex: 1;
@@ -234,7 +234,7 @@
 }
 
 .custom-menu-content {
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 1); /* Solid black */
   padding: 40px;
   border-radius: 15px;
   border: 2px solid rgba(187, 112, 173, 0.5);
@@ -496,34 +496,13 @@
   }
 }
 
-#pong-custom-menu {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #000;
-  z-index: 100;
-}
-
-.custom-menu-content {
-  background-color: #000;
-  border-radius: 15px;
-  box-shadow: 0 0 30px rgba(187, 112, 173, 0.3);
-  border: 2px solid rgba(187, 112, 173, 0.5);
-  padding: 40px;
-  max-width: 500px;
-  width: 90%;
-}
-
-/* Remove any background blur or transparency */
-#pong-custom-menu {
+/* Remove any background blur or transparency for menus */
+#pong-custom-menu,
+#game-menu {
   backdrop-filter: none;
+  background-color: #000000;
 }
 
 .custom-menu-content {
-  background-color: #000;
+  background-color: #000000;
 }
