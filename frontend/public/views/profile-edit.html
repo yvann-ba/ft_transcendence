@@ -1,50 +1,50 @@
 <main>
   <div class="profile-edit-container">
-    <h1 class="page-title">Edit Profile</h1>
+    <h1 class="page-title" data-i18n="profile_edit.title">Edit Profile</h1>
     
     <div class="profile-edit-section">
-      <h2personal_info">Personal Information</h2>
+      <h2 data-i18n="profile_edit.personal_info">Personal Information</h2>
       <form id="personal-info-form">
         <div class="form-group">
-          <label for="username">Username:</label>
+          <label for="username" data-i18n="profile_edit.username">Username:</label>
           <input type="text" id="username" name="username">
         </div>
         <div class="form-group">
-          <label for="display-name">Display Name:</label>
+          <label for="display-name" data-i18n="profile_edit.display_name">Display Name:</label>
           <input type="text" id="display-name" name="display-name">
         </div>
         <div class="form-group">
-          <label for="avatar">Avatar:</label>
+          <label for="avatar" data-i18n="profile_edit.avatar">Avatar:</label>
           <input type="file" id="avatar" name="avatar" accept="image/*">
           <div class="avatar-preview">
             <img id="avatar-preview-img" src="" alt="Avatar Preview">
           </div>
         </div>
-        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <button type="submit" class="btn btn-primary" data-i18n="profile_edit.save">Save Changes</button>
       </form>
     </div>
     
     <div class="profile-edit-section gdpr-section">
-      <h2gdpr_options">GDPR Options</h2>
-      <pgdpr_info">In accordance with the General Data Protection Regulation (GDPR), you have the following rights regarding your data:</p>
+      <h2 data-i18n="profile_edit.gdpr_options">GDPR Options</h2>
+      <p data-i18n="profile_edit.gdpr_info">In accordance with the General Data Protection Regulation (GDPR), you have the following rights regarding your data:</p>
       
       <div class="gdpr-options">
         <div class="gdpr-option">
-          <h3data_download">Download Your Data</h3>
-          <pdata_download_info">Request a copy of all your personal data stored in our system.</p>
-          <button id="download-data-btn" class="btn btn-secondary">Download Data</button>
+          <h3 data-i18n="profile_edit.data_download">Download Your Data</h3>
+          <p data-i18n="profile_edit.data_download_info">Request a copy of all your personal data stored in our system.</p>
+          <button id="download-data-btn" class="btn btn-secondary" data-i18n="profile_edit.download_data">Download Data</button>
         </div>
         
         <div class="gdpr-option">
-          <h3anonymize">Anonymize Account</h3>
-          <panonymize_info">Keep your game statistics but remove personal identifying information.</p>
-          <button id="anonymize-btn" class="btn btn-warning">Anonymize My Data</button>
+          <h3 data-i18n="profile_edit.anonymize">Anonymize Account</h3>
+          <p data-i18n="profile_edit.anonymize_info">Keep your game statistics but remove personal identifying information.</p>
+          <button id="anonymize-btn" class="btn btn-warning" data-i18n="profile_edit.anonymize_data">Anonymize My Data</button>
         </div>
         
         <div class="gdpr-option danger-zone">
-          <h3delete_account">Delete Account</h3>
-          <pdelete_info">Permanently delete your account and all associated data. This action cannot be undone.</p>
-          <button id="delete-account-btn" class="btn btn-danger">Delete My Account</button>
+          <h3 data-i18n="profile_edit.delete_account">Delete Account</h3>
+          <p data-i18n="profile_edit.delete_info">Permanently delete your account and all associated data. This action cannot be undone.</p>
+          <button id="delete-account-btn" class="btn btn-danger" data-i18n="profile_edit.delete">Delete My Account</button>
         </div>
       </div>
     </div>
@@ -56,8 +56,8 @@
       <h2 id="modal-title"></h2>
       <p id="modal-message"></p>
       <div class="modal-buttons">
-        <button id="modal-cancel" class="btn btn-secondary">Cancel</button>
-        <button id="modal-confirm" class="btn btn-danger">Confirm</button>
+        <button id="modal-cancel" class="btn btn-secondary" data-i18n="profile_edit.cancel">Cancel</button>
+        <button id="modal-confirm" class="btn btn-danger" data-i18n="profile_edit.confirm">Confirm</button>
       </div>
     </div>
   </div>

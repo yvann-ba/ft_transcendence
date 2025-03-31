@@ -233,6 +233,31 @@
       }
     }
   },
+  "profile_edit": {
+    "title": "Modifier le Profil",
+    "personal_info": "Informations Personnelles",
+    "username": "Nom d'utilisateur :",
+    "display_name": "Nom d'affichage :",
+    "avatar": "Avatar :",
+    "save": "Enregistrer les Modifications",
+    "gdpr_options": "Options RGPD",
+    "gdpr_info": "Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez des droits suivants concernant vos données :",
+    "data_download": "Télécharger Vos Données",
+    "data_download_info": "Demander une copie de toutes vos données personnelles stockées dans notre système.",
+    "download_data": "Télécharger les Données",
+    "anonymize": "Anonymiser le Compte",
+    "anonymize_info": "Conservez vos statistiques de jeu mais supprimez les informations personnelles d'identification.",
+    "anonymize_data": "Anonymiser Mes Données",
+    "delete_account": "Supprimer le Compte",
+    "delete_info": "Supprimer définitivement votre compte et toutes les données associées. Cette action ne peut pas être annulée.",
+    "delete": "Supprimer Mon Compte",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "anonymize_title": "Anonymiser Votre Compte",
+    "anonymize_confirm_message": "Cette action remplacera vos informations personnelles par des données anonymes. Votre historique de jeu sera conservé, mais ne sera plus lié à votre identité réelle. Cette action est irréversible. Voulez-vous continuer ?",
+    "delete_title": "Supprimer Votre Compte",
+    "delete_confirm_message": "Cette action supprimera définitivement votre compte et toutes les données associées. Cette opération est irréversible. Voulez-vous vraiment supprimer votre compte ?"
+  },
   "error": {
     "oops": "oups !",
     "not_found": "Page non trouvée",

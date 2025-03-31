@@ -1,6 +1,18 @@
 import "../styles/profile-edit.css";
+import { languageService } from '../utils/languageContext';
 
 // ========== FONCTIONS UTILITAIRES ==========
+
+function updatePageTranslations(): void {
+  // Update all elements with data-i18n attribute
+  const elements = document.querySelectorAll('[data-i18n]');
+  elements.forEach(element => {
+    const key = element.getAttribute('data-i18n');
+    if (key) {
+      element.textContent = languageService.translate(key);
+    }
+  });
+}
 
 function showNotification(type: 'success' | 'error' | 'info', message: string) {
   // Créer un élément de notification
@@ -34,7 +46,7 @@ function closeConfirmationModal() {
   }
 }
 
-function openConfirmationModal(title: string, message: string, confirmAction: () => void) {
+function openConfirmationModal(titleKey: string, messageKey: string, confirmAction: () => void) {
   const modal = document.getElementById('confirmation-modal') as HTMLElement;
   const modalTitle = document.getElementById('modal-title') as HTMLElement;
   const modalMessage = document.getElementById('modal-message') as HTMLElement;
@@ -45,17 +57,17 @@ function openConfirmationModal(title: string, message: string, confirmAction: ()
     return;
   }
   
-  // Configurer le contenu de la modal
-  modalTitle.textContent = title;
-  modalMessage.textContent = message;
+  // Use translations for title and message
+  modalTitle.textContent = languageService.translate(titleKey);
+  modalMessage.textContent = languageService.translate(messageKey);
   
-  // Configurer l'action de confirmation
+  // Configure confirmation action
   confirmBtn.onclick = () => {
     confirmAction();
     closeConfirmationModal();
   };
   
-  // Afficher la modal
+  // Show the modal
   modal.style.display = 'flex';
 }
 
@@ -278,8 +290,8 @@ function initGDPRFeatures() {
   const anonymizeBtn = document.getElementById('anonymize-btn');
   anonymizeBtn?.addEventListener('click', () => {
     openConfirmationModal(
-      'Anonymiser votre compte',
-      'Cette action remplacera vos informations personnelles par des données anonymes. Votre historique de jeu sera conservé, mais ne sera plus lié à votre identité réelle. Cette action est irréversible. Voulez-vous continuer?',
+      'profile_edit.anonymize_title',
+      'profile_edit.anonymize_confirm_message',
       handleAnonymization
     );
   });
@@ -288,8 +300,8 @@ function initGDPRFeatures() {
   const deleteAccountBtn = document.getElementById('delete-account-btn');
   deleteAccountBtn?.addEventListener('click', () => {
     openConfirmationModal(
-      'Supprimer votre compte',
-      'Cette action supprimera définitivement votre compte et toutes les données associées. Cette opération est irréversible. Voulez-vous vraiment supprimer votre compte?',
+      'profile_edit.delete_title',
+      'profile_edit.delete_confirm_message',
       handleAccountDeletion
     );
   });
@@ -298,6 +310,13 @@ function initGDPRFeatures() {
 // ========== INITIALISATION DE LA PAGE ==========
 
 function initProfileEditPage() {
+
+  // Translate the page content
+  updatePageTranslations();
+  
+  // Add listener for language changes
+  window.addEventListener('languageChanged', updatePageTranslations);
+
   initProfileForm();
   initGDPRFeatures();
   initConfirmationModal();
@@ -306,9 +325,9 @@ function initProfileEditPage() {
 // Export de la fonction principale
 export default function() {
   initProfileEditPage();
-  // Vous pouvez retourner une fonction de nettoyage si nécessaire
   return () => {
-    // Nettoyage des event listeners si nécessaire
-    console.log("Nettoyage de la page profile-edit");
+    // Clean up event listeners
+    window.removeEventListener('languageChanged', updatePageTranslations);
+    console.log("Cleaning up profile-edit page");
   };
 }

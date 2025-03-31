@@ -233,6 +233,31 @@
       }
     }
   },
+  "profile_edit": {
+    "title": "Edit Profile",
+    "personal_info": "Personal Information",
+    "username": "Username:",
+    "display_name": "Display Name:",
+    "avatar": "Avatar:",
+    "save": "Save Changes",
+    "gdpr_options": "GDPR Options",
+    "gdpr_info": "In accordance with the General Data Protection Regulation (GDPR), you have the following rights regarding your data:",
+    "data_download": "Download Your Data",
+    "data_download_info": "Request a copy of all your personal data stored in our system.",
+    "download_data": "Download Data",
+    "anonymize": "Anonymize Account",
+    "anonymize_info": "Keep your game statistics but remove personal identifying information.",
+    "anonymize_data": "Anonymize My Data",
+    "delete_account": "Delete Account",
+    "delete_info": "Permanently delete your account and all associated data. This action cannot be undone.",
+    "delete": "Delete My Account",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "anonymize_title": "Anonymize Your Account",
+    "anonymize_confirm_message": "This action will replace your personal information with anonymous data. Your game history will be kept but will no longer be linked to your real identity. This action is irreversible. Do you want to continue?",
+    "delete_title": "Delete Your Account",
+    "delete_confirm_message": "This action will permanently delete your account and all associated data. This operation is irreversible. Do you really want to delete your account?"
+  },
   "error": {
     "oops": "oops!",
     "not_found": "Page not found",

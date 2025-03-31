@@ -233,6 +233,31 @@
       }
     }
   },
+    "profile_edit": {
+    "title": "Editar Perfil",
+    "personal_info": "Información Personal",
+    "username": "Nombre de usuario:",
+    "display_name": "Nombre visible:",
+    "avatar": "Avatar:",
+    "save": "Guardar Cambios",
+    "gdpr_options": "Opciones GDPR",
+    "gdpr_info": "De acuerdo con el Reglamento General de Protección de Datos (GDPR), tienes los siguientes derechos sobre tus datos:",
+    "data_download": "Descargar tus Datos",
+    "data_download_info": "Solicitar una copia de todos tus datos personales almacenados en nuestro sistema.",
+    "download_data": "Descargar Datos",
+    "anonymize": "Anonimizar Cuenta",
+    "anonymize_info": "Mantén tus estadísticas de juego pero elimina la información de identificación personal.",
+    "anonymize_data": "Anonimizar Mis Datos",
+    "delete_account": "Eliminar Cuenta",
+    "delete_info": "Eliminar permanentemente tu cuenta y todos los datos asociados. Esta acción no se puede deshacer.",
+    "delete": "Eliminar Mi Cuenta",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "anonymize_title": "Anonimizar tu Cuenta",
+    "anonymize_confirm_message": "Esta acción reemplazará tu información personal con datos anónimos. Tu historial de juego se conservará, pero ya no estará vinculado a tu identidad real. Esta acción es irreversible. ¿Quieres continuar?",
+    "delete_title": "Eliminar tu Cuenta",
+    "delete_confirm_message": "Esta acción eliminará permanentemente tu cuenta y todos los datos asociados. Esta operación es irreversible. ¿Realmente quieres eliminar tu cuenta?"
+  },
   "error": {
     "oops": "¡ups!",
     "not_found": "Página no encontrada",
