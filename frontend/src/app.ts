@@ -21,14 +21,10 @@ export const changeProfileLabel = (): void => {
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // Add the message listener for Google OAuth popup
   window.addEventListener('message', async (event) => {
-    // Verify origin
     if (event.origin !== window.location.origin) return;
     
-    // Check for auth success message
     if (event.data === 'auth-success') {
-      // Fetch user data
       try {
         const response = await fetch('/api/users/me', {
           credentials: 'include'
@@ -38,7 +34,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           const userData = await response.json();
           console.log('User data after OAuth login:', userData);
           
-          // Store avatar URL in localStorage
           if (userData.avatar) {
             localStorage.setItem('userAvatar', userData.avatar);
             console.log('Stored avatar URL in localStorage:', userData.avatar);
@@ -57,7 +52,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // Initialize language
   const initialLang = getInitialLanguage();
   document.documentElement.lang = initialLang;
   await languageService.setLanguage(initialLang);
@@ -66,24 +60,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   const languageSwitcher = createLanguageSwitcher();
   document.body.appendChild(languageSwitcher);
   
-  // Set up language change listener
   window.addEventListener('languageChanged', async () => {
-    await navigate(); // Re-render the current page with new language
+    await navigate();
   });
   
-  // Check authentication status
   await checkAuthStatus();
   
-  // Initialize navbar animation
   initializeNavbarAnimation();
   
-  // Navigate to initial page with smooth transition
   await navigate();
   
-  // Preload common pages for faster navigation
   preloadCommonPages();
   
-  // Initialize burger menu for mobile
   initializeBurgerMenu();
 });
 
@@ -98,7 +86,6 @@ const initializeNavbarAnimation = (): void => {
     }, 300);
   }
   
-  // Update navbar links with translations
   const navLinks = document.querySelectorAll('.nav-link');
   navLinks.forEach(link => {
     const page = link.getAttribute('data-page');
@@ -119,7 +106,6 @@ const initializeBurgerMenu = (): void => {
   const burgerMenu = document.querySelector<HTMLDivElement>('.ham-menu');
 
   if (burgerButton && burgerMenu) {
-    // Remove any existing event listeners and recreate them
     const newBurger = burgerButton.cloneNode(true) as HTMLButtonElement;
     burgerButton.parentNode?.replaceChild(newBurger, burgerButton);
     
@@ -135,7 +121,6 @@ const initializeBurgerMenu = (): void => {
       }
     });
     
-    // Set up navigation in the hamburger menu
     const menuLinks = burgerMenu.querySelectorAll('a');
     menuLinks.forEach(link => {
       link.addEventListener('click', (e) => {
@@ -147,7 +132,6 @@ const initializeBurgerMenu = (): void => {
           newBurger.classList.remove('opened');
           newBurger.setAttribute('aria-expanded', 'false');
           
-          // Navigate to the destination
           navigate(href);
         }
       });

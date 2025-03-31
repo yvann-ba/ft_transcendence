@@ -16,7 +16,6 @@ export default function login() {
     const messageDiv = document.getElementById('message') as HTMLElement;
     const loginContainer = document.querySelector('.login-container') as HTMLElement;
     
-    // Ajouter le bouton de connexion Google
     if (loginContainer && !document.getElementById('google-button')) {
         const googleButton = document.createElement('button');
         googleButton.type = 'button';
@@ -39,7 +38,6 @@ export default function login() {
                 `width=${width},height=${height},left=${left},top=${top}`
             );
             
-            // Set up an interval to check when the popup is closed
             const pollTimer = window.setInterval(() => {
                 if (popup && popup.closed) {
                     window.clearInterval(pollTimer);
@@ -52,11 +50,10 @@ export default function login() {
                     if (hasAuthCookie) {
                         // Auth successful, update your app state
                         localStorage.setItem('token', 'authenticated');
-                        messageDiv.textContent = 'Connexion réussie !';
+                        messageDiv.textContent = 'Login successful!';
                         messageDiv.classList.remove('error');
                         messageDiv.classList.add('success');
                         
-                        // Navigate to home
                         window.history.pushState({}, "", '/home');
                         navigate();
                     }
@@ -68,7 +65,6 @@ export default function login() {
         orSeparator.className = 'separator';
         orSeparator.innerHTML = `<span>${languageService.translate('auth.or', 'or')}</span>`;
         
-        // Insérer avant le formulaire
         form.parentNode?.insertBefore(orSeparator, form);
         form.parentNode?.insertBefore(googleButton, orSeparator);
     }
@@ -90,7 +86,7 @@ export default function login() {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.error || 'Erreur lors de la connexion');
+                throw new Error(errorData.error || 'Error during login');
             }
 
             const data: LoginResponse = await response.json();
@@ -98,7 +94,7 @@ export default function login() {
             localStorage.setItem('token', data.token); // Store the token
             redirectAfterAuth();
 
-            messageDiv.textContent = 'Connexion réussie !';
+            messageDiv.textContent = 'Login successful!';
             messageDiv.classList.remove('error');
             messageDiv.classList.add('success');
 
@@ -125,24 +121,21 @@ export default function login() {
 
     updatePlaceholders();
     
-    // Vérifier s'il y a une erreur dans l'URL (pour redirection après échec OAuth)
     const urlParams = new URLSearchParams(window.location.search);
     const errorParam = urlParams.get('error');
     if (errorParam === 'auth_failed') {
-        messageDiv.textContent = "L'authentification avec Google a échoué. Veuillez réessayer.";
+        messageDiv.textContent = "Google authentication failed. Please try again.";
         messageDiv.classList.remove('success');
         messageDiv.classList.add('error');
     }
 
     const signupLinkContainer = document.querySelector('.signup-link') as HTMLElement;
     if (signupLinkContainer) {
-        // First, check if the link exists
         const existingLink = signupLinkContainer.querySelector('a[href="/register"]');
         
-        // If the link doesn't exist, create it properly
         if (!existingLink) {
-            const registerText = languageService.translate('auth.register', 'S\'inscrire');
-            signupLinkContainer.innerHTML = `${languageService.translate('auth.no_account', 'Pas encore de compte ?')} <a href="/register" style="color: #BB70AD; font-weight: bold;">${registerText}</a>`;
+            const registerText = languageService.translate('auth.register', 'Register');
+            signupLinkContainer.innerHTML = `${languageService.translate('auth.no_account', 'Don\'t have an account yet?')} <a href="/register" style="color: #BB70AD; font-weight: bold;">${registerText}</a>`;
         }
         
         // Make sure link is visible

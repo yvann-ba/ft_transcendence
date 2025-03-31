@@ -1,17 +1,12 @@
 import { languageService } from "./utils/languageContext";
 import { changeProfileLabel } from "./app";
 
-
-// Cache for preloaded HTML content
 const pageCache: { [key: string]: string } = {};
 
-// Flag to track if a transition is in progress
 let isTransitioning = false;
 
-// Store query parameters for routes
 const routeParams: { [key: string]: string } = {};
 
-// List of valid routes in the application
 const validRoutes = [
   "/", 
   "/home", 
@@ -28,17 +23,14 @@ const validRoutes = [
 ];
 
 export const navigate = async (path?: string, preserveParams = false): Promise<void> => {
-  // If no path is provided, use the current path
   let targetPath = path || window.location.pathname;
   
-  // Handle query parameters
   let queryString = '';
   if (path && path.includes('?')) {
     const [basePath, params] = path.split('?');
     targetPath = basePath;
     queryString = `?${params}`;
     
-    // Parse and store query parameters
     const urlParams = new URLSearchParams(params);
     urlParams.forEach((value, key) => {
       routeParams[key] = value;
@@ -47,11 +39,9 @@ export const navigate = async (path?: string, preserveParams = false): Promise<v
     queryString = window.location.search;
   }
   
-  // Check if the path exists in our valid routes
   const cleanPath = targetPath.split('?')[0];
   const pathExists = validRoutes.includes(cleanPath);
 
-  // If path doesn't exist, redirect to 404 page
   if (!pathExists && cleanPath !== "/404") {
     targetPath = "/404";
     queryString = "";
@@ -68,7 +58,6 @@ export const navigate = async (path?: string, preserveParams = false): Promise<v
     queryString = `?redirect=${returnUrl}`;
   }
 
-  // If transition is already in progress, ignore
   if (isTransitioning) return;
   
   isTransitioning = true;
@@ -85,29 +74,23 @@ export const navigate = async (path?: string, preserveParams = false): Promise<v
         pageCache[fullPath] = pageContent;
       }
       
-      // Update the content while overlay is visible
       document.getElementById("app")!.innerHTML = pageContent;
       
-      // Update URL if necessary (when called with a specific path)
       if (path || queryString) {
         window.history.pushState({}, "", targetPath + queryString);
       }
       
-      // Apply translations
       applyTranslationsToPage();
       
-      // Initialize any scripts needed for the new page
       await loadPageScript(targetPath + queryString);
 
       const { changeProfileLabel } = await import("./app");
       changeProfileLabel();
       
-      // Fade out the overlay
       setTimeout(() => {
         overlay.style.opacity = "0";
         
         setTimeout(() => {
-          // Remove overlay when fade out completes
           document.body.removeChild(overlay);
           isTransitioning = false;
         }, 300);
@@ -116,7 +99,6 @@ export const navigate = async (path?: string, preserveParams = false): Promise<v
       console.error("Navigation error:", error);
       isTransitioning = false;
       
-      // Still remove overlay in case of error
       overlay.style.opacity = "0";
       setTimeout(() => {
         if (document.body.contains(overlay)) {
@@ -138,9 +120,8 @@ function createTransitionOverlay(): HTMLElement {
   overlay.style.zIndex = '9999';
   overlay.style.opacity = '0';
   overlay.style.transition = 'opacity 0.3s ease';
-  overlay.style.pointerEvents = 'none'; // Allow clicking through during fade
+  overlay.style.pointerEvents = 'none';
   
-  // Force a reflow before changing opacity
   void overlay.offsetWidth;
   overlay.style.opacity = '1';
   
@@ -164,22 +145,17 @@ function requiresAuthentication(path: string): boolean {
 }
 
 function getViewName(path: string): string {
-  // Special case for 404
   if (path === "/404") return "404";
   
-  // Default to home if path is root
   if (path === "/") return "home";
   
-  // Remove the leading slash
   let routeName = path.substring(1);
   
-  // Remove any query parameters
   const queryParamIndex = routeName.indexOf('?');
   if (queryParamIndex > -1) {
     routeName = routeName.substring(0, queryParamIndex);
   }
   
-  // If empty after processing, default to home
   return routeName || "home";
 }
 
@@ -201,7 +177,6 @@ async function loadPage(viewName: string): Promise<string> {
 
 // Function to apply translations to the current page
 function applyTranslationsToPage(): void {
-  // Find all elements with data-i18n attribute
   const elements = document.querySelectorAll('[data-i18n]');
   elements.forEach(element => {
     const key = element.getAttribute('data-i18n');
@@ -210,7 +185,6 @@ function applyTranslationsToPage(): void {
     }
   });
   
-  // Update navigation links hover state
   const navLinks = document.querySelectorAll('.nav-link');
   navLinks.forEach(link => {
     const dataHover = link.getAttribute('data-hover');
@@ -231,16 +205,12 @@ function applyTranslationsToPage(): void {
     }
   });
   
-  // Update profile button based on auth status
   changeProfileLabel();
 }
 
-// Add a shared cleanup function to handle navigation transition cleanup
 let currentCleanup: (() => void) | null = null;
 
-// Function to load and execute page-specific JavaScript
 async function loadPageScript(path: string): Promise<void> {
-  // Clean up previous page if needed
   if (currentCleanup) {
     currentCleanup();
     currentCleanup = null;
@@ -303,7 +273,6 @@ document.body.addEventListener("click", (event: MouseEvent) => {
   if (link && !link.hasAttribute('target')) {
     const href = link.getAttribute("href");
     
-    // Only handle internal links
     if (href && href.startsWith("/")) {
       event.preventDefault();
       navigate(href);
@@ -312,18 +281,14 @@ document.body.addEventListener("click", (event: MouseEvent) => {
 });
 
 export function redirectAfterAuth(): void {
-  // Check if there's a redirect parameter
   const redirect = getQueryParam('redirect');
   if (redirect) {
-    // Decode the URL and navigate to it
     navigate(decodeURIComponent(redirect));
   } else {
-    // Default redirection to profile or home
     navigate('/profile-page');
   }
 }
 
-// Handle browser back/forward buttons
 window.addEventListener("popstate", () => {
   const currentPath = window.location.pathname;
   
@@ -341,23 +306,19 @@ export function isAuthenticated(): boolean {
   return token !== null && token !== "";
 }
 
-// Get a query parameter value for the current page
 export function getQueryParam(key: string): string | null {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(key) || routeParams[key] || null;
 }
 
-// Preload common pages in the background
 export function preloadCommonPages(): void {
-  // List of commonly accessed pages to preload
   const pagesToPreload = [
     "/home",
     "/pong-selection",
     "/login",
-    "/404"  // Also preload the 404 page
+    "/404"
   ];
   
-  // Preload pages in the background
   setTimeout(() => {
     pagesToPreload.forEach(async (path) => {
       try {
@@ -370,10 +331,9 @@ export function preloadCommonPages(): void {
         // Silently fail - this is just preloading
       }
     });
-  }, 2000); // Wait a bit after initial page load
+  }, 2000);
 }
 
-// Export this for backward compatibility
 export const checkAuthStatus = async (): Promise<boolean> => {
   try {
     const storedToken = localStorage.getItem('token');
@@ -381,14 +341,12 @@ export const checkAuthStatus = async (): Promise<boolean> => {
       return true;
     }
     
-    // Check auth_token non-httpOnly cookie
     const hasAuthCookie = document.cookie.split(';').some(item => item.trim().startsWith('auth_token='));
     if (hasAuthCookie) {
       localStorage.setItem('token', 'authenticated');
       return true;
     }
     
-    // If no local token, check with the server
     const response = await fetch("/api/auth/status", {
       method: "GET",
       credentials: "include",

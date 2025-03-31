@@ -61,7 +61,6 @@ export default function initializeTournamentMode() {
       }
     });
     
-    // Update input placeholders
     const inputs = document.querySelectorAll('[data-i18n-placeholder]');
     inputs.forEach(input => {
       const key = input.getAttribute('data-i18n-placeholder');
@@ -70,13 +69,11 @@ export default function initializeTournamentMode() {
       }
     });
     
-    // Get player input fields directly
     const player1Input = document.getElementById("player1-name") as HTMLInputElement;
     const player2Input = document.getElementById("player2-name") as HTMLInputElement;
     const player3Input = document.getElementById("player3-name") as HTMLInputElement;
     const player4Input = document.getElementById("player4-name") as HTMLInputElement;
     
-    // Update default values if they match any of the standard translations
     if (player1Input && (player1Input.value === "Player 1" || player1Input.value === "Joueur 1" || player1Input.value === "Jugador 1")) {
       player1Input.value = languageService.translate("game.tournament_mode.default_player1", "Player 1");
     }
@@ -241,7 +238,6 @@ export default function initializeTournamentMode() {
     elements.tournamentBracket?.classList.add("hidden");
     elements.winnerAnnouncement?.classList.remove("hidden");
     
-    // Get the champion (winner of the final match)
     const champion = tournamentState.matches[2].winner;
     
     if (elements.championName && champion) {

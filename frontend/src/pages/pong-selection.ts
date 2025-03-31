@@ -13,7 +13,6 @@ export default function initializePongSelection(): (() => void) {
     });
   };
   
-  // Handle card hover effects
   const handleCardMouseEnter = function(this: HTMLElement) {
     this.classList.add('hover-effect');
   };
@@ -22,12 +21,10 @@ export default function initializePongSelection(): (() => void) {
     this.classList.remove('hover-effect');
   };
   
-  // Set up event listeners
   cards.forEach(card => {
     card.addEventListener('mouseenter', handleCardMouseEnter);
     card.addEventListener('mouseleave', handleCardMouseLeave);
     
-    // Handle play buttons with smooth navigation
     const playButton = card.querySelector('.play-button');
     if (playButton) {
       playButton.addEventListener('click', (e) => {
@@ -40,7 +37,6 @@ export default function initializePongSelection(): (() => void) {
     }
   });
   
-  // Handle back button
   const backButton = document.querySelector('.back-button');
   if (backButton) {
     backButton.addEventListener('click', (e) => {
@@ -49,10 +45,8 @@ export default function initializePongSelection(): (() => void) {
     });
   }
   
-  // Run animations
   animateCards();
   
-  // Return cleanup function
   return () => {
     cards.forEach(card => {
       card.removeEventListener('mouseenter', handleCardMouseEnter);

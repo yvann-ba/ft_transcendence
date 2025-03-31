@@ -3,7 +3,6 @@ import userQueries  from '../queries/users';
 
 export default async function userRoutes(fastify: FastifyInstance) {
   
-
 fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, reply) => {
 	try {
 	  const userId = (request.user as { userId: number }).userId;
@@ -22,7 +21,7 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
 	  const user = await getUserByIdPromise(userId);
 	  
 	  if (!user) {
-		return reply.status(404).send({ error: "Utilisateur non trouvé" });
+		return reply.status(404).send({ error: "User not found" });
 	  }
 	  
 	  const { password, ...userWithoutPassword } = user;
@@ -30,7 +29,7 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
 	  return reply.send(userWithoutPassword);
 	} catch (err) {
 	  fastify.log.error("Error fetching user profile:", err);
-	  return reply.status(500).send({ error: "Erreur serveur" });
+	  return reply.status(500).send({ error: "Server error" });
 	}
   });
   
@@ -49,12 +48,12 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
 	  });
   
 	  if (!user) {
-		return reply.status(404).send({ error: 'Utilisateur non trouvé' });
+		return reply.status(404).send({ error: 'User not found' });
 	  }
   
 	  return reply.send(user);
 	} catch (err) {
-	  return reply.status(500).send({ error: 'Erreur lors de la récupération de l\'utilisateur', details: err });
+	  return reply.status(500).send({ error: 'Error retrieving user', details: err });
 	}
   });
 
@@ -68,18 +67,18 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
       };
 
 	  if (!username || !password || !firstName || !lastName) {
-		return reply.status(400).send({ error: "Tous les champs sont requis" });
+		return reply.status(400).send({ error: "All fields are required" });
 	  }
 	  
 	  if (password.length < 6) {
-		return reply.status(400).send({ error: "Le mot de passe doit contenir au moins 6 caractères" });
+		return reply.status(400).send({ error: "Password must be at least 6 characters" });
 	  }
 
       const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`;
 
       const existingUser = await userQueries.checkUserLogin(username);
       if (existingUser) {
-        return reply.status(400).send({ error: "Nom d'utilisateur déjà utilisé" });
+        return reply.status(400).send({ error: "Username already in use" });
       }
 
       // Create the user
@@ -102,13 +101,13 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
           sameSite: "none",
         })
         .send({ 
-          message: "Inscription réussie",
+          message: "Registration successful",
           token: token
         });
     } catch (err) {
       fastify.log.error("Registration error:", err);
       return reply.status(500).send({ 
-        error: "Erreur lors de l'inscription",
+        error: "Error during registration",
         details: (err as Error).message
       });
     }

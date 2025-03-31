@@ -56,7 +56,6 @@ fastify.decorate("authenticate", async (request: any, reply: any) => {
 
 fastify.register(migrateRoutes);
 
-//test
 fastify.get("/hello", async (request, reply) => {
   fastify.log.info("Request received for /hello");
   return { message: "Hello from Fastify API!" };
@@ -66,7 +65,6 @@ fastify.get("/", async (request, reply) => {
   return reply.sendFile("index.html");
 });
 
-//vos routes
 fastify.register(userRoutes);
 fastify.register(authRoutes);
 fastify.register(gameHistoryRoutes);
