@@ -23,7 +23,8 @@ const validRoutes = [
   "/pong-game",
   "/pong-tournament",
   "/four-player-pong",
-  "/profile-page"
+  "/profile-page",
+  "/profile-edit"
 ];
 
 export const navigate = async (path?: string, preserveParams = false): Promise<void> => {
@@ -245,18 +246,15 @@ async function loadPageScript(path: string): Promise<void> {
     currentCleanup = null;
   }
 
-  // Parse path to get main route and query parameters
   const [route, queryParams] = path.split('?');
   const urlParams = new URLSearchParams(queryParams || '');
 
   if (requiresAuthentication(route) && !isAuthenticated()) {
-    // Don't load the script for protected routes when not authenticated
     console.warn("Attempted to access protected route without authentication");
     return;
   }
-
+  console.log("route", route);
   try {
-    // Import the appropriate module based on the path
     if (route === "/" || route === "/home") {
       const module = await import("./pages/home");
       currentCleanup = module.default() || null;
@@ -290,6 +288,10 @@ async function loadPageScript(path: string): Promise<void> {
     } else if (route === "/404") {
       // No special scripts needed for 404 page
       console.log("Loading 404 page");
+    }
+    else if (route === "/profile-edit") {
+      const module = await import("./pages/profile-edit");
+      module.default
     }
   } catch (error) {
     console.error(`Error loading script for ${path}:`, error);
