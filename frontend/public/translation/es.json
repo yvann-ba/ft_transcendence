@@ -145,37 +145,31 @@
   },
   "about": {
     "title": "Acerca de",
-    "project": "Resumen del Proyecto",
-    "tech_stack": "Tecnologías",
-    "features": "Características Claves",
-    "team": "Nuestro Equipo",
+    "project": "Descripción del Proyecto",
     "project_description": {
-      "part1": "ft_transcendence es una plataforma en línea de Pong en tiempo real desarrollada como parte del programa de la escuela 42. Este proyecto nos desafía a crear una aplicación web completa con autenticación de usuarios, juego en tiempo real, sistemas de torneos y funciones sociales.",
-      "part2": "Nuestra implementación incluye juego local y contra la IA, configuraciones personalizables, perfiles de usuario y una interfaz moderna diseñada para una experiencia de juego excepcional."
+      "part1": "ft_transcendence es una plataforma web completa que ofrece el juego Pong en tiempo real. Este proyecto de la escuela 42 demuestra nuestra capacidad para crear una aplicación web completa con tecnologías modernas, que incluye autenticación de usuarios, sistemas de torneos y capacidades multijugador.",
+      "part2": "Nuestra implementación incluye el Pong clásico, un modo de juego con IA con múltiples niveles de dificultad, un modo rompeladrillos para cuatro jugadores y un sistema de torneos con configuraciones personalizables. La plataforma ofrece diseño responsive, perfiles de usuario, seguimiento del historial de partidas y una interfaz visualmente atractiva."
     },
-    "tech_categories": {
-      "frontend": "Frontend",
-      "backend": "Backend",
-      "database": "Base de datos",
-      "devops": "DevOps"
-    },
+    "tech_stack": "Stack Tecnológico",
+    "features": "Características Principales",
     "feature_categories": {
-      "realtime": "Pong en tiempo real",
-      "ai": "Oponente de IA",
-      "profiles": "Perfiles de usuario",
-      "customization": "Personalización",
-      "authentication": "Autenticación segura",
-      "responsive": "Diseño adaptable"
+      "realtime": "Múltiples Modos de Juego",
+      "ai": "IA Inteligente",
+      "profiles": "Gestión de Usuarios",
+      "customization": "Personalización del Juego",
+      "authentication": "Autenticación Segura",
+      "responsive": "Soporte Multilingüe"
     },
     "feature_descriptions": {
-      "realtime": "Juega al clásico Pong con gráficos modernos y jugabilidad fluida",
-      "ai": "Desafía a nuestra IA con niveles de dificultad ajustables",
-      "profiles": "Crea tu perfil, sigue tus estadísticas y revisa tu historial de partidas",
-      "customization": "Personaliza tu experiencia de juego con varias opciones visuales",
-      "authentication": "Sistema de autenticación robusto con integración OAuth 42",
-      "responsive": "Disfruta del juego en distintos dispositivos y tamaños de pantalla"
+      "realtime": "Pong clásico, oponente IA, rompeladrillos para cuatro jugadores y sistema de torneos",
+      "ai": "Oponente informático adaptativo con tres niveles de dificultad para jugar en solitario",
+      "profiles": "Autenticación segura, perfiles, historial de partidas y estadísticas de victorias/derrotas",
+      "customization": "Ajusta colores, puntuaciones para ganar y parámetros del juego para una experiencia personalizada",
+      "authentication": "Creación de cuenta local e integración con OAuth de Google",
+      "responsive": "Disponible en inglés, francés y español con cambio fácil de idioma"
     },
-    "team_description": "ft_transcendence fue desarrollado por un equipo dedicado de estudiantes de la escuela 42, combinando experiencia en desarrollo web, diseño de juegos y experiencia de usuario para crear esta plataforma inmersiva de Pong en línea."
+    "team": "Nuestro Equipo",
+    "team_description": "ft_transcendence fue desarrollado por un equipo dedicado de estudiantes de 42, combinando experiencia en desarrollo de juegos, tecnologías web, diseño UI/UX y arquitectura backend para crear esta completa plataforma de Pong en línea."
   },
   "contact": {
     "title": "Conoce",

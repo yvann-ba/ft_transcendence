@@ -25,7 +25,7 @@ fastify.register(cors, {
 });
 
 fastify.register(fastifyStatic, {
-  root: path.join(__dirname, "../../frontend/public"),
+  root: path.join(__dirname, "../public"),
   prefix: "/",
 });
 
