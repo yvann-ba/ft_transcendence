@@ -178,7 +178,7 @@ export const removeAvatar = async (userId: number): Promise<boolean> => {
 export const getUserData = async (userId: number): Promise<any> => {
   return new Promise((resolve, reject) => {
     // Get user basic information
-    getUserById(userId, async (err, user) => {
+    getUserById(userId, (err, user) => {
       if (err) {
         console.error("Error fetching user data:", err.message);
         return reject(err);
@@ -188,29 +188,90 @@ export const getUserData = async (userId: number): Promise<any> => {
         return resolve(null);
       }
       
-      try {
-        // Get user game history
-        const gameHistory = await getUserGameHistory(userId);
-        
-        // Get user friends
-        const friends = await getUserFriends(userId);
-        
-        // Get chat messages
-        const messages = await getUserMessages(userId);
-        
-        // Compile all user data
-        const userData = {
-          user,
-          gameHistory,
-          friends,
-          messages
-        };
-        
-        resolve(userData);
-      } catch (error) {
-        console.error("Error assembling user data:", error);
-        reject(error);
+      // Create a sanitized copy without password
+      const userCopy = { ...user };
+      if (userCopy.password) {
+        delete userCopy.password;
       }
+      
+      // We'll handle each data type separately and continue even if one fails
+      const gameHistoryPromise = new Promise<any[]>((resolveGames) => {
+        const query = `
+          SELECT * FROM games 
+          WHERE player1_id = ? OR player2_id = ? 
+          ORDER BY created_at DESC
+        `;
+        
+        db.all(query, [userId, userId], (err, rows) => {
+          if (err) {
+            console.error("Error fetching game history:", err.message);
+            resolveGames([]);
+          } else {
+            resolveGames(rows || []);
+          }
+        });
+      });
+      
+      const friendsPromise = new Promise<any[]>((resolveFriends) => {
+        const query = `
+          SELECT u.id, u.username, u.avatar 
+          FROM friendships f
+          JOIN users u ON (
+            (f.user1_id = ? AND f.user2_id = u.id) OR
+            (f.user2_id = ? AND f.user1_id = u.id)
+          )
+          WHERE f.status = 'accepted'
+        `;
+        
+        db.all(query, [userId, userId], (err, rows) => {
+          if (err) {
+            console.error("Error fetching friends:", err.message);
+            resolveFriends([]);
+          } else {
+            resolveFriends(rows || []);
+          }
+        });
+      });
+      
+      const messagesPromise = new Promise<any[]>((resolveMessages) => {
+        const query = `
+          SELECT * FROM messages
+          WHERE sender_id = ? OR receiver_id = ?
+          ORDER BY created_at DESC
+        `;
+        
+        db.all(query, [userId, userId], (err, rows) => {
+          if (err) {
+            console.error("Error fetching messages:", err.message);
+            resolveMessages([]);
+          } else {
+            resolveMessages(rows || []);
+          }
+        });
+      });
+      
+      // Execute all data gathering operations
+      Promise.all([gameHistoryPromise, friendsPromise, messagesPromise])
+        .then(([gameHistory, friends, messages]) => {
+          const userData = {
+            user: userCopy,
+            gameHistory,
+            friends,
+            messages
+          };
+          
+          resolve(userData);
+        })
+        .catch(error => {
+          console.error("Error assembling user data:", error);
+          // Even if there's an error, try to return at least the user data
+          resolve({
+            user: userCopy,
+            gameHistory: [],
+            friends: [],
+            messages: []
+          });
+        });
     });
   });
 };
@@ -307,54 +368,58 @@ export const anonymizeUser = async (userId: number): Promise<boolean> => {
   });
 };
 
-// Delete user account
 export const deleteUser = async (userId: number): Promise<boolean> => {
   return new Promise((resolve, reject) => {
-    // Begin transaction
-    db.serialize(() => {
-      db.run('BEGIN TRANSACTION');
-      
-      try {
-        // Delete related data first - adjust based on your actual schema
-        // Delete from games
-        db.run('DELETE FROM games WHERE player1_id = ? OR player2_id = ?', [userId, userId]);
-        
-        // Delete from friendships
-        db.run('DELETE FROM friendships WHERE user1_id = ? OR user2_id = ?', [userId, userId]);
-        
-        // Delete from messages
-        db.run('DELETE FROM messages WHERE sender_id = ? OR receiver_id = ?', [userId, userId]);
-        
+    
+    const deletionPromises = [];
+    
+    deletionPromises.push(new Promise<void>((resolveMsg) => {
+      db.run('DELETE FROM messages WHERE sender_id = ? OR receiver_id = ?', [userId, userId], (err) => {
+        if (err) {
+          console.error("Error deleting user messages:", err.message);
+        }
+        resolveMsg();
+      });
+    }));
+    
+    deletionPromises.push(new Promise<void>((resolveFriend) => {
+      db.run('DELETE FROM friendships WHERE user1_id = ? OR user2_id = ?', [userId, userId], (err) => {
+        if (err) {
+          console.error("Error deleting user friendships:", err.message);
+        }
+        resolveFriend();
+      });
+    }));
+    
+    deletionPromises.push(new Promise<void>((resolveGame) => {
+      db.run('DELETE FROM games WHERE player1_id = ? OR player2_id = ?', [userId, userId], (err) => {
+        if (err) {
+          console.error("Error deleting user games:", err.message);
+        }
+        resolveGame();
+      });
+    }));
+    
+    Promise.all(deletionPromises)
+      .then(() => {
         // Finally delete the user
         db.run('DELETE FROM users WHERE id = ?', [userId], function(err) {
           if (err) {
-            db.run('ROLLBACK');
             console.error("Error deleting user:", err.message);
             return reject(err);
           }
           
           const wasDeleted = this.changes > 0;
-          
-          // Commit if successful
-          db.run('COMMIT', (commitErr) => {
-            if (commitErr) {
-              console.error("Error committing transaction:", commitErr.message);
-              return reject(commitErr);
-            }
-            
-            resolve(wasDeleted);
-          });
+          resolve(wasDeleted);
         });
-      } catch (error) {
-        db.run('ROLLBACK');
-        console.error("Transaction error:", error);
-        reject(error);
-      }
-    });
+      })
+      .catch(err => {
+        console.error("Error during account deletion:", err);
+        reject(err);
+      });
   });
 };
 
-// Update the export default statement to include the new functions
 export default { 
   createUser, 
   getUserById, 

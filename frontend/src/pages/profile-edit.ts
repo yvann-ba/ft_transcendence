@@ -1,5 +1,6 @@
 import "../styles/profile-edit.css";
 import { UserService } from "../services/user-service";
+import { navigate } from "../router";
 
 export default function ProfileEdit() {
   const personalInfoForm = document.getElementById('personal-info-form') as HTMLFormElement;
@@ -33,16 +34,42 @@ export default function ProfileEdit() {
         firstnameInput.value = userData.first_name || '';
         lastnameInput.value = userData.last_name || '';
         
+        const avatarSection = document.querySelector('.avatar-preview-section') as HTMLDivElement;
+        
+        // Handle avatar display and section visibility
         if (userData.avatar) {
           avatarPreviewImg.src = userData.avatar;
+          avatarDeleteBtn.style.display = 'inline-block'; // Show delete button
+          avatarSection.style.display = 'block'; // Show avatar preview section
         } else {
           avatarPreviewImg.src = '/assets/default-avatar.png';
+          avatarDeleteBtn.style.display = 'none'; // Hide delete button
+          // Keep the preview visible but with default avatar
+          // If you want to hide the entire section, uncomment the next line
+          // avatarSection.style.display = 'none';
         }
       }
     } catch (error) {
       showError('Failed to load user data. Please try again later.');
     }
   }
+  
+  // Update the avatar delete handler
+  avatarDeleteBtn.addEventListener('click', async () => {
+    try {
+      await userService.deleteAvatar();
+      avatarPreviewImg.src = '/assets/default-avatar.png';
+      avatarDeleteBtn.style.display = 'none'; // Hide the button after deletion
+      
+      // Optionally hide the entire avatar section
+      // const avatarSection = document.querySelector('.avatar-preview-section') as HTMLDivElement;
+      // avatarSection.style.display = 'none';
+      
+      showSuccess('Avatar deleted successfully!');
+    } catch (error) {
+      showError('Failed to delete avatar. Please try again.');
+    }
+  });
 
   personalInfoForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -137,7 +164,7 @@ export default function ProfileEdit() {
           await userService.anonymizeAccount();
           showSuccess('Your account has been anonymized. You will be logged out.');
           setTimeout(() => {
-            window.location.href = '/logout';
+            navigate('/');
           }, 2000);
           break;
 
@@ -145,7 +172,7 @@ export default function ProfileEdit() {
           await userService.deleteAccount();
           showSuccess('Your account has been deleted. You will be redirected.');
           setTimeout(() => {
-            window.location.href = '/';
+            navigate('/');
           }, 2000);
           break;
       }
@@ -156,7 +183,6 @@ export default function ProfileEdit() {
     }
   });
 
-  // Helper functions
   function downloadJsonFile(data: any, filename: string) {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
     const downloadAnchorNode = document.createElement('a');

@@ -180,7 +180,6 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
         return reply.status(404).send({ error: "Utilisateur non trouvé" });
       }
       
-      // Remove password if present
       if (userData.user && userData.user.password) {
         delete userData.user.password;
       }
@@ -192,7 +191,6 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
     }
   });
   
-  // Anonymize account route
   fastify.post('/users/me/anonymize', { preHandler: fastify.authenticate }, async (request, reply) => {
     try {
       const userId = (request.user as { userId: number }).userId;
@@ -203,8 +201,8 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
         return reply.status(404).send({ error: "Utilisateur non trouvé" });
       }
       
-      // Clear session cookie
       reply.clearCookie("sessionid");
+	  reply.clearCookie("auth_token");
       
       return reply.send({ success: true, message: "Compte anonymisé avec succès" });
     } catch (err) {
@@ -226,6 +224,8 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
       
       // Clear session cookie
       reply.clearCookie("sessionid");
+	  reply.clearCookie("auth_token");
+
       
       return reply.send({ success: true, message: "Compte supprimé avec succès" });
     } catch (err) {
