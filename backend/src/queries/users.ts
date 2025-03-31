@@ -32,17 +32,17 @@ const createUser = async (username: string, password: string, firstName: string,
 
     db.run(query, [username, hashedPassword, lastName, firstName, email], function (err) {
       if (err) {
-        console.error('Erreur lors de la création de l\'utilisateur:', err.message);
+        console.error('User successfully created:', err.message);
         reject(err);
       } else {
-        console.log('Utilisateur créé avec succès, ID:', this.lastID);
+        console.log('User successfully created, ID:', this.lastID);
 
         getUserById(this.lastID, (err, row) => {
           if (err) {
-            console.error('Erreur lors de la récupération de l\'utilisateur:', err.message);
+            console.error('User recovery error', err.message);
             reject(err);
           } else {
-            resolve({ message: 'Utilisateur créé avec succès', user: row });
+            resolve({ message: 'User successfully created', user: row });
           }
         });
 
@@ -57,7 +57,7 @@ export const checkUserLogin = async (username: string): Promise<any> => {
 
     db.get(query, [username], (err, row) => {
       if (err) {
-        console.error("Erreur lors de la récupération de l'utilisateur:", err.message);
+        console.error("User recovery error:", err.message);
         return reject(err);
       }
       resolve(row || null);
@@ -81,7 +81,7 @@ export const checkUserByEmail = async (email: string): Promise<any> => {
 
     db.get(query, [email], (err, row) => {
       if (err) {
-        console.error("Erreur lors de la récupération de l'utilisateur par email:", err.message);
+        console.error("Error retrieving user by email:", err.message);
         return reject(err);
       }
       resolve(row || null);

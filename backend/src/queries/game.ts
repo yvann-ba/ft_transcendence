@@ -19,7 +19,7 @@ export const addGameToHistory = (
       [userId, opponentType, difficulty, userScore, opponentScore, result],
       function(err) {
         if (err) {
-          console.error('Erreur lors de l\'ajout de la partie à l\'historique:', err.message);
+          console.error('Error adding game to history:', err.message);
           reject(err);
         } else {
           resolve({ id: this.lastID });
@@ -48,7 +48,7 @@ export const getUserGameHistory = (userId: number, limit = 10): Promise<any[]> =
   
       db.all(query, [userId, limit], (err, rows) => {
         if (err) {
-          console.error('Erreur lors de la récupération de l\'historique:', err.message);
+          console.error('Error retrieving history:', err.message);
           reject(err);
         } else {
           resolve(rows);
@@ -71,7 +71,7 @@ export const updateUserGameStats = (
   
       db.run(query, [isWin ? 1 : 0, userId], function (err) {
         if (err) {
-          console.error('Erreur lors de la mise à jour des statistiques:', err.message);
+          console.error('Error updating statistics:', err.message);
           reject(err);
         } else {
           resolve();

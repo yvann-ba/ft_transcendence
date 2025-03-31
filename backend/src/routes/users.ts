@@ -9,7 +9,7 @@ export default async function userRoutes(fastify: FastifyInstance) {
 // 	  const user = await userQueries.createUser(username, password, email);
 // 	  return reply.send(user);
 // 	} catch (err) {
-// 	  return reply.status(500).send({ error: 'Erreur lors de la création de l\'utilisateur', details: err });
+// 	  return reply.status(500).send({ error: 'Error creating user', details: err });
 // 	}
 //   });
   
@@ -31,7 +31,7 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
 	  const user = await getUserByIdPromise(userId);
 	  
 	  if (!user) {
-		return reply.status(404).send({ error: "Utilisateur non trouvé" });
+		return reply.status(404).send({ error: "User not found" });
 	  }
 	  
 	  const { password, ...userWithoutPassword } = user;
@@ -39,7 +39,7 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
 	  return reply.send(userWithoutPassword);
 	} catch (err) {
 	  fastify.log.error("Error fetching user profile:", err);
-	  return reply.status(500).send({ error: "Erreur serveur" });
+	  return reply.status(500).send({ error: "Server error" });
 	}
   });
   
@@ -58,12 +58,12 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
 	  });
   
 	  if (!user) {
-		return reply.status(404).send({ error: 'Utilisateur non trouvé' });
+		return reply.status(404).send({ error: 'User not found' });
 	  }
   
 	  return reply.send(user);
 	} catch (err) {
-	  return reply.status(500).send({ error: 'Erreur lors de la récupération de l\'utilisateur', details: err });
+	  return reply.status(500).send({ error: 'Error retrieving user', details: err });
 	}
   });
 
@@ -77,18 +77,18 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
       };
 
 	  if (!username || !password || !firstName || !lastName) {
-		return reply.status(400).send({ error: "Tous les champs sont requis" });
+		return reply.status(400).send({ error: "All fields are required" });
 	  }
 	  
 	  if (password.length < 6) {
-		return reply.status(400).send({ error: "Le mot de passe doit contenir au moins 6 caractères" });
+		return reply.status(400).send({ error: "Password must be at least 6 characters" });
 	  }
 
       const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`;
 
       const existingUser = await userQueries.checkUserLogin(username);
       if (existingUser) {
-        return reply.status(400).send({ error: "Nom d'utilisateur déjà utilisé" });
+        return reply.status(400).send({ error: "Username already in use" });
       }
 
       // Create the user
@@ -111,13 +111,13 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
           sameSite: "none",
         })
         .send({ 
-          message: "Inscription réussie",
+          message: "Registration successful",
           token: token
         });
     } catch (err) {
       fastify.log.error("Registration error:", err);
       return reply.status(500).send({ 
-        error: "Erreur lors de l'inscription",
+        error: "Error during registration",
         details: (err as Error).message
       });
     }
@@ -130,7 +130,7 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
 //       const updatedUser = await updateUser(parseInt(id, 10), username, email);
 //       return reply.send(updatedUser);
 //     } catch (err) {
-//       return reply.status(500).send({ error: 'Erreur lors de la mise à jour de l\'utilisateur', details: err });
+//       return reply.status(500).send({ error: 'Error updating user', details: err });
 //     }
 //   });
 
@@ -138,9 +138,9 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
 //     try {
 //       const { id } = request.params as { id: string };
 //       await deleteUser(parseInt(id, 10));
-//       return reply.send({ message: 'Utilisateur supprimé avec succès' });
+//       return reply.send({ message: 'User deleted successfully' });
 //     } catch (err) {
-//       return reply.status(500).send({ error: 'Erreur lors de la suppression de l\'utilisateur', details: err });
+//       return reply.status(500).send({ error: 'Error deleting user', details: err });
 //     }
 //   });
 
