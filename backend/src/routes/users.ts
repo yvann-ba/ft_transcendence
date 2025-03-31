@@ -63,33 +63,42 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
         firstName: string;
         lastName: string;
       };
-
-	  if (!username || !password || !firstName || !lastName) {
-		return reply.status(400).send({ error: "All fields are required" });
-	  }
-	  
-	  if (password.length < 6) {
-		return reply.status(400).send({ error: "Password must be at least 6 characters" });
-	  }
-
+  
+      if (!username || !password || !firstName || !lastName) {
+        return reply.send({ 
+          success: false,
+          error: "All fields are required" 
+        });
+      }
+      
+      if (password.length < 6 || password.length > 50) {
+        return reply.send({ 
+          success: false,
+          error: "Password must be between 6 and 50 characters" 
+        });
+      }
+      
       const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`;
-
-      const existingUser = await userQueries.checkUserLogin(username);
-      if (existingUser) {
-        return reply.status(400).send({ error: "Username already in use" });
+  
+      const userCheck = await userQueries.checkUserLogin(username);
+      if (userCheck.success && userCheck.user) {
+        return reply.send({ 
+          success: false,
+          error: "Username already in use" 
+        });
       }
 
-      // Create the user
-      const result = await userQueries.createUser(username,
-		 password, 
-		 firstName,
-		 lastName,
-		 email);
+      const result = await userQueries.createUser(username, password, firstName, lastName, email);
       
-      // Generate JWT token
+      if (!result.success) {
+        return reply.send({
+          success: false,
+          error: result.error
+        });
+      }
+      
       const token = fastify.jwt.sign({ userId: result.user.id });
       
-      // Set cookie and send response
       reply
         .setCookie("sessionid", token, {
           httpOnly: true,
@@ -99,14 +108,15 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
           sameSite: "none",
         })
         .send({ 
+          success: true,
           message: "Registration successful",
           token: token
         });
     } catch (err) {
       fastify.log.error("Registration error:", err);
       return reply.status(500).send({ 
-        error: "Error during registration",
-        details: (err as Error).message
+        success: false,
+        error: "Error during registration"
       });
     }
   });

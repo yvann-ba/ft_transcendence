@@ -7,6 +7,8 @@ import { languageService } from '../utils/languageContext';
 interface LoginResponse {
     message: string;
     token: string;
+    success: boolean;
+    error: string;
 }
 
 export default function login() {
@@ -91,7 +93,14 @@ export default function login() {
 
             const data: LoginResponse = await response.json();
 
-            localStorage.setItem('token', data.token); // Store the token
+            if (!data.success) {
+                messageDiv.textContent = data.error;
+                messageDiv.classList.remove('success');
+                messageDiv.classList.add('error');
+                return;
+            }
+
+            localStorage.setItem('token', data.token);
             redirectAfterAuth();
 
             messageDiv.textContent = 'Login successful!';
@@ -138,7 +147,6 @@ export default function login() {
             signupLinkContainer.innerHTML = `${languageService.translate('auth.no_account', 'Don\'t have an account yet?')} <a href="/register" style="color: #BB70AD; font-weight: bold;">${registerText}</a>`;
         }
         
-        // Make sure link is visible
         signupLinkContainer.style.display = 'block';
         signupLinkContainer.style.visibility = 'visible';
         signupLinkContainer.style.marginTop = '15px';

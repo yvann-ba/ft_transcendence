@@ -5,36 +5,61 @@ import bcrypt from 'bcrypt';
 export default async function authRoutes(fastify: FastifyInstance) {
 
 
-  fastify.post("/login", async (request, reply) => {
-    fastify.log.info("Login attempt:", request.body);
-    try {
-      const { username, password } = request.body as { username: string; password: string };
-      const user = await checkUserLogin(username);
-
-      if (!user) {
-        return reply.status(401).send({ error: "User not found" });
-      }
-
-      const passwordMatch = await bcrypt.compare(password, user.password);
-      if (!passwordMatch) {
-        return reply.status(401).send({ error: "Incorrect password" });
-      }
-
-      const token = fastify.jwt.sign({ userId: user.id });
-      reply
-        .setCookie("sessionid", token, {
-          httpOnly: true,
-          secure: true,
-          path: "/",
-          maxAge: 60 * 60 * 24,
-          sameSite: "none", 
-        })
-        .send({ message: "Login successful" });
-    } catch (err) {
-      fastify.log.error("Login error:", err);
-      return reply.status(500).send({ error: "Error during login", details: err });
+fastify.post('/login', async (request, reply) => {
+  try {
+    const { username, password } = request.body as {
+      username: string;
+      password: string;
+    };
+    
+    if (!username || !password) {
+      return reply.send({
+        success: false,
+        error: "Username and password are required"
+      });
     }
-  });
+    
+    const userResult = await checkUserLogin(username);
+    
+    if (!userResult.success || !userResult.user) {
+      return reply.send({
+        success: false,
+        error: "Invalid username or password"
+      });
+    }
+    
+    const isValidPassword = await bcrypt.compare(password, userResult.user.password);
+    
+    if (!isValidPassword) {
+      return reply.send({
+        success: false,
+        error: "Invalid username or password"
+      });
+    }
+    
+    const token = fastify.jwt.sign({ userId: userResult.user.id });
+    
+    reply
+      .setCookie("sessionid", token, {
+        httpOnly: true,
+        secure: true,
+        path: "/",
+        maxAge: 60 * 60 * 24,
+        sameSite: "none",
+      })
+      .send({
+        success: true,
+        message: "Login successful",
+        token: token
+      });
+  } catch (err) {
+    fastify.log.error("Login error:", err);
+    return reply.send({
+      success: false,
+      error: "Server error"
+    });
+  }
+});
 
   fastify.get('/profile', { preHandler: fastify.authenticate }, async (request, reply) => {
 	

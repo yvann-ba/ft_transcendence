@@ -23,6 +23,28 @@ const SALT_ROUNDS = 10;
 
 const createUser = async (username: string, password: string, firstName: string, lastName: string, email: string): Promise<any> => {
   return new Promise(async (resolve, reject) => {
+    const MAX_USERNAME_LENGTH = 20;
+    const MAX_NAME_LENGTH = 50;
+    
+    if (username.length > MAX_USERNAME_LENGTH) {
+      return resolve({
+        success: false,
+        error: `Username cannot exceed ${MAX_USERNAME_LENGTH} characters`
+      });
+    }
+    if (firstName.length > MAX_NAME_LENGTH) {
+      return resolve({
+        success: false,
+        error: `First name cannot exceed ${MAX_NAME_LENGTH} characters`
+      });
+    }
+    if (lastName.length > MAX_NAME_LENGTH) {
+      return resolve({
+        success: false,
+        error: `Last name cannot exceed ${MAX_NAME_LENGTH} characters`
+      });
+    }
+
     const query = `
       INSERT INTO users (username, password, first_name, last_name, email)
       VALUES (?, ?, ?, ?, ?);
@@ -30,37 +52,55 @@ const createUser = async (username: string, password: string, firstName: string,
 
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-    db.run(query, [username, hashedPassword, lastName, firstName, email], function (err) {
+    db.run(query, [username, hashedPassword, firstName, lastName, email], function (err) {
       if (err) {
-        console.error('User successfully created:', err.message);
-        reject(err);
+        return resolve({
+          success: false,
+          error: err.message
+        });
       } else {
-        console.log('User successfully created, ID:', this.lastID);
-
         getUserById(this.lastID, (err, row) => {
           if (err) {
-            console.error('User recovery error', err.message);
-            reject(err);
+            return resolve({
+              success: false,
+              error: err.message
+            });
           } else {
-            resolve({ message: 'User successfully created', user: row });
+            resolve({ 
+              success: true,
+              message: 'User successfully created', 
+              user: row 
+            });
           }
         });
-
       }
     });
   });
 };
 
 export const checkUserLogin = async (username: string): Promise<any> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const query = `SELECT id, username, email, password FROM users WHERE username = ?`;
 
     db.get(query, [username], (err, row) => {
       if (err) {
-        console.error("User recovery error:", err.message);
-        return reject(err);
+        return resolve({
+          success: false,
+          error: err.message
+        });
       }
-      resolve(row || null);
+      
+      if (!row) {
+        return resolve({
+          success: true,
+          user: null
+        });
+      }
+      
+      resolve({
+        success: true,
+        user: row
+      });
     });
   });
 };
