@@ -1,6 +1,7 @@
 import "../styles/profile-edit.css";
 import { UserService } from "../services/user-service";
 import { navigate } from "../router";
+import { handleLogout } from "./profile-page";
 
 export default function ProfileEdit() {
   const personalInfoForm = document.getElementById('personal-info-form') as HTMLFormElement;
@@ -26,7 +27,6 @@ export default function ProfileEdit() {
   async function initializeUserData() {
     try {
       const userData = await userService.getCurrentUser();
-      console.log(userData);
       if (userData) {
         usernameInput.value = userData.username || '';
         firstnameInput.value = userData.first_name || '';
@@ -48,7 +48,6 @@ export default function ProfileEdit() {
       };
       
       const res = await userService.updateUserProfile(updatedData);
-      console.log(res);
       if (res.success === false)
         showError(res.error);
       else
@@ -117,22 +116,24 @@ export default function ProfileEdit() {
           const data = await userService.downloadUserData();
           downloadJsonFile(data, 'my-account-data.json');
           showSuccess('Your data has been downloaded!');
+          handleLogout();
           break;
 
         case 'anonymize':
           await userService.anonymizeAccount();
           showSuccess('Your account has been anonymized. You will be logged out.');
+
           setTimeout(() => {
             navigate('/');
-          }, 2000);
+          }, 1000);
           break;
 
         case 'delete':
           await userService.deleteAccount();
           showSuccess('Your account has been deleted. You will be redirected.');
           setTimeout(() => {
-            navigate('/');
-          }, 2000);
+            handleLogout();
+          }, 1000);
           break;
       }
       closeModal();

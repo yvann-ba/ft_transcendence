@@ -16,8 +16,6 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
 		});
 	  };
 	  
-	  console.log("Fetching user profile for user ID:", userId);
-
 	  const user = await getUserByIdPromise(userId);
 	  
 	  if (!user) {

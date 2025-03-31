@@ -531,9 +531,8 @@ import { languageService } from "../utils/languageContext";
     }
 
     // Function to handle logout
-    async function handleLogout(): Promise<void> {
+    export async function handleLogout(): Promise<void> {
         try {
-            // 1. Call server-side logout endpoint first
             const response = await fetch('/api/logout', {
                 method: 'POST',
                 credentials: 'include',
@@ -557,14 +556,12 @@ import { languageService } from "../utils/languageContext";
                 profileLabel.setAttribute("data-hover", "Login");
             }
             
-            // 5. Redirect to home page with a small delay to ensure cleanup completes
             setTimeout(() => {
                 navigate('/');
             }, 100);
             
         } catch (error) {
             console.error('Error during logout:', error);
-            // Even if there's an error, attempt to navigate away
             navigate('/');
         }
     }

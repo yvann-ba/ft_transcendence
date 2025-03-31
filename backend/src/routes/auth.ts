@@ -54,7 +54,6 @@ export default async function authRoutes(fastify: FastifyInstance) {
   
   fastify.post('/logout', async (request, reply) => {
     try {
-      // Clear the session cookie
       reply.clearCookie('sessionid', {
         path: '/',
         httpOnly: true,

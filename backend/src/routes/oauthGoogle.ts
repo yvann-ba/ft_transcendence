@@ -53,10 +53,22 @@ export default async function oauthGoogleRoutes(fastify: FastifyInstance) {
       const googleUser = await userRes.json();
       console.log("10. Google user data:", JSON.stringify(googleUser));
 
-      const firstName = googleUser.given_name || "Firstname";
-      const lastName = googleUser.family_name || "Lastname";
+      const firstName = googleUser.given_name || "";
+      const lastName = googleUser.family_name || "";
 
-      const username = lastName.toLowerCase() + firstName.toLowerCase() + Math.floor(Math.random() * 100000);
+
+
+      let username = lastName.toLowerCase() + firstName.toLowerCase() + Math.floor(Math.random() * 100000);
+      let add = "";
+
+      if (username.length <= 5) {
+        const alphanumeric = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        for (let i = username.length; i < 15 - username.length; i++) {
+          add += alphanumeric[Math.floor(Math.random() * alphanumeric.length)];
+        }
+      }
+
+      username = add + username;
 
       const userData = {
         username: username,
@@ -73,7 +85,6 @@ export default async function oauthGoogleRoutes(fastify: FastifyInstance) {
       fastify.log.info(`12. User data for fastify logger: ${JSON.stringify(userData)}`);
       console.log("13. Google picture URL:", googleUser.picture);
 
-      // Vérifier si utilisateur existe, sinon le créer
       let user = await checkUserByGoogleId(userData.googleID);
       fastify.log.info(`User found: ${JSON.stringify(user)}`);
       if (user === null) {

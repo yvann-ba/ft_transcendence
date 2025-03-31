@@ -32,11 +32,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         
         if (response.ok) {
           const userData = await response.json();
-          console.log('User data after OAuth login:', userData);
           
           if (userData.avatar) {
             localStorage.setItem('userAvatar', userData.avatar);
-            console.log('Stored avatar URL in localStorage:', userData.avatar);
           }
           
           // Set auth token and update UI
