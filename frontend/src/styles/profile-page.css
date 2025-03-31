@@ -50,22 +50,62 @@
 
 .profile-info {
     display: flex;
-    align-items: center;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 15px;
+    padding: 20px;
+    background-color: rgba(30, 30, 30, 0.5);
+    border-radius: 10px;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
 .avatar {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    margin-bottom: 10px;
+    margin: 0 auto 10px;
     object-fit: cover;
-    object-position: bottom;
+    object-position: center;
 }
 
 .username {
     font-size: 24px;
     color: #BB70AD;
+    text-align: center;
+    margin: 5px 0;
+}
+
+.name-container {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.namepr, .name {
+    display: inline-block;
+}
+
+.btn-add-friend {
+    padding: 10px 15px;
+    background-color: #BB70AD;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px auto 0;
+    display: block;
+    min-width: 120px;
+}
+
+@media (min-width: 768px) {
+    .profile-info {
+        padding: 30px;
+    }
 }
 
 .Profilename {
