@@ -65,10 +65,10 @@ export const checkUserLogin = async (username: string): Promise<any> => {
   });
 };
 
-export const createUserOAuth = (username: string, email: string, avatar: string) => {
+export const createUserOAuth = (googleId: string, username: string, firstName: string, lastName: string , email: string, avatar: string) => {
   return new Promise((resolve, reject) => {
-    const query = `INSERT INTO users (username, password, email, avatar) VALUES (?, ?, ?, ?)`;
-    db.run(query, [username, 'google_oauth', email, avatar], function (err) {
+    const query = `INSERT INTO users (google_id, username, password, email, avatar, first_name, last_name) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    db.run(query, [googleId, username, 'google_oauth', email, avatar, firstName, lastName], function (err) {
       if (err) return reject(err);
       resolve({ id: this.lastID, username, email, avatar});
     });
