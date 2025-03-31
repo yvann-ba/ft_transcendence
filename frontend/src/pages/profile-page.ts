@@ -76,11 +76,13 @@ import { languageService } from "../utils/languageContext";
             const date = new Date(game.played_at);
             const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
             
-            let winner: string;
+            let winner = '';
             if (game.result === 'WIN') {
                 winner = 'You';
+                row.classList.add('win-row');
             } else if (game.result === 'LOSS') {
                 winner = game.opponent_type === 'AI' ? 'AI' : game.opponent_name || 'Opponent';
+                row.classList.add('loss-row');
             } else {
                 winner = 'Draw';
             }
