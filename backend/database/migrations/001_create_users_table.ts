@@ -19,9 +19,9 @@ const createUsersTable = () => {
 
     db.run(query, (err) => {
         if (err) {
-            console.error('Erreur lors de la création de la table users:', err.message);
+            console.error('Error creating users table:', err.message);
         } else {
-            console.log('Table users créée avec succès');
+            console.log('Table users successfully created');
         }
     });
 };
