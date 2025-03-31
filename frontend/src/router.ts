@@ -253,7 +253,6 @@ async function loadPageScript(path: string): Promise<void> {
     console.warn("Attempted to access protected route without authentication");
     return;
   }
-  console.log("route", route);
   try {
     if (route === "/" || route === "/home") {
       const module = await import("./pages/home");
@@ -286,12 +285,11 @@ async function loadPageScript(path: string): Promise<void> {
       const module = await import("./pages/register");
       module.default();
     } else if (route === "/404") {
-      // No special scripts needed for 404 page
       console.log("Loading 404 page");
     }
     else if (route === "/profile-edit") {
       const module = await import("./pages/profile-edit");
-      module.default
+      module.default();
     }
   } catch (error) {
     console.error(`Error loading script for ${path}:`, error);

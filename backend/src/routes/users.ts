@@ -3,16 +3,7 @@ import userQueries  from '../queries/users';
 
 export default async function userRoutes(fastify: FastifyInstance) {
   
-//   fastify.post('/users', async (request, reply) => {
-// 	try {
-// 	  const { username, password, email } = request.body as { username: string; password: string; email: string };
-// 	  const user = await userQueries.createUser(username, password, email);
-// 	  return reply.send(user);
-// 	} catch (err) {
-// 	  return reply.status(500).send({ error: 'Erreur lors de la création de l\'utilisateur', details: err });
-// 	}
-//   });
-  
+
 fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, reply) => {
 	try {
 	  const userId = (request.user as { userId: number }).userId;
@@ -123,25 +114,124 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
     }
   });
 
-//   fastify.put('/users/:id', async (request, reply) => {
-//     try {
-//       const { id } = request.params as { id: string };
-//       const { username, email } = request.body as { username?: string; email?: string };
-//       const updatedUser = await updateUser(parseInt(id, 10), username, email);
-//       return reply.send(updatedUser);
-//     } catch (err) {
-//       return reply.status(500).send({ error: 'Erreur lors de la mise à jour de l\'utilisateur', details: err });
-//     }
-//   });
-
-//   fastify.delete('/users/:id', async (request, reply) => {
-//     try {
-//       const { id } = request.params as { id: string };
-//       await deleteUser(parseInt(id, 10));
-//       return reply.send({ message: 'Utilisateur supprimé avec succès' });
-//     } catch (err) {
-//       return reply.status(500).send({ error: 'Erreur lors de la suppression de l\'utilisateur', details: err });
-//     }
-//   });
+  fastify.put('/users/me', { preHandler: fastify.authenticate }, async (request, reply) => {
+    try {
+      const userId = (request.user as { userId: number }).userId;
+      const { username, firstname, lastname } = request.body as { 
+        username?: string;
+        firstname?: string;
+        lastname?: string;
+      };
+      
+      // Check if username is already taken (if changing username)
+      if (username) {
+        const existingUser = await userQueries.checkUserLogin(username);
+        if (existingUser && existingUser.id !== userId) {
+          return reply.status(400).send({ error: "Ce nom d'utilisateur est déjà utilisé" });
+        }
+      }
+      
+      const updatedUser = await userQueries.updateUser(userId, { 
+        username, 
+        first_name: firstname, 
+        last_name: lastname 
+      });
+      
+      if (!updatedUser) {
+        return reply.status(404).send({ error: "Utilisateur non trouvé" });
+      }
+      
+      // Remove password from response
+      const { password, ...userWithoutPassword } = updatedUser;
+      
+      return reply.send(userWithoutPassword);
+    } catch (err) {
+      fastify.log.error("Error updating user profile:", err);
+      return reply.status(500).send({ error: "Erreur lors de la mise à jour du profil" });
+    }
+  });
+  
+  // Delete avatar route
+  fastify.delete('/users/me/avatar', { preHandler: fastify.authenticate }, async (request, reply) => {
+    try {
+      const userId = (request.user as { userId: number }).userId;
+      
+      const success = await userQueries.removeAvatar(userId);
+      
+      if (!success) {
+        return reply.status(404).send({ error: "Utilisateur non trouvé ou avatar déjà supprimé" });
+      }
+      
+      return reply.send({ success: true, message: "Avatar supprimé avec succès" });
+    } catch (err) {
+      fastify.log.error("Error removing avatar:", err);
+      return reply.status(500).send({ error: "Erreur lors de la suppression de l'avatar" });
+    }
+  });
+  
+  // Download user data route
+  fastify.get('/users/me/data', { preHandler: fastify.authenticate }, async (request, reply) => {
+    try {
+      const userId = (request.user as { userId: number }).userId;
+      
+      const userData = await userQueries.getUserData(userId);
+      
+      if (!userData) {
+        return reply.status(404).send({ error: "Utilisateur non trouvé" });
+      }
+      
+      // Remove password if present
+      if (userData.user && userData.user.password) {
+        delete userData.user.password;
+      }
+      
+      return reply.send(userData);
+    } catch (err) {
+      fastify.log.error("Error downloading user data:", err);
+      return reply.status(500).send({ error: "Erreur lors du téléchargement des données utilisateur" });
+    }
+  });
+  
+  // Anonymize account route
+  fastify.post('/users/me/anonymize', { preHandler: fastify.authenticate }, async (request, reply) => {
+    try {
+      const userId = (request.user as { userId: number }).userId;
+      
+      const success = await userQueries.anonymizeUser(userId);
+      
+      if (!success) {
+        return reply.status(404).send({ error: "Utilisateur non trouvé" });
+      }
+      
+      // Clear session cookie
+      reply.clearCookie("sessionid");
+      
+      return reply.send({ success: true, message: "Compte anonymisé avec succès" });
+    } catch (err) {
+      fastify.log.error("Error anonymizing user:", err);
+      return reply.status(500).send({ error: "Erreur lors de l'anonymisation du compte" });
+    }
+  });
+  
+  // Delete account route
+  fastify.delete('/users/me', { preHandler: fastify.authenticate }, async (request, reply) => {
+    try {
+      const userId = (request.user as { userId: number }).userId;
+      
+      const success = await userQueries.deleteUser(userId);
+      
+      if (!success) {
+        return reply.status(404).send({ error: "Utilisateur non trouvé" });
+      }
+      
+      // Clear session cookie
+      reply.clearCookie("sessionid");
+      
+      return reply.send({ success: true, message: "Compte supprimé avec succès" });
+    } catch (err) {
+      fastify.log.error("Error deleting user:", err);
+      return reply.status(500).send({ error: "Erreur lors de la suppression du compte" });
+    }
+  });
 
 }
