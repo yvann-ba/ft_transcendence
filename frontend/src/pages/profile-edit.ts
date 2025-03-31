@@ -7,8 +7,6 @@ export default function ProfileEdit() {
   const usernameInput = document.getElementById('username') as HTMLInputElement;
   const firstnameInput = document.getElementById('firstname') as HTMLInputElement;
   const lastnameInput = document.getElementById('lastname') as HTMLInputElement;
-  const avatarPreviewImg = document.getElementById('avatar-preview-img') as HTMLImageElement;
-  const avatarDeleteBtn = document.getElementById('avatar-delete-btn') as HTMLButtonElement;
   
   const downloadDataBtn = document.getElementById('download-data-btn') as HTMLButtonElement;
   const anonymizeBtn = document.getElementById('anonymize-btn') as HTMLButtonElement;
@@ -33,43 +31,11 @@ export default function ProfileEdit() {
         usernameInput.value = userData.username || '';
         firstnameInput.value = userData.first_name || '';
         lastnameInput.value = userData.last_name || '';
-        
-        const avatarSection = document.querySelector('.avatar-preview-section') as HTMLDivElement;
-        
-        // Handle avatar display and section visibility
-        if (userData.avatar) {
-          avatarPreviewImg.src = userData.avatar;
-          avatarDeleteBtn.style.display = 'inline-block'; // Show delete button
-          avatarSection.style.display = 'block'; // Show avatar preview section
-        } else {
-          avatarPreviewImg.src = '/assets/default-avatar.png';
-          avatarDeleteBtn.style.display = 'none'; // Hide delete button
-          // Keep the preview visible but with default avatar
-          // If you want to hide the entire section, uncomment the next line
-          // avatarSection.style.display = 'none';
-        }
       }
     } catch (error) {
       showError('Failed to load user data. Please try again later.');
     }
   }
-  
-  // Update the avatar delete handler
-  avatarDeleteBtn.addEventListener('click', async () => {
-    try {
-      await userService.deleteAvatar();
-      avatarPreviewImg.src = '/assets/default-avatar.png';
-      avatarDeleteBtn.style.display = 'none'; // Hide the button after deletion
-      
-      // Optionally hide the entire avatar section
-      // const avatarSection = document.querySelector('.avatar-preview-section') as HTMLDivElement;
-      // avatarSection.style.display = 'none';
-      
-      showSuccess('Avatar deleted successfully!');
-    } catch (error) {
-      showError('Failed to delete avatar. Please try again.');
-    }
-  });
 
   personalInfoForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -81,20 +47,14 @@ export default function ProfileEdit() {
         lastname: lastnameInput.value
       };
       
-      await userService.updateUserProfile(updatedData);
-      showSuccess('Profile updated successfully!');
+      const res = await userService.updateUserProfile(updatedData);
+      console.log(res);
+      if (res.success === false)
+        showError(res.error);
+      else
+        showSuccess('Profile updated successfully!');
     } catch (error) {
       showError('Failed to update profile. Please try again.');
-    }
-  });
-
-  avatarDeleteBtn.addEventListener('click', async () => {
-    try {
-      await userService.deleteAvatar();
-      avatarPreviewImg.src = '/assets/default-avatar.png';
-      showSuccess('Avatar deleted successfully!');
-    } catch (error) {
-      showError('Failed to delete avatar. Please try again.');
     }
   });
 
@@ -150,7 +110,6 @@ export default function ProfileEdit() {
     );
   });
 
-  // Confirmation action handler
   modalConfirmBtn.addEventListener('click', async () => {
     try {
       switch (currentAction) {
@@ -194,11 +153,65 @@ export default function ProfileEdit() {
   }
 
   function showSuccess(message: string) {
-    alert(message);
+    showToast(message, 'success');
   }
 
   function showError(message: string) {
-    alert(message);
+    showToast(message, 'error');
+  }
+
+  function showToast(message: string, type: 'success' | 'error' | 'info' | 'warning') {
+    let toastContainer = document.getElementById('toast-container');
+    if (!toastContainer) {
+      toastContainer = document.createElement('div');
+      toastContainer.id = 'toast-container';
+      document.body.appendChild(toastContainer);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}-toast`;
+    
+    let icon = '';
+    switch (type) {
+      case 'success':
+        icon = '✓';
+        break;
+      case 'error':
+        icon = '✗';
+        break;
+      case 'warning':
+        icon = '⚠';
+        break;
+      case 'info':
+        icon = 'ℹ';
+        break;
+    }
+    
+    toast.innerHTML = `
+      <div class="toast-icon">${icon}</div>
+      <div class="toast-message">${message}</div>
+      <button class="toast-close">×</button>
+    `;
+    
+    toastContainer.appendChild(toast);
+    
+    const closeBtn = toast.querySelector('.toast-close');
+    if (closeBtn)
+    {
+      closeBtn.addEventListener('click', () => {
+        toast.classList.add('hide');
+        setTimeout(() => toast.remove(), 300);
+      });
+    }
+
+    setTimeout(() => {
+      toast.classList.add('hide');
+      setTimeout(() => toast.remove(), 300);
+    }, 5000);
+    
+    setTimeout(() => {
+      toast.classList.add('show');
+    }, 10);
   }
 
   initializeUserData();

@@ -107,57 +107,86 @@ export const updateUserAvatar = async (userId: number, avatar: string): Promise<
   });
 };
 
-// Update user information
 export const updateUser = async (userId: number, userData: any): Promise<any> => {
   return new Promise((resolve, reject) => {
-    // Build dynamic query based on provided fields
     const updates: string[] = [];
     const values: any[] = [];
     
+    const MAX_USERNAME_LENGTH = 20;
+    const MAX_NAME_LENGTH = 50;
+    
     if (userData.username !== undefined) {
+      if (userData.username.length > MAX_USERNAME_LENGTH) {
+        return resolve({
+          success: false,
+          error: `Username cannot exceed ${MAX_USERNAME_LENGTH} characters`
+        });
+      }
       updates.push('username = ?');
       values.push(userData.username);
     }
     
     if (userData.first_name !== undefined) {
+      if (userData.first_name.length > MAX_NAME_LENGTH) {
+        return resolve({
+          success: false,
+          error: `First name cannot exceed ${MAX_NAME_LENGTH} characters`
+        });
+      }
       updates.push('first_name = ?');
       values.push(userData.first_name);
     }
     
     if (userData.last_name !== undefined) {
+      if (userData.last_name.length > MAX_NAME_LENGTH) {
+        return resolve({
+          success: false,
+          error: `Last name cannot exceed ${MAX_NAME_LENGTH} characters`
+        });
+      }
       updates.push('last_name = ?');
       values.push(userData.last_name);
     }
     
     if (updates.length === 0) {
-      return resolve({});
+      return resolve({
+        success: true,
+        user: {} 
+      });
     }
-    
-    // Add userId to values array
     values.push(userId);
-    
     const query = `UPDATE users SET ${updates.join(', ')} WHERE id = ?`;
-    
     db.run(query, values, function(err) {
       if (err) {
-        console.error("Error updating user:", err.message);
-        return reject(err);
+        return resolve({ 
+          success: false, 
+          error: err.message
+        });
       }
       
       if (this.changes === 0) {
-        return resolve(null);
+        return resolve({
+          success: false,
+          error: 'User not found'
+        });
       }
       
-      // Get the updated user
       getUserById(userId, (err, user) => {
-        if (err) return reject(err);
-        resolve(user);
+        if (err) {
+          return resolve({
+            success: false,
+            error: err.message
+          });
+        }
+        resolve({
+          success: true,
+          user: user
+        });
       });
     });
   });
 };
 
-// Remove user's avatar
 export const removeAvatar = async (userId: number): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     const query = `UPDATE users SET avatar = NULL WHERE id = ?`;
@@ -173,10 +202,8 @@ export const removeAvatar = async (userId: number): Promise<boolean> => {
   });
 };
 
-// Get complete user data for GDPR purposes
 export const getUserData = async (userId: number): Promise<any> => {
   return new Promise((resolve, reject) => {
-    // Get user basic information
     getUserById(userId, (err, user) => {
       if (err) {
         console.error("Error fetching user data:", err.message);
@@ -187,13 +214,11 @@ export const getUserData = async (userId: number): Promise<any> => {
         return resolve(null);
       }
       
-      // Create a sanitized copy without password
       const userCopy = { ...user };
       if (userCopy.password) {
         delete userCopy.password;
       }
       
-      // We'll handle each data type separately and continue even if one fails
       const gameHistoryPromise = new Promise<any[]>((resolveGames) => {
         const query = `
           SELECT * FROM games 
@@ -249,7 +274,6 @@ export const getUserData = async (userId: number): Promise<any> => {
         });
       });
       
-      // Execute all data gathering operations
       Promise.all([gameHistoryPromise, friendsPromise, messagesPromise])
         .then(([gameHistory, friends, messages]) => {
           const userData = {
@@ -263,7 +287,6 @@ export const getUserData = async (userId: number): Promise<any> => {
         })
         .catch(error => {
           console.error("Error assembling user data:", error);
-          // Even if there's an error, try to return at least the user data
           resolve({
             user: userCopy,
             gameHistory: [],
@@ -275,7 +298,6 @@ export const getUserData = async (userId: number): Promise<any> => {
   });
 };
 
-// Helper function to get user game history
 const getUserGameHistory = async (userId: number): Promise<any[]> => {
   return new Promise((resolve, reject) => {
     const query = `
@@ -295,7 +317,6 @@ const getUserGameHistory = async (userId: number): Promise<any[]> => {
   });
 };
 
-// Helper function to get user friends
 const getUserFriends = async (userId: number): Promise<any[]> => {
   return new Promise((resolve, reject) => {
     const query = `
@@ -319,7 +340,6 @@ const getUserFriends = async (userId: number): Promise<any[]> => {
   });
 };
 
-// Helper function to get user messages
 const getUserMessages = async (userId: number): Promise<any[]> => {
   return new Promise((resolve, reject) => {
     const query = `
@@ -339,10 +359,8 @@ const getUserMessages = async (userId: number): Promise<any[]> => {
   });
 };
 
-// Anonymize user account
 export const anonymizeUser = async (userId: number): Promise<boolean> => {
   return new Promise((resolve, reject) => {
-    // Generate anonymous username
     const anonymousUsername = 'anonymous_' + Math.random().toString(36).substring(2, 10);
     const anonymousEmail = `${anonymousUsername}@anonymous.com`;
     

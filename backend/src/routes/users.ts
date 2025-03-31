@@ -122,7 +122,6 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
         lastname?: string;
       };
       
-      // Check if username is already taken (if changing username)
       if (username) {
         const existingUser = await userQueries.checkUserLogin(username);
         if (existingUser && existingUser.id !== userId) {
@@ -135,18 +134,21 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
         first_name: firstname, 
         last_name: lastname 
       });
+
       
       if (!updatedUser) {
         return reply.status(404).send({ error: "Utilisateur non trouvé" });
       }
       
-      // Remove password from response
+      if (updatedUser.password) 
+        delete updatedUser.password;
+
       const { password, ...userWithoutPassword } = updatedUser;
       
       return reply.send(userWithoutPassword);
     } catch (err) {
       fastify.log.error("Error updating user profile:", err);
-      return reply.status(500).send({ error: "Erreur lors de la mise à jour du profil" });
+      return reply.status(500).send({ error: "Server error" });
     }
   });
   
