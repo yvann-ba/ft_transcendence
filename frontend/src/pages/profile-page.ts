@@ -368,15 +368,17 @@ import { languageService } from "../utils/languageContext";
             const winSegment = document.getElementById('win-segment');
             const lossSegment = document.getElementById('loss-segment');
             const winPercentageText = document.getElementById('win-percentage');
+            const winPercentageNum = document.getElementById('win-percentage-num');
             const ratioText = document.querySelector('.ratio-text');
             const winNum = document.getElementById('win-num');
             const lossNum = document.getElementById('loss-num');
             
-            if (winSegment && lossSegment && winPercentageText && ratioText && winNum && lossNum) {
+            if (winSegment && lossSegment && winPercentageText && ratioText && winNum && lossNum && winPercentageNum) {
                 winSegment.style.strokeDasharray = `0 ${2 * Math.PI * 45}`;
                 lossSegment.style.strokeDasharray = `0 ${2 * Math.PI * 45}`;
                 ratioText.textContent = "0";
-                winPercentageText.textContent = "0% Wins";
+                winPercentageNum.textContent = "0%";
+                winPercentageText.textContent = "Wins";
                 winNum.textContent = "0 Wins";
                 lossNum.textContent = "0 Losses";
             }
@@ -390,6 +392,7 @@ import { languageService } from "../utils/languageContext";
         const winSegment = document.getElementById('win-segment');
         const lossSegment = document.getElementById('loss-segment');
         const winPercentageText = document.getElementById('win-percentage');
+        const winPercentageNum = document.getElementById('win-percentage-num');
         const winLegend = document.getElementById('win-legend');
         const ratioText = document.querySelector('.ratio-text');
         const lossLegend = document.getElementById('loss-legend');
@@ -397,7 +400,7 @@ import { languageService } from "../utils/languageContext";
         const winNum = document.getElementById('win-num');
         const lossNum = document.getElementById('loss-num');
         
-        if (!winSegment || !lossSegment || !winPercentageText || !winLegend || !lossLegend || !tooltip || !ratioText || !winNum || !lossNum) {
+        if (!winSegment || !lossSegment || !winPercentageText || !winLegend || !lossLegend || !tooltip || !ratioText || !winNum || !lossNum || !winPercentageNum) {
             return;
         }
         const winRatio = losses > 0 ? (wins / losses).toFixed(2) : wins > 0 ? "∞" : "0";
@@ -410,6 +413,7 @@ import { languageService } from "../utils/languageContext";
         const translatedPercentText = languageService.translate("profile.stats.win_percentage", "{percent}% Wins")
         .replace("{percent}", winPercentage);
         winPercentageText.textContent = translatedPercentText;
+        winPercentageNum.textContent = winPercentage + "%";
 
 
         animateChart = () => {

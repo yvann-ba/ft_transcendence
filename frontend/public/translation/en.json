@@ -144,7 +144,7 @@
     "stats": {
       "wins": "Wins",
       "losses": "Losses",
-      "win_percentage": "{percent}% Wins"
+      "win_percentage": "Wins"
     }
   },
     "about": {

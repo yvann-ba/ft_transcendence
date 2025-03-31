@@ -144,7 +144,7 @@
     "stats": {
       "wins": "Victoires",
       "losses": "Défaites",
-      "win_percentage": "{percent}% de Victoires"
+      "win_percentage": " de Victoires"
     }
   },
   "about": {

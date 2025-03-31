@@ -534,3 +534,8 @@ th.sorted-desc::after {
 .logout-button:hover {
     background-color: #d32f2f;
 }
+
+.percentage-text-container {
+    display: flex;
+    gap: 5px;
+}
