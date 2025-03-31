@@ -1,4 +1,4 @@
-    import "../styles/profile-page.css";
+import "../styles/profile-page.css";
     import { getCurrentUser } from "../utils/utils";
     import { navigate } from "../router";
     import { languageService } from "../utils/languageContext";
@@ -101,7 +101,44 @@
         }
     }
 
+    function setupGlobalErrorHandler() {
+        // This will catch all resource load errors including image errors
+        window.addEventListener('error', function(event) {
+            // Check if this is an image error
+            if (event.target && (event.target as HTMLElement).tagName === 'IMG') {
+                const img = event.target as HTMLImageElement;
+                
+                // Check if this is a Google image URL (which is causing the 429 errors)
+                if (img.src && (
+                    img.src.includes('googleusercontent.com') || 
+                    img.src.includes('ggpht.com') || 
+                    img.src.includes('gstatic.com')
+                )) {
+                    // This is a Google image that failed to load - likely a 429 error
+                    console.log("Suppressed Google image load error:", img.src.split('?')[0]);
+                    
+                    // Prevent the error from showing in console
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return false;
+                }
+
+                // If any avatar image fails to load, replace with default
+                if (img.classList.contains('avatar')) {
+                    img.src = "/assets/images/avatar.jpg";
+                    
+                    // Prevent the error from showing in console
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return false;
+                }
+            }
+        }, true); // Using the capture phase is important here
+    }
+
     async function initializeProfilePage(): Promise<() => void> {
+        // Add this line at the beginning
+        setupGlobalErrorHandler();
 
         updatePageTranslations();
         window.addEventListener('languageChanged', updatePageTranslations);
@@ -429,172 +466,18 @@
         
         if (nameElement) {
             const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim();
-            nameElement.textContent = fullName ? `Name: ${fullName}` : '';
+            nameElement.textContent = fullName ? `${fullName}` : '';
         }
         
         if (avatarElement) {
-            // Try to load from cache first
-            const cachedAvatar = localStorage.getItem('cachedAvatarImage');
-            const cachedTimestamp = localStorage.getItem('cachedAvatarTimestamp');
-            const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+            // Always use default avatar instead of handling Google images
+            avatarElement.src = "/assets/images/avatar.jpg";
+            avatarElement.alt = `${user.username}'s avatar`;
             
-            if (cachedAvatar && cachedTimestamp) {
-                // Check if cache is still valid (less than 1 day old)
-                const cacheAge = Date.now() - parseInt(cachedTimestamp);
-                if (cacheAge < ONE_DAY) {
-                    console.log("Using cached avatar image");
-                    avatarElement.src = cachedAvatar;
-                    avatarElement.alt = `${user.username}'s avatar`;
-                    // Still continue with the rest of the function to update cache if possible
-                }
-            }
-            
-            // Check multiple possible property names for the avatar URL
-            let avatarUrl = user.avatar || user.picture || user.profile_picture || user.avatar_url;
-            
-            // Additional check for common Google avatar URL patterns
-            if (typeof user === 'object' && user !== null) {
-                // Handle nested property paths that Google might use
-                if (!avatarUrl && user.photos && user.photos.length > 0) {
-                    avatarUrl = user.photos[0].value;
-                }
-                
-                // Google OAuth specific format
-                if (!avatarUrl && user.picture) {
-                    if (typeof user.picture === 'string') {
-                        avatarUrl = user.picture;
-                    } else if (typeof user.picture === 'object' && user.picture.data && user.picture.data.url) {
-                        avatarUrl = user.picture.data.url;
-                    }
-                }
-            }
-            
-            // Add URL validation
-            const isValidUrl = (url: string): boolean => {
-                try {
-                    new URL(url);
-                    return true;
-                } catch (e) {
-                    return false;
-                }
-            };
-            
-            // Convert HTTP URLs to HTTPS for better compatibility
-            if (avatarUrl && typeof avatarUrl === 'string' && avatarUrl.startsWith('http:')) {
-                avatarUrl = avatarUrl.replace('http:', 'https:');
-            }
-            
-            // Debug the avatar URL
-            console.log("Processing avatar URL:", avatarUrl);
-            
-            if (avatarUrl && isValidUrl(avatarUrl)) {
-                console.log("Valid avatar URL found, attempting to load:", avatarUrl);
-                
-                // First set a default immediately to ensure we have something displayed
-                avatarElement.src = "/assets/images/avatar.jpg";
-                avatarElement.alt = `${user.username}'s avatar`;
-                
-                // Create a new image to test loading before assigning to the avatar element
-                const testImg = new Image();
-                
-                // Set up crossOrigin to help with CORS issues
-                testImg.crossOrigin = "anonymous";
-                
-                testImg.onload = () => {
-                    clearTimeout(timeoutId);
-                    avatarElement.src = avatarUrl;
-                    avatarElement.alt = `${user.username}'s avatar`;
-                    
-                    // Store the actual image data as base64 in localStorage
-                    try {
-                        // Create a canvas to convert image to base64
-                        const canvas = document.createElement('canvas');
-                        canvas.width = testImg.width;
-                        canvas.height = testImg.height;
-                        const ctx = canvas.getContext('2d');
-                        if (ctx) {
-                            ctx.drawImage(testImg, 0, 0);
-                            const dataUrl = canvas.toDataURL('image/jpeg');
-                            
-                            // Store both URL and actual image data
-                            localStorage.setItem('lastSuccessfulAvatarUrl', avatarUrl);
-                            localStorage.setItem('cachedAvatarImage', dataUrl);
-                            localStorage.setItem('cachedAvatarTimestamp', Date.now().toString());
-                            console.log("Avatar image cached successfully as base64");
-                        }
-                    } catch (e) {
-                        console.warn("Could not cache avatar image:", e);
-                    }
-                };
-                
-                testImg.onerror = (e) => {
-                    console.error("Error pre-loading avatar image, using default:", e);
-                    
-                    // Try the backup URL from localStorage if available
-                    const backupUrl = localStorage.getItem('lastSuccessfulAvatarUrl');
-                    if (backupUrl && backupUrl !== avatarUrl) {
-                        console.log("Attempting to use backup avatar URL:", backupUrl);
-                        const backupImg = new Image();
-                        backupImg.crossOrigin = "anonymous";
-                        backupImg.onload = () => {
-                            avatarElement.src = backupUrl;
-                            avatarElement.alt = `${user.username}'s avatar`;
-                        };
-                        backupImg.onerror = () => {
-                            console.log("Backup avatar also failed, using default");
-                            avatarElement.src = "/assets/images/avatar.jpg";
-                            avatarElement.alt = `${user.username}'s avatar`;
-                        };
-                        backupImg.src = backupUrl;
-                    } else {
-                        avatarElement.src = "/assets/images/avatar.jpg";
-                        avatarElement.alt = `${user.username}'s avatar`;
-                    }
-                };
-                
-                // Set a timeout to handle very slow loading
-                const timeoutId = setTimeout(() => {
-                    if (!testImg.complete) {
-                        console.log("Avatar image load timed out, using default");
-                        testImg.src = ""; // Cancel the current loading
-                        avatarElement.src = "/assets/images/avatar.jpg";
-                        avatarElement.alt = `${user.username}'s avatar`;
-                    }
-                }, 5000); // 5 second timeout
-                
-                testImg.onload = () => {
-                    clearTimeout(timeoutId);
-                    avatarElement.src = avatarUrl;
-                    avatarElement.alt = `${user.username}'s avatar`;
-                    
-                    // Store the actual image data as base64 in localStorage
-                    try {
-                        // Create a canvas to convert image to base64
-                        const canvas = document.createElement('canvas');
-                        canvas.width = testImg.width;
-                        canvas.height = testImg.height;
-                        const ctx = canvas.getContext('2d');
-                        if (ctx) {
-                            ctx.drawImage(testImg, 0, 0);
-                            const dataUrl = canvas.toDataURL('image/jpeg');
-                            
-                            // Store both URL and actual image data
-                            localStorage.setItem('lastSuccessfulAvatarUrl', avatarUrl);
-                            localStorage.setItem('cachedAvatarImage', dataUrl);
-                            localStorage.setItem('cachedAvatarTimestamp', Date.now().toString());
-                            console.log("Avatar image cached successfully as base64");
-                        }
-                    } catch (e) {
-                        console.warn("Could not cache avatar image:", e);
-                    }
-                };
-                
-                testImg.src = avatarUrl;
-            } else {
-                console.log("No valid avatar URL found, using default");
-                avatarElement.src = "/assets/images/avatar.jpg";
-                avatarElement.alt = `${user.username}'s avatar`;
-            }
+            // Clear any cached avatar data
+            localStorage.removeItem('cachedAvatarImage');
+            localStorage.removeItem('cachedAvatarTimestamp');
+            localStorage.removeItem('lastSuccessfulAvatarUrl');
         } else {
             console.log("Avatar element not found in the DOM");
         }
@@ -621,19 +504,14 @@
                 console.warn('Server logout failed, continuing with client-side logout');
             }
             
-            // 2. Clear client-side auth state
             localStorage.removeItem('token');
             
-            // 3. Clear cookies with proper attributes
-            // Be thorough with different cookie clearing approaches
             document.cookie = 'sessionid=; Max-Age=0; path=/;';
             document.cookie = 'auth_token=; Max-Age=0; path=/;';
             
-            // Also try with domain specified
             document.cookie = 'sessionid=; Max-Age=0; path=/; domain=' + window.location.hostname;
             document.cookie = 'auth_token=; Max-Age=0; path=/; domain=' + window.location.hostname;
             
-            // 4. Update UI elements that depend on auth state
             const profileLabel = document.querySelector(".profile-label") as HTMLElement;
             if (profileLabel) {
                 profileLabel.textContent = "Login";

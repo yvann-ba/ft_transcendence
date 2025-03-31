@@ -97,7 +97,11 @@
       "waiting": "Waiting...",
       "play_next": "Play Next Match",
       "champion": "Tournament Champion",
-      "new": "New Tournament"
+      "new": "New Tournament",
+      "tag": "quoicoubeh",
+      "feature1": "4 players tournament",
+      "feature2": "Bracket system",
+      "feature3": "Temporary alias per player"
     },
     "features": {
       "two_players": "Two Players",

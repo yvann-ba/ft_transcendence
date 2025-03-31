@@ -97,7 +97,11 @@
       "waiting": "En attente...",
       "play_next": "Jouer le Prochain Match",
       "champion": "Champion du Tournoi",
-      "new": "Nouveau Tournoi"
+      "new": "Nouveau Tournoi",
+      "tag": "quoicoubeh",
+      "feature1": "Tournoi à 4 joueurs",
+      "feature2": "Système de bracket",
+      "feature3": "Alias temporaire par joueur"
     },
     "features": {
       "two_players": "Deux joueurs",
