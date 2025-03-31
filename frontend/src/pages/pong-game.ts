@@ -2,6 +2,7 @@ import "../styles/pong-game.css";
 import "../styles/pong-selection.css";
 import { AIOpponent, AIDifficulty } from '../game/ai/ai-opponent';
 import { languageService } from "../utils/languageContext";
+import { navigate } from "../router";
 
 declare global {
   interface Window {
@@ -73,29 +74,7 @@ interface GameState {
 }
 
 function backToGameModes(event?: Event): void {
-  if (event) event.preventDefault();
-  
-  const href = (event?.target as HTMLElement)?.getAttribute('href') || '/pong-selection';
-  
-  const transitionOverlay = document.createElement('div');
-  transitionOverlay.style.position = 'fixed';
-  transitionOverlay.style.top = '0';
-  transitionOverlay.style.left = '0';
-  transitionOverlay.style.width = '100%';
-  transitionOverlay.style.height = '100%';
-  transitionOverlay.style.backgroundColor = '#000';
-  transitionOverlay.style.zIndex = '9999';
-  transitionOverlay.style.opacity = '0';
-  transitionOverlay.style.transition = 'opacity 0.2s ease-in';
-  document.body.appendChild(transitionOverlay);
-  
-  setTimeout(() => {
-    transitionOverlay.style.opacity = '1';
-    
-    setTimeout(() => {
-      window.location.href = href;
-    }, 200);
-  }, 10);
+  navigate("/pong-selection");
 }
  
 export default async function initializePongGame(): Promise<(() => void) | null> {
