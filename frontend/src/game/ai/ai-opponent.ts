@@ -42,6 +42,8 @@ export class AIOpponent {
     constructor(canvasWidth: number, canvasHeight: number) {
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
+        this.updateInterval = 1000;
+        this.setDifficulty('medium');
     }
     
     public getPredictedPath(): { x: number, y: number }[] {
@@ -50,6 +52,13 @@ export class AIOpponent {
     
     public setDifficulty(difficulty: AIDifficulty): void {
         this.difficulty = difficulty;
+        if (difficulty === 'easy') {
+            this.updateInterval = 1800; 
+        } else if (difficulty === 'medium') {
+            this.updateInterval = 1400; 
+        } else if (difficulty === 'hard') {
+            this.updateInterval = 1000;
+        }
     }
     
     public update(currentGameState: GameState, currentTime: number): { moveUp: boolean, moveDown: boolean } {
@@ -144,14 +153,16 @@ export class AIOpponent {
         let imperfectionRange = 0;
         switch (this.difficulty) {
             case 'easy':
-                imperfectionRange = 200;
+                imperfectionRange = 250;
                 break;
             case 'medium':
-                imperfectionRange = 75;
+                imperfectionRange = 80;
+                
                 break;
             case 'hard':
-                imperfectionRange = 5;
+                imperfectionRange = 0;
                 break;
+        
         }
         
         const imperfection = Math.random() * imperfectionRange * 2 - imperfectionRange;
@@ -174,16 +185,24 @@ export class AIOpponent {
         const moveUp = smoothY < paddleY;
         const moveDown = smoothY > paddleY;
         if (this.difficulty === 'easy' && Math.random() < 0.1) {
-            return { moveUp: !moveUp, moveDown: !moveDown }; // Occasionally move the wrong way
+            return { moveUp: !moveUp, moveDown: !moveDown }; 
         }
         
-        if (this.difficulty === 'medium' && Math.random() < 0.05) {
+        if (this.difficulty === 'medium' && Math.random() < 0.07) {
+            return { moveUp: false, moveDown: false }; 
+        }
+        
+        if (this.difficulty === 'hard' && Math.random() < 0.03) {
             return { moveUp: false, moveDown: false }; // Occasional pause
         }
-        
         return { moveUp, moveDown };
+
     }
     private easeInOutQuad(t: number): number {
         return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
     }
+
+    public getCurrentDifficulty(): AIDifficulty {
+        return this.difficulty;
+      }
 }

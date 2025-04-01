@@ -562,18 +562,23 @@ export default async function initializePongGame(): Promise<(() => void) | null>
         
         btn.addEventListener('click', function(this: HTMLElement) {
           difficultyBtns.forEach(b => b.classList.remove('active'));
-          
           this.classList.add('active');
           
-          const difficultySelector = document.getElementById('ai-difficulty') as HTMLSelectElement;
-          if (difficultySelector) {
-            difficultySelector.value = this.getAttribute('data-difficulty') || 'medium';
-            
-            const event = new Event('change');
-            difficultySelector.dispatchEvent(event);
+          if (state.aiOpponent) {
+            const selectedDifficulty = this.getAttribute('data-difficulty') as AIDifficulty || 'medium';
+            state.aiOpponent.setDifficulty(selectedDifficulty);
           }
         });
       });
+      
+      if (state.aiOpponent) {
+        const currentDifficulty = state.aiOpponent.getCurrentDifficulty();
+        const difficultyBtn = document.querySelector(`.difficulty-btn[data-difficulty="${currentDifficulty}"]`);
+        if (difficultyBtn) {
+          difficultyBtns.forEach(b => b.classList.remove('active'));
+          difficultyBtn.classList.add('active');
+        }
+      }
     } else {
       if (titleElem) {
         titleElem.textContent = languageService.translate('game.classic_pong', 'PONG');
@@ -786,42 +791,21 @@ export default async function initializePongGame(): Promise<(() => void) | null>
     updateScores();
     resetBall();
     
-    if (state.aiEnabled && state.aiOpponent && elements.difficultySelector) {
-      const difficulty = elements.difficultySelector.value as AIDifficulty;
-      state.aiOpponent.setDifficulty(difficulty);
+    if (state.aiEnabled && state.aiOpponent) {
+      // Use the active difficulty button to determine the AI difficulty
+      const activeBtn = document.querySelector('.difficulty-btn.active');
+      if (activeBtn) {
+        const difficulty = activeBtn.getAttribute('data-difficulty') as AIDifficulty || 'medium';
+        state.aiOpponent.setDifficulty(difficulty);
+      }
     }
-
+  
     state.countdown = 3;
     state.countdownActive = true;
     state.fadingOut = false;
     state.countdownOpacity = 1.0;
   }
-
-  function gameLoop(currentTime: number): void {
-    if (!ctx || !canvas) return;
-
-    const deltaTime = (currentTime - state.lastTime) / 1000;
-    state.lastTime = currentTime;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = state.color.groundColor;
-    ctx.fillRect(canvas.width / 2 - 1, 0, 2, canvas.height);
-
-    drawPaddles();
-    drawBall();
-    update(deltaTime);
-
-    if (state.countdownActive || state.fadingOut) {
-      drawCountdown();
-    }
-    
-    if (state.debugMode) {
-      drawDebug();
-    }
-    
-    state.animationFrameId = requestAnimationFrame(gameLoop);
-  }
+  
 
   function openCustomMenu(): void {
     elements.menu?.classList.remove("show");
@@ -924,6 +908,34 @@ export default async function initializePongGame(): Promise<(() => void) | null>
 	  ctx.fillStyle = 'yellow';
 	  ctx.fill();
 	}}
+
+  function gameLoop(currentTime: number): void {
+    if (!ctx || !canvas) return;
+  
+    const deltaTime = (currentTime - state.lastTime) / 1000;
+    state.lastTime = currentTime;
+  
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+    ctx.fillStyle = state.color.groundColor;
+    ctx.fillRect(canvas.width / 2 - 1, 0, 2, canvas.height);
+  
+    drawPaddles();
+    drawBall();
+    update(deltaTime);
+  
+    if (state.countdownActive || state.fadingOut) {
+      drawCountdown();
+    }
+    
+    if (state.debugMode) {
+      drawDebug();
+    }
+    
+    state.animationFrameId = requestAnimationFrame(gameLoop);
+  }
+
+
 	function init(): void {
 	if (elements.menu) {
 	elements.menu.classList.add("show");
