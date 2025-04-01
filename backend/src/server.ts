@@ -107,7 +107,6 @@ fastify.get("/debug/auth", async (request: FastifyRequest, reply: FastifyReply) 
 const start = async () => {
   try {
 
-
     createUsersTable();
     createGameHistoryTable();
 
