@@ -90,6 +90,45 @@ div {
     flex: 0 0 auto; 
 }
 
+/* Compact language switcher */
+.language-switcher {
+opacity: 0.7;
+transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.language-switcher:hover {
+opacity: 1;
+}
+
+.language-btn {
+position: relative;
+outline: none;
+}
+
+.language-btn::after {
+content: '';
+position: absolute;
+bottom: -2px;
+left: 50%;
+width: 0;
+height: 2px;
+background-color: #BB70AD;
+transform: translateX(-50%);
+transition: width 0.3s ease;
+}
+
+.language-btn[data-lang=en]:hover::after,
+.language-btn[data-lang=fr]:hover::after,
+.language-btn[data-lang=es]:hover::after {
+width: 80%;
+}
+
+@media (max-width: 768px) {
+.language-switcher {
+    opacity: 0.6;
+}
+}
+
 .navbar .nav-links ul {
     font-family: 'Aeonik', sans-serif;
     justify-content: center;
