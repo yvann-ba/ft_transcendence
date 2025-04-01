@@ -103,7 +103,7 @@ export default function register() {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.error || 'Erreur lors de l\'inscription');
+                throw new Error(errorData.error || 'Registration error');
             }
 
             
@@ -117,7 +117,7 @@ export default function register() {
                 return ;
             }
 
-            messageDiv.textContent = 'Inscription réussie !';
+            messageDiv.textContent = 'Registration success !';
             messageDiv.classList.remove('error');
             messageDiv.classList.add('success');
 

@@ -664,7 +664,7 @@ export default async function initializePongGame(): Promise<(() => void) | null>
         });
         
       } catch (error) {
-          console.error('Erreur lors de l\'enregistrement de la partie:', error);
+          console.error('error whne saving game:', error);
       }
 		}
 

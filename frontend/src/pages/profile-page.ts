@@ -34,7 +34,7 @@ import { languageService } from "../utils/languageContext";
         });
         
         if (!response.ok) {
-            throw new Error('Erreur lors de la récupération de l\'historique');
+            throw new Error('Error retrieving history');
         }
         
         const gameHistory = await response.json();
@@ -97,7 +97,7 @@ import { languageService } from "../utils/languageContext";
 
         initializeHistoryTable();
         } catch (error) {
-        console.error('Erreur lors du chargement de l\'historique des parties:', error);
+        console.error('Error loading game history:', error);
         }
     }
 

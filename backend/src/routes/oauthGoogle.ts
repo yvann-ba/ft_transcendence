@@ -33,7 +33,7 @@ export default async function oauthGoogleRoutes(fastify: FastifyInstance) {
       console.log("4. Token response received:", tokenRes.status);
       const tokenData = await tokenRes.json();
       console.log("5. Token data parsed");
-      if (!tokenRes.ok) throw new Error(tokenData.error_description || 'Erreur OAuth Google');
+      if (!tokenRes.ok) throw new Error(tokenData.error_description || 'Error OAuth Google');
 
       const accessToken = tokenData.access_token;
       console.log("6. Access token extracted:", accessToken ? "Yes" : "No");

@@ -123,10 +123,10 @@ export default function ProfileEdit() {
             const anonymizationResult = await userService.anonymizeAccount();
             
             if (anonymizationResult && anonymizationResult.newUsername) {
-              showSuccess(`Votre compte a été anonymisé. Votre nouveau nom d'utilisateur est : ${anonymizationResult.newUsername}`);
+              showSuccess(`Your account has been anonymized. Your new username is : ${anonymizationResult.newUsername}`);
               
               const anonymizationInfo = {
-                message: "Votre compte a été anonymisé avec succès",
+                message: "Your account has been successfully anonymized",
                 newUsername: anonymizationResult.newUsername,
                 date: new Date().toISOString()
               };
@@ -136,7 +136,7 @@ export default function ProfileEdit() {
               downloadBtn.className = "btn btn-primary download-info-btn";
               downloadBtn.id = "download-info-btn";
               downloadBtn.onclick = () => {
-                downloadJsonFile(anonymizationInfo, 'mes-nouvelles-infos.json');
+                downloadJsonFile(anonymizationInfo, 'my-new-info.json');
                 
                 setTimeout(() => {
                   const btnToRemove = document.getElementById('download-info-btn');
@@ -164,14 +164,14 @@ export default function ProfileEdit() {
                 navigate('/');
               }, 1000);
             } else {
-              showSuccess('Votre compte a été anonymisé. Vous allez être déconnecté.');
+              showSuccess('Your account has been anonymized. You will be logged out.');
               setTimeout(() => {
                 handleLogout();
                 navigate('/');
               }, 3000);
             }
           } catch (error) {
-            showError("Erreur lors de l'anonymisation du compte.");
+            showError("Account anonymization error.");
             closeModal();
           }
           break;
