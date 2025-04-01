@@ -383,7 +383,6 @@ export default function initializeMultiplayerGame(): (() => void) | null {
   }
   
   function drawControlsHint(): void {
-    // Update the controls-list HTML content
     const controlsList = document.querySelector('.controls-list');
     if (controlsList) {
       controlsList.innerHTML = `
@@ -503,11 +502,9 @@ export default function initializeMultiplayerGame(): (() => void) | null {
     for (let i = 0; i < bricks.length; i++) {
       const brick = bricks[i];
       if (brick.active) {
-        // Calculate the closest point on the brick to the ball's center
         const closestX = Math.max(brick.x, Math.min(ball.x, brick.x + brick.width));
         const closestY = Math.max(brick.y, Math.min(ball.y, brick.y + brick.height));
         
-        // Calculate the distance between the closest point and the ball's center
         const distanceX = ball.x - closestX;
         const distanceY = ball.y - closestY;
         const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);

@@ -365,7 +365,6 @@
     }
   }
   
-  /* Player input styles for tournament */
   .player-inputs {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -399,7 +398,6 @@
     border-color: #BB70AD;
   }
   
-  /* Tournament bracket styles */
   #tournament-bracket {
     background-color: #000;
     border-radius: 15px;
@@ -470,7 +468,6 @@
     font-weight: bold;
   }
   
-  /* Winner announcement styles */
   #winner-announcement {
     background-color: #000;
     border-radius: 15px;
@@ -506,7 +503,6 @@
     }
   }
   
-  /* Registration form styles */
   #registration-form {
     background-color: #000;
     border-radius: 15px;
@@ -525,7 +521,6 @@
     text-align: center;
   }
   
-  /* Media queries */
   @media (max-width: 1160px) {
     .pong-custom-menu-canvas {
       flex-direction: column-reverse;
@@ -635,7 +630,6 @@
     box-shadow: 0 0 10px rgba(187, 112, 173, 0.5);
   }
   
-  /* Additional styles for AI mode */
   .ai-mode-badge {
     display: inline-block;
     background: #BB70AD;
@@ -648,7 +642,6 @@
     text-transform: uppercase;
   }
   
-  /* Pulse animation for the badge */
   @keyframes pulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.05); }
@@ -659,7 +652,6 @@
     animation: pulse 2s infinite;
   }
   
-  /* Debug panel for AI predictions (when enabled) */
   .debug-hint {
     color: #aaa;
     font-size: 14px;
@@ -715,7 +707,6 @@
     margin-top: 20px;
 }
 
-/* Make sure the buttons are stacked and centered */
 #pong-winner-announcement .pong-button {
     width: 200px;
     margin: 10px auto;

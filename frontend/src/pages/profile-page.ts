@@ -4,13 +4,11 @@ import { navigate } from "../router";
 import { languageService } from "../utils/languageContext";
 
     function updateButtonTranslations(): void {
-        // Update Log out button
         const logoutButton = document.querySelector('.btn-add-friend') as HTMLElement;
         if (logoutButton) {
         logoutButton.textContent = languageService.translate('profile.logout', 'Log out');
         }
         
-        // Update Edit profile link
         const editProfileLink = document.querySelector('.btn a') as HTMLElement;
         if (editProfileLink) {
         editProfileLink.textContent = languageService.translate('profile.edit', 'Edit profile');
@@ -26,7 +24,6 @@ import { languageService } from "../utils/languageContext";
           }
         });
         
-        // Add this line to update button texts
         updateButtonTranslations();
     }
 
@@ -105,19 +102,15 @@ import { languageService } from "../utils/languageContext";
     }
 
     function setupGlobalErrorHandler() {
-        // This will catch all resource load errors including image errors
         window.addEventListener('error', function(event) {
-            // Check if this is an image error
             if (event.target && (event.target as HTMLElement).tagName === 'IMG') {
                 const img = event.target as HTMLImageElement;
                 
-                // Check if this is a Google image URL (which is causing the 429 errors)
                 if (img.src && (
                     img.src.includes('googleusercontent.com') || 
                     img.src.includes('ggpht.com') || 
                     img.src.includes('gstatic.com')
                 )) {
-                    // This is a Google image that failed to load - likely a 429 error
                     console.log("Suppressed Google image load error:", img.src.split('?')[0]);
                     
                     // Prevent the error from showing in console
@@ -126,21 +119,18 @@ import { languageService } from "../utils/languageContext";
                     return false;
                 }
 
-                // If any avatar image fails to load, replace with default
                 if (img.classList.contains('avatar')) {
                     img.src = "/assets/images/avatar.jpg";
                     
-                    // Prevent the error from showing in console
                     event.preventDefault();
                     event.stopPropagation();
                     return false;
                 }
             }
-        }, true); // Using the capture phase is important here
+        }, true);
     }
 
     async function initializeProfilePage(): Promise<() => void> {
-        // Add this line at the beginning
         setupGlobalErrorHandler();
 
         updatePageTranslations();
@@ -223,7 +213,6 @@ import { languageService } from "../utils/languageContext";
         const rows = historyTab.querySelectorAll('tbody tr');
         
         rows.forEach(row => {
-            // Appliquer les styles en fonction du résultat
             if (row.classList.contains('win')) {
                 row.classList.add('win-row');
             } else if (row.classList.contains('loss')) {
@@ -232,13 +221,11 @@ import { languageService } from "../utils/languageContext";
                 row.classList.add('draw-row');
             }
             
-            // Animation row
             row.classList.add('animated-row');
             (row as HTMLElement).style.opacity = '0';
             (row as HTMLElement).style.transform = 'translateY(20px)';
         });
         
-        // Le reste de votre code existant pour handleHistoryRowHover, etc.
         handleHistoryRowHover = function(this: HTMLElement, event: Event) {
             this.classList.add('row-hover');
             const winnerCell = this.querySelector('.winner');
@@ -417,33 +404,27 @@ import { languageService } from "../utils/languageContext";
 
 
         animateChart = () => {
-            // Calculate the correct stroke dash array values
             const winDashArray = `${circumference * wins / total} ${circumference}`;
             const lossDashArray = `${circumference * losses / total} ${circumference}`;
             
-            // Reset transitions
             winSegment.style.transition = 'none';
             lossSegment.style.transition = 'none';
             
-            // Set initial state
             winSegment.style.strokeDasharray = `0 ${circumference}`;
             lossSegment.style.strokeDasharray = `0 ${circumference}`;
             lossSegment.style.strokeDashoffset = `${-circumference * wins / total}`;
             
-            // Force reflow
             void winSegment.offsetWidth;
             
             // Reset legend visibility
             winLegend.classList.remove('visible');
             lossLegend.classList.remove('visible');
             
-            // Animate win segment
             setTimeout(() => {
                 winSegment.style.transition = 'stroke-dasharray 1.5s ease-in-out';
                 winSegment.style.strokeDasharray = winDashArray;
             }, 300);
             
-            // Animate loss segment
             setTimeout(() => {
                 lossSegment.style.transition = 'stroke-dasharray 1.5s ease-in-out';
                 lossSegment.style.strokeDasharray = lossDashArray;
@@ -527,12 +508,10 @@ import { languageService } from "../utils/languageContext";
             logoutButton.textContent = languageService.translate('profile.logout', 'Log out');
             logoutButton.classList.add('logout-button');
             
-            // Add logout functionality
             logoutButton.addEventListener('click', handleLogout);
         }
     }
 
-    // Function to handle logout
     export async function handleLogout(): Promise<void> {
         try {
             const response = await fetch('/api/logout', {

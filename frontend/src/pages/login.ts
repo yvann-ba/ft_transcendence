@@ -50,7 +50,6 @@ export default function login() {
                     );
                     
                     if (hasAuthCookie) {
-                        // Auth successful, update your app state
                         localStorage.setItem('token', 'authenticated');
                         messageDiv.textContent = 'Login successful!';
                         messageDiv.classList.remove('error');

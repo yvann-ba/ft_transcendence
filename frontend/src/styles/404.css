@@ -89,7 +89,6 @@
     }
 }
 
-/* Add glitch effect to 404 */
 .glitch {
     position: relative;
     color: white;
@@ -135,7 +134,6 @@
     100% { clip-path: inset(70% 0 5% 0); }
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .error-code {
         font-size: 8rem;

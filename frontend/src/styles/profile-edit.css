@@ -67,7 +67,6 @@
     border: 1px solid #ff4d4d;
 }
 
-/* Button Styles */
 .btn {
     padding: 8px 16px;
     border: none;
@@ -206,4 +205,12 @@
   
   .toast-close:hover {
     opacity: 1;
+  }
+
+  .download-info-btn {
+    transition: opacity 0.3s ease;
+  }
+  
+  .fade-out {
+    opacity: 0;
   }

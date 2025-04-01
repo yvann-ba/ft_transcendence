@@ -12,7 +12,7 @@ interface User {
     email: string;
     first_name: string;
     last_name: string;
-    avatar_url?: string; // Make sure this matches your backend field name
+    avatar_url?: string;
     player_games: number;
     player_wins: number;
     created_at: string;

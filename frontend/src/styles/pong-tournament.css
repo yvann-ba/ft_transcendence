@@ -2,7 +2,6 @@
     --slider-track-bg: linear-gradient(to right, #BB70AD 10%, #BB70AD 25%, #ffffff 25%);
   }
   
-  /* Tournament Game Layout */
   .main-menu {
     position: absolute;
     display: flex;
@@ -33,7 +32,6 @@
     color: #BB70AD;
   }
   
-  /* Tournament Menu */
   #tournament-menu {
     position: fixed;
     top: 0;
@@ -70,7 +68,6 @@
     opacity: 0.8;
   }
   
-  /* Player Registration Form */
   #registration-form {
     background-color: #000;
     border-radius: 15px;
@@ -130,8 +127,8 @@
     flex-direction: column;
     gap: 20px;
     width: 300px;
-    margin: 0 auto; /* This centers the buttons */
-    align-items: center; /* Ensure buttons are centered */
+    margin: 0 auto;
+    align-items: center; 
   }
   
   .pong-button {
@@ -166,7 +163,6 @@
     border-color: #BB70AD;
   }
   
-  /* Customize Menu */
   #customize-menu {
     position: fixed;
     top: 0;
@@ -177,10 +173,9 @@
     justify-content: center;
     align-items: center;
     background: #000;
-    z-index: 999; /* Higher z-index to ensure it covers everything */
+    z-index: 999;
   }
   
-  /* Hide tournament title when customize menu is visible */
   #customize-menu:not(.hidden) ~ .game-title-container,
   #customize-menu:not(.hidden) ~ #registration-form {
     display: none;
@@ -242,7 +237,6 @@
     text-align: center;
   }
   
-  /* Color Inputs */
   .color-input {
     -webkit-appearance: none;
     appearance: none;
@@ -251,7 +245,7 @@
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    background-color: transparent; /* To ensure the color shows through */
+    background-color: transparent;
   }
   
   .color-input::-webkit-color-swatch {
@@ -264,7 +258,6 @@
     border-radius: 8px;
   }
   
-  /* Slider Styles */
   .pong-custom-slider {
     -webkit-appearance: none;
     appearance: none;
@@ -311,7 +304,6 @@
     margin-top: 5px;
   }
   
-  /* Tournament Bracket */
   #tournament-bracket {
     background-color: #000;
     border-radius: 15px;
@@ -389,7 +381,6 @@
     font-weight: bold;
   }
   
-  /* Connector Lines */
   .connector-container {
     position: relative;
     width: 80px;
@@ -437,7 +428,6 @@
     left: 0;
   }
   
-  /* Winner Announcement */
   #winner-announcement {
     background-color: #000;
     border-radius: 15px;
@@ -479,7 +469,6 @@
     }
   }
   
-  /* Countdown */
   #countdown-container {
     position: fixed;
     top: 0;
@@ -518,7 +507,6 @@
     }
   }
   
-  /* Animation Keyframes */
   @keyframes fadeInDown {
     from {
       opacity: 0;
@@ -550,12 +538,10 @@
     }
   }
   
-  /* Utility Classes */
   .hidden {
     display: none !important;
   }
   
-  /* Media Queries */
   @media (max-width: 1160px) {
     .tournament-buttons {
       width: 80%;
@@ -610,10 +596,9 @@
   }
 
   .tournament-buttons .pong-button {
-    width: 100%; /* Ensure buttons take full width of container */
+    width: 100%;
   }
   
-  /* Make tournament form centered and formatted nicely */
   #registration-form {
     display: flex;
     flex-direction: column;
@@ -625,10 +610,9 @@
     padding: 40px;
     max-width: 600px;
     width: 90%;
-    margin: 0 auto; /* Ensure it's centered */
+    margin: 0 auto;
   }
   
-  /* Fix player inputs grid to be better aligned */
   .player-inputs {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -641,7 +625,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    align-items: stretch; /* Make inputs fill the available width */
+    align-items: stretch;
   }
   
   .player-input input {

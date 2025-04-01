@@ -118,47 +118,63 @@ export default function ProfileEdit() {
           showSuccess('Your data has been downloaded!');
           break;
 
-          case 'anonymize':
-            try {
-              const anonymizationResult = await userService.anonymizeAccount();
+        case 'anonymize':
+          try {
+            const anonymizationResult = await userService.anonymizeAccount();
+            
+            if (anonymizationResult && anonymizationResult.newUsername) {
+              showSuccess(`Votre compte a été anonymisé. Votre nouveau nom d'utilisateur est : ${anonymizationResult.newUsername}`);
               
-              if (anonymizationResult && anonymizationResult.newUsername) {
-                showSuccess(`Votre compte a été anonymisé. Votre nouveau nom d'utilisateur est : ${anonymizationResult.newUsername}`);
-                
-                const anonymizationInfo = {
-                  message: "Votre compte a été anonymisé avec succès",
-                  newUsername: anonymizationResult.newUsername,
-                  date: new Date().toISOString()
-                };
-                
-                const downloadBtn = document.createElement('button');
-                downloadBtn.textContent = "Télécharger mes nouvelles informations";
-                downloadBtn.className = "btn btn-primary download-info-btn";
-                downloadBtn.onclick = () => {
-                  downloadJsonFile(anonymizationInfo, 'mes-nouvelles-infos.json');
-                };
-                
-                const toastContainer = document.getElementById('toast-container');
-                if (toastContainer) {
-                  toastContainer.appendChild(downloadBtn);
-                }
+              const anonymizationInfo = {
+                message: "Votre compte a été anonymisé avec succès",
+                newUsername: anonymizationResult.newUsername,
+                date: new Date().toISOString()
+              };
+              
+              const downloadBtn = document.createElement('button');
+              downloadBtn.textContent = "Download new username";
+              downloadBtn.className = "btn btn-primary download-info-btn";
+              downloadBtn.id = "download-info-btn";
+              downloadBtn.onclick = () => {
+                downloadJsonFile(anonymizationInfo, 'mes-nouvelles-infos.json');
                 
                 setTimeout(() => {
-                  handleLogout();
-                  navigate('/');
-                }, 10000);
-              } else {
-                showSuccess('Votre compte a été anonymisé. Vous allez être déconnecté.');
-                setTimeout(() => {
-                  handleLogout();
-                  navigate('/');
-                }, 3000);
-              }
-            } catch (error) {
-              showError("Erreur lors de l'anonymisation du compte.");
-              closeModal();
+                  const btnToRemove = document.getElementById('download-info-btn');
+                  if (btnToRemove && btnToRemove.parentNode) {
+                    btnToRemove.classList.add('fade-out'); 
+                    setTimeout(() => {
+                      if (btnToRemove.parentNode) {
+                        btnToRemove.parentNode.removeChild(btnToRemove);
+                      }
+                    }, 300);
+                  }
+                }, 100);
+              };
+
+            let toastContainer = document.getElementById('toast-container');
+            if (!toastContainer) {
+              toastContainer = document.createElement('div');
+              toastContainer.id = 'toast-container';
+              document.body.appendChild(toastContainer);
             }
-            break;
+            toastContainer.appendChild(downloadBtn);
+              
+              setTimeout(() => {
+                handleLogout();
+                navigate('/');
+              }, 1000);
+            } else {
+              showSuccess('Votre compte a été anonymisé. Vous allez être déconnecté.');
+              setTimeout(() => {
+                handleLogout();
+                navigate('/');
+              }, 3000);
+            }
+          } catch (error) {
+            showError("Erreur lors de l'anonymisation du compte.");
+            closeModal();
+          }
+          break;
 
         case 'delete':
           await userService.deleteAccount();

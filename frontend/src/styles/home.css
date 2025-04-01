@@ -1,4 +1,3 @@
-/* Enhanced responsive styles for home page */
 
 main {
     display: block;
@@ -118,7 +117,6 @@ main {
     transition: font-size 0.3s ease-out, height 0.3s ease-out;
 }
 
-/* Responsive font size adjustments */
 @media screen and (max-width: 1600px) {
     .home-header-heading {
         font-size: min(12rem, 13vw);

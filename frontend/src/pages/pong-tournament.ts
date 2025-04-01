@@ -386,26 +386,20 @@ export default function initializeTournamentMode() {
         ctx.fill();
     }
   function openCustomMenu(): void {
-    // Hide registration form without removing from DOM
     elements.registrationForm?.classList.add("hidden");
     
-    // Show customize menu
     customizeElements.customizeMenu?.classList.remove("hidden");
     
-    // This ensures the tournament mode title doesn't show behind the customize menu
     const gameTitle = document.querySelector('.game-title-container');
     if (gameTitle) {
         (gameTitle as HTMLElement).style.display = 'none';
     }
 }
 function closeCustomMenu(): void {
-    // Hide customize menu
     customizeElements.customizeMenu?.classList.add("hidden");
     
-    // Show registration form again
     elements.registrationForm?.classList.remove("hidden");
     
-    // Restore title
     const gameTitle = document.querySelector('.game-title-container');
     if (gameTitle) {
         (gameTitle as HTMLElement).style.display = '';
@@ -629,7 +623,7 @@ function closeCustomMenu(): void {
             gameState.scores.player2++;
             updateScoreboard();
             resetBall();
-        }  // Added closing bracket here
+        } 
         if (canvas && gameState.ball.x + radius >= canvas.width) {
             gameState.scores.player1++;
             updateScoreboard();
@@ -698,7 +692,6 @@ function closeCustomMenu(): void {
             sliderAnimation(event);
         });
         
-        // Initialize with default values
         if (customizeElements.ballColorInput) {
             customizeElements.ballColorInput.value = customSettings.ballColor;
         }
@@ -722,14 +715,12 @@ function closeCustomMenu(): void {
           elements.startTournamentButton?.addEventListener("click", initTournament);
           elements.playNextMatchButton?.addEventListener("click", playNextMatch);
           elements.newTournamentButton?.addEventListener("click", resetTournament);
-          // Initialize player input fields with default values
           elements.playerInputs[0].value = languageService.translate("game.tournament_mode.default_player1", "Player 1");
           elements.playerInputs[1].value = languageService.translate("game.tournament_mode.default_player2", "Player 2");
           elements.playerInputs[2].value = languageService.translate("game.tournament_mode.default_player3", "Player 3");
           elements.playerInputs[3].value = languageService.translate("game.tournament_mode.default_player4", "Player 4");
     
           initCustomization();
-          // Initialize all Back to Game Modes buttons
         const backButtons = [
             document.getElementById("back-to-modes-button"),
             document.getElementById("back-to-modes-button-winner")
@@ -737,9 +728,7 @@ function closeCustomMenu(): void {
         
         backButtons.forEach(button => {
             if (button) {
-            // Remove existing event listeners first to avoid duplicates
             button.removeEventListener('click', backToGameModes);
-            // Add our improved event listener
             button.addEventListener('click', backToGameModes);
             }
         });
