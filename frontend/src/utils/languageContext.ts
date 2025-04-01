@@ -8,7 +8,6 @@ const translationCache: Record<Language, TranslationKeys | null> = {
   es: null
 };
 
-// Function to deeply get a value from nested objects using a dot-notation key
 export function getTranslation(obj: any, path: string, defaultValue: string = ''): string {
   const travel = (regexp: RegExp) =>
     String.prototype.split
@@ -19,31 +18,26 @@ export function getTranslation(obj: any, path: string, defaultValue: string = ''
   return result === undefined || result === null ? defaultValue : result;
 }
 
-// Initialize language from localStorage or default to browser language
 export function getInitialLanguage(): Language {
   const savedLanguage = localStorage.getItem('language') as Language;
   if (savedLanguage && ['en', 'fr', 'es'].includes(savedLanguage)) {
     return savedLanguage;
   }
   
-  // If no saved language, try to detect browser language
   const browserLang = navigator.language.substring(0, 2);
   if (['en', 'fr', 'es'].includes(browserLang)) {
     return browserLang as Language;
   }
   
-  // Default to English
   return 'en';
 }
 
-// Load translations for a specific language
 async function loadTranslations(language: Language): Promise<TranslationKeys> {
   if (translationCache[language]) {
     return translationCache[language]!;
   }
   
   try {
-    // Fix the path - note we're changing from /translations/ to /translation/
     const response = await fetch(`/translation/${language}.json`);
     if (!response.ok) {
       console.error(`Failed to load translation file: ${language}.json`);
@@ -54,7 +48,6 @@ async function loadTranslations(language: Language): Promise<TranslationKeys> {
     return translations;
   } catch (error) {
     console.error(`Error loading translations for ${language}:`, error);
-    // Fallback to English
     if (language !== 'en') {
       return loadTranslations('en');
     }
@@ -62,7 +55,6 @@ async function loadTranslations(language: Language): Promise<TranslationKeys> {
   }
 }
 
-// Main language service
 class LanguageService {
   private currentLanguage: Language;
   private translations: TranslationKeys;
@@ -90,7 +82,6 @@ class LanguageService {
     localStorage.setItem('language', language);
     this.translations = await loadTranslations(language);
     
-    // Update the HTML lang attribute
     document.documentElement.lang = language;
     
     this.notifyListeners();
@@ -113,10 +104,8 @@ class LanguageService {
   }
 }
 
-// Create a singleton instance
 export const languageService = new LanguageService();
 
-// Helper function for components
 export function t(key: string, defaultValue: string = key): string {
   return languageService.translate(key, defaultValue);
 }

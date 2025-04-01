@@ -27,7 +27,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #000000; /* Solid black background */
+  background: #000000; 
   z-index: 100;
 }
 
@@ -71,7 +71,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: #000000; /* Solid black background */
+  background: #000000;
   z-index: 100;
 }
 
@@ -184,16 +184,16 @@
   display: flex;
   justify-content: center;
   color: rgb(250, 250, 250);
-  top: 5vh; /* Move it higher up */
+  top: 5vh;
   font-size: 5vh;
   font-weight: 700;
   width: 800px;
   gap: 1.5rem;
   z-index: 5;
-  background-color: rgba(0, 0, 0, 0.6); /* Add slight background for visibility */
+  background-color: rgba(0, 0, 0, 0.6); 
   padding: 10px;
   border-radius: 10px;
-  margin-bottom: 20px; /* Add margin to create more space */
+  margin-bottom: 20px;
 }
 
 .pong-custom-slider {
@@ -234,7 +234,7 @@
 }
 
 .custom-menu-content {
-  background: rgba(0, 0, 0, 1); /* Solid black */
+  background: rgba(0, 0, 0, 1); 
   padding: 40px;
   border-radius: 15px;
   border: 2px solid rgba(187, 112, 173, 0.5);
@@ -496,7 +496,6 @@
   }
 }
 
-/* Remove any background blur or transparency for menus */
 #pong-custom-menu,
 #game-menu {
   backdrop-filter: none;

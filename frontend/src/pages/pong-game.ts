@@ -645,7 +645,6 @@ export default async function initializePongGame(): Promise<(() => void) | null>
 
 		if (state.aiEnabled) {
       try {
-        // Check who is the winner - Player 1 is YOU in AI mode
         const result = state.scores.player1 >= state.scores.winning ? "WIN" : "LOSS";
         const difficulty = document.querySelector(".difficulty-btn.active")?.getAttribute("data-difficulty") || "medium";
         

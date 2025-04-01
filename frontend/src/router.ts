@@ -328,7 +328,6 @@ export function preloadCommonPages(): void {
           pageCache[path] = content;
         }
       } catch (error) {
-        // Silently fail - this is just preloading
       }
     });
   }, 2000);

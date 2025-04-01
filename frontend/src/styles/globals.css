@@ -1,8 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
 @import url('four-player-pong.css');
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 @layer components {
 
@@ -90,7 +87,6 @@ div {
     flex: 0 0 auto; 
 }
 
-/* Compact language switcher */
 .language-switcher {
 opacity: 0.7;
 transition: opacity 0.3s ease, transform 0.3s ease;
@@ -401,7 +397,6 @@ body.contact-page {
     overflow-y: auto !important;
 }
 
-/* Add to globals.css or create a new file for navbar styles */
 
 .navbar {
     display: flex;

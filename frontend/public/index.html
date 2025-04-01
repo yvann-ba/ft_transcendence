@@ -7,7 +7,6 @@
     <title>Pong Game</title>
     <script src="https://kit.fontawesome.com/3de3c501a5.js" crossorigin="anonymous"></script>
     <style>
-        /* Initial loading spinner */
         .initial-loader {
             position: fixed;
             top: 0;
@@ -31,7 +30,6 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-        /* Prevent FOUC (Flash of Unstyled Content) */
         .no-fouc {
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -42,7 +40,6 @@
     </style>
 </head>
 <body>
-    <!-- Initial loading spinner -->
     <div class="initial-loader" id="initialLoader">
         <div class="loader-spinner"></div>
     </div>
@@ -104,11 +101,9 @@
         <div id="app"></div>
     </div>
 
-    <!-- Page transition overlay -->
     <div id="pageTransitionOverlay" class="page-transition-overlay"></div>
 
     <script type="module">
-        // Helper to show initial content when ready
         document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 const initialLoader = document.getElementById('initialLoader');
@@ -118,7 +113,6 @@
                     initialLoader.style.opacity = '0';
                     mainContent.classList.add('ready');
                     
-                    // Remove loader from DOM after transition completes
                     setTimeout(() => {
                         initialLoader.style.display = 'none';
                     }, 300);
