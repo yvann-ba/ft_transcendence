@@ -31,30 +31,6 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
 	}
   });
   
-  fastify.get('/users/:id', async (request, reply) => {
-	try {
-	  const { id } = request.params as { id: string };
-  
-	  const user = await new Promise((resolve, reject) => {
-		userQueries.getUserById(parseInt(id, 10), (err, user) => {
-		  if (err) {
-			reject(err);
-		  } else {
-			resolve(user);
-		  }
-		});
-	  });
-  
-	  if (!user) {
-		return reply.status(404).send({ error: 'User not found' });
-	  }
-  
-	  return reply.send(user);
-	} catch (err) {
-	  return reply.status(500).send({ error: 'Error retrieving user', details: err });
-	}
-  });
-
   fastify.post('/register', async (request, reply) => {
     try {
       const { username, password, firstName, lastName } = request.body as {
@@ -131,9 +107,15 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
       };
       
       if (username) {
-        const existingUser = await userQueries.checkUserLogin(username);
-        if (existingUser && existingUser.id !== userId) {
-          return reply.status(400).send({ error: "Ce nom d'utilisateur est déjà utilisé" });
+        const existingUserResult = await userQueries.checkUserLogin(username);
+        
+        if (existingUserResult.success && 
+            existingUserResult.user && 
+            existingUserResult.user.id !== userId) {
+          return reply.send({ 
+            success: false, 
+            error: "Ce nom d'utilisateur est déjà utilisé" 
+          });
         }
       }
       
@@ -142,11 +124,6 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
         first_name: firstname, 
         last_name: lastname 
       });
-
-      
-      if (!updatedUser) {
-        return reply.status(404).send({ error: "Utilisateur non trouvé" });
-      }
       
       if (updatedUser.password) 
         delete updatedUser.password;
@@ -178,7 +155,6 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
     }
   });
   
-  // Download user data route
   fastify.get('/users/me/data', { preHandler: fastify.authenticate }, async (request, reply) => {
     try {
       const userId = (request.user as { userId: number }).userId;
@@ -207,13 +183,16 @@ fastify.get('/users/me', { preHandler: fastify.authenticate }, async (request, r
       const success = await userQueries.anonymizeUser(userId);
       
       if (!success) {
-        return reply.status(404).send({ error: "Utilisateur non trouvé" });
+        return reply.status(404).send({
+          success: false,
+          error: "Utilisateur non trouvé",
+        });
       }
       
       reply.clearCookie("sessionid");
-	  reply.clearCookie("auth_token");
+	    reply.clearCookie("auth_token");
       
-      return reply.send({ success: true, message: "Compte anonymisé avec succès" });
+      return reply.send({ success: true, message: "Compte anonymisé avec succès", newUsername: success.newUsername });
     } catch (err) {
       fastify.log.error("Error anonymizing user:", err);
       return reply.status(500).send({ error: "Erreur lors de l'anonymisation du compte" });

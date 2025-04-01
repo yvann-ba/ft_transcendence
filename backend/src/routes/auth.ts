@@ -18,10 +18,10 @@ fastify.post('/login', async (request, reply) => {
         error: "Username and password are required"
       });
     }
-    
+
     const userResult = await checkUserLogin(username);
     
-    if (!userResult.success || !userResult.user) {
+    if (!userResult.success || !userResult.user || userResult.user.google_id) {
       return reply.send({
         success: false,
         error: "Invalid username or password"

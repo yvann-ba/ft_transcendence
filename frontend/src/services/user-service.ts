@@ -60,12 +60,14 @@ export class UserService {
       method: 'POST',
       credentials: 'include'
     });
+
+    const data = await response.json();
     
-    if (!response.ok) {
+    if (!data.success) {
       throw new Error('Failed to anonymize account');
     }
     
-    return true;
+    return data;
   }
   
   async deleteAccount() {

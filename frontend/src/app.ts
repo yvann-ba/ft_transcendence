@@ -37,11 +37,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             localStorage.setItem('userAvatar', userData.avatar);
           }
           
-          // Set auth token and update UI
           localStorage.setItem('token', 'authenticated');
           changeProfileLabel();
           
-          // Redirect to home or refresh the page
           window.location.href = '/home';
         }
       } catch (error) {

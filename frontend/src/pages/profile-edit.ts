@@ -116,17 +116,49 @@ export default function ProfileEdit() {
           const data = await userService.downloadUserData();
           downloadJsonFile(data, 'my-account-data.json');
           showSuccess('Your data has been downloaded!');
-          handleLogout();
           break;
 
-        case 'anonymize':
-          await userService.anonymizeAccount();
-          showSuccess('Your account has been anonymized. You will be logged out.');
-
-          setTimeout(() => {
-            navigate('/');
-          }, 1000);
-          break;
+          case 'anonymize':
+            try {
+              const anonymizationResult = await userService.anonymizeAccount();
+              
+              if (anonymizationResult && anonymizationResult.newUsername) {
+                showSuccess(`Votre compte a été anonymisé. Votre nouveau nom d'utilisateur est : ${anonymizationResult.newUsername}`);
+                
+                const anonymizationInfo = {
+                  message: "Votre compte a été anonymisé avec succès",
+                  newUsername: anonymizationResult.newUsername,
+                  date: new Date().toISOString()
+                };
+                
+                const downloadBtn = document.createElement('button');
+                downloadBtn.textContent = "Télécharger mes nouvelles informations";
+                downloadBtn.className = "btn btn-primary download-info-btn";
+                downloadBtn.onclick = () => {
+                  downloadJsonFile(anonymizationInfo, 'mes-nouvelles-infos.json');
+                };
+                
+                const toastContainer = document.getElementById('toast-container');
+                if (toastContainer) {
+                  toastContainer.appendChild(downloadBtn);
+                }
+                
+                setTimeout(() => {
+                  handleLogout();
+                  navigate('/');
+                }, 10000);
+              } else {
+                showSuccess('Votre compte a été anonymisé. Vous allez être déconnecté.');
+                setTimeout(() => {
+                  handleLogout();
+                  navigate('/');
+                }, 3000);
+              }
+            } catch (error) {
+              showError("Erreur lors de l'anonymisation du compte.");
+              closeModal();
+            }
+            break;
 
         case 'delete':
           await userService.deleteAccount();

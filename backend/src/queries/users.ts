@@ -80,7 +80,7 @@ const createUser = async (username: string, password: string, firstName: string,
 
 export const checkUserLogin = async (username: string): Promise<any> => {
   return new Promise((resolve) => {
-    const query = `SELECT id, username, email, password FROM users WHERE username = ?`;
+    const query = `SELECT id, username, email, password, google_id FROM users WHERE username = ?`;
 
     db.get(query, [username], (err, row) => {
       if (err) {
@@ -299,7 +299,7 @@ export const getUserData = async (userId: number): Promise<any> => {
   });
 };
 
-export const anonymizeUser = async (userId: number): Promise<boolean> => {
+export const anonymizeUser = async (userId: number): Promise<any> => {
   return new Promise((resolve, reject) => {
     const anonymousUsername = 'anonymous_' + Math.random().toString(36).substring(2, 10);
     const anonymousEmail = `${anonymousUsername}@anonymous.com`;
@@ -320,7 +320,10 @@ export const anonymizeUser = async (userId: number): Promise<boolean> => {
         return reject(err);
       }
       
-      resolve(this.changes > 0);
+      return resolve({
+        success: true,
+        newUsername: anonymousUsername
+      })
     });
   });
 };

@@ -515,16 +515,12 @@ import { languageService } from "../utils/languageContext";
         }
         
         if (avatarElement) {
-            // Always use default avatar instead of handling Google images
             avatarElement.src = "/assets/images/avatar.jpg";
             avatarElement.alt = `${user.username}'s avatar`;
             
-            // Clear any cached avatar data
             localStorage.removeItem('cachedAvatarImage');
             localStorage.removeItem('cachedAvatarTimestamp');
             localStorage.removeItem('lastSuccessfulAvatarUrl');
-        } else {
-            console.log("Avatar element not found in the DOM");
         }
         
         if (logoutButton) {
