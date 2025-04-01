@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "wss": "^0.0.2"
-  },
-  "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
-    "@types/jsonwebtoken": "^9.0.9"
-  }
-}
