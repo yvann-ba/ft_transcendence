@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="frontend\public\assets\readme\HomePage2_process.png" alt="Size Limit CLI" width="2000">
+  <img src="frontend\public\assets\readme\homepage2_process.png" alt="Size Limit CLI" width="2000">
 </p>
 > A full-stack multiplayer web app containerized with Docker and served via Nginx, featuring a TypeScript frontend and a Fastify (Node.js) backend with OAuth and JWT-based authentication. Built by 42 School students to showcase real-time gameplay, secure web architecture, and modular deployment.
 
