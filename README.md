@@ -1,4 +1,3 @@
-![about](https://github.com/user-attachments/assets/f698de43-c35a-4012-bd59-350a042dfc0c)# ft_transcendence — Multiplayer Pong Reinvented 🕹️
 
 [![Dockerized](https://img.shields.io/badge/Dockerized-%E2%9C%94%EF%B8%8F-blue?logo=docker&style=flat-square)](https://www.docker.com/)
 [![Made at 42](https://img.shields.io/badge/Made%20at-42%20School-black?style=flat-square)](https://42.fr)
