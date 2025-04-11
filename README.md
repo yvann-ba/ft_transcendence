@@ -3,7 +3,7 @@
 
 ### A full-stack multiplayer web app containerized with Docker and served via Nginx, featuring a TypeScript frontend and a Fastify (Node.js) backend with OAuth and JWT-based authentication.
 
-#### Built by 42 School students to showcase real-time gameplay, secure web architecture, and modular deployment.
+> Built by 42 School students to showcase real-time gameplay, secure web architecture, and modular deployment.
 
 
 
@@ -18,7 +18,7 @@
 
 ## How to Run It ⚙️
 
-Yes, you can run it on **Linux, macOS, or Windows** — no setup headaches.
+You can run it on **Linux, macOS, or Windows** — no setup headaches.
 
 ```bash
 # Clone the repo
@@ -27,52 +27,37 @@ cd ft_transcendence
 
 # Run everything with Docker
 make
-(or docker-compose -f ./docker-compose.yml up --build for windows users)
+# or for Windows users
+docker-compose -f ./docker-compose.yml up --build
 
 # Access in your browser
 https://localhost:8443
 ```
 
-That’s it. One command. Zero config. Ready to play.
-
----
-
-### How It Works 🧠
+## How It Works 🧠
 
 ![Dockerized-Diagram](https://github.com/user-attachments/assets/eae2720e-5b85-475e-99fe-8c09e1b281b3)
 
+**🕹️ Game Experience:**
+- Real-time WebSocket gameplay with smooth performance
+- Customizable games (colors, rules, difficulty levels)
+- Player dashboards with W/L stats and detailed match history
 
-Under the hood:
-- **Frontend**: TypeScript, TailwindCSS, i18n
-- **Backend**: Fastify (Node.js), Google OAuth, JWT
-- **Database**: SQLite for persistence
-- **Dockerized** with Nginx and HTTPS for clean deploys
+**🌍 User Experience:**
+- Fully localized in English, French, and Spanish
+- Google & local authentication (JWT-secured)
+- GDPR compliance tools: data download, anonymization, deletion
 
-Security and privacy are deeply integrated:
+**🔐 Security Layer:**
 - JWT-protected routes & sessions
 - HTTPS for all connections
 - Robust validation on both frontend & backend
 - XSS and SQL injection prevention
-- Secrets & tokens stored securely in `.env` (and ignored by Git)
+- Secrets & tokens stored securely in `.env`
 
-> In short: fast, portable, safe.
+All this in a responsive Single Page Application that works seamlessly across modern browsers
 
----
-
-## Core Features ✨
-
-- 🕹️ Real-time WebSocket gameplay  
-- 🔐 Google & local auth (JWT-secured)  
-- 🎨 Customizable games (colors, rules, difficulty)  
-- 🌍 Fully localized in English, French, and Spanish  
-- 📊 Player dashboards: W/L stats, match history  
-- 🧑‍💼 GDPR tools: data download, anonymization, deletion  
-
-All this in a responsive SPA that works across browsers.
-
----
-
-## Team
+## 🙌 Our Team
 
 [//]: contributor-faces
 <a href="https://github.com/yvann-ba"><img src="https://avatars.githubusercontent.com/u/97234242?v=4" title="Yvann" width="50" height="50"></a>
