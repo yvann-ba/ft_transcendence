@@ -23,7 +23,7 @@ A complete UI walkthrough of the platform — from home screen to game selection
 
 | ![About Page](frontend/public/assets/readme/gif/about.gif) | ![Contact Page](frontend/public/assets/readme/gif/contact.gif) |
 |:--:|:--:|
-| ![Profile Page](frontend/public/assets/readme/gif/profile.gif) | ![Brick Wall Mode](frontend/public/assets/readme/gif/brickwall.gif) |
+| ![Profile Page](frontend/public/assets/readme/gif/profile.gif) | ![Brick Wall Mode](frontend/public/assets/readme/gif/BrickWall.gif) |
 | ![Tournament Mode](frontend/public/assets/readme/gif/tournament.gif) | ![AI Mode](frontend/public/assets/readme/gif/aigame.gif) |
 
 
