@@ -7,7 +7,7 @@
 
 
 <p align="center">
-  <img src="frontend\public\assets\readme\HomePage_shadow.png" alt="Size Limit CLI" width="2000">
+  <img src="frontend\public\assets\readme\HomePage_shadow3.png" alt="Size Limit CLI" width="2000">
 </p>
 
 ## Full Site Demo — UI Navigation 🌐
