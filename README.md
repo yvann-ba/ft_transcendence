@@ -1,8 +1,7 @@
-https://github.com/user-attachments/assets/39b06695-25eb-42a8-8ff5-b7dba2bc4b45
+![demo](https://github.com/user-attachments/assets/056e3019-ec66-45c8-aa13-c71513d6331a)
 
 ### A full-stack multiplayer web app containerized with Docker and served via Nginx, featuring a TypeScript frontend and a Fastify (Node.js) backend with OAuth and JWT-based authentication. Built by 42 School students to showcase real-time gameplay, secure web architecture, and modular deployment.
 
----
 
 
 | ![about](https://github.com/user-attachments/assets/6bbaa945-9079-46dd-a34e-245347bb13e5) |  ![contact](https://github.com/user-attachments/assets/be4b3e73-2b8a-44f5-982a-50b40202dc30) |
