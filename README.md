@@ -36,7 +36,9 @@ https://localhost:8443
 
 ## How It Works 🧠
 
-![Dockerized-Diagram](https://github.com/user-attachments/assets/eae2720e-5b85-475e-99fe-8c09e1b281b3)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/eae2720e-5b85-475e-99fe-8c09e1b281b3" alt="Dockerized Architecture" width="738">
+</p>
 
 **🕹️ Game Experience:**
 - Real-time WebSocket gameplay with smooth performance
