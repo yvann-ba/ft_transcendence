@@ -1,20 +1,6 @@
+https://github.com/user-attachments/assets/39b06695-25eb-42a8-8ff5-b7dba2bc4b45
 
-[![Dockerized](https://img.shields.io/badge/Dockerized-%E2%9C%94%EF%B8%8F-blue?logo=docker&style=flat-square)](https://www.docker.com/)
-[![Made at 42](https://img.shields.io/badge/Made%20at-42%20School-black?style=flat-square)](https://42.fr)
-[![Multilingual](https://img.shields.io/badge/Languages-EN%20%7C%20FR%20%7C%20ES-yellowgreen?style=flat-square)]()
-[![License: MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat-square)](https://opensource.org/licenses/MIT)
-
-> A full-stack multiplayer web app containerized with Docker and served via Nginx, featuring a TypeScript frontend and a Fastify (Node.js) backend with OAuth and JWT-based authentication. Built by 42 School students to showcase real-time gameplay, secure web architecture, and modular deployment.
-
----
-
-## 🎥 Full Site Walkthrough
-
-<p align="center">
-  <video src="frontend\public\assets\readme\video\demo.mp4" width="100%" controls autoplay loop muted></video>
-</p>
-
-A complete UI walkthrough of the platform — from home screen to game selection, user login, settings, and navigation.
+### A full-stack multiplayer web app containerized with Docker and served via Nginx, featuring a TypeScript frontend and a Fastify (Node.js) backend with OAuth and JWT-based authentication. Built by 42 School students to showcase real-time gameplay, secure web architecture, and modular deployment.
 
 ---
 
