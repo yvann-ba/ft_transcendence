@@ -1,6 +1,10 @@
-![demo](https://github.com/user-attachments/assets/056e3019-ec66-45c8-aa13-c71513d6331a)
 
-### A full-stack multiplayer web app containerized with Docker and served via Nginx, featuring a TypeScript frontend and a Fastify (Node.js) backend with OAuth and JWT-based authentication. Built by 42 School students to showcase real-time gameplay, secure web architecture, and modular deployment.
+![homepage2_process](https://github.com/user-attachments/assets/5ba59e11-6822-42fe-b9af-4823c2f33962)
+
+### A full-stack multiplayer web app containerized with Docker and served via Nginx, featuring a TypeScript frontend and a Fastify (Node.js) backend with OAuth and JWT-based authentication.
+
+#### Built by 42 School students to showcase real-time gameplay, secure web architecture, and modular deployment.
+
 
 
 
@@ -18,11 +22,12 @@ Yes, you can run it on **Linux, macOS, or Windows** — no setup headaches.
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-org/ft_transcendence.git
+git clone https://github.com/yvann-ba/ft_transcendence.git
 cd ft_transcendence
 
 # Run everything with Docker
 make
+(or docker-compose -f ./docker-compose.yml up --build for windows users)
 
 # Access in your browser
 https://localhost:8443
@@ -32,9 +37,10 @@ That’s it. One command. Zero config. Ready to play.
 
 ---
 
-## How It Works 🧠
+### How It Works 🧠
 
-[put diagram here]  
+![Dockerized-Diagram](https://github.com/user-attachments/assets/eae2720e-5b85-475e-99fe-8c09e1b281b3)
+
 
 Under the hood:
 - **Frontend**: TypeScript, TailwindCSS, i18n
@@ -62,30 +68,17 @@ Security and privacy are deeply integrated:
 - 📊 Player dashboards: W/L stats, match history  
 - 🧑‍💼 GDPR tools: data download, anonymization, deletion  
 
-All this in a responsive SPA that works across browsers and devices.
+All this in a responsive SPA that works across browsers.
 
 ---
 
-## About the Project 🧩
+## Team
 
-[put image here if needed]  
+[//]: contributor-faces
+<a href="https://github.com/yvann-ba"><img src="https://avatars.githubusercontent.com/u/97234242?v=4" title="Yvann" width="50" height="50"></a>
+<a href="https://github.com/romainguign"><img src="https://avatars.githubusercontent.com/u/140240760?v=4" title="Romain" width="50" height="50"></a>
+<a href="https://github.com/Lilien86"><img src="https://avatars.githubusercontent.com/u/125573483?v=4" title="Lilien" width="50" height="50"></a>
+<a href="https://github.com/thomassolo"><img src="https://avatars.githubusercontent.com/u/116556004?v=4" title="Thomas" width="50" height="50"></a>
+<a href="https://github.com/lukeslater0961"><img src="https://avatars.githubusercontent.com/u/45939824?v=4" title="Luke" width="50" height="50"></a>
 
-**ft_transcendence** is more than just Pong — it’s an experiment in full-stack architecture, real-time systems, UI/UX polish, and privacy-by-design. Everything from game mechanics to OAuth, from animations to Docker, was crafted by us.
-
----
-
-## Meet the Team 👥
-
-Each member of the squad brought their own power-ups:
-
-| Name | Role | Highlights |
-|------|------|-----------|
-| **Yvann Barbot** | Game Dev | AI Opponent, Tournament Logic |
-| **Romain Guignard** | Fullstack | Fastify Backend, GDPR, UX Polish |
-| **Thomas Soloherison** | Backend Auth | JWT, Google OAuth, Stats Dashboards |
-| **Lilien Auger** | Realtime Engineer | WebSocket Integration, Multi-language UI |
-| **Luke Slater** | Frontend | UI/UX Design, Mobile Support, i18n Setup |
-
-➡️ Learn more on our [Contact Page](/contact) and [About Page](/about).
-
----
+[//]: contributor-faces
