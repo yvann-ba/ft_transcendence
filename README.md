@@ -12,7 +12,7 @@
 ## 🎥 Full Site Walkthrough
 
 <p align="center">
-  <video src="[put full walkthrough video here]" width="100%" controls autoplay loop muted></video>
+  <video src="frontend\public\assets\readme\video\demo.mp4" width="100%" controls autoplay loop muted></video>
 </p>
 
 A complete UI walkthrough of the platform — from home screen to game selection, user login, settings, and navigation.
