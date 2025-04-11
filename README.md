@@ -59,7 +59,7 @@ https://localhost:8443
 
 All this in a responsive Single Page Application that works seamlessly across modern browsers
 
-## 🙌 Our Team
+## 🙌 Check our Team
 
 [//]: contributor-faces
 <a href="https://github.com/yvann-ba"><img src="https://avatars.githubusercontent.com/u/97234242?v=4" title="Yvann" width="50" height="50"></a>
