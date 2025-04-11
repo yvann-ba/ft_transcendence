@@ -1,23 +1,8 @@
 
-[![Dockerized](https://img.shields.io/badge/Dockerized-%E2%9C%94%EF%B8%8F-blue?logo=docker&style=flat-square)](https://www.docker.com/)
-[![Made at 42](https://img.shields.io/badge/Made%20at-42%20School-black?style=flat-square)](https://42.fr)
-[![Multilingual](https://img.shields.io/badge/Languages-EN%20%7C%20FR%20%7C%20ES-yellowgreen?style=flat-square)]()
-[![License: MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+![homepage2_process](https://github.com/user-attachments/assets/5ba59e11-6822-42fe-b9af-4823c2f33962)
 
-> A full-stack multiplayer web app containerized with Docker and served via Nginx, featuring a TypeScript frontend and a Fastify (Node.js) backend with OAuth and JWT-based authentication. Built by 42 School students to showcase real-time gameplay, secure web architecture, and modular deployment.
-
----
-
-## 🎥 Full Site Walkthrough
-
-<p align="center">
-  <video src="frontend\public\assets\readme\video\demo.mp4" width="100%" controls autoplay loop muted></video>
-</p>
-
-A complete UI walkthrough of the platform — from home screen to game selection, user login, settings, and navigation.
-
----
-
+### A full-stack multiplayer web app containerized with Docker and served via Nginx, featuring a TypeScript frontend and a Fastify (Node.js) backend with OAuth and JWT-based authentication
+> Built by 42 School students to showcase real-time gameplay, secure web architecture, and modular deployment.
 
 | ![about](https://github.com/user-attachments/assets/6bbaa945-9079-46dd-a34e-245347bb13e5) |  ![contact](https://github.com/user-attachments/assets/be4b3e73-2b8a-44f5-982a-50b40202dc30) |
 |:--:|:--:|
@@ -25,82 +10,57 @@ A complete UI walkthrough of the platform — from home screen to game selection
 | ![tournament](https://github.com/user-attachments/assets/5dc9def0-1fc9-475c-a0cb-e37c6110f563) |  ![aigame](https://github.com/user-attachments/assets/506af276-535b-4fce-8f69-7bb21f265437) |
 
 
----
 
 ## How to Run It ⚙️
 
-Yes, you can run it on **Linux, macOS, or Windows** — no setup headaches.
+You can run it on **Linux, macOS, or Windows** — no setup headaches.
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-org/ft_transcendence.git
+git clone https://github.com/yvann-ba/ft_transcendence.git
 cd ft_transcendence
 
 # Run everything with Docker
 make
+# or for Windows users
+docker-compose -f ./docker-compose.yml up --build
 
 # Access in your browser
 https://localhost:8443
 ```
 
-That’s it. One command. Zero config. Ready to play.
-
----
-
 ## How It Works 🧠
 
-[put diagram here]  
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/8b59e9cf-db7f-4fb4-a50d-4bd441b7a208" alt="Dockerized Architecture" width="738">
+</p>
 
-Under the hood:
-- **Frontend**: TypeScript, TailwindCSS, i18n
-- **Backend**: Fastify (Node.js), Google OAuth, JWT
-- **Database**: SQLite for persistence
-- **Dockerized** with Nginx and HTTPS for clean deploys
+**🕹️ Game Experience:**
+- Real-time WebSocket gameplay with smooth performance
+- Customizable games (colors, rules, difficulty levels)
+- Player dashboards with W/L stats and detailed match history
 
-Security and privacy are deeply integrated:
+**🌍 User Experience:**
+- Fully localized in English, French, and Spanish
+- Google & local authentication (JWT-secured)
+- GDPR compliance tools: data download, anonymization, deletion
+
+**🔐 Security Layer:**
 - JWT-protected routes & sessions
 - HTTPS for all connections
 - Robust validation on both frontend & backend
 - XSS and SQL injection prevention
-- Secrets & tokens stored securely in `.env` (and ignored by Git)
+- Secrets & tokens stored securely in `.env`
 
-> In short: fast, portable, safe.
+All this in a responsive Single Page Application that works seamlessly across modern browsers
 
----
+## 🙌 Check our Team
 
-## Core Features ✨
+[//]: contributor-faces
+<a href="https://github.com/yvann-ba"><img src="https://avatars.githubusercontent.com/u/97234242?v=4" title="Yvann" width="50" height="50"></a>
+<a href="https://github.com/romainguign"><img src="https://avatars.githubusercontent.com/u/140240760?v=4" title="Romain" width="50" height="50"></a>
+<a href="https://github.com/Lilien86"><img src="https://avatars.githubusercontent.com/u/125573483?v=4" title="Lilien" width="50" height="50"></a>
+<a href="https://github.com/thomassolo"><img src="https://avatars.githubusercontent.com/u/116556004?v=4" title="Thomas" width="50" height="50"></a>
+<a href="https://github.com/lukeslater0961"><img src="https://avatars.githubusercontent.com/u/45939824?v=4" title="Luke" width="50" height="50"></a>
 
-- 🕹️ Real-time WebSocket gameplay  
-- 🔐 Google & local auth (JWT-secured)  
-- 🎨 Customizable games (colors, rules, difficulty)  
-- 🌍 Fully localized in English, French, and Spanish  
-- 📊 Player dashboards: W/L stats, match history  
-- 🧑‍💼 GDPR tools: data download, anonymization, deletion  
-
-All this in a responsive SPA that works across browsers and devices.
-
----
-
-## About the Project 🧩
-
-[put image here if needed]  
-
-**ft_transcendence** is more than just Pong — it’s an experiment in full-stack architecture, real-time systems, UI/UX polish, and privacy-by-design. Everything from game mechanics to OAuth, from animations to Docker, was crafted by us.
-
----
-
-## Meet the Team 👥
-
-Each member of the squad brought their own power-ups:
-
-| Name | Role | Highlights |
-|------|------|-----------|
-| **Yvann Barbot** | Game Dev | AI Opponent, Tournament Logic |
-| **Romain Guignard** | Fullstack | Fastify Backend, GDPR, UX Polish |
-| **Thomas Soloherison** | Backend Auth | JWT, Google OAuth, Stats Dashboards |
-| **Lilien Auger** | Realtime Engineer | WebSocket Integration, Multi-language UI |
-| **Luke Slater** | Frontend | UI/UX Design, Mobile Support, i18n Setup |
-
-➡️ Learn more on our [Contact Page](/contact) and [About Page](/about).
-
----
+[//]: contributor-faces
