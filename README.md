@@ -1,18 +1,17 @@
-# ft_transcendence — Multiplayer Pong Reinvented 🕹️
-
-[![Dockerized](https://img.shields.io/badge/Dockerized-%E2%9C%94%EF%B8%8F-blue?logo=docker&style=flat-square)](https://www.docker.com/)
-[![Made at 42](https://img.shields.io/badge/Made%20at-42%20School-black?style=flat-square)](https://42.fr)
-
-> A full-stack multiplayer web app containerized with Docker and served via Nginx, featuring a TypeScript frontend and a Fastify (Node.js) backend with OAuth and JWT-based authentication. Built by 42 School students to showcase real-time gameplay, secure web architecture, and modular deployment.
-
-
 <p align="center">
   <img src="frontend\public\assets\readme\HomePage_shadow3.png" alt="Size Limit CLI" width="2000">
 </p>
+> A full-stack multiplayer web app containerized with Docker and served via Nginx, featuring a TypeScript frontend and a Fastify (Node.js) backend with OAuth and JWT-based authentication. Built by 42 School students to showcase real-time gameplay, secure web architecture, and modular deployment.
 
-## Full Site Demo — UI Navigation 🌐
-[put video here]  
-A quick walkthrough showing the entire UI in action — from home screen to game mode selection, login flow, profile page, and stats dashboard.
+
+
+
+
+
+### Full Site Demo — UI Navigation 🌐
+<p align="center">
+  <img src="frontend\public\assets\readme\about.gif" alt="Size Limit CLI" width="2000">
+</p>A quick walkthrough showing the entire UI in action — from home screen to game mode selection, login flow, profile page, and stats dashboard.
 
 ## VS AI — Adaptive Solo Mode 🤖
 [put gif here]
@@ -58,7 +57,9 @@ That’s it. One command. Zero config. Ready to play.
 ---
 
 ## How It Works 🧠  
-[put diagram here]  
+<p align="center">
+  <img src="frontend\public\assets\readme\Dockerized-Diagram.png" alt="Size Limit CLI" width="2000">
+</p>
 Under the hood:
 - **Frontend**: TypeScript, TailwindCSS, i18n
 - **Backend**: Fastify (Node.js), Google OAuth, JWT
