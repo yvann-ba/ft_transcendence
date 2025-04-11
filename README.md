@@ -37,7 +37,7 @@ https://localhost:8443
 ## How It Works 🧠
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/eae2720e-5b85-475e-99fe-8c09e1b281b3" alt="Dockerized Architecture" width="738">
+  <img src="https://github.com/user-attachments/assets/8b59e9cf-db7f-4fb4-a50d-4bd441b7a208" alt="Dockerized Architecture" width="738">
 </p>
 
 **🕹️ Game Experience:**
