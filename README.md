@@ -7,11 +7,7 @@
 
 
 <p align="center">
-  <img src="frontend\public\assets\readme\HomePage2.png" style="box-shadow: 0 8px 50px rgba(0, 0, 0, 0.5); border-radius: 16px;" />
-</p>
-
-<p align="center">
-  <img src="frontend\public\assets\readme\about.gif" style="box-shadow: 0 8px 50px rgba(0, 0, 0, 0.5); border-radius: 16px;" />
+  <img src="frontend\public\assets\readme\HomePage_shadow.png" alt="Size Limit CLI" width="2000">
 </p>
 
 ## Full Site Demo — UI Navigation 🌐
