@@ -10,6 +10,9 @@
 ---
 
 
+## Full Site Demo — UI Navigation 🌐
+[put video here]  
+A quick walkthrough showing the entire UI in action — from home screen to game mode selection, login flow, profile page, and stats dashboard.
 
 ## VS AI — Adaptive Solo Mode 🤖
 [put gif here]
@@ -32,9 +35,6 @@ Instant 4-player bracket tournaments. Enter player aliases, launch matches, and 
 
 ---
 
-## Full Site Demo — UI Navigation 🌐
-[put video here]  
-A quick walkthrough showing the entire UI in action — from home screen to game mode selection, login flow, profile page, and stats dashboard.
 
 ---
 
