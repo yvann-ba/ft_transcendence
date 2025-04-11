@@ -1,4 +1,4 @@
-# ft_transcendence — Multiplayer Pong Reinvented 🕹️
+![about](https://github.com/user-attachments/assets/f698de43-c35a-4012-bd59-350a042dfc0c)# ft_transcendence — Multiplayer Pong Reinvented 🕹️
 
 [![Dockerized](https://img.shields.io/badge/Dockerized-%E2%9C%94%EF%B8%8F-blue?logo=docker&style=flat-square)](https://www.docker.com/)
 [![Made at 42](https://img.shields.io/badge/Made%20at-42%20School-black?style=flat-square)](https://42.fr)
@@ -19,12 +19,11 @@ A complete UI walkthrough of the platform — from home screen to game selection
 
 ---
 
-## 🎞️ Feature Demos (GIF Grid)
 
-| ![About Page](frontend/public/assets/readme/gif/about.gif) | ![Contact Page](frontend/public/assets/readme/gif/contact.gif) |
+| ![about](https://github.com/user-attachments/assets/6bbaa945-9079-46dd-a34e-245347bb13e5) |  ![contact](https://github.com/user-attachments/assets/be4b3e73-2b8a-44f5-982a-50b40202dc30) |
 |:--:|:--:|
-| ![Profile Page](frontend/public/assets/readme/gif/profile.gif) | ![Brick Wall Mode](frontend/public/assets/readme/gif/BrickWall.gif) |
-| ![Tournament Mode](frontend/public/assets/readme/gif/tournament.gif) | ![AI Mode](frontend/public/assets/readme/gif/aigame.gif) |
+|  ![profile](https://github.com/user-attachments/assets/374e7777-aaf0-49ff-ab98-6f103c55cb2f) | ![BrickWall](https://github.com/user-attachments/assets/afd6f91a-3151-4842-804a-c3db847515c2) |
+| ![tournament](https://github.com/user-attachments/assets/5dc9def0-1fc9-475c-a0cb-e37c6110f563) |  ![aigame](https://github.com/user-attachments/assets/506af276-535b-4fce-8f69-7bb21f265437) |
 
 
 ---
