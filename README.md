@@ -2,13 +2,17 @@
 
 [![Dockerized](https://img.shields.io/badge/Dockerized-%E2%9C%94%EF%B8%8F-blue?logo=docker&style=flat-square)](https://www.docker.com/)
 [![Made at 42](https://img.shields.io/badge/Made%20at-42%20School-black?style=flat-square)](https://42.fr)
-[![Multilingual](https://img.shields.io/badge/Languages-EN%20%7C%20FR%20%7C%20ES-yellowgreen?style=flat-square)]()
-[![License: MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
 > A full-stack multiplayer web app containerized with Docker and served via Nginx, featuring a TypeScript frontend and a Fastify (Node.js) backend with OAuth and JWT-based authentication. Built by 42 School students to showcase real-time gameplay, secure web architecture, and modular deployment.
 
----
 
+<p align="center">
+  <img src="frontend\public\assets\readme\HomePage2.png" style="box-shadow: 0 8px 50px rgba(0, 0, 0, 0.5); border-radius: 16px;" />
+</p>
+
+<p align="center">
+  <img src="frontend\public\assets\readme\about.gif" style="box-shadow: 0 8px 50px rgba(0, 0, 0, 0.5); border-radius: 16px;" />
+</p>
 
 ## Full Site Demo — UI Navigation 🌐
 [put video here]  
