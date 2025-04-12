@@ -13,21 +13,31 @@
 
 ## How to Run It ⚙️
 
-You can run it on **Linux, macOS, or Windows** — no setup headaches.
+### Prerequisites
+- [Docker](https://www.docker.com/get-started) installed and running
+
+### Installation Steps
 
 ```bash
-# Clone the repo
+# Clone the repository
 git clone https://github.com/yvann-ba/ft_transcendence.git
 cd ft_transcendence
 
-# Run everything with Docker
+# Create your .env file from example
+cp .env.example .env
+# Edit the .env file with your google auth values
+
+# Start the application with Docker
 make
-# or for Windows users
+# OR for Windows users
 docker-compose -f ./docker-compose.yml up --build
 
-# Access in your browser
+# Access the application in your browser
 https://localhost:8443
 ```
+
+> **Note**: For Google OAuth to work, create your credentials at [Google Cloud Console](https://console.cloud.google.com/) and add them to your .env file.
+
 
 ## How It Works 🧠
 
