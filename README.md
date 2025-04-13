@@ -2,14 +2,19 @@
 ![homepage2_process](https://github.com/user-attachments/assets/5ba59e11-6822-42fe-b9af-4823c2f33962)
 
 ### A full-stack multiplayer web app containerized with Docker and served via Nginx, featuring a TypeScript frontend and a Fastify (Node.js) backend with OAuth and JWT-based authentication
-> Built by 42 School students to showcase real-time gameplay, secure web architecture, and modular deployment.
+> Built by students from 42 School to showcase real-time gameplay, secure web architecture, and modular deployment.
 
 | ![about](https://github.com/user-attachments/assets/6bbaa945-9079-46dd-a34e-245347bb13e5) |  ![contact](https://github.com/user-attachments/assets/be4b3e73-2b8a-44f5-982a-50b40202dc30) |
 |:--:|:--:|
 |  ![profile](https://github.com/user-attachments/assets/374e7777-aaf0-49ff-ab98-6f103c55cb2f) | ![BrickWall](https://github.com/user-attachments/assets/afd6f91a-3151-4842-804a-c3db847515c2) |
 | ![tournament](https://github.com/user-attachments/assets/5dc9def0-1fc9-475c-a0cb-e37c6110f563) |  ![aigame](https://github.com/user-attachments/assets/506af276-535b-4fce-8f69-7bb21f265437) |
 
-
+<details>
+  <summary><b>🎬 Click to watch the Full Demo Video</b></summary>
+  
+  [Watch the full demonstration of our application's features and gameplay](https://github.com/user-attachments/assets/25069b38-0d7d-47bb-bec5-01125281db57)
+  
+</details>
 
 ## How to Run It ⚙️
 
