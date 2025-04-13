@@ -79,3 +79,9 @@ All this in a responsive Single Page Application that works seamlessly across mo
 <a href="https://github.com/lukeslater0961"><img src="https://avatars.githubusercontent.com/u/45939824?v=4" title="Luke" width="50" height="50"></a>
 
 [//]: contributor-faces
+
+---
+
+[![Featured on Awesome README](https://awesome.re/badge-flat.svg)](https://github.com/matiassingers/awesome-readme)
+
+This project is featured on [Awesome README](https://github.com/matiassingers/awesome-readme) list, a curated collection of nice README files with over 19,000 stars.
